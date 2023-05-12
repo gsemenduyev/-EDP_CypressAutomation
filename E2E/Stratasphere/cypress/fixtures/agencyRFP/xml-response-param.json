@@ -1,0 +1,100 @@
+{
+    "lines": [
+        {
+            "line": [
+                "Station - TEST",
+                "Days - MTuWThF",
+                "DP - DT",
+                "Time - 9a - 10a",
+                "Length - 30",
+                "Media - TV",
+                "Program - Program 1",
+                "Start Date - 11/27/23",
+                "End Date - 12/24/23",
+                "Seller Rate - $ 10.00",
+                "Seller Rtg - 0.40",
+                "Seller CPP - $ 25.00"
+            ]
+        },
+        {
+            "line": [
+                "Station - TEST",
+                "Days - MTuWThF",
+                "DP - DT",
+                "Time - 1p - 2p",
+                "Length - 30",
+                "Media - TV",
+                "Program - Program 2",
+                "Start Date - 11/27/23",
+                "End Date - 12/24/23",
+                "Seller Rate - $ 20.00",
+                "Seller Rtg - 0.20",
+                "Seller CPP - $ 100.00"
+            ]
+        },
+        {
+            "line": [
+                "Station - TEST",
+                "Days - MTuWThF",
+                "DP - DT",
+                "Time - 2p - 3p",
+                "Length - 30",
+                "Media - TV",
+                "Program - Program 3",
+                "Start Date - 11/27/23",
+                "End Date - 12/24/23",
+                "Seller Rate - $ 30.00",
+                "Seller Rtg - 0.10",
+                "Seller CPP - $ 300.00"
+            ]
+        },
+        {
+            "line": [
+                "Station - TEST",
+                "Days - MTuWThFSa",
+                "DP - PT",
+                "Time - 8p - 9p",
+                "Length - 30",
+                "Media - TV",
+                "Program - Program 4",
+                "Start Date - 11/27/23",
+                "End Date - 12/24/23",
+                "Seller Rate - $ 40.00",
+                "Seller Rtg - 0.10",
+                "Seller CPP - $ 400.00"
+            ]
+        },
+        {
+            "line": [
+                "Station - TEST",
+                "Days - MTuWThFSa",
+                "DP - PT",
+                "Time - 9p - 10p",
+                "Length - 30",
+                "Media - TV",
+                "Program - Program 5",
+                "Start Date - 11/27/23",
+                "End Date - 12/24/23",
+                "Seller Rate - $ 50.00",
+                "Seller Rtg - 0.20",
+                "Seller CPP - $ 250.00"
+            ]
+        },
+        {
+            "line": [
+                "Station - TEST",
+                "Days - MTuWThFSa",
+                "DP - RT",
+                "Time - 3a - 6a",
+                "Length - 30",
+                "Media - TV",
+                "Program - Program 6",
+                "Start Date - 11/27/23",
+                "End Date - 12/24/23",
+                "Seller Rate - $ 60.00",
+                "Seller Rtg - 0.30",
+                "Seller CPP - $ 200.00"
+            ]
+        }
+    ]
+}
