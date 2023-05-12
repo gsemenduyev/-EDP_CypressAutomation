@@ -1,0 +1,15 @@
+{
+    "budget":"$1000",
+    "vendor":"TEST-TV",
+    "client":"Test Client",
+    "office":"Test Office",
+    "product":"Test Product",
+    "goalType":"Ratings",
+    "primaryDemo":"Adults 25-54",
+    "agency":"Test Agency",
+    "startDate":"11/27/23",
+    "endDate":"12/24/23",
+    "dueDate":"12/06/23",
+    "market":"Chicago"
+   }
+  
