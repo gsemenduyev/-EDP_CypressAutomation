@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "headlessChrome": "npx cypress run --browser chrome",
+    "headedChrome": "npx cypress run --browser chrome"
   },
   "cypress-cucumber-preprocessor": {
     "stepDefinitions": "cypress/integration/**/*.js",
