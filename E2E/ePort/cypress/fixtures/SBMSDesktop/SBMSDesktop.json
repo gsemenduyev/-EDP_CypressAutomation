@@ -1,0 +1,10 @@
+{
+    "reporter": "cypress-terminal-report",
+    "reporterOptions": {
+       
+        "filepath": "C:/FWA/SBMS/SBMS.exe",
+        "username": "admin"
+        
+    }
+
+}
