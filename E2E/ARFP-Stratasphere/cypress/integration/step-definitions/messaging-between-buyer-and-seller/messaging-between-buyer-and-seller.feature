@@ -1,13 +1,13 @@
-
+@arfp
 Feature: Messaging between Seller and Buyer
 
   Feature Description: Validate messaging between Seller and Buyer
 
-  @arfp
+  
   Scenario: Buyer creates new RFP and send it to Seller
     * Login to Agency RFP
-  #  * Create New RFP
-   # * Validate RFP Creation
+    * Create New RFP
+    * Validate RFP Creation
     * Logout Agency RFP
 
   

@@ -10,15 +10,6 @@ async function setupNodeEvents(on, config) {
   on("file:preprocessor", browserify.default(config));
   allureWriter(on, config);
   registerDataSession(on, config);
-  require('cypress-terminal-report/src/installLogsPrinter')(on);
-  const options = {
-    outputRoot: config.projectRoot + '/logs/',
-    // Used to trim the base path of specs and reduce nesting in the generated output directory.
-    specRoot: 'cypress/e2e',
-    outputTarget: {
-      'cypress-logs|json': 'json',
-    }
-  };
   return config;
 }
 
@@ -35,6 +26,7 @@ module.exports = defineConfig({
     allureReuseAfterSpec: true,
     allureAddVideoOnPass : true,
     allureResultsPath: "cypress/reports/allure-results",
+
     // PROD 
     // agencyUrl: "https://2wayrfp.gotostrata.com/RFP/login",
     // agencyUsername: "agency.one@mail.com",
@@ -53,7 +45,6 @@ module.exports = defineConfig({
 
   retries: {
     runMode: 1,
-
   },
   projectId: "p6oru5",
 

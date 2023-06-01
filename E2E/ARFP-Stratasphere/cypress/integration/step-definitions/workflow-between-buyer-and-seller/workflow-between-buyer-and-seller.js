@@ -19,9 +19,9 @@ import { linearProposalRfpPage } from "../../../support/page-objects/agency-page
 import { mailinatorHomePage } from "../../../support/page-objects/mailinator-pages/MailinatorHomePage";
 import { sSphereProposalResponsePage } from "../../../support/page-objects/ssphere-pages/SSphereProposalResponsePage";
 
-const fileName = 'stores/TEST Dallas RTG_IMP Dec2023.xml'
-const sellerRevisionRate = '8'
-const buyerRevisionRate = '$ 5.00';
+const FILE_NAME = 'stores/TEST Dallas RTG_IMP Dec2023.xml'
+const SELLER_REVISION_RATE = '8'
+const BUYER_REVISION_RATE = '$ 5.00';
 
 let newRfpParam;
 let xmlResponseParam;
@@ -94,7 +94,7 @@ Given('Create New RFP', () => {
             createRfpPage.selectVendorContact().eq(index).click();
         }
     })
-    cy.isElementExists(createRfpPage.marketRequiredSelectorSyntax()).then(isElementExists => {
+    cy.is_element_exists(createRfpPage.marketRequiredSelectorSyntax()).then(isElementExists => {
         if (isElementExists) {
             cy.get('select').select(newRfpParam.market);
         }
@@ -176,7 +176,7 @@ Given('Validate {string} Page in Stratasphere', string => {
 Given('Upload XML Response', () => {
     sSphereProposalsPage.uploadResponseButton().click();
     sSphereProposalsPage.uploadResponseText().should('have.text', 'Upload Response');
-    cy.uploadFile(fileName, sSphereProposalsPage.fileInput());
+    cy.upload_file(FILE_NAME, sSphereProposalsPage.fileInput());
     cy.wait(3000)
     sSphereProposalsPage.validatedXmlText().then(function (el) {
         if (el.text() !== 'Validated') {
@@ -190,7 +190,7 @@ Given('Upload XML Response', () => {
     sSphereProposalsPage.additionalAttachmentsNextButton().click();
     sSphereProposalsPage.commentsText().should('include.text', 'Comments');
     sSphereProposalsPage.commentsRfpNextButton().click({ force: true });
-    sSphereProposalsPage.uploadedFileText().should('include.text', fileName);
+    sSphereProposalsPage.uploadedFileText().should('include.text', FILE_NAME);
     sSphereProposalsPage.sendToAgencyButton().click();
     sSphereProposalsPage.sentResponseText(60000).should('include.text', 'Your response has been sent.');
 })
@@ -257,9 +257,9 @@ Given('Validate the response from Agency', () => {
             linesValueMap.set("Line " + rowIndex, tempList);
         }
     }).then(() => {
-        const map1 = xmlProposalJsonMap('');
-        const map2 = linesValueMap;
-        cy.compareTwoMaps(map1, map2);
+        let map1 = xml_proposal_map('');
+        let map2 = linesValueMap;
+        cy.compare_two_maps(map1, map2);
     })
 
 })
@@ -280,7 +280,7 @@ Given('Delete the Line', () => {
         linearProposalRfpPage.deleteButton().click({ force: true });
         linearProposalRfpPage.saveButton().click({ force: true });
     }).then(() => {
-        cy.isElementExists(linearProposalRfpPage.selectLineCheckBoxSelectorSyntax()).then(function (exists) {
+        cy.is_element_exists(linearProposalRfpPage.selectLineCheckBoxSelectorSyntax()).then(function (exists) {
             if (exists) {
                 linearProposalRfpPage.selectLineCheckBox().each((element, index1, list) => {
                     linesNumAfter = list.length;
@@ -295,15 +295,15 @@ Given('Delete the Line', () => {
 // Create Type1 Rate Request
 Given('Create Type1 Rate Request', () => {
     linearProposalRfpPage.selectLineCheckBox().first().check({ force: true });
-    linearProposalRfpPage.myReteTexBox().type(buyerRevisionRate + '{enter}');
+    linearProposalRfpPage.myReteTexBox().type(BUYER_REVISION_RATE + '{enter}');
     linearProposalRfpPage.saveButton().click();
-    linearProposalRfpPage.myReteTexBoxValue().should('have.text', buyerRevisionRate);
+    linearProposalRfpPage.myReteTexBoxValue().should('have.text', BUYER_REVISION_RATE);
     linearProposalRfpPage.actionsDropdown().click({ force: true });
     linearProposalRfpPage.sendRateRequestButton().click({ force: true });
     linearProposalRfpPage.sendRateRequestText().should('have.text', 'Send Rate Request');
     linearProposalRfpPage.vendorText().should('have.text', newRfpParam.vendor);
     linearProposalRfpPage.sendButton().click();
-    linearProposalRfpPage.myReteTexBoxValue().should('have.text', buyerRevisionRate);
+    linearProposalRfpPage.myReteTexBoxValue().should('have.text', BUYER_REVISION_RATE);
 })
 
 // Search Stratasphere user in Mailinator
@@ -320,7 +320,7 @@ Given('Search Stratasphere user in Mailinator', () => {
 Given('Validate email Proposal Response', () => {
     let index = 0;
     const checkEmailExists = () => {
-        cy.isElementExists(mailinatorHomePage.newRfpEmailSyntax()).then(function (el) {
+        cy.is_element_exists(mailinatorHomePage.newRfpEmailSyntax()).then(function (el) {
             if (index < 60 && !el) {
                 mailinatorHomePage.goButton().click();
                 cy.wait(5000);
@@ -420,12 +420,12 @@ Given('Revise the Buy Rate', () => {
     sSphereProposalsPage.previousButton().should('be.visible');
     sSphereProposalsPage.sellerRateCell().type("{selectAll}{backspace}");
     sSphereProposalsPage.startDateCell().click({ force: true })
-    sSphereProposalsPage.sellerRateCell().parent().type("{" + sellerRevisionRate + "}")
+    sSphereProposalsPage.sellerRateCell().parent().type("{" + SELLER_REVISION_RATE + "}")
     sSphereProposalsPage.startDateCell().click({ force: true })
 
     sSphereProposalsPage.sellerRateCell().then(function (el) {
-        if (el.text() !== '$' + sellerRevisionRate) {
-            sSphereProposalsPage.sellerRateCell().clear().type(sellerRevisionRate);
+        if (el.text() !== '$' + SELLER_REVISION_RATE) {
+            sSphereProposalsPage.sellerRateCell().clear().type(SELLER_REVISION_RATE);
         }
     })
 
@@ -447,7 +447,7 @@ Given('Revise the Buy Rate', () => {
 Given('Buyer Rate Revision Validations', () => {
     sSphereProposalResponsePage.pageTitle(15000).should('have.text', " Proposal Response");
     sSphereProposalResponsePage.selectVersion().should('include.text', '3 of 3');
-    sSphereProposalsPage.updatedMyRateCell().should('have.text', '$' + sellerRevisionRate)
+    sSphereProposalsPage.updatedMyRateCell().should('have.text', '$' + SELLER_REVISION_RATE)
 })
 
 // Validate Buyer Revision Details
@@ -458,8 +458,8 @@ Given('Validate Buyer Revision Details', () => {
     linearProposalRfpPage.proposalCell(1).should('have.text', newRfpParam.vendor.slice(0, 4))
     linearProposalRfpPage.proposalCell(9).should('have.text', newRfpParam.startDate)
     linearProposalRfpPage.proposalCell(10).should('have.text', newRfpParam.endDate)
-    linearProposalRfpPage.proposalCell(11).should('include.text', buyerRevisionRate)
-    linearProposalRfpPage.proposalCell(13).should('include.text', '$ ' + sellerRevisionRate)
+    linearProposalRfpPage.proposalCell(11).should('include.text', BUYER_REVISION_RATE)
+    linearProposalRfpPage.proposalCell(13).should('include.text', '$ ' + SELLER_REVISION_RATE)
 
 })
 
@@ -467,7 +467,7 @@ Given('Validate Buyer Revision Details', () => {
  Helper function that's converting Json file with parameters related to 'Linear Proposal - RFP' page.
  Returns map of parameters
 */
-function xmlProposalJsonMap() {
+function xml_proposal_map() {
     let linesValueMap = new Map();
     xmlResponseParam.lines.forEach((lines, index) => {
         let tempList = new Array();
