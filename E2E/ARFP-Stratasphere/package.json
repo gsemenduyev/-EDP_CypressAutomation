@@ -4,22 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "headlessChrome": "npx cypress run --browser chrome",
-    "headedChrome": "npx cypress run --browser chrome"
+
+    "cy:run:stratasphere": "cypress run --browser chrome --headed --env tags=\"@stratasphere\" allure=true",
+    "cy:run:arfp": "cypress run --browser chrome --headed --env tags=\"@arfp\" allure=true",
+    "allure:report": "allure generate cypress/allure-results --clean -o cypress\\allure-report",
+    "allure:clear": "if exist cypress\\allure-results rmdir /q /s cypress\\allure-results && if exist cypress\\allure-report rmdir /q /s cypress\\allure-report && if exist cypress\\screenshots rmdir /q /s cypress\\screenshots && if exist cypress\\videos rmdir /q /s cypress\\videos",
+    
+    "test-stratasphere": "npm run allure:clear && npm run cy:run:stratasphere && npm run allure:report",
+    "test-arfp": "npm run allure:clear && npm run cy:run:arfp && npm run allure:report"
+    
   },
   "cypress-cucumber-preprocessor": {
-    "stepDefinitions": "cypress/integration/**/*.js",
-    "json": {
-      "enabled": true,
-      "output": "cypress/CucumberReports/results.json"
-    },
-    "messages": {
-      "enabled": true
-    },
-    "html": {
-      "enabled": true,
-      "output": "cypress/CucumberReports/cucumber-htmlreport.html/index.html"
-    }
+    "stepDefinitions": "cypress/integration/**/*.js"
   },
   "author": "",
   "license": "ISC",
@@ -27,6 +23,7 @@
     "@bahmutov/cypress-esbuild-preprocessor": "^2.2.0",
     "@cypress/browserify-preprocessor": "^3.0.2",
     "@cypress/skip-test": "^2.6.1",
+    "@shelex/cypress-allure-plugin": "^2.39.1",
     "cypress": "^12.12.0",
     "cypress-aliases": "^2.0.0",
     "cypress-cucumber-attach-screenshots-to-failed-steps": "^1.0.0",
@@ -36,6 +33,7 @@
     "cypress-iframe": "^1.0.1",
     "cypress-ntlm-auth": "^4.1.2",
     "cypress-recurse": "^1.31.2",
+    "cypress-terminal-report": "^5.2.0",
     "cypress-xpath": "^2.0.1",
     "esbuild": "^0.17.18",
     "multiple-cucumber-html-reporter": "^3.4.0",

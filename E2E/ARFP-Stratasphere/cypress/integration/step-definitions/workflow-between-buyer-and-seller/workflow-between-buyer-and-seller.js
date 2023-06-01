@@ -40,7 +40,7 @@ Given('Login to Agency RFP', () => {
     cy.visit(Cypress.env('agencyUrl') + "/Login");
     agencyBasePage.pageTitle().should('have.text', 'Sign In');
     agencyLoginPage.usernameBox().type(Cypress.env('agencyUsername'));
-    agencyLoginPage.passwordBox().type(Cypress.env('agencyPassword'));
+    agencyLoginPage.passwordBox().type(Cypress.env('agencyPassword'), { log: false });
     agencyLoginPage.loginButton().click();
     cy.title().should('eq', 'Home - RFP');
 })
@@ -123,8 +123,8 @@ Given('Validate RFP Creation', () => {
     cy.dataSession('newRfpName').then(newRfpName => {
         agencyBasePage.pageTitle(60000).should('have.text', newRfpName);
     })
-    
-    rfpDetailsPage.rfpStatus(1200000).contains('Sent', {timeout: 1200000});
+
+    rfpDetailsPage.rfpStatus(1200000).contains('Sent', { timeout: 1200000 });
     rfpDetailsPage.rfpStatus().should('have.text', 'Sent');
     rfpDetailsPage.launchPreBuyButton()
 })
@@ -140,7 +140,7 @@ Given('Login to Stratasphere', () => {
     cy.visit(Cypress.env('ssphereUrl'));
     sSphereBasePage.pageTitle().should('include.text', ' Login');
     sSphereLoginPage.usernameBox().type(Cypress.env('ssphereUsername'));
-    sSphereLoginPage.passwordBox().type(Cypress.env('sspherePassword'));
+    sSphereLoginPage.passwordBox().type(Cypress.env('sspherePassword'), { log: false });
     sSphereLoginPage.loginButton().click();
     sSphereBasePage.manuDropdownToggle().should('be.visible');
     sSphereBasePage.pageTitle().then(function (titleText) {
@@ -177,7 +177,7 @@ Given('Upload XML Response', () => {
     sSphereProposalsPage.uploadResponseButton().click();
     sSphereProposalsPage.uploadResponseText().should('have.text', 'Upload Response');
     cy.uploadFile(fileName, sSphereProposalsPage.fileInput());
-    cy.wait(1000)
+    cy.wait(3000)
     sSphereProposalsPage.validatedXmlText().then(function (el) {
         if (el.text() !== 'Validated') {
             sSphereProposalsPage.uploadVerificationYesButton().click();
@@ -244,11 +244,9 @@ Given('Validate the response from Agency', () => {
         if (rowIndex !== 0 && rowIndex !== list.length - 1) {
             for (let columnIndex = 0; columnIndex <= columnNum; columnIndex++) {
                 linearProposalRfpPage.proposalHeader(columnIndex).then(function (headerText) {
-                    cy.wait(1)
                     headerText1 = headerText.text();
                 })
                 linearProposalRfpPage.proposalCell(cellIndex++).then(function (cellText) {
-                    cy.wait(1)
                     var cellTextTemp = cellText.text();
                     if (cellTextTemp !== "" && cellTextTemp !== '0') {
                         tempList.push(headerText1 + " - " + cellTextTemp);

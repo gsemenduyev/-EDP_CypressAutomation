@@ -15,3 +15,7 @@ cucumber-report/
 cypress/cucumberReports/cucumber-htmlreport.html/index.html
 cypress/cucumberReports/results.json
 cucumber-messages.ndjson
+cypress/reports
+allure-report
+allure-results
+allure-reports
