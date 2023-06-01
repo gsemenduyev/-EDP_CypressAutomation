@@ -34,7 +34,7 @@ module.exports = defineConfig({
     allureOmitPreviousAttemptScreenshots: true,
     allureReuseAfterSpec: true,
     allureAddVideoOnPass : true,
-    allureResultsPath: "cypress/allure-results",
+    allureResultsPath: "cypress/reports/allure-results",
     // PROD 
     // agencyUrl: "https://2wayrfp.gotostrata.com/RFP/login",
     // agencyUsername: "agency.one@mail.com",
