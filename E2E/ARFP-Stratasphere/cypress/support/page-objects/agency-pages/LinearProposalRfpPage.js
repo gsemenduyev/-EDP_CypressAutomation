@@ -3,16 +3,16 @@ class LinearProposalRfpPage {
         return cy.get(".campaign-header span", { timeout: milliseconds });
     }
     proposalRows() {
-        return cy.get("div[role='row']");
+        return cy.get("div[role='row']", { log: false });
     }
     proposalHeader(index) {
-        return cy.get(".rdg-header-sort-name").eq(index);
+        return cy.get(".rdg-header-sort-name", { log: false }).eq(index, { log: false });
     }
     proposalHeaders() {
         return cy.get(".rdg-header-sort-name");
     }
     proposalCell(index) {
-        return cy.get("div[role='gridcell']").eq(index);
+        return cy.get("div[role='gridcell']", { log: false }).eq(index, { log: false });
     }
     selectLineCheckBox() {
         return cy.get("input[aria-label='Select']");

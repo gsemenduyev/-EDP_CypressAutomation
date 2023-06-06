@@ -1,13 +1,16 @@
+@arfp
 Feature: Messaging between Seller and Buyer
 
   Feature Description: Validate messaging between Seller and Buyer
 
-  Scenario: Buyer creates new RFP and send it to Stratashere.
+  
+  Scenario: Buyer creates new RFP and send it to Seller
     * Login to Agency RFP
     * Create New RFP
     * Validate RFP Creation
     * Logout Agency RFP
 
+  
   Scenario: Seller Validates RFP Details Page and sends a message to buyer
     * Login to Stratasphere
     * Search for RFP in Stratasphere
@@ -15,7 +18,8 @@ Feature: Messaging between Seller and Buyer
     * Send a message from Seller to Buyer
     * Logout from Stratasphere
 
-  Scenario: Seller Validates RFP Details Page and sends a message to Buyer
+  
+  Scenario: Bueyr Validates RFP Details Page and sends a message to Buyer
     * Login to Agency RFP
     * Search for existing RFP
     * Click on Launch Pre-buy button
@@ -23,6 +27,7 @@ Feature: Messaging between Seller and Buyer
     * Send a message from Buyer to Seller
     * Logout Agency RFP
 
+  
   Scenario: Seller receives the massage from Buyer
     * Login to Stratasphere
     * Search for RFP in Stratasphere
