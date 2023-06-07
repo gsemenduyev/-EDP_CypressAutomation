@@ -1,4 +1,4 @@
-class MailinatorHomePage{
+class MailinatorHomePage {
     userSearchBox() {
         return cy.get('#inbox_field');
     }
@@ -9,7 +9,7 @@ class MailinatorHomePage{
     publicMessageText(milliseconds) {
         return cy.get('.gray-color', { timeout: milliseconds });
     }
-    emailBodyIframe(){
+    emailBodyIframe() {
         return cy.get('#html_msg_body');
     }
     goButton() {
@@ -27,5 +27,56 @@ class MailinatorHomePage{
     redirectSsphereLink() {
         return cy.get('a').eq(0)
     }
+    linksTab() {
+        return cy.get('#pills-links-tab')
+    }
+    negotiationLinks(negotiate) {
+        return cy.get('#pills-links-content').contains(negotiate).siblings().children('a')
+    }
+    deleteEmailButton() {
+        return cy.get("a[onclick='deleteEmail();']");
+    }
+
+    /* 
+    Utils function that searches for email in https://www.mailinator.com/v4/public/inboxes.jsp
+    [@param] emailTitle - Email Title.
+    [@param] newRfpName - RFP Name
+    */
+    search_email(emailTitle, newRfpName) {
+        const mailinatorHomePage = new MailinatorHomePage;
+        let index = 0;
+        const checkEmailExists = () => {
+            cy.is_element_exists(mailinatorHomePage.newRfpEmailSyntax()).then(function (el) {
+                if (index < 60 && !el) {
+                    mailinatorHomePage.goButton().click();
+                    cy.wait(5000);
+                    index++;
+                    checkEmailExists();
+                }
+            })
+        }
+        checkEmailExists();
+        index = 0;
+        const checkEmailName = () => {
+            mailinatorHomePage.emailName().each((el) => {
+                if (el.text().trim().includes(emailTitle + newRfpName)) {
+                    cy.log(el.text().trim());
+                    cy.wrap(el).click();
+                    mailinatorHomePage.publicMessageText().should('include.text', newRfpName);
+                    return false;
+                }
+            })
+            mailinatorHomePage.publicMessageText().then(function (titleRfp) {
+                if (index < 60 && (!titleRfp.text().trim().includes(emailTitle + newRfpName))) {
+                    mailinatorHomePage.goButton().click();
+                    cy.wait(5000);
+                    index++
+                    checkEmailName();
+                }
+            })
+        }
+        checkEmailName();
+        mailinatorHomePage.publicMessageText().should('include.text', newRfpName);
+    }
 }
-export const mailinatorHomePage = new MailinatorHomePage;
+export default MailinatorHomePage;

@@ -5,19 +5,31 @@ import 'cypress-data-session'
 import 'cypress-iframe'
 import { Given } from "@badeball/cypress-cucumber-preprocessor";
 import { recurse } from 'cypress-recurse';
-import { each } from 'cypress-recurse';
-import { agencyLoginPage } from '../../../support/page-objects/agency-pages/AgencyLoginPage';
-import { agencyBasePage } from '../../../support/page-objects/agency-pages/AgencyBasePage';
-import { createRfpPage } from "../../../support/page-objects/agency-pages/CreateRFPPage";
-import { rfpDetailsPage } from "../../../support/page-objects/agency-pages/RfpDetailsPage";
-import { sSphereLoginPage } from "../../../support/page-objects/ssphere-pages/SSphereLoginPage";
-import { sSphereProposalsPage } from "../../../support/page-objects/ssphere-pages/SSphereProposalsPage";
-import { sSphereBasePage } from "../../../support/page-objects/ssphere-pages/SSphereBasePage";
-import { sSphereHomePage } from "../../../support/page-objects/ssphere-pages/SSphereHomePage";
-import { searchRfpPage } from "../../../support/page-objects/agency-pages/SearchRfpPage";
-import { linearProposalRfpPage } from "../../../support/page-objects/agency-pages/LinearProposalRfpPage";
-import { mailinatorHomePage } from "../../../support/page-objects/mailinator-pages/MailinatorHomePage";
-import { sSphereProposalResponsePage } from "../../../support/page-objects/ssphere-pages/SSphereProposalResponsePage";
+import AgencyLoginPage from '../../../support/page-objects/agency-pages/AgencyLoginPage';
+import AgencyBasePage from '../../../support/page-objects/agency-pages/AgencyBasePage';
+import CreateRFPPage from "../../../support/page-objects/agency-pages/CreateRFPPage";
+import RfpDetailsPage from "../../../support/page-objects/agency-pages/RfpDetailsPage";
+import SSphereLoginPage from "../../../support/page-objects/ssphere-pages/SSphereLoginPage";
+import SSphereProposalsPage from "../../../support/page-objects/ssphere-pages/SSphereProposalsPage";
+import SSphereBasePage from "../../../support/page-objects/ssphere-pages/SSphereBasePage";
+import SSphereHomePage from "../../../support/page-objects/ssphere-pages/SSphereHomePage";
+import SearchRfpPage from "../../../support/page-objects/agency-pages/SearchRfpPage";
+import LinearProposalRfpPage from "../../../support/page-objects/agency-pages/LinearProposalRfpPage";
+import MailinatorHomePage from "../../../support/page-objects/mailinator-pages/MailinatorHomePage";
+import SSphereProposalResponsePage from "../../../support/page-objects/ssphere-pages/SSphereProposalResponsePage";
+
+const agencyLoginPage = new AgencyLoginPage;
+const agencyBasePage = new AgencyBasePage;
+const createRfpPage = new CreateRFPPage;
+const sSphereLoginPage = new SSphereLoginPage;
+const sSphereProposalsPage = new SSphereProposalsPage;
+const sSphereBasePage = new SSphereBasePage;
+const sSphereHomePage = new SSphereHomePage;
+const linearProposalRfpPage = new LinearProposalRfpPage;
+const mailinatorHomePage = new MailinatorHomePage;
+const sSphereProposalResponsePage = new SSphereProposalResponsePage;
+const searchRfpPage = new SearchRfpPage;
+const rfpDetailsPage = new RfpDetailsPage;
 
 const FILE_NAME = 'stores/TEST Dallas RTG_IMP Dec2023.xml'
 const SELLER_REVISION_RATE = '8'
@@ -316,43 +328,10 @@ Given('Search Stratasphere user in Mailinator', () => {
 
 })
 
-// Validate email Proposal Response 
+// Validate email Proposal Response
 Given('Validate email Proposal Response', () => {
-    let index = 0;
-    const checkEmailExists = () => {
-        cy.is_element_exists(mailinatorHomePage.newRfpEmailSyntax()).then(function (el) {
-            if (index < 60 && !el) {
-                mailinatorHomePage.goButton().click();
-                cy.wait(5000);
-                index++;
-                checkEmailExists();
-            }
-        })
-    }
-    checkEmailExists();
-
     cy.dataSession('newRfpName').then(newRfpName => {
-        index = 0;
-        const checkEmailName = () => {
-            mailinatorHomePage.emailName().each((el) => {
-                if (el.text().trim().includes('New Rate Request for ' + newRfpName)) {
-                    cy.log(el.text().trim());
-                    cy.wrap(el).click();
-                    mailinatorHomePage.publicMessageText().should('include.text', newRfpName);
-                    return false;
-                }
-            })
-            mailinatorHomePage.publicMessageText().then(function (titleRfp) {
-                if (index < 60 && (!titleRfp.text().trim().includes('New Rate Request for ' + newRfpName))) {
-                    mailinatorHomePage.goButton().click();
-                    cy.wait(5000);
-                    index++
-                    checkEmailName();
-                }
-            })
-        }
-        checkEmailName();
-        mailinatorHomePage.publicMessageText().should('include.text', newRfpName);
+        mailinatorHomePage.search_email('New Rate Request for ', newRfpName)
     })
 
     const getIframeBody = () => {
@@ -366,16 +345,18 @@ Given('Validate email Proposal Response', () => {
     getIframeBody(mailinatorHomePage.emailBodyIframe()).find(mailinatorHomePage.emailDetailsSyntax()).eq(2)
         .should('include.text', newRfpParam.startDate.slice(0, 6) + '20' + newRfpParam.startDate.slice(6) + ' to '
             + newRfpParam.endDate.slice(0, 6) + '20' + newRfpParam.endDate.slice(6))
-    getIframeBody(mailinatorHomePage.emailBodyIframe()).find(mailinatorHomePage.emailDetailsSyntax()).eq(3).should('have.text', newRfpParam.primaryDemo)
+    getIframeBody(mailinatorHomePage.emailBodyIframe()).find(mailinatorHomePage.emailDetailsSyntax()).eq(3).should('have.text', newRfpParam.primaryDemo);
 
     getIframeBody(mailinatorHomePage.emailBodyIframe()).find('a').eq(0).then(function (el) {
         const url = el.prop('href')
         cy.dataSession({
             name: 'redirectSsphereLink',
             setup: () => url,
+            validate: false,
             shareAcrossSpecs: true,
         })
     })
+    mailinatorHomePage.deleteEmailButton().click();
 })
 
 

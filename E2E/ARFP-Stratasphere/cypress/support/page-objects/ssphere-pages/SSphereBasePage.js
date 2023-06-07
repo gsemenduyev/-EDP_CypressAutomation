@@ -11,5 +11,14 @@ class SSphereBasePage{
     manuDropdownToggle() {
         return cy.get(".fa.fa-bars");
     }
+    negotiationMessage(){
+        return cy.get('.h4');
+    }
+    myRateNegotiation(){
+        return cy.get(".ui-grid-cell-contents [ng-if='grid.getCellValue(row, col) != 0.00']");
+    }
+    submitButton(){
+        return cy.get(".btn.btn-primary");
+    }
 }
-export const sSphereBasePage = new SSphereBasePage;
+export default  SSphereBasePage;

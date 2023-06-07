@@ -9,4 +9,4 @@ class AgencyLoginPage {
         return cy.get('.btn');
     }
 }
-export const agencyLoginPage = new AgencyLoginPage;
+export default AgencyLoginPage;

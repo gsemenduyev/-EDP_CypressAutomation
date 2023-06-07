@@ -6,4 +6,4 @@ class SSphereHomePage{
         return 'a[ui-sref="proposals"]';
     }
 }
-export const sSphereHomePage = new SSphereHomePage;
+export default SSphereHomePage;

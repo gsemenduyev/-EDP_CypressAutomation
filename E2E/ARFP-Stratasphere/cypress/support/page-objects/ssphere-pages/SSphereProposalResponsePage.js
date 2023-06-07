@@ -37,4 +37,4 @@ class SSphereProposalResponsePage{
         return cy.contains('Revise');
     }
 }
-export const sSphereProposalResponsePage = new SSphereProposalResponsePage;
+export default SSphereProposalResponsePage;

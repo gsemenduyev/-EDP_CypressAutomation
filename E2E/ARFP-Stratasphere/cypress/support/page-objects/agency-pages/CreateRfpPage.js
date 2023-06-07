@@ -114,4 +114,4 @@ class CreateRfpPage {
         });
     }
 }
-export const createRfpPage = new CreateRfpPage;
+export default CreateRfpPage;

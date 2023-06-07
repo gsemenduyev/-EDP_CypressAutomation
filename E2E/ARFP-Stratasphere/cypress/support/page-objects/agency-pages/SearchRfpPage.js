@@ -6,4 +6,4 @@ class SearchRfpPage {
         return cy.get('.btn.btn-primary.btn-sm').eq(1);
     }
 }
-export const searchRfpPage = new SearchRfpPage;
+export default SearchRfpPage;

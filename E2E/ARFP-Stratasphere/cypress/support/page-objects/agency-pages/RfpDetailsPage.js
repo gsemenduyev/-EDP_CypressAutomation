@@ -9,4 +9,4 @@ class RfpDetailsPage {
         return cy.get('.btn-link', { timeout: milliseconds });
     }
 }
-export const rfpDetailsPage = new RfpDetailsPage;
+export default RfpDetailsPage;

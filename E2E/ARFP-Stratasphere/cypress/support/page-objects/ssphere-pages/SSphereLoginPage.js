@@ -11,4 +11,4 @@ class SSphereLoginPage{
         return cy.get('.btn.btn-primary');
     }
 }
-export const sSphereLoginPage = new SSphereLoginPage;
+export default SSphereLoginPage;
