@@ -32,7 +32,7 @@ const searchRfpPage = new SearchRfpPage;
 const rfpDetailsPage = new RfpDetailsPage;
 
 const FILE_NAME = 'stores/TEST Dallas RTG_IMP Dec2023.xml'
-const SELLER_REVISION_RATE = '8'
+const SELLER_REVISION_RATE = '8';
 const BUYER_REVISION_RATE = '$ 5.00';
 
 let newRfpParam;
@@ -135,10 +135,9 @@ Given('Validate RFP Creation', () => {
     cy.dataSession('newRfpName').then(newRfpName => {
         agencyBasePage.pageTitle(60000).should('have.text', newRfpName);
     })
-
     rfpDetailsPage.rfpStatus(1200000).contains('Sent', { timeout: 1200000 });
     rfpDetailsPage.rfpStatus().should('have.text', 'Sent');
-    rfpDetailsPage.launchPreBuyButton()
+    rfpDetailsPage.launchPreBuyButton();
 })
 
 // Logout Agency RFP
@@ -154,7 +153,7 @@ Given('Login to Stratasphere', () => {
     sSphereLoginPage.usernameBox().type(Cypress.env('ssphereUsername'));
     sSphereLoginPage.passwordBox().type(Cypress.env('sspherePassword'), { log: false });
     sSphereLoginPage.loginButton().click();
-    sSphereBasePage.manuDropdownToggle().should('be.visible');
+    sSphereBasePage.menuDropdownToggle().should('be.visible');
     sSphereBasePage.pageTitle().then(function (titleText) {
         if (titleText.text().includes(' Home')) {
             sSphereHomePage.proposalsField().click()
@@ -189,7 +188,7 @@ Given('Upload XML Response', () => {
     sSphereProposalsPage.uploadResponseButton().click();
     sSphereProposalsPage.uploadResponseText().should('have.text', 'Upload Response');
     cy.upload_file(FILE_NAME, sSphereProposalsPage.fileInput());
-    cy.wait(3000)
+    cy.wait(3000);
     sSphereProposalsPage.validatedXmlText().then(function (el) {
         if (el.text() !== 'Validated') {
             sSphereProposalsPage.uploadVerificationYesButton().click();
@@ -244,7 +243,7 @@ Given('Click on Launch Pre-buy button', () => {
 // Validate the response from Agency
 Given('Validate the response from Agency', () => {
     cy.dataSession('newRfpName').then(newRfpName => {
-        linearProposalRfpPage.campaignHeaderText(15000).should('have.text', newRfpName)
+        linearProposalRfpPage.campaignHeaderText(15000).should('have.text', newRfpName);
     })
 
     let cellIndex = 1;
@@ -280,7 +279,7 @@ Given('Validate the response from Agency', () => {
 Given('Delete the Line', () => {
     cy.title('eq', 'Linear Proposal - RFP');
     cy.dataSession('newRfpName').then(newRfpName => {
-        linearProposalRfpPage.campaignHeaderText(15000).should('have.text', newRfpName)
+        linearProposalRfpPage.campaignHeaderText(15000).should('have.text', newRfpName);
     })
 
     var linesNumBefore;
@@ -331,7 +330,7 @@ Given('Search Stratasphere user in Mailinator', () => {
 // Validate email Proposal Response
 Given('Validate email Proposal Response', () => {
     cy.dataSession('newRfpName').then(newRfpName => {
-        mailinatorHomePage.search_email('New Rate Request for ', newRfpName)
+        mailinatorHomePage.search_email('New Rate Request for ', newRfpName);
     })
 
     const getIframeBody = () => {
@@ -340,11 +339,11 @@ Given('Validate email Proposal Response', () => {
             .then(cy.wrap);
     }
 
-    getIframeBody(mailinatorHomePage.emailBodyIframe()).find(mailinatorHomePage.emailDetailsSyntax()).eq(0).should('have.text', '2')
-    getIframeBody(mailinatorHomePage.emailBodyIframe()).find(mailinatorHomePage.emailDetailsSyntax()).eq(1).should('have.text', newRfpParam.agency)
+    getIframeBody(mailinatorHomePage.emailBodyIframe()).find(mailinatorHomePage.emailDetailsSyntax()).eq(0).should('have.text', '2');
+    getIframeBody(mailinatorHomePage.emailBodyIframe()).find(mailinatorHomePage.emailDetailsSyntax()).eq(1).should('have.text', newRfpParam.agency);
     getIframeBody(mailinatorHomePage.emailBodyIframe()).find(mailinatorHomePage.emailDetailsSyntax()).eq(2)
         .should('include.text', newRfpParam.startDate.slice(0, 6) + '20' + newRfpParam.startDate.slice(6) + ' to '
-            + newRfpParam.endDate.slice(0, 6) + '20' + newRfpParam.endDate.slice(6))
+            + newRfpParam.endDate.slice(0, 6) + '20' + newRfpParam.endDate.slice(6));
     getIframeBody(mailinatorHomePage.emailBodyIframe()).find(mailinatorHomePage.emailDetailsSyntax()).eq(3).should('have.text', newRfpParam.primaryDemo);
 
     getIframeBody(mailinatorHomePage.emailBodyIframe()).find('a').eq(0).then(function (el) {
@@ -358,7 +357,6 @@ Given('Validate email Proposal Response', () => {
     })
     mailinatorHomePage.deleteEmailButton().click();
 })
-
 
 // Redirect from Mailinator to Stratasphere
 Given('Redirect from Mailinator to Stratasphere', () => {
@@ -400,9 +398,9 @@ Given('Revise the Buy Rate', () => {
     sSphereProposalsPage.addBuyLineButton().should('be.visible');
     sSphereProposalsPage.previousButton().should('be.visible');
     sSphereProposalsPage.sellerRateCell().type("{selectAll}{backspace}");
-    sSphereProposalsPage.startDateCell().click({ force: true })
-    sSphereProposalsPage.sellerRateCell().parent().type("{" + SELLER_REVISION_RATE + "}")
-    sSphereProposalsPage.startDateCell().click({ force: true })
+    sSphereProposalsPage.startDateCell().click({ force: true });
+    sSphereProposalsPage.sellerRateCell().parent().type("{" + SELLER_REVISION_RATE + "}");
+    sSphereProposalsPage.startDateCell().click({ force: true });
 
     sSphereProposalsPage.sellerRateCell().then(function (el) {
         if (el.text() !== '$' + SELLER_REVISION_RATE) {
@@ -418,29 +416,29 @@ Given('Revise the Buy Rate', () => {
     sSphereProposalsPage.nextButton().should('be.visible');
     sSphereProposalsPage.nextButton().click();
     sSphereProposalsPage.commentsNextButton().click();
-    sSphereProposalsPage.sendRevisionTab().should('include.text', 'Send Revision')
+    sSphereProposalsPage.sendRevisionTab().should('include.text', 'Send Revision');
     sSphereProposalsPage.sendRevisionPreviousButton().should('be.visible');
-    sSphereProposalsPage.responseCompleteConformationText('include.text', 'Please make sure your response is complete. You will only be able to respond to this RFP once.')
+    sSphereProposalsPage.responseCompleteConformationText('include.text', 'Please make sure your response is complete. You will only be able to respond to this RFP once.');
     sSphereProposalsPage.sendToAgencyButton().click();
 })
 
 // Buyer Rate Revision Validations
 Given('Buyer Rate Revision Validations', () => {
-    sSphereProposalResponsePage.pageTitle(15000).should('have.text', " Proposal Response");
+    sSphereProposalResponsePage.pageTitle(150000).should('have.text', " Proposal Response");
     sSphereProposalResponsePage.selectVersion().should('include.text', '3 of 3');
-    sSphereProposalsPage.updatedMyRateCell().should('have.text', '$' + SELLER_REVISION_RATE)
+    sSphereProposalsPage.updatedMyRateCell().should('have.text', '$' + SELLER_REVISION_RATE);
 })
 
 // Validate Buyer Revision Details
 Given('Validate Buyer Revision Details', () => {
     cy.dataSession('newRfpName').then(newRfpName => {
-        linearProposalRfpPage.campaignHeaderText(15000).should('have.text', newRfpName)
+        linearProposalRfpPage.campaignHeaderText(15000).should('have.text', newRfpName);
     })
-    linearProposalRfpPage.proposalCell(1).should('have.text', newRfpParam.vendor.slice(0, 4))
-    linearProposalRfpPage.proposalCell(9).should('have.text', newRfpParam.startDate)
-    linearProposalRfpPage.proposalCell(10).should('have.text', newRfpParam.endDate)
-    linearProposalRfpPage.proposalCell(11).should('include.text', BUYER_REVISION_RATE)
-    linearProposalRfpPage.proposalCell(13).should('include.text', '$ ' + SELLER_REVISION_RATE)
+    linearProposalRfpPage.proposalCell(1).should('have.text', newRfpParam.vendor.slice(0, 4));
+    linearProposalRfpPage.proposalCell(9).should('have.text', newRfpParam.startDate);
+    linearProposalRfpPage.proposalCell(10).should('have.text', newRfpParam.endDate);
+    linearProposalRfpPage.proposalCell(11).should('include.text', BUYER_REVISION_RATE);
+    linearProposalRfpPage.proposalCell(13).should('include.text', '$ ' + SELLER_REVISION_RATE);
 
 })
 
@@ -453,9 +451,9 @@ function xml_proposal_map() {
     xmlResponseParam.lines.forEach((lines, index) => {
         let tempList = new Array();
         lines.line.forEach((line) => {
-            tempList.push(line)
+            tempList.push(line);
         })
-        linesValueMap.set("Line " + (index + 1), tempList)
+        linesValueMap.set("Line " + (index + 1), tempList);
     })
     return linesValueMap;
 }

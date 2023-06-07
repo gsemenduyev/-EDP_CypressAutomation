@@ -8,7 +8,7 @@ class SSphereBasePage{
     pageTitle() {
         return cy.get("[data-ng-bind='title']");
     }
-    manuDropdownToggle() {
+    menuDropdownToggle() {
         return cy.get(".fa.fa-bars");
     }
     negotiationMessage(){

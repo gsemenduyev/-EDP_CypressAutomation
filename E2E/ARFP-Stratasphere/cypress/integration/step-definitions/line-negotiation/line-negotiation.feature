@@ -1,7 +1,7 @@
-@wip
+@arfp
 Feature: Line negotiation
 
-  Feature Description:
+  Feature Description: Negotiation worflow between Buyer and Seller
 
   Scenario: Buyer creates new RFP and send it to Stratashere (LN).
     * Login to Agency RFP
@@ -58,4 +58,3 @@ Feature: Line negotiation
     * Click on Launch Pre-buy button
     * Validate line changes were "Make Changes" by the Seller
     * Logout Agency RFP
-

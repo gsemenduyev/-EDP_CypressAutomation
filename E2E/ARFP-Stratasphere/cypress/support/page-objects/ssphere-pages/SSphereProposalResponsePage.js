@@ -8,7 +8,6 @@ class SSphereProposalResponsePage{
     mediaTypeName() {
         return cy.get('.col-md-2.single-line-text').eq(0);
     }
-
     campaignName() {
         return cy.get('.col-md-2.single-line-text').eq(1);
     }

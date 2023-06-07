@@ -1,10 +1,10 @@
-@stratasphere
+@stratasphere @arfp
 Feature: Workflow between buyer and seller
 
   Feature Description:
   Buyer creates new RFP and sends to Seller, Seller uploads Proposal XML and sends to Buyer,
   Buyer receives the Proposal XML changes the Rate and sends Rate request to Seller,
-  Seller resivece the email from Buyer with the new Rate,
+  Seller receives the email from Buyer with the new Rate,
   Seller updates Rate request and sends it back to Buyer.
 
   Scenario: Buyer creates new RFP and send it to Stratashere (WBBS)
@@ -20,7 +20,7 @@ Feature: Workflow between buyer and seller
     * Upload XML Response
     * Logout from Stratasphere
 
-  Scenario: Buyer validatev the Proposal response and creates Type1 Rate Request (WBBS)
+  Scenario: Buyer validate the Proposal response and creates Type1 Rate Request (WBBS)
     * Login to Agency RFP
     * Search for existing RFP
     * Click on Launch Pre-buy button

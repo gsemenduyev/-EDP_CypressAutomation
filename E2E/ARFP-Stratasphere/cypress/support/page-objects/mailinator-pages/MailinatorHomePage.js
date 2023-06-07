@@ -25,10 +25,10 @@ class MailinatorHomePage {
         return "[rel*='nofollow']";
     }
     redirectSsphereLink() {
-        return cy.get('a').eq(0)
+        return cy.get('a').eq(0);
     }
     linksTab() {
-        return cy.get('#pills-links-tab')
+        return cy.get('#pills-links-tab');
     }
     negotiationLinks(negotiate) {
         return cy.get('#pills-links-content').contains(negotiate).siblings().children('a')

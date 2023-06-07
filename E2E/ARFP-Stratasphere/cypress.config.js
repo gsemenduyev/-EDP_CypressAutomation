@@ -16,7 +16,7 @@ async function setupNodeEvents(on, config) {
 module.exports = defineConfig({
   viewportWidth: 1920,
   viewportHeight: 1080,
-  defaultCommandTimeout: 600000,
+  defaultCommandTimeout: 15000,
   pageLoadTimeout: 600000,
   screenshotOnRunFailure: true,
   video: true,
@@ -28,15 +28,15 @@ module.exports = defineConfig({
     allureResultsPath: "cypress/reports/allure-results",
     
     // PROD 
-    agencyUrl: "https://2wayrfp.gotostrata.com/RFP/login",
-    agencyUsername: "agency.one@mail.com",
-    ssphereUrl: "https://stratasphere.media/ui_new/#/",
-    ssphereUsername: "nsingh@mailinator.com",
+    // agencyUrl: "https://2wayrfp.gotostrata.com/RFP/login",
+    // agencyUsername: "agency.one@mail.com",
+    // ssphereUrl: "https://stratasphere.media/ui_new/#/",
+    // ssphereUsername: "nsingh@mailinator.com",
 
-    // agencyUrl: "https://2wayrfpqa.pregotostrata.com/RFP",
-    // agencyUsername: "agency.three@mail.com",
-    // ssphereUrl: "https://ssphereqa.pregotostrata.com/ui_new#/",
-    // ssphereUsername: "laseller2@mailinator.com",
+    agencyUrl: "https://2wayrfpqa.pregotostrata.com/RFP",
+    agencyUsername: "agency.three@mail.com",
+    ssphereUrl: "https://ssphereqa.pregotostrata.com/ui_new#/",
+    ssphereUsername: "laseller2@mailinator.com",
 
     mailinatorUrl: "https://www.mailinator.com/v4/public/inboxes.jsp?to=laseller2",
     agencyPassword: "Password01!",
@@ -48,13 +48,9 @@ module.exports = defineConfig({
   },
   projectId: "p6oru5",
   
-
   e2e: {
     setupNodeEvents,
     experimentalOriginDependencies: true,
- //  experimentalModifyObstructiveThirdPartyCode: true,
     specPattern: "**/*.feature",
-
-    //specPattern: 'cypress/integration/examples/*.js'
   },
 });
