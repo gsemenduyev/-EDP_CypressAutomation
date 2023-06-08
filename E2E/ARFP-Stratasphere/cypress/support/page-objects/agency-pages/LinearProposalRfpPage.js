@@ -68,5 +68,26 @@ class LinearProposalRfpPage {
     buyerMsgContent() {
         return cy.get("[class='msg-row right'] .msg-content");
     }
+    negotiateButton() {
+        return cy.get('.negotiate-tooltip-button .ink');
+    }
+    sendSelectedBuylinesModal() {
+        return cy.get('.osu-surface.osu-surface-level-7.osu-overlay.osu-modal.small-modal');
+    }
+    sendSelectedBuylinesModalTitle() {
+        return cy.get('.osu-overlay-header');
+    }
+    sendSelectedBuylinesModalMyRate(myRate) {
+        return cy.get("div[title='$ " + myRate + "']").last();
+    }
+    alertBox() {
+        return cy.get('.s-alert-box-inner > span');
+    }
+    lineChangesMsg () {
+        return cy.get('.osu-banner-body').last();
+    }
+    sellerRateTexBoxValue() {
+        return cy.get('[aria-rowindex="2"] [aria-colindex="14"] .text-right');
+    }
 }
-export const linearProposalRfpPage = new LinearProposalRfpPage;
+export default LinearProposalRfpPage;

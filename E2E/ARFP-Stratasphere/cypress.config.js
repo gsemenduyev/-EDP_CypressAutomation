@@ -17,16 +17,16 @@ module.exports = defineConfig({
   viewportWidth: 1920,
   viewportHeight: 1080,
   defaultCommandTimeout: 15000,
-  pageLoadTimeout: 300000,
+  pageLoadTimeout: 600000,
   screenshotOnRunFailure: true,
   video: true,
   env: {
     allure: true,
     allureOmitPreviousAttemptScreenshots: true,
     allureReuseAfterSpec: true,
-    allureAddVideoOnPass : true,
+    allureAddVideoOnPass: true,
     allureResultsPath: "cypress/reports/allure-results",
-
+    
     // PROD 
     // agencyUrl: "https://2wayrfp.gotostrata.com/RFP/login",
     // agencyUsername: "agency.one@mail.com",
@@ -47,10 +47,10 @@ module.exports = defineConfig({
     runMode: 1,
   },
   projectId: "p6oru5",
-
+  
   e2e: {
     setupNodeEvents,
+    experimentalOriginDependencies: true,
     specPattern: "**/*.feature",
-    //specPattern: 'cypress/integration/examples/*.js'
   },
 });

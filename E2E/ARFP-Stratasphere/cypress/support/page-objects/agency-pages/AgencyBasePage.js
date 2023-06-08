@@ -18,4 +18,4 @@ class AgencyBasePage {
         return cy.get(".osu-button.ghost").first();
     }
 }
-export const agencyBasePage = new AgencyBasePage;
+export default AgencyBasePage;

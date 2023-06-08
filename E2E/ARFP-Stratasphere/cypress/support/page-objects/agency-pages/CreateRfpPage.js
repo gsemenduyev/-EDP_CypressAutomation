@@ -68,15 +68,12 @@ class CreateRfpPage {
     vendorInputBox() {
         return cy.get("input[placeholder='Type to search vendors'");
     }
-
     vendorSearchOptions() {
         return cy.get('#ui-select-choices-11 .ui-select-highlight');
     }
-
     vendorContact() {
         return cy.get('.vendor-contact a');
     }
-
     vendorContactOptions() {
         return cy.get("[ng-repeat*='contact in contacts']");
     }
@@ -114,4 +111,4 @@ class CreateRfpPage {
         });
     }
 }
-export const createRfpPage = new CreateRfpPage;
+export default CreateRfpPage;

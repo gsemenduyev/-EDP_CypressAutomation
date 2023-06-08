@@ -147,4 +147,4 @@ class SSphereProposalsPage {
         return cy.get("[class='msg-row'] .msg-content");
     }
 }
-export const sSphereProposalsPage = new SSphereProposalsPage;
+export default SSphereProposalsPage;

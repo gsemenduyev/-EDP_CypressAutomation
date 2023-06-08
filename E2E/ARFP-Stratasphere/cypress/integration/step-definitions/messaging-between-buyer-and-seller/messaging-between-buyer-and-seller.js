@@ -3,8 +3,11 @@
 /// <reference types="cypress-xpath" />
 import 'cypress-data-session';
 import { Given } from "@badeball/cypress-cucumber-preprocessor";
-import { sSphereProposalsPage } from "../../../support/page-objects/ssphere-pages/SSphereProposalsPage";
-import { linearProposalRfpPage } from "../../../support/page-objects/agency-pages/LinearProposalRfpPage";
+import SSphereProposalsPage from "../../../support/page-objects/ssphere-pages/SSphereProposalsPage";
+import LinearProposalRfpPage from "../../../support/page-objects/agency-pages/LinearProposalRfpPage";
+
+const sSphereProposalsPage = new SSphereProposalsPage;
+const linearProposalRfpPage = new LinearProposalRfpPage;
 
 const sellerMessage = 'Hi Buyer';
 const buyerMessage = 'Hi Seller';
@@ -30,8 +33,8 @@ Given('Validate message from Buyer', () => {
 Given('Send a message from Buyer to Seller', () => {
     linearProposalRfpPage.actionsDropdown().click({ force: true });
     linearProposalRfpPage.msgAndAttachmentsOption().click();
-    linearProposalRfpPage.textarea().type(buyerMessage)
-    linearProposalRfpPage.sentMsgButton().click()
+    linearProposalRfpPage.textarea().type(buyerMessage);
+    linearProposalRfpPage.sentMsgButton().click();
     linearProposalRfpPage.buyerMsgContent().should('have.text', buyerMessage);
     linearProposalRfpPage.msgSidebarCloseButton().click();
 }) 
@@ -40,5 +43,5 @@ Given('Send a message from Buyer to Seller', () => {
 Given('Validate the message from Buyer', () => {
     sSphereProposalsPage.msgsButton().click({ force: true });
     sSphereProposalsPage.campaignMsgsModal().should('be.visible');
-    sSphereProposalsPage.buyerMsgsContent().should('have.text', buyerMessage)
+    sSphereProposalsPage.buyerMsgsContent().should('have.text', buyerMessage);
 })
