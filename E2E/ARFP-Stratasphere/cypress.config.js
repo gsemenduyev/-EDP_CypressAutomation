@@ -4,12 +4,14 @@ const preprocessor = require("@badeball/cypress-cucumber-preprocessor");
 const browserify = require("@badeball/cypress-cucumber-preprocessor/browserify");
 const registerDataSession = require('cypress-data-session/src/plugin')
 const allureWriter = require('@shelex/cypress-allure-plugin/writer');
+const TestRailReporter = require('cypress-testrail');
 
 async function setupNodeEvents(on, config) {
   await preprocessor.addCucumberPreprocessorPlugin(on, config);
   on("file:preprocessor", browserify.default(config));
   allureWriter(on, config);
   registerDataSession(on, config);
+  new TestRailReporter(on, config).register();
   return config;
 }
 
@@ -43,9 +45,6 @@ module.exports = defineConfig({
     sspherePassword: "abc123!"
   },
 
-  retries: {
-    runMode: 1,
-  },
   projectId: "p6oru5",
   
   e2e: {

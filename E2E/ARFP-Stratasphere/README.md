@@ -5,6 +5,8 @@ cd E2E
 cd ARFP-Stratasphere
 
 npm install
+npm update
+
 npx cypress open
 npm test
 npm run test-stratasphere
