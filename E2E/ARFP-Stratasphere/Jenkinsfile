@@ -17,7 +17,7 @@ pipeline {
             steps {
                 sh "node --version"
                 sh "uname -m && cat /etc/*release"
-                sh "cd E2E\ARFP-Stratasphere"
+                sh "cd E2E/ARFP-Stratasphere"
             //    sh "cd ARFP-Stratasphere"
                 sh "npm install"
                 sh "npm install -g allure-commandline"
