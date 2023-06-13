@@ -25,19 +25,19 @@ pipeline {
             }
         }
     }
-    post{
-        always{
-            publishHTML(
-                target: [
-                        allowMissing: false,
-                        alwaysLinkToLastBuild: false,
-                        keepAll: true,
-                        reportDir: 'cypress/reports/allure-report',
-                        reportFiles: 'index.html',
-                        reportName: "Allure Report"
-                ]
-        )
-        }
-    }
+    // post{
+    //     always{
+    //         publishHTML(
+    //             target: [
+    //                     allowMissing: false,
+    //                     alwaysLinkToLastBuild: false,
+    //                     keepAll: true,
+    //                     reportDir: 'cypress/reports/allure-report',
+    //                     reportFiles: 'index.html',
+    //                     reportName: "Allure Report"
+    //             ]
+    //     )
+    //     }
+    // }
 
     }
