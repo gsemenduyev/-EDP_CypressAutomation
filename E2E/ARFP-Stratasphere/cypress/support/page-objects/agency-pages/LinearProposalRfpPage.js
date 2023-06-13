@@ -89,5 +89,8 @@ class LinearProposalRfpPage {
     sellerRateTexBoxValue() {
         return cy.get('[aria-rowindex="2"] [aria-colindex="14"] .text-right');
     }
+    exportProposalXmlButton() {
+        return cy.contains('Export Proposal XML');
+    }
 }
 export default LinearProposalRfpPage;

@@ -12,7 +12,6 @@
     "cy:run:stratasphere": "cypress run --browser chrome --headed --env tags=\"@stratasphere\" allure=true",
     "cy:run:arfp": "cypress run --browser chrome --headed --env tags=\"@arfp\" allure=true",
     
-
     "test-wip": "npm run allure:clear && npm run cy:run:wip && npm run allure:report",
     "test": "npm run allure:clear && npm run cy:run:all && npm run allure:report",
     "test-stratasphere": "npm run allure:clear && npm run cy:run:stratasphere && npm run allure:report",

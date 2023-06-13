@@ -1,10 +1,14 @@
 NODE.js
-JAVA 8 >=
+JAVA >= 8 
+
+cd E2E
+cd ARFP-Stratasphere
 
 npm install
-
+npx cypress open
 npm test
 npm run test-stratasphere
 npm run test-arfp
+npm run test-wip
 
 allure open 'cypress/reports/allure-report'
