@@ -1,0 +1,43 @@
+pipeline {
+    agent {
+        docker {
+      label 'al2'
+      image 'cypress/browsers:node18.12.0-chrome107'
+      args '--ipc=host'
+    }
+    }
+     parameters{
+        choice(name: 'POJECTS', choices: ['stratasphere', 'arfp'], description: "Choice the Project to run")
+    }
+    options{
+        ansiColor('xterm')
+    }
+    stages {
+        stage('Test') {
+            steps {
+                sh "node --version"
+                sh "uname -m && cat /etc/*release"
+                sh "cd E2E"
+                sh "cd ARFP-Stratasphere"
+                sh "npm install"
+                sh "npm install -g allure-commandline"
+                sh "npm run test-${POJECTS}"
+            }
+        }
+    }
+    post{
+        always{
+            publishHTML(
+                target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: 'cypress/reports/allure-report',
+                        reportFiles: 'index.html',
+                        reportName: "Allure Report"
+                ]
+        )
+        }
+    }
+
+    }
