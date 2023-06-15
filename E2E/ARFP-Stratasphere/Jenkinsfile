@@ -23,7 +23,21 @@ pipeline {
     post{
 
         always{
-            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'E2E/ARFP-Stratasphere/cypress/reports', reportFiles: 'E2E/ARFP-Stratasphere/cypress/reports/multi-html-report/index.html', reportName: 'HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+             publishHTML (target : [allowMissing: true,
+        alwaysLinkToLastBuild: true,
+        keepAll: true,
+        reportDir: 'E2E/ARFP-Stratasphere/cypress/reports/html',
+        reportFiles: 'cucumber-htmlreport.html.html',
+        reportName: 'Cucumber Report',
+        reportTitles: 'Cucumber Report'])
+      publishHTML (target : [allowMissing: true,
+        alwaysLinkToLastBuild: true,
+        keepAll: true,
+        reportDir: 'E2E/ARFP-Stratasphere/cypress/reports/multi-html-report',
+        reportFiles: 'index.html',
+        reportName: 'Multi HTML Report',
+        reportTitles: 'Multi HTML Report'])
+        
         }
     }
 
