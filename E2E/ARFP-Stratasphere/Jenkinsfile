@@ -31,14 +31,14 @@ pipeline {
         alwaysLinkToLastBuild: true,
         keepAll: true,
         reportDir: 'E2E/ARFP-Stratasphere/cypress/reports',
-        reportFiles: 'E2E/ARFP-Stratasphere/cypress/reports/cucumber-reports/cucumber-html-report/index.html',
+        reportFiles: 'cucumber-reports/cucumber-html-report/index.html',
         reportName: 'Cucumber Report',
         reportTitles: 'Cucumber Report'])
       publishHTML (target : [allowMissing: true,
         alwaysLinkToLastBuild: true,
         keepAll: true,
         reportDir: 'E2E/ARFP-Stratasphere/cypress/reports',
-        reportFiles: 'E2E/ARFP-Stratasphere/cypress/reports/multi-html-report/index.html',
+        reportFiles: 'multi-html-report/index.html',
         reportName: 'Multi HTML Report',
         reportTitles: 'Multi HTML Report'])
         
