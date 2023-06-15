@@ -1,13 +1,13 @@
 pipeline {
     agent {
         docker {
-      label 'al2'
-      image 'cypress/browsers:node18.12.0-chrome107'
-      args '--ipc=host'
+            label 'al2'
+            image 'cypress/browsers:node18.12.0-chrome107'
+            args '--ipc=host'
     }
-    }
-     parameters{
-        choice(name: 'POJECTS', choices: ['stratasphere', 'arfp'], description: "Choice the Project to run")
+}
+    parameters{
+        choice(name: 'POJECTS', choices: ['stratasphere', 'arfp', 'wip'], description: "Choice the Project to run")
     }
     options{
         ansiColor('xterm')
@@ -15,29 +15,29 @@ pipeline {
     stages {
         stage('Test') {
             steps {
-                sh "node --version"
-                sh "uname -m && cat /etc/*release"
-                sh "cd E2E/ARFP-Stratasphere"
-            //    sh "cd ARFP-Stratasphere"
-                sh "npm install"
-                sh "npm install -g allure-commandline"
-                sh "npm run test-${POJECTS}"
+                sh "cd E2E/ARFP-Stratasphere && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome --headed --env tags=\"@${POJECTS}\""
             }
         }
     }
-    // post{
-    //     always{
-    //         publishHTML(
-    //             target: [
-    //                     allowMissing: false,
-    //                     alwaysLinkToLastBuild: false,
-    //                     keepAll: true,
-    //                     reportDir: 'cypress/reports/allure-report',
-    //                     reportFiles: 'index.html',
-    //                     reportName: "Allure Report"
-    //             ]
-    //     )
-    //     }
-    // }
-
+    post{
+        always{
+            script {
+                sh "cd E2E/ARFP-Stratasphere && node ./cucumber-html-report.js"
+            }
+      publishHTML (target : [allowMissing: true,
+        alwaysLinkToLastBuild: true,
+        keepAll: true,
+        reportDir: 'E2E/ARFP-Stratasphere/cypress/reports',
+        reportFiles: 'cucumber-reports/cucumber-html-report/index.html',
+        reportName: 'Cucumber Report',
+        reportTitles: 'Cucumber Report'])
+      publishHTML (target : [allowMissing: true,
+        alwaysLinkToLastBuild: true,
+        keepAll: true,
+        reportDir: 'E2E/ARFP-Stratasphere/cypress/reports',
+        reportFiles: 'multi-html-report/index.html',
+        reportName: 'Multi HTML Report',
+        reportTitles: 'Multi HTML Report'])
+        }
     }
+}

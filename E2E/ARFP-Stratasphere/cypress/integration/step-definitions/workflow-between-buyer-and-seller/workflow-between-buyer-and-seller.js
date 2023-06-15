@@ -7,7 +7,7 @@ import { Given } from "@badeball/cypress-cucumber-preprocessor";
 import { recurse } from 'cypress-recurse';
 import AgencyLoginPage from '../../../support/page-objects/agency-pages/AgencyLoginPage';
 import AgencyBasePage from '../../../support/page-objects/agency-pages/AgencyBasePage';
-import CreateRFPPage from "../../../support/page-objects/agency-pages/CreateRFPPage";
+import CreateRfpPage from "../../../support/page-objects/agency-pages/CreateRfpPage";
 import RfpDetailsPage from "../../../support/page-objects/agency-pages/RfpDetailsPage";
 import SSphereLoginPage from "../../../support/page-objects/ssphere-pages/SSphereLoginPage";
 import SSphereProposalsPage from "../../../support/page-objects/ssphere-pages/SSphereProposalsPage";
@@ -20,7 +20,7 @@ import SSphereProposalResponsePage from "../../../support/page-objects/ssphere-p
 
 const agencyLoginPage = new AgencyLoginPage;
 const agencyBasePage = new AgencyBasePage;
-const createRfpPage = new CreateRFPPage;
+const createRfpPage = new CreateRfpPage;
 const sSphereLoginPage = new SSphereLoginPage;
 const sSphereProposalsPage = new SSphereProposalsPage;
 const sSphereBasePage = new SSphereBasePage;

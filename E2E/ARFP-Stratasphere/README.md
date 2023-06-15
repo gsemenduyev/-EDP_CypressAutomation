@@ -14,3 +14,5 @@ npm run test-arfp
 npm run test-wip
 
 allure open 'cypress/reports/allure-report'
+
+npx cypress run --browser chrome --headed --env tags=@wip
