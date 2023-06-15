@@ -20,15 +20,21 @@ pipeline {
         }
     }
 
-    post {
+    post{
         always{
-                   echo 'Testing Completed!'
-        script {
-            sh "node ./cucumber-html-report.js"
-        } 
+            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'cypress/reports', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: '', useWrapperFileDirectly: true])
         }
+    }
 
-        }
+    // post {
+    //     always{
+    //                echo 'Testing Completed!'
+    //     script {
+    //         sh "node ./cucumber-html-report.js"
+    //     } 
+    //     }
+
+    //     }
 
     }
 
