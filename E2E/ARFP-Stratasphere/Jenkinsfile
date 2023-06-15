@@ -9,20 +9,23 @@ pipeline {
      parameters{
         choice(name: 'POJECTS', choices: ['stratasphere', 'arfp'], description: "Choice the Project to run")
     }
-    options{
+     options{
         ansiColor('xterm')
     }
     stages {
         stage('Test') {
             steps {
-                sh "npm cache clean --force"
-            //    sh "cd E2E/ARFP-Stratasphere"
-            //    sh "cd ARFP-Stratasphere"
-                sh "cd E2E/ARFP-Stratasphere && npm ci --prefer-offline && npx cypress run --browser chrome --headed --env tags=\"@wip\""
-         //       sh "npm install -g allure-commandline"
-          //      sh "npm run test-${POJECTS}"
+                sh "cd E2E/ARFP-Stratasphere && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome --headed --env tags=\"@${POJECTS}\""
             }
         }
+    }
+
+    post {
+        echo 'Testing Completed!'
+        script {
+            sh "node .\cucumber-html-report.js"
+        }
+
     }
 
     }

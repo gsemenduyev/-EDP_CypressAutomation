@@ -18,4 +18,7 @@ import '@shelex/cypress-allure-plugin';
 // import failOnConsoleError from 'cypress-fail-on-console-error'
 // failOnConsoleError();
 
-require('cypress-xpath');
+module.exports = (on, config) => {
+    on('file:preprocessor', cucumber())
+  
+    }

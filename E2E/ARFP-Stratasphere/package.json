@@ -16,7 +16,18 @@
     "test-arfp": "npm run allure:clear && npm run cy:run:arfp && npm run allure:report"
   },
   "cypress-cucumber-preprocessor": {
-    "stepDefinitions": "cypress/integration/**/*.js"
+    "stepDefinitions": "cypress/integration/**/*.js",
+    "json": {
+      "enabled": true,
+      "output": "cypress/reports/cucumber-reports/results.json"
+    },
+    "messages": {
+      "enabled": true
+    },
+    "html": {
+      "enabled": true,
+      "output": "cypress/reports/cucumber-reports/cucumber-htmlreport.html/index.html"
+    }
   },
   "author": "",
   "license": "ISC",
@@ -25,13 +36,17 @@
     "@shelex/cypress-allure-plugin": "^2.39.1",
     "convert-excel-to-json": "^1.7.0",
     "cypress": "^12.12.0",
+    "cypress-cucumber-attach-screenshots-to-failed-steps": "^1.0.0",
+    "cypress-cucumber-preprocessor": "^4.3.1",
     "cypress-data-session": "^2.7.0",
+    "cypress-fail-on-console-error": "^4.0.2",
     "cypress-file-upload": "^5.0.8",
     "cypress-iframe": "^1.0.1",
     "cypress-ntlm-auth": "^4.1.2",
     "cypress-recurse": "^1.31.2",
     "cypress-testrail": "^2.7.1",
     "esbuild": "^0.17.18",
+    "multiple-cucumber-html-reporter": "^3.4.0",
     "neat-csv": "5.1.0"
   },
   "dependencies": {

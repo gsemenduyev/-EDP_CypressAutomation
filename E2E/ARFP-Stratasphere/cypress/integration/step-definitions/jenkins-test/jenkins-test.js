@@ -11,7 +11,7 @@ Given('Login to Agency RFP Jenkins test', () => {
     agencyLoginPage.usernameBox().type(Cypress.env('agencyUsername'));
     agencyLoginPage.passwordBox().type(Cypress.env('agencyPassword'), { log: false });
     agencyLoginPage.loginButton().click();
-    cy.title().should('eq', 'Home - RFP');
+    cy.title().should('eq', 'Home - RFP1');
 })
 
 // Logout Agency RFP Jenkins test
