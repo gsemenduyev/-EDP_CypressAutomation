@@ -1,15 +1,15 @@
 pipeline {
     agent {
         docker {
-      label 'al2'
-      image 'cypress/browsers:node18.12.0-chrome107'
-      args '--ipc=host'
+            label 'al2'
+            image 'cypress/browsers:node18.12.0-chrome107'
+            args '--ipc=host'
     }
-    }
-     parameters{
+}
+    parameters{
         choice(name: 'POJECTS', choices: ['stratasphere', 'arfp', 'wip'], description: "Choice the Project to run")
     }
-     options{
+    options{
         ansiColor('xterm')
     }
     stages {
@@ -19,15 +19,12 @@ pipeline {
             }
         }
     }
-
     post{
-
         always{
             script {
                 sh "cd E2E/ARFP-Stratasphere && node ./cucumber-html-report.js"
             }
-
-        publishHTML (target : [allowMissing: true,
+      publishHTML (target : [allowMissing: true,
         alwaysLinkToLastBuild: true,
         keepAll: true,
         reportDir: 'E2E/ARFP-Stratasphere/cypress/reports',
@@ -41,20 +38,6 @@ pipeline {
         reportFiles: 'multi-html-report/index.html',
         reportName: 'Multi HTML Report',
         reportTitles: 'Multi HTML Report'])
-        
         }
     }
-
-    // post {
-    //     always{
-    //                echo 'Testing Completed!'
-    //     script {
-    //         sh "node ./cucumber-html-report.js"
-    //     } 
-    //     }
-
-    //     }
-
-    }
-
-    
+}
