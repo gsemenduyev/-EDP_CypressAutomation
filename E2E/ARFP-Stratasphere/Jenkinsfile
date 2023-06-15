@@ -21,11 +21,15 @@ pipeline {
     }
 
     post {
-        echo 'Testing Completed!'
+        always{
+                   echo 'Testing Completed!'
         script {
             sh "node ./cucumber-html-report.js"
+        } 
+        }
+
         }
 
     }
 
-    }
+    
