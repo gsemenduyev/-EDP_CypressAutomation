@@ -22,11 +22,12 @@
       "output": "cypress/reports/cucumber-reports/results.json"
     },
     "messages": {
-      "enabled": true
+      "enabled": true,
+      "output": "cypress/reports/messages/cucumber-messages.ndjson"
     },
     "html": {
       "enabled": true,
-      "output": "cypress/reports/cucumber-reports/cucumber-htmlreport.html/index.html"
+      "output": "cypress/reports/cucumber-reports/cucumber-html-report/index.html"
     }
   },
   "author": "",
