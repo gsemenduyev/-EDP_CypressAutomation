@@ -23,7 +23,7 @@ pipeline {
     post{
 
         always{
-            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'E2E/ARFP-Stratasphere/cypress/reports', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'E2E/ARFP-Stratasphere/cypress/reports', reportFiles: 'E2E/ARFP-Stratasphere/cypress/reports/multi-html-report/index.html', reportName: 'HTML Report', reportTitles: '', useWrapperFileDirectly: true])
         }
     }
 
