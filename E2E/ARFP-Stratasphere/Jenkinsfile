@@ -23,7 +23,7 @@ pipeline {
     post {
         echo 'Testing Completed!'
         script {
-            sh "node .\cucumber-html-report.js"
+            sh "node ./cucumber-html-report.js"
         }
 
     }
