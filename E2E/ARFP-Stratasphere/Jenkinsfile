@@ -7,7 +7,8 @@ pipeline {
     }
 }
     parameters{
-        choice(name: 'POJECTS', choices: ['stratasphere', 'arfp', 'wip'], description: "Choice the Project to run")
+        choice(name: 'ENVIRONMENT', choices: ['Production', 'QA'], description: "Choice the Environment to run")
+        choice(name: 'POJECTS', choices: ['Stratasphere', 'ARFP', 'WIP'], description: "Choice the Project to run")
     }
     options{
         ansiColor('xterm')
@@ -15,7 +16,7 @@ pipeline {
     stages {
         stage('Test') {
             steps {
-                sh "cd E2E/ARFP-Stratasphere && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome --env tags=\"@${POJECTS}\""
+                sh "cd E2E/ARFP-Stratasphere && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome --env tags=\"@${POJECTS}\",ENV=\"@${ENVIRONMENT}\""
             }
         }
     }

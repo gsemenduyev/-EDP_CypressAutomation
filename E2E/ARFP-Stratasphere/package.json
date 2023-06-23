@@ -6,14 +6,14 @@
   "scripts": {
     "allure:report": "allure generate cypress\\reports\\allure-results --clean -o cypress\\reports\\allure-report",
     "allure:clear": "if exist cypress\\reports\\allure-results rmdir /q /s cypress\\reports\\allure-results && if exist cypress\\reports\\allure-report rmdir /q /s cypress\\reports\\allure-report && if exist cypress\\screenshots rmdir /q /s cypress\\screenshots && if exist cypress\\videos rmdir /q /s cypress\\videos",
-    "cy:run:wip": "cypress run --browser chrome --headed --env tags=\"@wip\" allure=true",
+    "cy:run:wip": "cypress run --browser chrome --headed --env tags=\"@WIP\" allure=true",
     "cy:run:all": "cypress run --browser chrome --headed --env allure=true",
-    "cy:run:stratasphere": "cypress run --browser chrome --headed --env tags=\"@stratasphere\" allure=true",
-    "cy:run:arfp": "cypress run --browser chrome --headed --env tags=\"@arfp\" allure=true",
-    "test-wip": "npm run allure:clear && npm run cy:run:wip && npm run allure:report",
+    "cy:run:stratasphere": "cypress run --browser chrome --headed --env tags=\"@Stratasphere\" allure=true",
+    "cy:run:arfp": "cypress run --browser chrome --headed --env tags=\"@ARFP\" allure=true",
+    "test-WIP": "npm run allure:clear && npm run cy:run:wip && npm run allure:report",
     "test": "npm run allure:clear && npm run cy:run:all && npm run allure:report",
-    "test-stratasphere": "npm run allure:clear && npm run cy:run:stratasphere && npm run allure:report",
-    "test-arfp": "npm run allure:clear && npm run cy:run:arfp && npm run allure:report"
+    "test-Stratasphere": "npm run allure:clear && npm run cy:run:stratasphere && npm run allure:report",
+    "test-ARFP": "npm run allure:clear && npm run cy:run:arfp && npm run allure:report"
   },
   "cypress-cucumber-preprocessor": {
     "stepDefinitions": "cypress/integration/**/*.js",
@@ -33,6 +33,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/helper-compilation-targets": "^7.22.5",
     "@cypress/browserify-preprocessor": "^3.0.2",
     "@shelex/cypress-allure-plugin": "^2.39.1",
     "convert-excel-to-json": "^1.7.0",

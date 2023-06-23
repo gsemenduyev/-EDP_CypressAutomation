@@ -1,4 +1,4 @@
-@stratasphere @arfp
+@Stratasphere @ARFP
 Feature: Workflow between buyer and seller
 
   Feature Description:

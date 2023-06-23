@@ -1,4 +1,4 @@
-@arfp
+@ARFP
 Feature: Export from prebuy screen
 
   Feature Description:

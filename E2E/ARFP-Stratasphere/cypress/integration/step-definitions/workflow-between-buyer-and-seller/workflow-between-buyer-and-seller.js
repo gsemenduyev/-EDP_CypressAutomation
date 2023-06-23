@@ -17,6 +17,7 @@ import SearchRfpPage from "../../../support/page-objects/agency-pages/SearchRfpP
 import LinearProposalRfpPage from "../../../support/page-objects/agency-pages/LinearProposalRfpPage";
 import MailinatorHomePage from "../../../support/page-objects/mailinator-pages/MailinatorHomePage";
 import SSphereProposalResponsePage from "../../../support/page-objects/ssphere-pages/SSphereProposalResponsePage";
+import EnvUtils from "../../../support/utils/EnvUtils"
 
 const agencyLoginPage = new AgencyLoginPage;
 const agencyBasePage = new AgencyBasePage;
@@ -30,6 +31,7 @@ const mailinatorHomePage = new MailinatorHomePage;
 const sSphereProposalResponsePage = new SSphereProposalResponsePage;
 const searchRfpPage = new SearchRfpPage;
 const rfpDetailsPage = new RfpDetailsPage;
+const envUtils = new EnvUtils;
 
 const FILE_NAME = 'stores/TEST Dallas RTG_IMP Dec2023.xml'
 const SELLER_REVISION_RATE = '8';
@@ -49,10 +51,10 @@ before(function () {
 
 // Login to Agency RFP
 Given('Login to Agency RFP', () => {
-    cy.visit(Cypress.env('agencyUrl') + "/Login");
+    cy.visit(envUtils.getAgencyUrl());
     agencyBasePage.pageTitle().should('have.text', 'Sign In');
-    agencyLoginPage.usernameBox().type(Cypress.env('agencyUsername'));
-    agencyLoginPage.passwordBox().type(Cypress.env('agencyPassword'), { log: false });
+    agencyLoginPage.usernameBox().type(envUtils.getAgencyUsername());
+    agencyLoginPage.passwordBox().type(envUtils.getAgencyPassword(), { log: false });
     agencyLoginPage.loginButton().click();
     cy.title().should('eq', 'Home - RFP');
 })
@@ -102,7 +104,7 @@ Given('Create New RFP', () => {
     createRfpPage.vendorContact().click();
 
     createRfpPage.vendorContactOptions().each((element, index, list) => {
-        if (element.text().includes(Cypress.env('ssphereUsername'))) {
+        if (element.text().includes(envUtils.getSsphereUsername())) {
             createRfpPage.selectVendorContact().eq(index).click();
         }
     })
@@ -148,10 +150,10 @@ Given('Logout Agency RFP', () => {
 
 // Login to Stratasphere
 Given('Login to Stratasphere', () => {
-    cy.visit(Cypress.env('ssphereUrl'));
+    cy.visit(envUtils.getSsphereUrl());
     sSphereBasePage.pageTitle().should('include.text', ' Login');
-    sSphereLoginPage.usernameBox().type(Cypress.env('ssphereUsername'));
-    sSphereLoginPage.passwordBox().type(Cypress.env('sspherePassword'), { log: false });
+    sSphereLoginPage.usernameBox().type(envUtils.getSsphereUsername());
+    sSphereLoginPage.passwordBox().type(envUtils.getSspherePassword(), { log: false });
     sSphereLoginPage.loginButton().click();
     sSphereBasePage.menuDropdownToggle().should('be.visible');
     sSphereBasePage.pageTitle().then(function (titleText) {
@@ -319,10 +321,10 @@ Given('Create Type1 Rate Request', () => {
 
 // Search Stratasphere user in Mailinator
 Given('Search Stratasphere user in Mailinator', () => {
-    cy.visit(Cypress.env('mailinatorUrl'));
+    cy.visit(envUtils.getMailinatorUrl());
     cy.title().should('eq', 'Mailinator');
     mailinatorHomePage.userSearchBox().clear();
-    mailinatorHomePage.userSearchBox().type(Cypress.env('ssphereUsername'));
+    mailinatorHomePage.userSearchBox().type(envUtils.getSsphereUsername());
     mailinatorHomePage.goButton().click({ force: true });
 
 })

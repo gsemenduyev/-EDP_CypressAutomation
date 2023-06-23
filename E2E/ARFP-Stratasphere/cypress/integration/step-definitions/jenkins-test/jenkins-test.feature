@@ -1,4 +1,4 @@
-@wip
+@WIP
 Feature: Workflow between buyer and seller Jenkins test
 
 
