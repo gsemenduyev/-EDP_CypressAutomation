@@ -366,8 +366,8 @@ Given('Redirect from Mailinator to Stratasphere', () => {
         cy.visit(redirectSsphereLink);
     })
     sSphereBasePage.pageTitle().should('include.text', ' Login');
-    sSphereLoginPage.usernameBox().type(Cypress.env('ssphereUsername'));
-    sSphereLoginPage.passwordBox().type(Cypress.env('sspherePassword'));
+    sSphereLoginPage.usernameBox().type(envUtils.getSsphereUsername());
+    sSphereLoginPage.passwordBox().type(envUtils.getSspherePassword());
     sSphereLoginPage.loginButton().click();
 })
 

@@ -14,13 +14,12 @@ before(function () {
         });
     }
 });
-
-after(function () {
+before(function () {
     cy.writeFile('cypress/reports/run-info/run-env.json', {
         agencyUrl: envProperties.agencyUrl,
         ssphereUrl: envProperties.ssphereUrl,
         mailinatorUrl: envProperties.mailinatorUrl,
-        env: ENV
+        env: envProperties.env,
     })
 })
 

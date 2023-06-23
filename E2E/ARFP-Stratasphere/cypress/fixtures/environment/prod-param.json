@@ -5,5 +5,6 @@
     "ssphereUsername": "nsingh@mailinator.com",
     "mailinatorUrl": "https://www.mailinator.com/v4/public/inboxes.jsp",
     "agencyPassword": "Password01!",
-    "sspherePassword": "abc123!"
+    "sspherePassword": "abc123!",
+    "env": "Production"
 }

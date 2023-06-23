@@ -5,6 +5,7 @@ const registerDataSession = require('cypress-data-session/src/plugin')
 const allureWriter = require('@shelex/cypress-allure-plugin/writer');
 const TestRailReporter = require('cypress-testrail');
 const fs = require('fs');
+const RUN_ENV_FILE_PATH = 'cypress/reports/run-info/run-env.json';
 
 async function setupNodeEvents(on, config) {
   await addCucumberPreprocessorPlugin(on, config, { omitAfterRunHandler: true, });
@@ -15,9 +16,9 @@ async function setupNodeEvents(on, config) {
 
   on('after:run', async (results) => {
     try {
-      fs.readFileSync('cypress/reports/run-info/run-env.json', { encoding: 'utf8', flag: 'r' });
+      fs.readFileSync(RUN_ENV_FILE_PATH, { encoding: 'utf8', flag: 'r' });
     } catch (error) {
-      fs.writeFileSync('cypress/reports/run-info/run-env.json',
+      fs.writeFileSync(RUN_ENV_FILE_PATH,
         JSON.stringify({
           agencyUrl: "-",
           ssphereUrl: "-",
@@ -25,7 +26,7 @@ async function setupNodeEvents(on, config) {
           env: "-"
         }))
     }
-    const data = fs.readFileSync('cypress/reports/run-info/run-env.json', { encoding: 'utf8', flag: 'r' });
+    const data = fs.readFileSync(RUN_ENV_FILE_PATH, { encoding: 'utf8', flag: 'r' });
     const runInfo = JSON.parse(data);
     if (results) {
       await afterRunHandler(config);
@@ -67,6 +68,7 @@ module.exports = defineConfig({
     allureOmitPreviousAttemptScreenshots: true,
     allureReuseAfterSpec: true,
     allureAddVideoOnPass: true,
+    allureResultsPath: "cypress/videos/allure-results",
     //allureResultsPath: "cypress/reports/allure-results",
   },
   projectId: "p6oru5",
