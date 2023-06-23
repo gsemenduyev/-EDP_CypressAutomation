@@ -36,9 +36,7 @@ const envUtils = new EnvUtils;
 const FILE_NAME = 'stores/TEST Dallas RTG_IMP Dec2023.xml'
 const SELLER_REVISION_RATE = '8';
 const BUYER_REVISION_RATE = '$ 5.00';
-const ENV = Cypress.env('ENV');
 
-let envProperties;
 let newRfpParam;
 let xmlResponseParam;
 
@@ -49,37 +47,14 @@ before(function () {
     cy.fixture('/agencyRFP/xml-response-param').then(function (data) {
         xmlResponseParam = data;
     })
-    if (ENV === 'Production') {
-        cy.log(`Environment - ${ENV}`);
-        cy.fixture('/environment/prod-param.json').then(function (data) {
-            envProperties = data;
-        });
-    } else if (ENV === 'QA' || ENV === undefined) {
-        cy.log(`Environment - ${ENV}`);
-        cy.fixture('/environment/qa-param.json').then(function (data) {
-            envProperties = data;
-        });
-    }
 })
 
 // Login to Agency RFP
 Given('Login to Agency RFP', () => {
-    cy.writeFile('cypress/reports/run-info/run-env.json', {
-        // agencyUrl: envProperties.agencyUrl,
-        // ssphereUrl: envProperties.ssphereUrl,
-        // mailinatorUrl: envProperties.mailinatorUrl
-        agencyUrl: "1",
-        ssphereUrl: "2",
-        mailinatorUrl: "3"
-
-    })
-
-
-
-    cy.visit(envProperties.agencyUrl);
+    cy.visit(envUtils.getAgencyUrl());
     agencyBasePage.pageTitle().should('have.text', 'Sign In');
-    agencyLoginPage.usernameBox().type(envProperties.agencyUsername);
-    agencyLoginPage.passwordBox().type(envProperties.agencyPassword, { log: false });
+    agencyLoginPage.usernameBox().type(envUtils.getAgencyUsername());
+    agencyLoginPage.passwordBox().type(envUtils.getAgencyPassword(), { log: false });
     agencyLoginPage.loginButton().click();
     cy.title().should('eq', 'Home - RFP');
 })
