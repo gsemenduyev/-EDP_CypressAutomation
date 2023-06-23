@@ -40,7 +40,6 @@ report.generate({
       { label: 'Agency RFP URL', value: runInfo['agencyUrl'] },
       { label: 'Stratasphere URL', value: runInfo['ssphereUrl'] },
       { label: 'Seller Email URL', value: runInfo['mailinatorUrl'] },
-      { label: 'Release', value: '1.0.0' },
       { label: 'Cypress Version', value: runInfo['cypressVersion'] },
       { label: 'Node Version', value: runInfo['nodeVersion'] },
       {
