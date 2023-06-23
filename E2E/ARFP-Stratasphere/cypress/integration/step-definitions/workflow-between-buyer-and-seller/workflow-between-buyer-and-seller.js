@@ -65,9 +65,13 @@ before(function () {
 // Login to Agency RFP
 Given('Login to Agency RFP', () => {
     cy.writeFile('cypress/reports/run-info/run-env.json', {
-        agencyUrl: envProperties.agencyUrl,
-        ssphereUrl: envProperties.ssphereUrl,
-        mailinatorUrl: envProperties.mailinatorUrl
+        // agencyUrl: envProperties.agencyUrl,
+        // ssphereUrl: envProperties.ssphereUrl,
+        // mailinatorUrl: envProperties.mailinatorUrl
+        agencyUrl: "1",
+        ssphereUrl: "2",
+        mailinatorUrl: "3"
+
     })
     cy.visit(envProperties.agencyUrl);
     agencyBasePage.pageTitle().should('have.text', 'Sign In');
