@@ -1,7 +1,7 @@
 const report = require('multiple-cucumber-html-reporter');
 const dayjs = require('dayjs');
 const fs = require('fs');
-const data = fs.readFileSync('cypress/reports/report-metadata.json', { encoding: 'utf8', flag: 'r' });
+const data = fs.readFileSync('cypress/reports/run-info/report-metadata.json', { encoding: 'utf8', flag: 'r' });
 const runInfo = JSON.parse(data);
 
 const osName = () => {

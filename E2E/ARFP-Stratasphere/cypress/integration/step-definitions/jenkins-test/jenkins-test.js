@@ -15,14 +15,14 @@ const ENV = Cypress.env('ENV');
 // Login to Agency RFP Jenkins test
 Given('Login to Agency RFP Jenkins test', () => {
     //    cy.log(`Hello URL ------  ${Cypress.env('agencyUrl')}`)
-
+envUtils.setReportRunInfoEnv()
     cy.log('Hi')
 })
 
 
 // Logout Agency RFP Jenkins test
 Given('Logout Agency RFP Jenkins test', () => {
-
+    
     // let a =   Cypress.env('agencyUrl')
     cy.log('By')
 

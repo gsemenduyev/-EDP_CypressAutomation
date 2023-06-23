@@ -1,5 +1,3 @@
-
-
 const { defineConfig } = require("cypress");
 const { addCucumberPreprocessorPlugin, afterRunHandler } = require("@badeball/cypress-cucumber-preprocessor");
 const browserify = require("@badeball/cypress-cucumber-preprocessor/browserify");
@@ -7,8 +5,6 @@ const registerDataSession = require('cypress-data-session/src/plugin')
 const allureWriter = require('@shelex/cypress-allure-plugin/writer');
 const TestRailReporter = require('cypress-testrail');
 const fs = require('fs');
-const data = fs.readFileSync('cypress/fixtures/environment/temp-env.json', { encoding: 'utf8', flag: 'r' });
-const runInfo = JSON.parse(data);
 
 async function setupNodeEvents(on, config) {
   await addCucumberPreprocessorPlugin(on, config, { omitAfterRunHandler: true, });
@@ -16,11 +12,24 @@ async function setupNodeEvents(on, config) {
   allureWriter(on, config);
   registerDataSession(on, config);
   new TestRailReporter(on, config).register();
+
   on('after:run', async (results) => {
+    try {
+      fs.readFileSync('cypress/reports/run-info/run-env.json', { encoding: 'utf8', flag: 'r' });
+    } catch (error) {
+      fs.writeFileSync('cypress/reports/run-info/run-env.json',
+        JSON.stringify({
+          agencyUrl: "-",
+          ssphereUrl: "-",
+          mailinatorUrl: "-",
+        }))
+    }
+    const data = fs.readFileSync('cypress/reports/run-info/run-env.json', { encoding: 'utf8', flag: 'r' });
+    const runInfo = JSON.parse(data);
     if (results) {
       await afterRunHandler(config);
       fs.writeFileSync(
-        'cypress/reports/report-metadata.json',
+        'cypress/reports/run-info/report-metadata.json',
         JSON.stringify(
           {
             browserName: results.browserName,

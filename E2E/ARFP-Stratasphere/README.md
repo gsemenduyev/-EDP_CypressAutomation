@@ -16,6 +16,7 @@ npm run test-WIP
 allure open 'cypress/reports/allure-report'
 
 npx cypress run --browser chrome --headed --env tags=@WIP
+
 node ./cucumber-html-report.js
 
 npx cypress open  --env ENV="QA"
@@ -25,7 +26,7 @@ npx cypress run  --env ENV="Production"
 npx cypress open  --env ENV="Production"
 
 npx cypress run --browser chrome --headed --env tags="@WIP",ENV="Production"
-
+npx cypress run --browser chrome --env tags=\"@${POJECTS}\",ENV=\"@${ENVIRONMENT}\""
 npx cypress open --config-file production-config.json --env tags="@WIP"
 npx cypress open --config-file cypress.qa.json
 production.config.js
