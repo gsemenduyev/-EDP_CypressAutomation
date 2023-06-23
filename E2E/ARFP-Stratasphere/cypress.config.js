@@ -22,6 +22,7 @@ async function setupNodeEvents(on, config) {
           agencyUrl: "-",
           ssphereUrl: "-",
           mailinatorUrl: "-",
+          env: "-"
         }))
     }
     const data = fs.readFileSync('cypress/reports/run-info/run-env.json', { encoding: 'utf8', flag: 'r' });
@@ -40,6 +41,7 @@ async function setupNodeEvents(on, config) {
             cypressVersion: results.cypressVersion,
             startedTestsAt: results.startedTestsAt,
             endedTestsAt: results.endedTestsAt,
+            env: runInfo['env'],
             agencyUrl: runInfo['agencyUrl'],
             ssphereUrl: runInfo['ssphereUrl'],
             mailinatorUrl: runInfo['mailinatorUrl'],

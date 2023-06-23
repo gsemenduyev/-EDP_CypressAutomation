@@ -19,7 +19,8 @@ after(function () {
     cy.writeFile('cypress/reports/run-info/run-env.json', {
         agencyUrl: envProperties.agencyUrl,
         ssphereUrl: envProperties.ssphereUrl,
-        mailinatorUrl: envProperties.mailinatorUrl
+        mailinatorUrl: envProperties.mailinatorUrl,
+        env: ENV
     })
 })
 
@@ -45,13 +46,5 @@ class EnvUtils {
     getMailinatorUrl() {
         return envProperties.mailinatorUrl;
     }
-    // setReportRunInfoEnv(){
-    //  //   cy.writeFile('cypress/fixtures/environment/temp-env.json', {'cypress/reports/temp-env.json'
-    //      cy.writeFile('cypress/reports/run-info/run-env.json', {
-    //      agencyUrl: envProperties.agencyUrl,
-    //      ssphereUrl: envProperties.ssphereUrl,
-    //      mailinatorUrl: envProperties.mailinatorUrl
-    //  })
-    // }
 }
 export default EnvUtils;

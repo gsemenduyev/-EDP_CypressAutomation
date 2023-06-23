@@ -36,6 +36,7 @@ report.generate({
   customData: {
     title: 'Run Info',
     data: [
+      { label: 'Environment', value: runInfo['env'] },
       { label: 'Agency RFP URL', value: runInfo['agencyUrl'] },
       { label: 'Stratasphere URL', value: runInfo['ssphereUrl'] },
       { label: 'Seller Email URL', value: runInfo['mailinatorUrl'] },
