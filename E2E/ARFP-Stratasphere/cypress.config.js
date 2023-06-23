@@ -67,7 +67,7 @@ module.exports = defineConfig({
     allureOmitPreviousAttemptScreenshots: true,
     allureReuseAfterSpec: true,
     allureAddVideoOnPass: true,
-    allureResultsPath: "cypress/reports/allure-results",
+    //allureResultsPath: "cypress/reports/allure-results",
   },
   projectId: "p6oru5",
   e2e: {
