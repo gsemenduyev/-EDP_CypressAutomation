@@ -73,6 +73,9 @@ Given('Login to Agency RFP', () => {
         mailinatorUrl: "3"
 
     })
+
+
+
     cy.visit(envProperties.agencyUrl);
     agencyBasePage.pageTitle().should('have.text', 'Sign In');
     agencyLoginPage.usernameBox().type(envProperties.agencyUsername);
