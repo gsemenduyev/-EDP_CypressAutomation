@@ -9,7 +9,10 @@ class LinearProposalRfpPage {
         return cy.get(".rdg-header-sort-name", { log: false }).eq(index, { log: false });
     }
     proposalHeaders() {
-        return cy.get(".rdg-header-sort-name");
+        return cy.get(".rdg-header-sort-name", { log: false });
+    }
+    proposalResponse() {
+        return cy.get("[role='grid']");
     }
     proposalCell(index) {
         return cy.get("div[role='gridcell']", { log: false }).eq(index, { log: false });
@@ -91,6 +94,12 @@ class LinearProposalRfpPage {
     }
     exportProposalXmlButton() {
         return cy.contains('Export Proposal XML');
+    }
+    importProposalXmlButton() {
+        return cy.get("input[type='file']");
+    }
+    modalImportXmlButton() {
+        return cy.contains("Import XML");
     }
 }
 export default LinearProposalRfpPage;
