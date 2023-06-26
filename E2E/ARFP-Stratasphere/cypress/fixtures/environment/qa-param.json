@@ -1,0 +1,10 @@
+{
+    "agencyUrl": "https://2wayrfpqa.pregotostrata.com/RFP",
+    "agencyUsername": "agency.three@mail.com",
+    "ssphereUrl": "https://ssphereqa.pregotostrata.com/ui_new#/",
+    "ssphereUsername": "laseller2@mailinator.com",
+    "mailinatorUrl": "https://www.mailinator.com/v4/public/inboxes.jsp",
+    "agencyPassword": "Password01!",
+    "sspherePassword": "abc123!",
+    "env": "QA"
+}

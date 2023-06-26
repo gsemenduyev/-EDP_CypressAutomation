@@ -1,4 +1,4 @@
-@arfp
+@ARFP
 Feature: Line negotiation
 
   Feature Description: Negotiation worflow between Buyer and Seller

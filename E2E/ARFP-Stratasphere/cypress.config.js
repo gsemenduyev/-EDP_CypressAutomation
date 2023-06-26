@@ -1,17 +1,58 @@
-
 const { defineConfig } = require("cypress");
-const preprocessor = require("@badeball/cypress-cucumber-preprocessor");
+const { addCucumberPreprocessorPlugin, afterRunHandler } = require("@badeball/cypress-cucumber-preprocessor");
 const browserify = require("@badeball/cypress-cucumber-preprocessor/browserify");
 const registerDataSession = require('cypress-data-session/src/plugin')
 const allureWriter = require('@shelex/cypress-allure-plugin/writer');
 const TestRailReporter = require('cypress-testrail');
+const fs = require('fs');
+const RUN_ENV_FILE_PATH = 'cypress/reports/run-info/run-env.json';
 
 async function setupNodeEvents(on, config) {
-  await preprocessor.addCucumberPreprocessorPlugin(on, config);
+  await addCucumberPreprocessorPlugin(on, config, { omitAfterRunHandler: true, });
   on("file:preprocessor", browserify.default(config));
   allureWriter(on, config);
   registerDataSession(on, config);
   new TestRailReporter(on, config).register();
+
+  on('after:run', async (results) => {
+    try {
+      fs.readFileSync(RUN_ENV_FILE_PATH, { encoding: 'utf8', flag: 'r' });
+    } catch (error) {
+      fs.writeFileSync(RUN_ENV_FILE_PATH,
+        JSON.stringify({
+          agencyUrl: "-",
+          ssphereUrl: "-",
+          mailinatorUrl: "-",
+          env: "-"
+        }))
+    }
+    const data = fs.readFileSync(RUN_ENV_FILE_PATH, { encoding: 'utf8', flag: 'r' });
+    const runInfo = JSON.parse(data);
+    if (results) {
+      await afterRunHandler(config);
+      fs.writeFileSync(
+        'cypress/reports/run-info/report-metadata.json',
+        JSON.stringify(
+          {
+            browserName: results.browserName,
+            browserVersion: results.browserVersion,
+            osName: results.osName,
+            osVersion: results.osVersion,
+            nodeVersion: results.config.resolvedNodeVersion,
+            cypressVersion: results.cypressVersion,
+            startedTestsAt: results.startedTestsAt,
+            endedTestsAt: results.endedTestsAt,
+            env: runInfo['env'],
+            agencyUrl: runInfo['agencyUrl'],
+            ssphereUrl: runInfo['ssphereUrl'],
+            mailinatorUrl: runInfo['mailinatorUrl'],
+          },
+          null,
+          '\t',
+        ),
+      );
+    }
+  });
   return config;
 }
 
@@ -27,26 +68,10 @@ module.exports = defineConfig({
     allureOmitPreviousAttemptScreenshots: true,
     allureReuseAfterSpec: true,
     allureAddVideoOnPass: true,
-    allureResultsPath: "cypress/reports/allure-results",
-    
-    // PROD 
-    // agencyUrl: "https://2wayrfp.gotostrata.com/RFP/login",
-    // agencyUsername: "agency.one@mail.com",
-    // ssphereUrl: "https://stratasphere.media/ui_new/#/",
-    // ssphereUsername: "nsingh@mailinator.com",
-
-    agencyUrl: "https://2wayrfpqa.pregotostrata.com/RFP",
-    agencyUsername: "agency.three@mail.com",
-    ssphereUrl: "https://ssphereqa.pregotostrata.com/ui_new#/",
-    ssphereUsername: "laseller2@mailinator.com",
-
-    mailinatorUrl: "https://www.mailinator.com/v4/public/inboxes.jsp?to=laseller2",
-    agencyPassword: "Password01!",
-    sspherePassword: "abc123!"
+    allureResultsPath: "cypress/videos/allure-results",
+    //allureResultsPath: "cypress/reports/allure-results",
   },
-
   projectId: "p6oru5",
-  
   e2e: {
     setupNodeEvents,
     experimentalOriginDependencies: true,

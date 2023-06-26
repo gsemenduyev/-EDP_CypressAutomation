@@ -1,6 +1,5 @@
 /// <reference types="Cypress" />
 /// <reference types="cypress-data-session" />
-/// <reference types="cypress-xpath" />
 import 'cypress-data-session';
 import { Given } from "@badeball/cypress-cucumber-preprocessor";
 import SSphereProposalsPage from "../../../support/page-objects/ssphere-pages/SSphereProposalsPage";
