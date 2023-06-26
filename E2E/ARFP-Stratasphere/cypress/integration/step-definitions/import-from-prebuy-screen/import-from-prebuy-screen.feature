@@ -1,4 +1,4 @@
-@WIP
+@ARFP
 Feature: Import from prebuy screen
 
     Feature Description:
