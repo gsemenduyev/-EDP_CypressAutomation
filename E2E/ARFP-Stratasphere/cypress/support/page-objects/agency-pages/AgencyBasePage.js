@@ -17,5 +17,8 @@ class AgencyBasePage {
     pastDueRfpModalNoButton() {
         return cy.get(".osu-button.ghost").first();
     }
+    alertBox() {
+        return cy.get('.s-alert-box-inner span');
+    }
 }
 export default AgencyBasePage;
