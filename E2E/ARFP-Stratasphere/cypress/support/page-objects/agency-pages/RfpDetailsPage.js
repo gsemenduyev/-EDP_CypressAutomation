@@ -8,5 +8,8 @@ class RfpDetailsPage {
     launchPreBuyButton(milliseconds) {
         return cy.get('.btn-link', { timeout: milliseconds });
     }
+    responseButton(milliseconds) {
+        return cy.get("[ng-show='!request.$hideResponses'] a", { timeout: milliseconds });
+    }
 }
 export default RfpDetailsPage;

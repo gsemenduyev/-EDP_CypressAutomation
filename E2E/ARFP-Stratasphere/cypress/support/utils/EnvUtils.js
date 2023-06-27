@@ -8,7 +8,7 @@ before(function () {
             envProperties = data;
         });
     } else if (ENV === 'QA' || ENV === undefined) {
-        cy.log(`Environment - ${ENV}`);
+        cy.log(`Environment - QA`);
         cy.fixture('/environment/qa-param.json').then(function (data) {
             envProperties = data;
         });
