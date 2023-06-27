@@ -22,6 +22,6 @@ Feature: Export from prebuy screen
     * Login to Agency RFP
     * Search for existing RFP
     * Click on Launch Pre-buy button
-    * Validate the response from Agency
+    * Validate the response from "Seller Xml"
     * Export from prebuy screen and validate XML file
     * Logout Agency RFP
