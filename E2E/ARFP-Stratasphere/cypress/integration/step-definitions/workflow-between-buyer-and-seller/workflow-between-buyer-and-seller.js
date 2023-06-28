@@ -38,14 +38,18 @@ const SELLER_REVISION_RATE = '8';
 const BUYER_REVISION_RATE = '$ 5.00';
 
 let newRfpParam;
-let xmlResponseParam;
+let sellerXml;
+let buyerXml
 
 before(function () {
     cy.fixture('/agencyRFP/new-rfp-param').then(function (data) {
         newRfpParam = data;
     })
     cy.fixture('/agencyRFP/xml-response-param').then(function (data) {
-        xmlResponseParam = data;
+        sellerXml = data;
+    })
+    cy.fixture('/agencyRFP/import-xml-prebuy-screen-param').then(function (data) {
+        buyerXml = data;
     })
 })
 
@@ -242,39 +246,50 @@ Given('Click on Launch Pre-buy button', () => {
     cy.title('eq', 'Linear Proposal - RFP');
 })
 
-// Validate the response from Agency
-Given('Validate the response from Agency', () => {
+// Validate the response from Agency {string}
+Given('Validate the response from {string}', string => {
     cy.dataSession('newRfpName').then(newRfpName => {
         linearProposalRfpPage.campaignHeaderText(15000).should('have.text', newRfpName);
     })
 
+    cy.viewport(2560, 1292);
+    cy.wait(500);
     let cellIndex = 1;
     let headerText1;
-    let columnNum = 21;
     let linesValueMap = new Map();
-    linearProposalRfpPage.proposalRows().each((element, rowIndex, list) => {
-        let tempList = new Array();
-        if (rowIndex !== 0 && rowIndex !== list.length - 1) {
-            for (let columnIndex = 0; columnIndex <= columnNum; columnIndex++) {
-                linearProposalRfpPage.proposalHeader(columnIndex).then(function (headerText) {
-                    headerText1 = headerText.text();
-                })
-                linearProposalRfpPage.proposalCell(cellIndex++).then(function (cellText) {
-                    var cellTextTemp = cellText.text();
-                    if (cellTextTemp !== "" && cellTextTemp !== '0') {
-                        tempList.push(headerText1 + " - " + cellTextTemp);
-                    }
-                })
+    linearProposalRfpPage.proposalHeaders().then((value) => {
+        linearProposalRfpPage.proposalRows().each((element, rowIndex, list) => {
+            let tempList = new Array();
+            if (rowIndex !== 0 && rowIndex !== list.length - 1) {
+                for (let columnIndex = 0; columnIndex < value.length; columnIndex++) {
+                    linearProposalRfpPage.proposalHeader(columnIndex).then(function (headerText) {
+                        headerText1 = headerText.text();
+
+                    });
+                    linearProposalRfpPage.proposalCell(cellIndex++).then(function (cellText) {
+                        var cellTextTemp = cellText.text();
+                        if (cellTextTemp !== "" && cellTextTemp !== '0') {
+                            tempList.push(headerText1 + " - " + cellTextTemp);
+                        }
+                    });
+                }
+                cellIndex++;
+                linesValueMap.set("Line " + rowIndex, tempList);
             }
-            cellIndex++;
-            linesValueMap.set("Line " + rowIndex, tempList);
-        }
+        })
     }).then(() => {
-        let map1 = xml_proposal_map('');
+        let xmlParam;
+        if(string === 'Buyer Imported Xml'){
+            xmlParam = buyerXml;
+        } else if(string === 'Seller Xml'){
+            xmlParam = sellerXml;
+        }
+        let map1 = xml_proposal_map(xmlParam);
         let map2 = linesValueMap;
         cy.compare_two_maps(map1, map2);
-    })
-
+    });
+    linearProposalRfpPage.proposalResponse().screenshot({capture: 'viewport'});
+    cy.viewport(1920, 1080);
 })
 
 // Delete the Line
@@ -448,9 +463,9 @@ Given('Validate Buyer Revision Details', () => {
  Helper function that's converting Json file with parameters related to 'Linear Proposal - RFP' page.
  Returns map of parameters
 */
-function xml_proposal_map() {
+function xml_proposal_map(param) {
     let linesValueMap = new Map();
-    xmlResponseParam.lines.forEach((lines, index) => {
+    param.lines.forEach((lines, index) => {
         let tempList = new Array();
         lines.line.forEach((line) => {
             tempList.push(line);

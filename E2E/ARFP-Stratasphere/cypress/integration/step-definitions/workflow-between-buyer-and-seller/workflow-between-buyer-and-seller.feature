@@ -24,7 +24,7 @@ Feature: Workflow between buyer and seller
     * Login to Agency RFP
     * Search for existing RFP
     * Click on Launch Pre-buy button
-    * Validate the response from Agency
+    * Validate the response from "Seller Xml"
     * Delete the Line
     * Create Type1 Rate Request
     * Logout Agency RFP

@@ -20,7 +20,7 @@ Feature: Line negotiation
     * Login to Agency RFP
     * Search for existing RFP
     * Click on Launch Pre-buy button
-    * Validate the response from Agency
+    * Validate the response from "Seller Xml"
     * Change My Rete "5.00" and Negotiate the line with seller
     * Logout Agency RFP
 
