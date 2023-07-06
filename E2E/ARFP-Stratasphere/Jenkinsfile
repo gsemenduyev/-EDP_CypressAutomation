@@ -8,7 +8,7 @@ pipeline {
 }
     parameters{
         choice(name: 'ENVIRONMENT', choices: ['Production', 'QA'], description: "Choose the Environment to run")
-        choice(name: 'POJECTS', choices: ['Stratasphere', 'ARFP', 'WIP'], description: "Choose the Project to run")
+        choice(name: 'PROJECTS', choices: ['Stratasphere', 'ARFP', 'WIP'], description: "Choose the Project to run")
     }
     options{
         ansiColor('xterm')
