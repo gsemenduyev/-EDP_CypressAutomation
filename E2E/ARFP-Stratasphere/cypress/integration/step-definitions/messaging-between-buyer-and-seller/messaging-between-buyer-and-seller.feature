@@ -4,7 +4,7 @@ Feature: Messaging between Seller and Buyer
   Feature Description: Validate messaging between Seller and Buyer
 
   Scenario: Buyer creates new RFP and send it to Seller (MBSB)
-    * Login to Agency RFP
+    * Login to Agency RFP with 'Permanent' password
     * Create New RFP
     * Validate RFP Creation
     * Logout Agency RFP
@@ -17,7 +17,7 @@ Feature: Messaging between Seller and Buyer
     * Logout from Stratasphere
 
   Scenario: Bueyr Validates RFP Details Page and sends a message to Buyer (MBSB)
-    * Login to Agency RFP
+    * Login to Agency RFP with 'Permanent' password
     * Search for existing RFP
     * Click on Launch Pre-buy button
     * Validate message from Buyer

@@ -9,7 +9,7 @@ class MailinatorHomePage {
     publicMessageText(milliseconds) {
         return cy.get('.gray-color', { timeout: milliseconds });
     }
-    emailBodyIframe() {
+    emailMsgBodyIframe() {
         return cy.get('#html_msg_body');
     }
     goButton() {
@@ -35,6 +35,9 @@ class MailinatorHomePage {
     }
     deleteEmailButton() {
         return cy.get("a[onclick='deleteEmail();']");
+    }
+    emailTextMsgBodyIframe() {
+        return cy.get('#texthtml_msg_body');
     }
 
     /* 

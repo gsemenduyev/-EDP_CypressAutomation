@@ -1,10 +1,11 @@
 {
     "agencyUrl": "https://2wayrfp.gotostrata.com/RFP/login",
-    "agencyUsername": "agency.one@mail.com",
+    "agencyUsername": "FWAutomatedTesting@mailinator.com",
     "ssphereUrl": "https://stratasphere.media/ui_new/#/",
     "ssphereUsername": "nsingh@mailinator.com",
     "mailinatorUrl": "https://www.mailinator.com/v4/public/inboxes.jsp",
-    "agencyPassword": "Password01!",
+    "agencyPassword": "Freewheel@18",
+    "tempAgencyPassword": "Temporary123!",
     "sspherePassword": "abc123!",
     "env": "Production"
 }

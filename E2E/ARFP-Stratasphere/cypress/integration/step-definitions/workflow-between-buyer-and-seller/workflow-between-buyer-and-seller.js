@@ -52,13 +52,18 @@ before(function () {
         buyerXml = data;
     })
 })
-
-// Login to Agency RFP
-Given('Login to Agency RFP', () => {
+//Login to Agency RFP with 'Temporary, Permanent' password
+Given('Login to Agency RFP with {string} password', string => {
+    var agencyPassword;
+    if (string === 'Temporary') {
+        agencyPassword = envUtils.getTempAgencyPassword();
+    } else if (string === 'Permanent') {
+        agencyPassword = envUtils.getAgencyPassword();
+    }
     cy.visit(envUtils.getAgencyUrl());
     agencyBasePage.pageTitle().should('have.text', 'Sign In');
-    agencyLoginPage.usernameBox().type(envUtils.getAgencyUsername());
-    agencyLoginPage.passwordBox().type(envUtils.getAgencyPassword(), { log: false });
+    agencyLoginPage.usernameBox().type(agencyPassword);
+    agencyLoginPage.passwordBox().type(agencyPassword, { log: false });
     agencyLoginPage.loginButton().click();
     cy.title().should('eq', 'Home - RFP');
 })
@@ -279,16 +284,16 @@ Given('Validate the response from {string}', string => {
         })
     }).then(() => {
         let xmlParam;
-        if(string === 'Buyer Imported Xml'){
+        if (string === 'Buyer Imported Xml') {
             xmlParam = buyerXml;
-        } else if(string === 'Seller Xml'){
+        } else if (string === 'Seller Xml') {
             xmlParam = sellerXml;
         }
         let map1 = xml_proposal_map(xmlParam);
         let map2 = linesValueMap;
         cy.compare_two_maps(map1, map2);
     });
-    linearProposalRfpPage.proposalResponse().screenshot({capture: 'viewport'});
+    linearProposalRfpPage.proposalResponse().screenshot({ capture: 'viewport' });
     cy.viewport(1920, 1080);
 })
 
@@ -334,12 +339,16 @@ Given('Create Type1 Rate Request', () => {
     linearProposalRfpPage.myReteTexBoxValue().should('have.text', BUYER_REVISION_RATE);
 })
 
-// Search Stratasphere user in Mailinator
-Given('Search Stratasphere user in Mailinator', () => {
+// Search for Stratasphere, AgencyRFP user in Mailinator
+Given('Search for {string} user in Mailinator', string => {
     cy.visit(envUtils.getMailinatorUrl());
     cy.title().should('eq', 'Mailinator');
     mailinatorHomePage.userSearchBox().clear();
-    mailinatorHomePage.userSearchBox().type(envUtils.getSsphereUsername());
+    if (string === 'Stratasphere') {
+        mailinatorHomePage.userSearchBox().type(envUtils.getSsphereUsername());
+    } else if (string === 'AgencyRFP') {
+        mailinatorHomePage.userSearchBox().type(envUtils.getAgencyUsername());
+    }
     mailinatorHomePage.goButton().click({ force: true });
 
 })
@@ -351,19 +360,19 @@ Given('Validate email Proposal Response', () => {
     })
 
     const getIframeBody = () => {
-        return mailinatorHomePage.emailBodyIframe()
+        return mailinatorHomePage.emailMsgBodyIframe()
             .its('0.contentDocument.body')
             .then(cy.wrap);
     }
 
-    getIframeBody(mailinatorHomePage.emailBodyIframe()).find(mailinatorHomePage.emailDetailsSyntax()).eq(0).should('have.text', '2');
-    getIframeBody(mailinatorHomePage.emailBodyIframe()).find(mailinatorHomePage.emailDetailsSyntax()).eq(1).should('have.text', newRfpParam.agency);
-    getIframeBody(mailinatorHomePage.emailBodyIframe()).find(mailinatorHomePage.emailDetailsSyntax()).eq(2)
+    getIframeBody(mailinatorHomePage.emailMsgBodyIframe()).find(mailinatorHomePage.emailDetailsSyntax()).eq(0).should('have.text', '2');
+    getIframeBody(mailinatorHomePage.emailMsgBodyIframe()).find(mailinatorHomePage.emailDetailsSyntax()).eq(1).should('have.text', newRfpParam.agency);
+    getIframeBody(mailinatorHomePage.emailMsgBodyIframe()).find(mailinatorHomePage.emailDetailsSyntax()).eq(2)
         .should('include.text', newRfpParam.startDate.slice(0, 6) + '20' + newRfpParam.startDate.slice(6) + ' to '
             + newRfpParam.endDate.slice(0, 6) + '20' + newRfpParam.endDate.slice(6));
-    getIframeBody(mailinatorHomePage.emailBodyIframe()).find(mailinatorHomePage.emailDetailsSyntax()).eq(3).should('have.text', newRfpParam.primaryDemo);
+    getIframeBody(mailinatorHomePage.emailMsgBodyIframe()).find(mailinatorHomePage.emailDetailsSyntax()).eq(3).should('have.text', newRfpParam.primaryDemo);
 
-    getIframeBody(mailinatorHomePage.emailBodyIframe()).find('a').eq(0).then(function (el) {
+    getIframeBody(mailinatorHomePage.emailMsgBodyIframe()).find('a').eq(0).then(function (el) {
         const url = el.prop('href')
         cy.dataSession({
             name: 'redirectSsphereLink',

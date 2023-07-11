@@ -17,7 +17,7 @@ Feature: Line negotiation
     * Logout from Stratasphere
 
   Scenario: Buyer negotiate Seller rate (LN)
-    * Login to Agency RFP
+    * Login to Agency RFP with 'Permanent' password
     * Search for existing RFP
     * Click on Launch Pre-buy button
     * Validate the response from "Seller Xml"
@@ -25,11 +25,11 @@ Feature: Line negotiation
     * Logout Agency RFP
 
   Scenario: Seller validates the email from buyer and Accepts the Buyer rate (LN)
-    * Search Stratasphere user in Mailinator
+    * Search for 'Stratasphere' user in Mailinator
     * "Accept" negotiation from email and verify user landed on Stratasphere page
 
   Scenario: Buyer received confirmation message for line negotiation Accepted and change the rate.
-    * Login to Agency RFP
+    * Login to Agency RFP with 'Permanent' password
     * Search for existing RFP
     * Click on Launch Pre-buy button
     * Validate line changes were "accepted" by the Seller
@@ -37,11 +37,11 @@ Feature: Line negotiation
     * Logout Agency RFP
 
   Scenario: Seller validates the email from buyer and Rejects the Buyer rate (LN)
-    * Search Stratasphere user in Mailinator
+    * Search for 'Stratasphere' user in Mailinator
     * "Reject" negotiation from email and verify user landed on Stratasphere page
 
   Scenario: Buyer received confirmation message for line negotiation Rejected and change the rate.
-    * Login to Agency RFP
+    * Login to Agency RFP with 'Permanent' password
     * Search for existing RFP
     * Click on Launch Pre-buy button
     * Validate line changes were "rejected" by the Seller
@@ -49,7 +49,7 @@ Feature: Line negotiation
     * Logout Agency RFP
 
   Scenario: Seller validates the email from buyer and Makes Changes to the Buyer rate (LN)
-    * Search Stratasphere user in Mailinator
+    * Search for 'Stratasphere' user in Mailinator
     * "Make Changes" negotiation from email and verify user landed on Stratasphere page
 
   Scenario: Buyer received confirmation message for line negotiation Make Changes.

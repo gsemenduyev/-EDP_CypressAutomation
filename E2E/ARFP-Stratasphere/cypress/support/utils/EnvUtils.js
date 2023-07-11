@@ -33,6 +33,9 @@ class EnvUtils {
     getAgencyPassword() {
         return envProperties.agencyPassword;
     }
+    getTempAgencyPassword() {
+        return envProperties.tempAgencyPassword;
+    }
     getSsphereUrl() {
         return envProperties.ssphereUrl;
     }
