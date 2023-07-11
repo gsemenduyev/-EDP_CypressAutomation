@@ -5,14 +5,30 @@ const registerDataSession = require('cypress-data-session/src/plugin')
 const allureWriter = require('@shelex/cypress-allure-plugin/writer');
 const TestRailReporter = require('cypress-testrail');
 const fs = require('fs');
+const xlsx = require('node-xlsx').default;
+const path = require('path')
 const RUN_ENV_FILE_PATH = 'cypress/reports/run-info/run-env.json';
-
+const delay = async (ms) => new Promise((res) => setTimeout(res, ms));
 async function setupNodeEvents(on, config) {
   await addCucumberPreprocessorPlugin(on, config, { omitAfterRunHandler: true, });
   on("file:preprocessor", browserify.default(config));
   allureWriter(on, config);
   registerDataSession(on, config);
   new TestRailReporter(on, config).register();
+  
+  on('task', { 
+    parseXlsx({ filePath }) { 
+      return new Promise((resolve, reject) => { 
+        try {
+          const jsonData = xlsx.parse(fs.readFileSync(filePath)); 
+          resolve(jsonData);
+        } catch (e) {
+          reject(e)
+        }
+      })
+    }
+  });
+
 
   on('after:run', async (results) => {
     try {

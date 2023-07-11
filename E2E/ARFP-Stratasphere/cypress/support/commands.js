@@ -9,6 +9,11 @@
 // ***********************************************
 /// <reference types="cypress-data-session" />
 import 'cypress-file-upload';
+
+Cypress.Commands.add("parse_xlsx", (inputFile) => {
+    return cy.task('parseXlsx', { filePath: inputFile })
+  })
+
 /*
 Upload File into Webpage.
 [@param] fileName - name of the file.

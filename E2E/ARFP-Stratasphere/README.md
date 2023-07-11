@@ -6,7 +6,7 @@ cd E2E/ARFP-Stratasphere
 npm install
 npm update
 
-npx cypress open
+npx cypress open --env ENV="Production"
 npm test
 npm run test-Stratasphere
 npm run test-ARFP
