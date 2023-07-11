@@ -4,7 +4,7 @@ Feature: Line negotiation
   Feature Description: Negotiation worflow between Buyer and Seller
 
   Scenario: Buyer creates new RFP and send it to Stratashere (LN).
-    * Login to Agency RFP
+    * Login to Agency RFP with 'Permanent' password
     * Create New RFP
     * Validate RFP Creation
     * Logout Agency RFP
@@ -53,7 +53,7 @@ Feature: Line negotiation
     * "Make Changes" negotiation from email and verify user landed on Stratasphere page
 
   Scenario: Buyer received confirmation message for line negotiation Make Changes.
-    * Login to Agency RFP
+    * Login to Agency RFP with 'Permanent' password
     * Search for existing RFP
     * Click on Launch Pre-buy button
     * Validate line changes were "Make Changes" by the Seller

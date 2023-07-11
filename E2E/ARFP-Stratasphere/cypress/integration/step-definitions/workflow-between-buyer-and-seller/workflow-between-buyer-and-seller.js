@@ -62,7 +62,7 @@ Given('Login to Agency RFP with {string} password', string => {
     }
     cy.visit(envUtils.getAgencyUrl());
     agencyBasePage.pageTitle().should('have.text', 'Sign In');
-    agencyLoginPage.usernameBox().type(agencyPassword);
+    agencyLoginPage.usernameBox().type(envUtils.getAgencyUsername());
     agencyLoginPage.passwordBox().type(agencyPassword, { log: false });
     agencyLoginPage.loginButton().click();
     cy.title().should('eq', 'Home - RFP');
