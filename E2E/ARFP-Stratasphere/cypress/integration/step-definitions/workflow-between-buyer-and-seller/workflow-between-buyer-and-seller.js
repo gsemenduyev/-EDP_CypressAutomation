@@ -203,10 +203,10 @@ Given('Upload XML Response', () => {
     const checkXmlValidated = () => {
         cy.is_element_exists(sSphereProposalsPage.validatedXmlTextSyntax()).then(function (validated) {
             cy.is_element_exists(sSphereProposalsPage.proposalVerificationModalSyntax()).then(proposalVerification => {
-                if (proposalVerification) {
+                if (proposalVerification === true) {
                     sSphereProposalsPage.uploadVerificationYesButton().click()
-                    index = 15;
-                } else if (index < 15 && !validated) {
+                    index = 20;
+                } else if (index < 20 && validated === false) {
                     cy.wait(1000);
                     index++;
                     checkXmlValidated();
