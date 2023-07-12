@@ -146,5 +146,11 @@ class SSphereProposalsPage {
     buyerMsgsContent() {
         return cy.get("[class='msg-row'] .msg-content");
     }
+    validatedXmlTextSyntax(){
+        return '.validated'
+    }
+    proposalVerificationModalSyntax(){
+        return '.modal-body'
+    }
 }
 export default SSphereProposalsPage;

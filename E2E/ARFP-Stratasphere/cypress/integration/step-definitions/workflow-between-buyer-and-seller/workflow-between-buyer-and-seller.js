@@ -199,13 +199,22 @@ Given('Upload XML Response', () => {
     sSphereProposalsPage.uploadResponseButton().click();
     sSphereProposalsPage.uploadResponseText().should('have.text', 'Upload Response');
     cy.upload_file(FILE_NAME, sSphereProposalsPage.fileInput());
-    cy.wait(3000);
-    sSphereProposalsPage.validatedXmlText().then(function (el) {
-        if (el.text() !== 'Validated') {
-            sSphereProposalsPage.uploadVerificationYesButton().click();
-        }
-    })
-
+    var index = 0;
+    const checkXmlValidated = () => {
+        cy.is_element_exists(sSphereProposalsPage.validatedXmlTextSyntax()).then(function (validated) {
+            cy.is_element_exists(sSphereProposalsPage.proposalVerificationModalSyntax()).then(proposalVerification => {
+                if (proposalVerification) {
+                    sSphereProposalsPage.uploadVerificationYesButton().click()
+                    index = 15;
+                } else if (index < 15 && !validated) {
+                    cy.wait(1000);
+                    index++;
+                    checkXmlValidated();
+                }
+            })
+        })
+    }
+    checkXmlValidated();
     sSphereProposalsPage.validatedXmlText().should('have.text', 'Validated');
     sSphereProposalsPage.uploadResponseNextButton().click();
     sSphereProposalsPage.additionalAttachmentsText().should('include.text', 'Additional Attachments');

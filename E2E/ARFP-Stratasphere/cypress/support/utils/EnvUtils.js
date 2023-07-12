@@ -7,7 +7,7 @@ before(function () {
         cy.fixture('/environment/prod-param.json').then(function (data) {
             envProperties = data;
         });
-    } else if (ENV === 'QA' || ENV === undefined) {
+    } else {
         cy.log(`Environment - QA`);
         cy.fixture('/environment/qa-param.json').then(function (data) {
             envProperties = data;
