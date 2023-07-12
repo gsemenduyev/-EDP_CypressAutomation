@@ -16,7 +16,7 @@ Feature: Messaging between Seller and Buyer
     * Send a message from Seller to Buyer
     * Logout from Stratasphere
 
-  Scenario: Bueyr Validates RFP Details Page and sends a message to Buyer (MBSB)
+  Scenario: Buyer Validates RFP Details Page and sends a message to Buyer (MBSB)
     * Login to Agency RFP with 'Permanent' password
     * Search for existing RFP
     * Click on Launch Pre-buy button

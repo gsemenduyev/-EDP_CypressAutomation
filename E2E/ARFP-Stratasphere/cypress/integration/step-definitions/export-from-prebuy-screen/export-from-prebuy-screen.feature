@@ -5,7 +5,7 @@ Feature: Export from prebuy screen
   Buyer creates new RFP and sends to Seller, Seller uploads Proposal XML and sends to Buyer,
   Buyer receives the Proposal XML, exports the XML from prebuy screen and validates the file
 
-  Scenario: Buyer creates new RFP and sends it to Stratashere (EFPS)
+  Scenario: Buyer creates new RFP and sends it to Stratasphere (EFPS)
     * Login to Agency RFP with 'Permanent' password
     * Create New RFP
     * Validate RFP Creation

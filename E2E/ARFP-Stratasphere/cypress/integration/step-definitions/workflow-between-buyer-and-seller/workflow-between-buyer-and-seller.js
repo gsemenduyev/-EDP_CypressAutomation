@@ -362,8 +362,8 @@ Given('Search for {string} user in Mailinator', string => {
 
 })
 
-// Validate email Proposal Response
-Given('Validate email Proposal Response', () => {
+// Validate email for New Rate Request
+Given('Validate email for New Rate Request', () => {
     cy.dataSession('newRfpName').then(newRfpName => {
         mailinatorHomePage.search_email('New Rate Request for ', newRfpName);
     })
@@ -390,7 +390,6 @@ Given('Validate email Proposal Response', () => {
             shareAcrossSpecs: true,
         })
     })
-    mailinatorHomePage.deleteEmailButton().click();
 })
 
 // Redirect from Mailinator to Stratasphere
