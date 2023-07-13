@@ -1,4 +1,4 @@
-@WIP
+@ARFP
 Feature: Stratasphere and Agency RFP email verification
 
     Feature Description:
@@ -12,7 +12,7 @@ Feature: Stratasphere and Agency RFP email verification
         * Validate RFP Creation
         * Logout Agency RFP
 
-    Scenario: Seller receives email for New RFP Request from buyer
+    Scenario: Seller receives New RFP Request email from buyer
         * Search for 'Stratasphere' user in Mailinator
         * Validate email for 'New RFP Request'
 
@@ -23,6 +23,6 @@ Feature: Stratasphere and Agency RFP email verification
         * Upload XML Response
         * Logout from Stratasphere
 
-    Scenario: Seller receives email for New RFP Request from buyer
+    Scenario: Buyer receives RFP Response email from buyer
         * Search for 'AgencyRFP' user in Mailinator
         * Validate email for 'RFP Response Received'

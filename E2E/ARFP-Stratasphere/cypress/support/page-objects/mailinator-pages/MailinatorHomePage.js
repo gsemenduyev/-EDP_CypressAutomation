@@ -39,6 +39,12 @@ class MailinatorHomePage {
     emailTextMsgBodyIframe() {
         return cy.get('#texthtml_msg_body');
     }
+    emailHeader(index) {
+        return cy.get('.wrapper-info-title.d-flex div').eq(index);
+    }
+    userSearchBox() {
+        return cy.get('#inbox_field');
+    }
 
     /* 
     Utils function that searches for email in https://www.mailinator.com/v4/public/inboxes.jsp

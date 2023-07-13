@@ -26,7 +26,7 @@ Given('Validate message from Buyer', () => {
     linearProposalRfpPage.msgAndAttachmentsOption().click();
     linearProposalRfpPage.sellerMsgContent().should('have.text', sellerMessage);
     linearProposalRfpPage.msgSidebarCloseButton().click();
-}) 
+})
 
 // Send a message from Buyer to Seller
 Given('Send a message from Buyer to Seller', () => {
@@ -36,7 +36,7 @@ Given('Send a message from Buyer to Seller', () => {
     linearProposalRfpPage.sentMsgButton().click();
     linearProposalRfpPage.buyerMsgContent().should('have.text', buyerMessage);
     linearProposalRfpPage.msgSidebarCloseButton().click();
-}) 
+})
 
 // Validate the message from Buyer
 Given('Validate the message from Buyer', () => {
