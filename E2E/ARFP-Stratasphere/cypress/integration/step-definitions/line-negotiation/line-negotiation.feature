@@ -1,9 +1,9 @@
 @ARFP
 Feature: Line negotiation
 
-  Feature Description: Negotiation worflow between Buyer and Seller
+  Feature Description: Negotiation workflow between Buyer and Seller
 
-  Scenario: Buyer creates new RFP and send it to Stratashere (LN).
+  Scenario: Buyer creates new RFP and send it to Stratasphere (LN).
     * Login to Agency RFP with 'Permanent' password
     * Create New RFP
     * Validate RFP Creation

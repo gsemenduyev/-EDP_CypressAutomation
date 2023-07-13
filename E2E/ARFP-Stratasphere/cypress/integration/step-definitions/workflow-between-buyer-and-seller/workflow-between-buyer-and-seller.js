@@ -1,8 +1,8 @@
 /// <reference types="Cypress" />
 /// <reference types="cypress-data-session" />
 /// <reference types="cypress-iframe" />
-import 'cypress-data-session'
-import 'cypress-iframe'
+import 'cypress-data-session';
+import 'cypress-iframe';
 import { Given } from "@badeball/cypress-cucumber-preprocessor";
 import { recurse } from 'cypress-recurse';
 import AgencyLoginPage from '../../../support/page-objects/agency-pages/AgencyLoginPage';
@@ -17,7 +17,7 @@ import SearchRfpPage from "../../../support/page-objects/agency-pages/SearchRfpP
 import LinearProposalRfpPage from "../../../support/page-objects/agency-pages/LinearProposalRfpPage";
 import MailinatorHomePage from "../../../support/page-objects/mailinator-pages/MailinatorHomePage";
 import SSphereProposalResponsePage from "../../../support/page-objects/ssphere-pages/SSphereProposalResponsePage";
-import EnvUtils from "../../../support/utils/EnvUtils"
+import EnvUtils from "../../../support/utils/EnvUtils";
 
 const agencyLoginPage = new AgencyLoginPage;
 const agencyBasePage = new AgencyBasePage;
@@ -33,7 +33,7 @@ const searchRfpPage = new SearchRfpPage;
 const rfpDetailsPage = new RfpDetailsPage;
 const envUtils = new EnvUtils;
 
-const FILE_NAME = 'stores/TEST Dallas RTG_IMP Dec2023.xml'
+const FILE_NAME = 'stores/TEST Dallas RTG_IMP Dec2023.xml';
 const SELLER_REVISION_RATE = '8';
 const BUYER_REVISION_RATE = '$ 5.00';
 
@@ -66,6 +66,7 @@ Given('Login to Agency RFP with {string} password', string => {
     agencyLoginPage.passwordBox().type(agencyPassword, { log: false });
     agencyLoginPage.loginButton().click();
     cy.title().should('eq', 'Home - RFP');
+    cy.screenshot();
 })
 
 // Create New RFP
@@ -125,7 +126,7 @@ Given('Create New RFP', () => {
 
     createRfpPage.saveButton().click();
     createRfpPage.newRfpPageTitle().should('include.text', 'AutomationRFP');
-
+    cy.screenshot();
     agencyBasePage.pageTitle().then(function (newRfpName) {
         cy.dataSession({
             name: 'newRfpName',
@@ -138,23 +139,26 @@ Given('Create New RFP', () => {
     createRfpPage.saveAndSendRfpButton().click();
     cy.dataSession('newRfpName').then(newRfpName => {
         agencyBasePage.pageTitle(60000).should('include.text', newRfpName);
-    })
-})
+    });
+
+});
 
 // Validate RFP Creation
 Given('Validate RFP Creation', () => {
     cy.dataSession('newRfpName').then(newRfpName => {
         agencyBasePage.pageTitle(60000).should('have.text', newRfpName);
-    })
+    });
     rfpDetailsPage.rfpStatus(1200000).contains('Sent', { timeout: 1200000 });
     rfpDetailsPage.rfpStatus().should('have.text', 'Sent');
     rfpDetailsPage.launchPreBuyButton();
+    cy.screenshot();
 })
 
 // Logout Agency RFP
 Given('Logout Agency RFP', () => {
     agencyBasePage.signOutButton().click({ force: true });
     agencyBasePage.pageTitle().should('have.text', 'Sign In');
+    cy.screenshot();
 })
 
 // Login to Stratasphere
@@ -167,11 +171,12 @@ Given('Login to Stratasphere', () => {
     sSphereBasePage.menuDropdownToggle().should('be.visible');
     sSphereBasePage.pageTitle().then(function (titleText) {
         if (titleText.text().includes(' Home')) {
-            sSphereHomePage.proposalsField().click()
+            sSphereHomePage.proposalsField().click();
         } else {
             sSphereBasePage.pageTitle().should('include.text', ' Proposals');
         }
     })
+    cy.screenshot();
 })
 
 // Search for RFP in Stratasphere
@@ -180,6 +185,7 @@ Given('Search for RFP in Stratasphere', () => {
         sSphereProposalsPage.campaignSearchBox().type(newRfpName);
         cy.contains(newRfpName).click();
     })
+    cy.screenshot();
 })
 
 // Validate {string} in Stratasphere'
@@ -192,6 +198,7 @@ Given('Validate {string} Page in Stratasphere', string => {
     sSphereProposalsPage.endDate().should('have.text', newRfpParam.endDate.slice(0, 6) + '20' + newRfpParam.endDate.slice(6));
     sSphereProposalsPage.agency().should('have.text', newRfpParam.client);
     sSphereProposalsPage.product().should('have.text', newRfpParam.product);
+    cy.screenshot();
 })
 
 // Upload XML Response
@@ -199,13 +206,23 @@ Given('Upload XML Response', () => {
     sSphereProposalsPage.uploadResponseButton().click();
     sSphereProposalsPage.uploadResponseText().should('have.text', 'Upload Response');
     cy.upload_file(FILE_NAME, sSphereProposalsPage.fileInput());
-    cy.wait(3000);
-    sSphereProposalsPage.validatedXmlText().then(function (el) {
-        if (el.text() !== 'Validated') {
-            sSphereProposalsPage.uploadVerificationYesButton().click();
-        }
-    })
-
+    var index = 0;
+    const checkXmlValidated = () => {
+        cy.is_element_exists(sSphereProposalsPage.validatedXmlTextSyntax()).then(function (validated) {
+            cy.is_element_exists(sSphereProposalsPage.proposalVerificationModalSyntax()).then(proposalVerification => {
+                if (proposalVerification === true) {
+                    sSphereProposalsPage.uploadVerificationYesButton().click();
+                    index = 20;
+                } else if (index < 20 && validated === false) {
+                    cy.wait(1000);
+                    index++;
+                    checkXmlValidated();
+                }
+            });
+        });
+    }
+    checkXmlValidated();
+    cy.screenshot();
     sSphereProposalsPage.validatedXmlText().should('have.text', 'Validated');
     sSphereProposalsPage.uploadResponseNextButton().click();
     sSphereProposalsPage.additionalAttachmentsText().should('include.text', 'Additional Attachments');
@@ -222,6 +239,7 @@ Given('Logout from Stratasphere', () => {
     sSphereBasePage.userSettingsDropdown(15000).click({ force: true });
     sSphereBasePage.logOutButton().click({ force: true });
     sSphereBasePage.pageTitle().should('include.text', ' Login');
+    cy.screenshot();
 })
 
 // Search for existing RFP
@@ -242,8 +260,8 @@ Given('Search for existing RFP', () => {
             }
         )
         rfpDetailsPage.pageTitle().should('have.text', newRfpName);
-    })
-})
+    });
+});
 
 // Click on Launch Pre-buy button
 Given('Click on Launch Pre-buy button', () => {
@@ -281,7 +299,7 @@ Given('Validate the response from {string}', string => {
                 cellIndex++;
                 linesValueMap.set("Line " + rowIndex, tempList);
             }
-        })
+        });
     }).then(() => {
         let xmlParam;
         if (string === 'Buyer Imported Xml') {
@@ -295,7 +313,7 @@ Given('Validate the response from {string}', string => {
     });
     linearProposalRfpPage.proposalResponse().screenshot({ capture: 'viewport' });
     cy.viewport(1920, 1080);
-})
+});
 
 // Delete the Line
 Given('Delete the Line', () => {
@@ -317,13 +335,13 @@ Given('Delete the Line', () => {
             if (exists) {
                 linearProposalRfpPage.selectLineCheckBox().each((element, index1, list) => {
                     linesNumAfter = list.length;
-                })
+                });
             }
-        })
+        });
     }).then(() => {
         expect(linesNumBefore, "Line was successfully deleted").to.not.equal(linesNumAfter);
     });
-})
+});
 
 // Create Type1 Rate Request
 Given('Create Type1 Rate Request', () => {
@@ -337,7 +355,7 @@ Given('Create Type1 Rate Request', () => {
     linearProposalRfpPage.vendorText().should('have.text', newRfpParam.vendor);
     linearProposalRfpPage.sendButton().click();
     linearProposalRfpPage.myReteTexBoxValue().should('have.text', BUYER_REVISION_RATE);
-})
+});
 
 // Search for Stratasphere, AgencyRFP user in Mailinator
 Given('Search for {string} user in Mailinator', string => {
@@ -350,14 +368,15 @@ Given('Search for {string} user in Mailinator', string => {
         mailinatorHomePage.userSearchBox().type(envUtils.getAgencyUsername());
     }
     mailinatorHomePage.goButton().click({ force: true });
+    cy.screenshot();
 
 })
 
-// Validate email Proposal Response
-Given('Validate email Proposal Response', () => {
+// Validate email for New Rate Request
+Given('Validate email for New Rate Request', () => {
     cy.dataSession('newRfpName').then(newRfpName => {
         mailinatorHomePage.search_email('New Rate Request for ', newRfpName);
-    })
+    });
 
     const getIframeBody = () => {
         return mailinatorHomePage.emailMsgBodyIframe()
@@ -379,10 +398,10 @@ Given('Validate email Proposal Response', () => {
             setup: () => url,
             validate: false,
             shareAcrossSpecs: true,
-        })
-    })
-    mailinatorHomePage.deleteEmailButton().click();
-})
+        });
+    });
+    cy.screenshot();
+});
 
 // Redirect from Mailinator to Stratasphere
 Given('Redirect from Mailinator to Stratasphere', () => {
@@ -393,7 +412,8 @@ Given('Redirect from Mailinator to Stratasphere', () => {
     sSphereLoginPage.usernameBox().type(envUtils.getSsphereUsername());
     sSphereLoginPage.passwordBox().type(envUtils.getSspherePassword());
     sSphereLoginPage.loginButton().click();
-})
+    cy.screenshot();
+});
 
 // Validate Proposal Response Page
 Given('Validate Proposal Response Page', () => {
@@ -402,7 +422,7 @@ Given('Validate Proposal Response Page', () => {
     sSphereProposalResponsePage.mediaTypeName().should('include.text', newRfpParam.vendor.slice(5));
     cy.dataSession('newRfpName').then(newRfpName => {
         sSphereProposalResponsePage.campaignName().should('have.text', newRfpName);
-    })
+    });
     sSphereProposalResponsePage.marketName().should('have.text', newRfpParam.market);
     sSphereProposalResponsePage.primaryDemo().should('have.text', newRfpParam.primaryDemo.slice(0, 9) + ' - ' + newRfpParam.primaryDemo.slice(10));
     sSphereProposalResponsePage.flightStart().should('have.text', newRfpParam.startDate.slice(0, 6) + '20' + newRfpParam.startDate.slice(6));
@@ -413,7 +433,7 @@ Given('Validate Proposal Response Page', () => {
     sSphereProposalResponsePage.selectOneOfTwoVersion().click();
     sSphereProposalResponsePage.buyerRateCell().should('not.have.text');
     sSphereProposalResponsePage.reviseButton().click();
-})
+});
 
 // Revise the Buy Rate
 Given('Revise the Buy Rate', () => {
@@ -432,7 +452,7 @@ Given('Revise the Buy Rate', () => {
         if (el.text() !== '$' + SELLER_REVISION_RATE) {
             sSphereProposalsPage.sellerRateCell().clear().type(SELLER_REVISION_RATE);
         }
-    })
+    });
 
     sSphereProposalsPage.saveContinueButton().click();
     sSphereProposalsPage.additionalAttachmentsTab().should('include.text', 'Additional Attachments');
@@ -446,14 +466,15 @@ Given('Revise the Buy Rate', () => {
     sSphereProposalsPage.sendRevisionPreviousButton().should('be.visible');
     sSphereProposalsPage.responseCompleteConformationText('include.text', 'Please make sure your response is complete. You will only be able to respond to this RFP once.');
     sSphereProposalsPage.sendToAgencyButton().click();
-})
+});
 
 // Buyer Rate Revision Validations
 Given('Buyer Rate Revision Validations', () => {
     sSphereProposalResponsePage.pageTitle(150000).should('have.text', " Proposal Response");
     sSphereProposalResponsePage.selectVersion().should('include.text', '3 of 3');
     sSphereProposalsPage.updatedMyRateCell().should('have.text', '$' + SELLER_REVISION_RATE);
-})
+    cy.screenshot();
+});
 
 // Validate Buyer Revision Details
 Given('Validate Buyer Revision Details', () => {
@@ -465,8 +486,9 @@ Given('Validate Buyer Revision Details', () => {
     linearProposalRfpPage.proposalCell(10).should('have.text', newRfpParam.endDate);
     linearProposalRfpPage.proposalCell(11).should('include.text', BUYER_REVISION_RATE);
     linearProposalRfpPage.proposalCell(13).should('include.text', '$ ' + SELLER_REVISION_RATE);
+    cy.screenshot();
 
-})
+});
 
 /*
  Helper function that's converting Json file with parameters related to 'Linear Proposal - RFP' page.
