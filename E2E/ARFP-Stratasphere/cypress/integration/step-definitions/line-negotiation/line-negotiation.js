@@ -1,8 +1,8 @@
 /// <reference types="Cypress" />
 /// <reference types="cypress-data-session" />
 /// <reference types="cypress-iframe" />
-import 'cypress-data-session'
-import 'cypress-iframe'
+import 'cypress-data-session';
+import 'cypress-iframe';
 import { Given } from "@badeball/cypress-cucumber-preprocessor";
 import LinearProposalRfpPage from "../../../support/page-objects/agency-pages/LinearProposalRfpPage";
 import MailinatorHomePage from "../../../support/page-objects/mailinator-pages/MailinatorHomePage";
@@ -46,12 +46,12 @@ Given('{string} negotiation from email and verify user landed on Stratasphere pa
         mailinatorHomePage.search_email('New Change Request for ', newRfpName);
     })
     mailinatorHomePage.negotiationLinks(negotiate).then(function (el) {
-        const url = el.prop('href')
+        const url = el.prop('href');
         mailinatorHomePage.deleteEmailButton().click();
         cy.visit(url);
-        const sentArgs = { negotiate, sellerNegotiationRate: SELLER_NEGOTIATION_RATE }
+        const sentArgs = { negotiate, sellerNegotiationRate: SELLER_NEGOTIATION_RATE };
         cy.origin(url, { args: sentArgs }, ({ negotiate, sellerNegotiationRate }) => {
-            const tempPage = Cypress.require('../../../support/page-objects/ssphere-pages/SSphereBasePage')
+            const tempPage = Cypress.require('../../../support/page-objects/ssphere-pages/SSphereBasePage');
             const sSphereBasePage = new tempPage;
             sSphereBasePage.pageTitle().should('include.text', 'Proposal Response ' + negotiate);
             if (negotiate === "Make Changes") {
@@ -59,8 +59,8 @@ Given('{string} negotiation from email and verify user landed on Stratasphere pa
                 sSphereBasePage.submitButton().click();
             }
             sSphereBasePage.negotiationMessage().should('include.text', 'Your response has been sent. Thanks for using Stratasphere!');
-        })
-    })
+        });
+    });
 });
 
 // Validate line changes were "accepted, rejected, " by the Seller
@@ -76,11 +76,11 @@ Given('Validate line changes were {string} by the Seller', negotiate => {
         if (negotiate === 'accepted') {
             linearProposalRfpPage.myReteTexBoxValue().then(function (myRete) {
                 linearProposalRfpPage.sellerRateTexBoxValue().should('include.text', myRete.text());
-            })
+            });
         } else if (negotiate === 'rejected') {
             linearProposalRfpPage.myReteTexBoxValue().then(function (myRete) {
                 linearProposalRfpPage.sellerRateTexBoxValue().should('not.eq', myRete.text());
-            })
+            });
         }
     }
 });

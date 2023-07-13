@@ -6,7 +6,7 @@ Feature: Export from Response screen
    Buyer receives the Proposal XML. Buyer navigates to View and Edit Responses page,
    then clicks on hamburger button and exports the XLSX file
 
-   Scenario: Buyer creates new RFP and sends it to Stratashere
+   Scenario: Buyer creates new RFP and sends it to Stratasphere
       * Login to Agency RFP with 'Permanent' password
       * Create New RFP
       * Validate RFP Creation
