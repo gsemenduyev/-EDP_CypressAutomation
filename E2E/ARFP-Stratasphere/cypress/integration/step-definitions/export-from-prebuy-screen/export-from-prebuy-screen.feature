@@ -6,7 +6,7 @@ Feature: Export from prebuy screen
   Buyer receives the Proposal XML, exports the XML from prebuy screen and validates the file
 
   Scenario: Buyer creates new RFP and sends it to Stratashere (EFPS)
-    * Login to Agency RFP
+    * Login to Agency RFP with 'Permanent' password
     * Create New RFP
     * Validate RFP Creation
     * Logout Agency RFP
@@ -19,7 +19,7 @@ Feature: Export from prebuy screen
     * Logout from Stratasphere
 
   Scenario: Buyer validate the Proposal response and exports from prebuy screen (EFPS)
-    * Login to Agency RFP
+    * Login to Agency RFP with 'Permanent' password
     * Search for existing RFP
     * Click on Launch Pre-buy button
     * Validate the response from "Seller Xml"

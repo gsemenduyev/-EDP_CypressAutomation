@@ -5,7 +5,7 @@ Feature: Import from prebuy screen
     Buyer creates new RFP and Imports from prebuy screen
 
     Scenario: Buyer creates new RFP and validates the imported Xml
-        * Login to Agency RFP
+        * Login to Agency RFP with 'Permanent' password
         * Create New RFP
         * Validate RFP Creation
         * Search for existing RFP

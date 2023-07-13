@@ -2,3 +2,5 @@ node_modules
 screenshots
 videos
 reports
+cypress/fixtures/agencyRFP/parsed-xlsx-from-response-screen.json
+cypress/fixtures/agencyRFP/ui-table-from-response-screen.json

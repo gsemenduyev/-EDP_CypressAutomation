@@ -7,7 +7,7 @@ Feature: Export from Response screen
    then clicks on hamburger button and exports the XLSX file
 
    Scenario: Buyer creates new RFP and sends it to Stratashere
-      * Login to Agency RFP
+      * Login to Agency RFP with 'Permanent' password
       * Create New RFP
       * Validate RFP Creation
       * Logout Agency RFP
@@ -20,7 +20,7 @@ Feature: Export from Response screen
       * Logout from Stratasphere
 
    Scenario: Buyer navigates to 'View and Edit Responses' page and exports XLSX file from hamburger dropdown
-      * Login to Agency RFP
+      * Login to Agency RFP with 'Permanent' password
       * Search for existing RFP
       * Navigate to View and Edit Responses page
       * Export XLSX file from hamburger dropdown

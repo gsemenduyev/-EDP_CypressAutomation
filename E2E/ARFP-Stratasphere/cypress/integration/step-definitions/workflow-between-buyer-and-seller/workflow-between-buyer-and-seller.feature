@@ -8,7 +8,7 @@ Feature: Workflow between buyer and seller
   Seller updates Rate request and sends it back to Buyer.
 
   Scenario: Buyer creates new RFP and send it to Stratashere (WBBS)
-    * Login to Agency RFP
+    * Login to Agency RFP with 'Permanent' password
     * Create New RFP
     * Validate RFP Creation
     * Logout Agency RFP
@@ -21,7 +21,7 @@ Feature: Workflow between buyer and seller
     * Logout from Stratasphere
 
   Scenario: Buyer validate the Proposal response and creates Type1 Rate Request (WBBS)
-    * Login to Agency RFP
+    * Login to Agency RFP with 'Permanent' password
     * Search for existing RFP
     * Click on Launch Pre-buy button
     * Validate the response from "Seller Xml"
@@ -30,7 +30,7 @@ Feature: Workflow between buyer and seller
     * Logout Agency RFP
 
   Scenario: Seller validates the email from buyer (WBBS)
-    * Search Stratasphere user in Mailinator
+    * Search for 'Stratasphere' user in Mailinator
     * Validate email Proposal Response
 
   Scenario: Seller Redirects from Mailinator to Stratasphere and Revise the Buy Rate (WBBS)
@@ -42,7 +42,7 @@ Feature: Workflow between buyer and seller
     * Logout from Stratasphere
 
   Scenario: Buyer receives new Rate from Seller (WBBS)
-    * Login to Agency RFP
+    * Login to Agency RFP with 'Permanent' password
     * Search for existing RFP
     * Click on Launch Pre-buy button
     * Validate Buyer Revision Details
