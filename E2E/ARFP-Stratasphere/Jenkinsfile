@@ -56,7 +56,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-            sh "cd E2E/ARFP-Stratasphere && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome --env tags=\"@${PROJECTS}\" && ENV=\"${ENVIRONMENT}\" && VERSION=\"${VERSION}\""
+            sh "cd E2E/ARFP-Stratasphere && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome --env tags=\"@${PROJECTS}\" && ENV=\"${ENVIRONMENT}\",VERSION=\"${VERSION}\""
             }
 
         }
