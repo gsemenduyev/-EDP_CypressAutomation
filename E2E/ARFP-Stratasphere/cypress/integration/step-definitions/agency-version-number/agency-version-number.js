@@ -11,7 +11,6 @@ const VERSION = Cypress.env('VERSION')
 
 // Validate Agency RFP version number
 Given('Validate Agency RFP version number', () => {
-    cy.log("VERSION " - VERSION)
     agencyBasePage.versionNumber().invoke('text').then(version => {
         if(VERSION === undefined || VERSION === null){
             throw new Error(`Set Agency RFP version ${version.trim()} as Environment veritable.`)

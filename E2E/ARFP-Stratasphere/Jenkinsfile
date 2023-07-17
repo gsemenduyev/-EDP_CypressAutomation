@@ -12,7 +12,7 @@ pipeline {
         choice(name: 'ENVIRONMENT', choices: ['Production', 'QA'], description: "Choose the Environment to run")
         choice(name: 'PROJECTS', choices: ['Stratasphere', 'ARFP', 'WIP'], description: "Choose the Project to run")
         string(name: 'RUN_ID', defaultValue: 'R5383', trim: true, description: "Choose the Test Rail Run ID")
-        string(name: 'VERSION',defaultValue: 'v 8.4.1.39508',  trim: false, description: "When ARFP project is selected, input Agency RFP version (Production and QA versions might be different)")
+        string(name: 'VERSION',defaultValue: 'v 8.4.1.39508',  trim: false, description: "When ARFP project is selected, input Agency RFP version (Production and QA versions may vary)")
     }
     options{
         ansiColor('xterm')
