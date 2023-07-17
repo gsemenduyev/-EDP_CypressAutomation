@@ -16,6 +16,6 @@ allure open 'cypress/reports/allure-report'
 
 node ./cucumber-html-report.js
 
-npx cypress open  --env ENV="QA"
+npx cypress open  --env ENV="QA",VERSION="v 8.4.1.39508"
 ARFP
-npx cypress run --browser chrome --headed --env tags="@WIP",ENV="QA"
+npx cypress run --browser chrome --headed --env tags="@WIP",ENV="QA",VERSION="v 8.4.1.39508"

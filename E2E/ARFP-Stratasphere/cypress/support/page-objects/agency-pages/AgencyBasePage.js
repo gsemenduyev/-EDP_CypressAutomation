@@ -20,5 +20,8 @@ class AgencyBasePage {
     alertBox() {
         return cy.get('.s-alert-box-inner span');
     }
+    versionNumber() {
+        return cy.get('.footer .text-right');
+    }
 }
 export default AgencyBasePage;
