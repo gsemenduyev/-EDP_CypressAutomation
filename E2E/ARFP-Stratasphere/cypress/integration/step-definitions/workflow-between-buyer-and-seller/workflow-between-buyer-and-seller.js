@@ -66,6 +66,20 @@ Given('Login to Agency RFP with {string} password', string => {
     agencyLoginPage.passwordBox().type(agencyPassword, { log: false });
     agencyLoginPage.loginButton().click();
     cy.title().should('eq', 'Home - RFP');
+    var index = 0;
+    const checkXmlValidated = () => {
+        cy.wait(1000)
+        cy.is_element_exists(agencyBasePage.pastDueRfpModalSyntax()).then(pastDueRfpModal => {
+            if (pastDueRfpModal === true) {
+                agencyBasePage.pastDueRfpModalNoButton().click();
+                index++;
+                checkXmlValidated();
+            } else if (index < 5 || pastDueRfpModal === false) {
+                index = 5;
+            }
+        })
+    }
+    checkXmlValidated()
     cy.screenshot();
 })
 

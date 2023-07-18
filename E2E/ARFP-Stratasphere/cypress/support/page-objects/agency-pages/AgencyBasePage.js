@@ -12,10 +12,10 @@ class AgencyBasePage {
         return cy.get("[href*='search']");
     }
     pastDueRfpModalSyntax() {
-        return '[index="1"] > .modal-dialog > .modal-content';
+        return '.modal-content';
     }
     pastDueRfpModalNoButton() {
-        return cy.get(".osu-button.ghost").first();
+        return cy.get(".osu-button.ghost").eq(0);
     }
     alertBox() {
         return cy.get('.s-alert-box-inner span');
