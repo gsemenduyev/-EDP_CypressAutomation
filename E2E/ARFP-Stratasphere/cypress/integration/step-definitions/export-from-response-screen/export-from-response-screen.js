@@ -18,7 +18,9 @@ Given('Navigate to View and Edit Responses page', () => {
 
 // Export XLSX file from hamburger dropdown
 Given('Export XLSX file from hamburger dropdown', () => {
+    viewEditResponsesPage.hamburgerButton().should('be.visible')
     viewEditResponsesPage.hamburgerButton().click();
+    viewEditResponsesPage.exportButton().should('be.visible')
     viewEditResponsesPage.exportButton().click();
 
 });
