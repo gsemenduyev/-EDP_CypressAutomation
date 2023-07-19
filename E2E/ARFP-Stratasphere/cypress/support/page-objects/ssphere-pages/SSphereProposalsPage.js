@@ -146,11 +146,20 @@ class SSphereProposalsPage {
     buyerMsgsContent() {
         return cy.get("[class='msg-row'] .msg-content");
     }
-    validatedXmlTextSyntax(){
-        return '.validated'
+    validatedXmlTextSyntax() {
+        return '.validated';
     }
-    proposalVerificationModalSyntax(){
-        return '.modal-body'
+    proposalVerificationModalSyntax() {
+        return '.modal-body';
+    }
+    rfpModalHeaders(index) {
+        return cy.get('.ui-grid-header-cell-label').eq(index)
+    }
+    filterOptions(index) {
+        return cy.get('.ui-grid-menu-item').eq(index)
+    }
+    hamburgerButton(index) {
+        return cy.get('.ui-grid-icon-menu').eq(index)
     }
 }
 export default SSphereProposalsPage;
