@@ -9,7 +9,8 @@ const xlsx = require('node-xlsx').default;
 const path = require('path')
 const RUN_ENV_FILE_PATH = 'cypress/reports/run-info/run-env.json';
 const delay = async (ms) => new Promise((res) => setTimeout(res, ms));
-async function setupNodeEvents(on, config) {
+async function setupNodeEvents(cypressOn, config) {
+  const on = require('cypress-on-fix')(cypressOn)
   await addCucumberPreprocessorPlugin(on, config, { omitAfterRunHandler: true, });
   on("file:preprocessor", browserify.default(config));
   allureWriter(on, config);
@@ -79,6 +80,10 @@ module.exports = defineConfig({
   pageLoadTimeout: 600000,
   screenshotOnRunFailure: true,
   video: true,
+  retries: {
+    runMode: 0,
+    openMode: 0
+  },
   env: {
     allure: true,
     allureOmitPreviousAttemptScreenshots: true,

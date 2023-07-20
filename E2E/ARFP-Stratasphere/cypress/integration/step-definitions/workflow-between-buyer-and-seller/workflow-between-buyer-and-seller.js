@@ -66,6 +66,20 @@ Given('Login to Agency RFP with {string} password', string => {
     agencyLoginPage.passwordBox().type(agencyPassword, { log: false });
     agencyLoginPage.loginButton().click();
     cy.title().should('eq', 'Home - RFP');
+    var index = 0;
+    const checkXmlValidated = () => {
+        cy.wait(1000)
+        cy.is_element_exists(agencyBasePage.pastDueRfpModalSyntax()).then(pastDueRfpModal => {
+            if (pastDueRfpModal === true) {
+                agencyBasePage.pastDueRfpModalNoButton().click();
+                index++;
+                checkXmlValidated();
+            } else if (index < 5 || pastDueRfpModal === false) {
+                index = 5;
+            }
+        })
+    }
+    checkXmlValidated()
     cy.screenshot();
 })
 
@@ -181,6 +195,19 @@ Given('Login to Stratasphere', () => {
 
 // Search for RFP in Stratasphere
 Given('Search for RFP in Stratasphere', () => {
+    sSphereProposalsPage.rfpModalHeaders(1).should('be.visible');
+    sSphereProposalsPage.rfpModalHeaders(1).invoke('text').then(header => {
+        if (header !== 'Campaign') {
+            sSphereProposalsPage.hamburgerButton(0).click();
+            sSphereProposalsPage.campaignFilterOptions().then(function (el) {
+                if (el.prop('class').includes('cancel')) {
+                    sSphereProposalsPage.campaignFilterOptions().should('be.visible').click();
+                }
+            })
+            sSphereProposalsPage.hamburgerButton(0).click();
+        }
+    })
+    sSphereProposalsPage.rfpModalHeaders(1).should('have.text', 'Campaign')
     cy.dataSession('newRfpName').then(newRfpName => {
         sSphereProposalsPage.campaignSearchBox().type(newRfpName);
         cy.contains(newRfpName).click();

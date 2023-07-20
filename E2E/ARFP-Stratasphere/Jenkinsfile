@@ -1,3 +1,5 @@
+#!/usr/bin/env groovy
+import groovy.json.*
 pipeline {
     agent {
         docker {
@@ -9,17 +11,75 @@ pipeline {
     parameters{
         choice(name: 'ENVIRONMENT', choices: ['Production', 'QA'], description: "Choose the Environment to run")
         choice(name: 'PROJECTS', choices: ['Stratasphere', 'ARFP', 'WIP'], description: "Choose the Project to run")
+        string(name: 'RUN_ID', defaultValue: 'R5383', trim: true, description: "Choose the Test Rail Run ID")
+        string(name: 'VERSION',defaultValue: 'v 8.4.1.39508',  trim: true, description: "When ARFP project is selected, input Agency RFP version (Production and QA versions may vary)")
     }
     options{
         ansiColor('xterm')
     }
     stages {
-        stage('Test') {
+        stage('Create TestRail Run') {
             steps {
-            sh "cd E2E/ARFP-Stratasphere && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome --env tags=\"@${POJECTS}\" && ENV=\"@${ENVIRONMENT}\""
+                script {
+                        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'TestRail_GS', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME']])  {
+                        def domain = "https://testrail.stratag.com/"
+                        def username = "${USERNAME}"
+                        def password = "${PASSWORD}"
+                        def runId = "${RUN_ID}"
+                        // Update cypress.env.json
+                        def reporterConfig = readJSON file: 'E2E/ARFP-Stratasphere/cypress.env.json'
+                        def testrail = [
+                       'domain': (domain),
+                       'username': (username),
+                       'password': (password),
+                       'runId': (runId)
+                        ]
+                        reporterConfig.put("testrail", testrail)
+                        def json = JsonOutput.toJson(reporterConfig)
+                        json = JsonOutput.prettyPrint(json)
+                        writeFile(file: 'E2E/ARFP-Stratasphere/cypress.env.json', text: json)
+
+                       def reporterConfig1 = readJSON file: 'E2E/ARFP-Stratasphere/cypress.env.json'
+                       testrail = [
+                       'domain': reporterConfig1.testrail.domain,
+                       'username': reporterConfig1.testrail.username.values[0],
+                       'password': reporterConfig1.testrail.password.values[0],
+                       'runId': reporterConfig1.testrail.runId.values[0]
+                        ]
+                        reporterConfig.put("testrail", testrail)
+                        json = JsonOutput.toJson(reporterConfig)
+                        json = JsonOutput.prettyPrint(json)
+                        writeFile(file: 'E2E/ARFP-Stratasphere/cypress.env.json', text: json)
+                    }
+                }
             }
         }
-    }
+        stage('Test') {
+            steps {
+            sh "cd E2E/ARFP-Stratasphere && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome --env tags=\"@${PROJECTS}\",ENV=\"${ENVIRONMENT}\",VERSION=\"${VERSION}\""
+            }
+
+        }
+        stage('Clear TestRail file') {
+            steps {
+                script {
+                        // Update cypress.env.json
+                        def reporterConfig = readJSON file: 'E2E/ARFP-Stratasphere/cypress.env.json'
+                        def testrail = [
+                       'domain': '-',
+                       'username': '-',
+                       'password': '-',
+                       'runId': '-'
+                        ]
+                        reporterConfig.put("testrail", testrail)
+                        def json = JsonOutput.toJson(reporterConfig)
+                        json = JsonOutput.prettyPrint(json)
+                        writeFile(file: 'E2E/ARFP-Stratasphere/cypress.env.json', text: json)
+                    }
+                }
+            }
+ }
+
     post{
         always{
             script {

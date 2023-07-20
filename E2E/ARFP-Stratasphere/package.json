@@ -45,6 +45,7 @@
     "cypress-file-upload": "^5.0.8",
     "cypress-iframe": "^1.0.1",
     "cypress-ntlm-auth": "^4.1.2",
+    "cypress-on-fix": "^1.0.2",
     "cypress-recurse": "^1.31.2",
     "cypress-testrail": "^2.7.1",
     "dotenv": "^16.2.0",
