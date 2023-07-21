@@ -45,8 +45,8 @@ class MailinatorHomePage {
     userSearchBox() {
         return cy.get('#inbox_field');
     }
-    forgotPasswordEmail() {
-        return cy.contains('Forgot Password for RFP').first();
+    forgotPasswordEmail(milliseconds) {
+        return cy.contains('Forgot Password for RFP', { timeout: milliseconds }).first();
     }
     emailTiming() {
         return cy.get('.ng-binding').eq(8);
