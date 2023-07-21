@@ -38,6 +38,7 @@ Given('Request new password link and set {string} password', string => {
                 const mailinatorHomePage = new tempPage;
                 cy.reload()
                 mailinatorHomePage.publicInboxes().click()
+                cy.wait(5000)
                 mailinatorHomePage.forgotPasswordEmail(60000).should('exist')
                 mailinatorHomePage.emailTiming().then(el => {
                    if (el.text().trim() === 'just now' || el.text().trim() === '1 min') {
