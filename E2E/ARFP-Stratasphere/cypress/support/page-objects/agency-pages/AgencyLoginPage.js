@@ -14,6 +14,9 @@ class AgencyLoginPage {
     submitButton() {
         return cy.get('.btn');
     }
+    submitButtonSyntax() {
+        return '.btn.btn-primary.white';
+    }
     forgotPasswordConformation() {
         return cy.get('p');
     }
@@ -23,5 +26,9 @@ class AgencyLoginPage {
     conformNewPasswordInput() {
         return cy.get('.form-control.login-input').eq(1);
     }
+    resetPasswordConformationMsgSyntax() {
+        return '.col-md-offset-2.col-sm-offset-2 p';
+    }
+    
 }
 export default AgencyLoginPage;

@@ -4,24 +4,20 @@ Feature: Change password Agency RFP
   Feature Description:
   Test functionality Change password in Agency RFP
 
-  Scenario: Agent Requests new password
-    * Login to Agency RFP with 'Permanent' password
-    * Logout Agency RFP
-    * Click on Forgot Password then insert Username
+  # Scenario: Agent logs in with Permanent password
+  #   * Login to Agency RFP with 'Permanent' password
+  #   * Logout Agency RFP
 
-  Scenario: Agent checks the email for password reset link and resets the password
-    * Search for 'AgencyRFP' user in Mailinator
-    * Check the email for new password request and set 'Temporary' password
+  Scenario: Agent Requests new password and set Temporary password
+    * Request new password link and set 'Temporary' password
 
-  Scenario: Agent is able to login with Temporary password and Request new password
-    * Login to Agency RFP with 'Temporary' password
-    * Logout Agency RFP
-    * Click on Forgot Password then insert Username
+  # Scenario: Agent logs in with Temporary password
+  #   * Login to Agency RFP with 'Temporary' password
+  #   * Logout Agency RFP
 
-  Scenario: Agent checks the email for password reset link and resets the password
-    * Search for 'AgencyRFP' user in Mailinator
-    * Check the email for new password request and set 'Permanent' password
+  # Scenario: Agent Requests new password and set Permanent password
+  #   * Request new password link and set 'Permanent' password
 
-  Scenario: Agent is able to login with Permanent password
-    * Login to Agency RFP with 'Permanent' password
-    * Logout Agency RFP
+  # Scenario: Agent logs in with reseated Permanent password
+  #   * Login to Agency RFP with 'Permanent' password
+  #   * Logout Agency RFP

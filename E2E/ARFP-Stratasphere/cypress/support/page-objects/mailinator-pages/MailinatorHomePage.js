@@ -45,6 +45,19 @@ class MailinatorHomePage {
     userSearchBox() {
         return cy.get('#inbox_field');
     }
+    forgotPasswordEmail() {
+        return cy.contains('Forgot Password for RFP').first();
+    }
+    emailTiming() {
+        return cy.get('.ng-binding').eq(8);
+    }
+    forgotPasswordLink() {
+        return cy.get('#texthtml_msg_body')
+            .its('0.contentDocument')
+            .then(cy.wrap)
+            .find('a')
+            .eq(0);
+    }
 
     /* 
     Utils function that searches for email in https://www.mailinator.com/v4/public/inboxes.jsp
