@@ -32,6 +32,7 @@ Given('Request new password link and set {string} password', string => {
 
         cy.visit(`${envUtils.getMailinatorUrl()}?to=${envUtils.getAgencyUsername().substr(0, envUtils.getAgencyUsername().indexOf('@'))}`).then(() => {
             cy.origin(envUtils.getMailinatorUrl(), () => {
+                cy.reload()
                 const tempPage = Cypress.require('../../../support/page-objects/mailinator-pages/MailinatorHomePage')
                 const mailinatorHomePage = new tempPage;
                 cy.title().should('eq', 'Mailinator');
