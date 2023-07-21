@@ -30,24 +30,24 @@ Given('Request new password link and set {string} password', string => {
         agencyLoginPage.submitButton().click()
         agencyLoginPage.forgotPasswordConformation().should('include.text', 'Email has been sent').screenshot()
 
-        cy.visit(`${envUtils.getMailinatorUrl()}?to=${envUtils.getAgencyUsername().substr(0, envUtils.getAgencyUsername().indexOf('@'))}`).then(() => {
+        //cy.visit(`${envUtils.getMailinatorUrl()}?to=${envUtils.getAgencyUsername().substr(0, envUtils.getAgencyUsername().indexOf('@'))}`)
             cy.origin(envUtils.getMailinatorUrl(), () => {
+                cy.visit(`https://www.mailinator.com/v4/public/inboxes.jsp?to=FWAutoTesting`)
                 cy.title().should('eq', 'Mailinator');
                 const tempPage = Cypress.require('../../../support/page-objects/mailinator-pages/MailinatorHomePage')
                 const mailinatorHomePage = new tempPage;
                 cy.reload()
                 mailinatorHomePage.publicInboxes().click()
-                mailinatorHomePage.forgotPasswordEmail(120000).should('exist')
+                mailinatorHomePage.forgotPasswordEmail(60000).should('exist')
                 mailinatorHomePage.emailTiming().then(el => {
                    if (el.text().trim() === 'just now' || el.text().trim() === '1 min') {
                         mailinatorHomePage.forgotPasswordEmail().click();
                    }
                 })
-                mailinatorHomePage.publicMessageText(120000).should('include.text', 'Forgot Password for RFP');
+                mailinatorHomePage.publicMessageText(60000).should('include.text', 'Forgot Password for RFP');
                 mailinatorHomePage.forgotPasswordLink()
                     .invoke('attr', 'target', '_parent')
                     .click({ force: true })
-            })
         });
 
         // Verify Requests for new password was sent
