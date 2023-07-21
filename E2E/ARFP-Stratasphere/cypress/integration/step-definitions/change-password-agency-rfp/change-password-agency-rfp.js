@@ -32,17 +32,18 @@ Given('Request new password link and set {string} password', string => {
 
         cy.visit(`${envUtils.getMailinatorUrl()}?to=${envUtils.getAgencyUsername().substr(0, envUtils.getAgencyUsername().indexOf('@'))}`).then(() => {
             cy.origin(envUtils.getMailinatorUrl(), () => {
-                cy.reload()
+                cy.title().should('eq', 'Mailinator');
                 const tempPage = Cypress.require('../../../support/page-objects/mailinator-pages/MailinatorHomePage')
                 const mailinatorHomePage = new tempPage;
-                cy.title().should('eq', 'Mailinator');
-                mailinatorHomePage.forgotPasswordEmail(600000).should('exist')
+                cy.reload()
+                mailinatorHomePage.publicInboxes().click()
+                mailinatorHomePage.forgotPasswordEmail(120000).should('exist')
                 mailinatorHomePage.emailTiming().then(el => {
-                    if (el.text().trim() === 'just now' || el.text().trim() === '1 min') {
+                   if (el.text().trim() === 'just now' || el.text().trim() === '1 min') {
                         mailinatorHomePage.forgotPasswordEmail().click();
-                    }
+                   }
                 })
-                mailinatorHomePage.publicMessageText(600000).should('include.text', 'Forgot Password for RFP');
+                mailinatorHomePage.publicMessageText(120000).should('include.text', 'Forgot Password for RFP');
                 mailinatorHomePage.forgotPasswordLink()
                     .invoke('attr', 'target', '_parent')
                     .click({ force: true })

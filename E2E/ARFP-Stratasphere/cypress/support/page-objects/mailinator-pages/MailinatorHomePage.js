@@ -51,6 +51,9 @@ class MailinatorHomePage {
     emailTiming() {
         return cy.get('.ng-binding').eq(8);
     }
+    publicInboxes() {
+        return cy.get("[href='inboxes.jsp']")
+    }
     forgotPasswordLink() {
         return cy.get('#texthtml_msg_body')
             .its('0.contentDocument')
