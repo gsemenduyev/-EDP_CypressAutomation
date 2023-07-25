@@ -23,32 +23,38 @@ before(function () {
     }
 });
 
-// Delete 'Forgot Password' email
-afterEach(function () {
-    cy.visit(`${envProperties.mailinatorUrl}?to=${envProperties.agencyUsername.substr(0, envProperties.agencyUsername.indexOf('@'))}`)
-    cy.title().should('eq', 'Mailinator')
-    mailinatorHomePage.search_email('Forgot Password for ', 'RFP')
-    cy.log('Delete Forgot Password email')
-    mailinatorHomePage.deleteEmailButton().click({ force: true })
-})
-
-//Requests new password link and set 'Temporary, Permanent' password {string} minute
+//Requests new password link and set 'Temporary, Permanent' password
 Given('Request new password link and set {string} password', string => {
     var agencyPassword;
+    var index = 0;
     cy.visit(`${envUtils.getMailinatorUrl()}?to=${envUtils.getAgencyUsername().substr(0, envUtils.getAgencyUsername().indexOf('@'))}`)
     cy.title().should('eq', 'Mailinator');
 
     // Requests new password
-    cy.request_agency_password(envUtils.getAgencyUrl(), envProperties.agencyUsername)
+    cy.request_agency_password(envUtils.getAgencyUrl(), envProperties.agencyUsername);
     cy.visit(`${envUtils.getMailinatorUrl()}?to=${envUtils.getAgencyUsername().substr(0, envUtils.getAgencyUsername().indexOf('@'))}`)
     cy.title().should('eq', 'Mailinator');
-    mailinatorHomePage.search_email('Forgot Password for ', 'RFP')
+    mailinatorHomePage.forgotPasswordEmail(300000).should('exist');
+    const checkEmailExists = () => {
+        mailinatorHomePage.emailTiming().then(el => {
+            if (el.text().trim() !== 'just now' && index < 20) {
+                cy.reload();
+                cy.wait(5000);
+                index++;
+                checkEmailExists();
+            } else if (el.text().trim() === 'just now') {
+                mailinatorHomePage.forgotPasswordEmail().click();
+            }
+        })
+    }
+    checkEmailExists();
+
     mailinatorHomePage.publicMessageText(600).should('include.text', 'Forgot Password for RFP');
     mailinatorHomePage.forgotPasswordLink()
         .invoke('attr', 'target', '_parent')
         .click({ force: true })
 
-    // Verify Requests for new password was sent.
+    // Reset password.
     const sentArgs = {
         password: string,
         agencyPermPassword: envProperties.agencyPassword,
@@ -70,12 +76,11 @@ Given('Request new password link and set {string} password', string => {
                 agencyLoginPage.newPasswordInput().type(agencyPassword, { log: false })
                 agencyLoginPage.conformNewPasswordInput().type(agencyPassword, { log: false })
                 agencyLoginPage.submitButton().click()
-                cy.screenshot()
             }
         })
 
-        // Verify 'Requests sent' for new password was 
-        cy.get(agencyLoginPage.resetPasswordConformationMsgSyntax()).then((message) => {
+        // Verify Password has been reset 
+        cy.get(agencyLoginPage.resetPasswordConformationMsgSyntax(), { timeout: 60000 }).then((message) => {
             expect(message.text().trim()).includes(passwordResetMsg)
             cy.screenshot()
         })
