@@ -20,7 +20,7 @@ class AgencyLoginPage {
     forgotPasswordConformation() {
         return cy.get('p');
     }
-    newPasswordInput() {
+    newPasswordInput(milliseconds) {
         return cy.get('.form-control.login-input', {timeout: milliseconds}).eq(0);
     }
     conformNewPasswordInput() {
