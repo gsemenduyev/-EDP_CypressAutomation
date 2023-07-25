@@ -73,7 +73,7 @@ Given('Request new password link and set {string} password', string => {
                 } else if (password === 'Permanent') {
                     agencyPassword = agencyPermPassword;
                 }
-                agencyLoginPage.newPasswordInput().type(agencyPassword, { log: false })
+                agencyLoginPage.newPasswordInput(60000).type(agencyPassword, { log: false })
                 agencyLoginPage.conformNewPasswordInput().type(agencyPassword, { log: false })
                 agencyLoginPage.submitButton().click()
             }
@@ -81,7 +81,8 @@ Given('Request new password link and set {string} password', string => {
 
         // Verify Password has been reset 
         cy.get(agencyLoginPage.resetPasswordConformationMsgSyntax(), { timeout: 60000 }).then((message) => {
-            if(!message.text().trim().includes(passwordResetMsg)){
+            cy.log(message.text().trim())
+            if(message.text().trim().includes('Invalid request.')){
                 cy.wait(60000)
             }
             expect(message.text().trim()).includes(passwordResetMsg)

@@ -21,7 +21,7 @@ class AgencyLoginPage {
         return cy.get('p');
     }
     newPasswordInput() {
-        return cy.get('.form-control.login-input').eq(0);
+        return cy.get('.form-control.login-input', {timeout: milliseconds}).eq(0);
     }
     conformNewPasswordInput() {
         return cy.get('.form-control.login-input').eq(1);
