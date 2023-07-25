@@ -1,89 +1,83 @@
 /// <reference types="Cypress" />
 import { Given } from "@badeball/cypress-cucumber-preprocessor";
-import AgencyLoginPage from "../../../support/page-objects/agency-pages/AgencyLoginPage";
 import MailinatorHomePage from "../../../support/page-objects/mailinator-pages/MailinatorHomePage";
 import EnvUtils from "../../../support/utils/EnvUtils"
-import AgencyBasePage from '../../../support/page-objects/agency-pages/AgencyBasePage';
 
-const agencyBasePage = new AgencyBasePage;
-const agencyLoginPage = new AgencyLoginPage;
+const mailinatorHomePage = new MailinatorHomePage;
 const envUtils = new EnvUtils;
-
 const ENV = Cypress.env('ENV');
 const PASSWORD_RESET_MSG = 'Password has been reset';
+let envProperties;
 
-//Requests new password link and set 'Temporary, Permanent' password {string}
+before(function () {
+    if (ENV === 'Production') {
+        cy.log(`Environment - ${ENV}`);
+        cy.fixture('/environment/prod-param.json').then(function (data) {
+            envProperties = data;
+        });
+    } else if (ENV === 'QA' || ENV === undefined) {
+        cy.log(`Environment - QA`);
+        cy.fixture('/environment/qa-param.json').then(function (data) {
+            envProperties = data;
+        });
+    }
+});
+
+// Delete 'Forgot Password' email
+afterEach(function () {
+    cy.visit(`${envProperties.mailinatorUrl}?to=${envProperties.agencyUsername.substr(0, envProperties.agencyUsername.indexOf('@'))}`)
+    cy.title().should('eq', 'Mailinator')
+    mailinatorHomePage.search_email('Forgot Password for ', 'RFP')
+    cy.log('Delete Forgot Password email')
+    mailinatorHomePage.deleteEmailButton().click({ force: true })
+})
+
+//Requests new password link and set 'Temporary, Permanent' password {string} minute
 Given('Request new password link and set {string} password', string => {
     var agencyPassword;
-    var index = 0;
-    var retries = 20;
+    cy.visit(`${envUtils.getMailinatorUrl()}?to=${envUtils.getAgencyUsername().substr(0, envUtils.getAgencyUsername().indexOf('@'))}`)
+    cy.title().should('eq', 'Mailinator');
 
     // Requests new password
-    const requestPassword = () => {
-        if (index === retries) {
-            throw new Error(`Can't reset the password after ${retries} attempts.`)
-        }
-        cy.visit(envUtils.getAgencyUrl());
-        agencyBasePage.pageTitle().should('have.text', 'Sign In');
-        agencyLoginPage.forgotPasswordButton().click()
-        agencyLoginPage.usernameBox().type(envUtils.getAgencyUsername());
-        agencyLoginPage.submitButton().click()
-        agencyLoginPage.forgotPasswordConformation().should('include.text', 'Email has been sent').screenshot()
+    cy.request_agency_password(envUtils.getAgencyUrl(), envProperties.agencyUsername)
+    cy.visit(`${envUtils.getMailinatorUrl()}?to=${envUtils.getAgencyUsername().substr(0, envUtils.getAgencyUsername().indexOf('@'))}`)
+    cy.title().should('eq', 'Mailinator');
+    mailinatorHomePage.search_email('Forgot Password for ', 'RFP')
+    mailinatorHomePage.publicMessageText(600).should('include.text', 'Forgot Password for RFP');
+    mailinatorHomePage.forgotPasswordLink()
+        .invoke('attr', 'target', '_parent')
+        .click({ force: true })
 
-        //cy.visit(`${envUtils.getMailinatorUrl()}?to=${envUtils.getAgencyUsername().substr(0, envUtils.getAgencyUsername().indexOf('@'))}`)
-            cy.origin(envUtils.getMailinatorUrl(), () => {
-                cy.visit(`https://www.mailinator.com/v4/public/inboxes.jsp?to=FWAutoTesting`)
-                cy.title().should('eq', 'Mailinator');
-                const tempPage = Cypress.require('../../../support/page-objects/mailinator-pages/MailinatorHomePage')
-                const mailinatorHomePage = new tempPage;
-                cy.reload()
-                mailinatorHomePage.publicInboxes().click()
-                cy.wait(5000)
-                mailinatorHomePage.forgotPasswordEmail(60000).should('exist')
-                mailinatorHomePage.emailTiming().then(el => {
-                   if (el.text().trim() === 'just now' || el.text().trim() === '1 min') {
-                        mailinatorHomePage.forgotPasswordEmail().click();
-                   }
-                })
-                mailinatorHomePage.publicMessageText(60000).should('include.text', 'Forgot Password for RFP');
-                mailinatorHomePage.forgotPasswordLink()
-                    .invoke('attr', 'target', '_parent')
-                    .click({ force: true })
-        });
+    // Verify Requests for new password was sent.
+    const sentArgs = {
+        password: string,
+        agencyPermPassword: envProperties.agencyPassword,
+        agencyTempPassword: envProperties.tempAgencyPassword,
+        passwordResetMsg: PASSWORD_RESET_MSG,
+    };
 
-        // Verify Requests for new password was sent
-        cy.is_element_exists(agencyLoginPage.submitButtonSyntax()).then(el => {
-            if (el === false && index < retries) {
-                index++;
-                requestPassword();
-            } else {
-                if (string === 'Temporary') {
-                    agencyPassword = envUtils.getTempAgencyPassword();
-                } else if (string === 'Permanent') {
-                    agencyPassword = envUtils.getAgencyPassword();
+    cy.origin(envUtils.getAgencyUrl(), { args: sentArgs }, ({ password, agencyPermPassword, agencyTempPassword, passwordResetMsg }) => {
+        Cypress.require('../../../support/commands')
+        const tempPage = Cypress.require('../../../support/page-objects/agency-pages/AgencyLoginPage')
+        const agencyLoginPage = new tempPage;
+        cy.is_element_exists(agencyLoginPage.submitButtonSyntax()).then(submitButton => {
+            if (submitButton === true) {
+                if (password === 'Temporary') {
+                    agencyPassword = agencyTempPassword;
+                } else if (password === 'Permanent') {
+                    agencyPassword = agencyPermPassword;
                 }
-                cy.screenshot()
                 agencyLoginPage.newPasswordInput().type(agencyPassword, { log: false })
                 agencyLoginPage.conformNewPasswordInput().type(agencyPassword, { log: false })
                 agencyLoginPage.submitButton().click()
-                cy.is_element_exists(agencyLoginPage.resetPasswordConformationMsgSyntax()).then(el => {
-                    if (el === false && index < retries) {
-                        index++;
-                        requestPassword();
-                    } else {
-                        cy.get(agencyLoginPage.resetPasswordConformationMsgSyntax()).then((message) => {
-                            if (message.text().trim().includes(PASSWORD_RESET_MSG)) {
-                                expect(message.text().trim()).includes(PASSWORD_RESET_MSG)
-                                cy.screenshot()
-                            } else {
-                                index++;
-                                requestPassword();
-                            }
-                        })
-                    }
-                })
+                cy.screenshot()
             }
         })
-    }
-    requestPassword()
+
+        // Verify 'Requests sent' for new password was 
+        cy.get(agencyLoginPage.resetPasswordConformationMsgSyntax()).then((message) => {
+            expect(message.text().trim()).includes(passwordResetMsg)
+            cy.screenshot()
+        })
+    })
 })

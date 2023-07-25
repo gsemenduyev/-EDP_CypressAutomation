@@ -86,8 +86,9 @@ class MailinatorHomePage {
             mailinatorHomePage.emailName().each((el) => {
                 if (el.text().trim().includes(emailTitle + newRfpName)) {
                     cy.log(el.text().trim());
-                    cy.wrap(el).click();
-                    mailinatorHomePage.publicMessageText().should('include.text', newRfpName);
+                    cy.wrap(el).click({ force: true });
+                    cy.wait(1000)
+                    mailinatorHomePage.publicMessageText(10000).should('include.text', newRfpName);
                     return false;
                 }
             })

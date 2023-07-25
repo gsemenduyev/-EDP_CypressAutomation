@@ -29,6 +29,5 @@ class AgencyLoginPage {
     resetPasswordConformationMsgSyntax() {
         return '.col-md-offset-2.col-sm-offset-2 p';
     }
-    
 }
 export default AgencyLoginPage;
