@@ -66,25 +66,17 @@ Given('Request new password link and set {string} password', string => {
         Cypress.require('../../../support/commands')
         const tempPage = Cypress.require('../../../support/page-objects/agency-pages/AgencyLoginPage')
         const agencyLoginPage = new tempPage;
-        cy.is_element_exists(agencyLoginPage.submitButtonSyntax()).then(submitButton => {
-            if (submitButton === true) {
-                if (password === 'Temporary') {
-                    agencyPassword = agencyTempPassword;
-                } else if (password === 'Permanent') {
-                    agencyPassword = agencyPermPassword;
-                }
-                agencyLoginPage.newPasswordInput(60000).type(agencyPassword, { log: false })
-                agencyLoginPage.conformNewPasswordInput().type(agencyPassword, { log: false })
-                agencyLoginPage.submitButton().click()
-            }
-        })
+        if (password === 'Temporary') {
+            agencyPassword = agencyTempPassword;
+        } else if (password === 'Permanent') {
+            agencyPassword = agencyPermPassword;
+        }
+        agencyLoginPage.newPasswordInput(60000).type(agencyPassword, { log: false })
+        agencyLoginPage.conformNewPasswordInput().type(agencyPassword, { log: false })
+        agencyLoginPage.submitButton().click()
 
         // Verify Password has been reset 
         cy.get(agencyLoginPage.resetPasswordConformationMsgSyntax(), { timeout: 60000 }).then((message) => {
-            cy.log(message.text().trim())
-            if(message.text().trim().includes('Invalid request.')){
-                cy.wait(60000)
-            }
             expect(message.text().trim()).includes(passwordResetMsg)
             cy.screenshot()
         })
