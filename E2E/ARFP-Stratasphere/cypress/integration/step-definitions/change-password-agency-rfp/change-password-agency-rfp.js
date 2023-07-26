@@ -79,10 +79,9 @@ Given('Request new password link and set {string} password', string => {
         cy.get(agencyLoginPage.resetPasswordConformationMsgSyntax(), { timeout: 60000 }).then((message) => {
             expect(message.text().trim()).includes(passwordResetMsg)
             cy.screenshot()
+            if (password === 'Temporary') {
+                cy.wait(60000);
+            }
         })
-        if (password === 'Temporary') {
-            cy.wait(60000);
-        }
-
     })
 })
