@@ -23,15 +23,30 @@ before(function () {
     }
 });
 
-//Requests new password link and set 'Temporary, Permanent' password
-Given('Request new password link and set {string} password', string => {
-    var agencyPassword;
-    var index = 0;
+// Request new password on Agency RFP Forgot Password page
+Given('Request new password on Agency RFP Forgot Password page', () => {
     cy.visit(`${envUtils.getMailinatorUrl()}?to=${envUtils.getAgencyUsername().substr(0, envUtils.getAgencyUsername().indexOf('@'))}`)
     cy.title().should('eq', 'Mailinator');
 
-    // Requests new password
-    cy.request_agency_password(envUtils.getAgencyUrl(), envProperties.agencyUsername);
+    const sentArgs = {
+        agencyUsername: envProperties.agencyUsername
+    };
+    cy.visit(envUtils.getAgencyUrl());
+    cy.origin(envUtils.getAgencyUrl(), { args: sentArgs }, ({ agencyUsername }) => {
+        const tempPage = Cypress.require('../../../support/page-objects/agency-pages/AgencyLoginPage')
+        const agencyLoginPage = new tempPage;
+        agencyLoginPage.pageTitle(5000).should('have.text', 'Sign In');
+        agencyLoginPage.forgotPasswordButton().click()
+        agencyLoginPage.pageTitle(5000).should('have.text', 'Forgot Password');
+        agencyLoginPage.usernameBox().type(agencyUsername);
+        agencyLoginPage.submitButton().click()
+        agencyLoginPage.forgotPasswordConformation().should('include.text', 'Email has been sent').screenshot();
+    })
+})
+
+// Open Forgot Password email and click on restore password link
+Given('Open Forgot Password email and click on restore password link', () => {
+    var index = 0;
     cy.visit(`${envUtils.getMailinatorUrl()}?to=${envUtils.getAgencyUsername().substr(0, envUtils.getAgencyUsername().indexOf('@'))}`)
     cy.title().should('eq', 'Mailinator');
     mailinatorHomePage.forgotPasswordEmail(300000).should('exist');
@@ -52,9 +67,13 @@ Given('Request new password link and set {string} password', string => {
     mailinatorHomePage.publicMessageText(600).should('include.text', 'Forgot Password for RFP');
     mailinatorHomePage.forgotPasswordLink()
         .invoke('attr', 'target', '_parent')
-        .click({ force: true })
+        .click({ force: true });
 
-    // Reset password.
+})
+
+// Set 'Temporary, Permanent' password
+Given('Set {string} password', string => {
+    var agencyPassword;
     const sentArgs = {
         password: string,
         agencyPermPassword: envProperties.agencyPassword,
@@ -71,8 +90,8 @@ Given('Request new password link and set {string} password', string => {
         } else if (password === 'Permanent') {
             agencyPassword = agencyPermPassword;
         }
-        agencyLoginPage.newPasswordInput(60000).type(agencyPassword, { log: false })
-        agencyLoginPage.conformNewPasswordInput().type(agencyPassword, { log: false })
+        agencyLoginPage.newPasswordInput(60000).type(agencyPassword)
+        agencyLoginPage.conformNewPasswordInput().type(agencyPassword)
         agencyLoginPage.submitButton().click()
 
         // Verify Password has been reset 

@@ -11,24 +11,6 @@
 import 'cypress-file-upload';
 
 /*
-Request Agency RFP Password 
-[@param] agencyUrl
-[@param] agencyUsername
-*/
-Cypress.Commands.add('request_agency_password', (agencyUrl, agencyUsername) => {
-    cy.visit(agencyUrl);
-    cy.origin(agencyUrl,
-        { args: { agencyUsername } },
-        ({ agencyUsername }) => {
-            cy.get('#page-title', { timeout: 5000 }).should('have.text', 'Sign In');
-            cy.get("[href='/RFP/forgotpassword']").click()
-            cy.get('#Username').type(agencyUsername);
-            cy.get('.btn').click()
-            cy.get('p').should('include.text', 'Email has been sent').screenshot()
-        })
-});
-
-/*
 Parse XLSX file.
 [@param] filePath- file path.
 */

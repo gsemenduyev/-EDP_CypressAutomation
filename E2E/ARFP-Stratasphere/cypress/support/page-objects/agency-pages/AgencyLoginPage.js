@@ -29,5 +29,8 @@ class AgencyLoginPage {
     resetPasswordConformationMsgSyntax() {
         return '.col-md-offset-2.col-sm-offset-2 p';
     }
+    pageTitle(milliseconds) {
+        return cy.get('#page-title', {timeout: milliseconds});
+    }
 }
 export default AgencyLoginPage;
