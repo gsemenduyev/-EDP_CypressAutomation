@@ -80,5 +80,9 @@ Given('Request new password link and set {string} password', string => {
             expect(message.text().trim()).includes(passwordResetMsg)
             cy.screenshot()
         })
+        if (password === 'Temporary') {
+            cy.wait(60000);
+        }
+
     })
 })
