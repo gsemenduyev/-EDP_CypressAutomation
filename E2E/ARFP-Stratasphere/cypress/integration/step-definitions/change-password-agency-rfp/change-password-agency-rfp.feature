@@ -1,4 +1,4 @@
-@WIP
+@ARFP
 Feature: Change password Agency RFP
 
   Feature Description:

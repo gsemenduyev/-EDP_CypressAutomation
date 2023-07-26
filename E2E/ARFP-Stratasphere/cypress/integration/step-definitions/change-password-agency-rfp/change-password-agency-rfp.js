@@ -90,8 +90,8 @@ Given('Set {string} password', string => {
         } else if (password === 'Permanent') {
             agencyPassword = agencyPermPassword;
         }
-        agencyLoginPage.newPasswordInput(60000).type(agencyPassword)
-        agencyLoginPage.conformNewPasswordInput().type(agencyPassword)
+        agencyLoginPage.newPasswordInput(60000).type(agencyPassword, { log: false })
+        agencyLoginPage.conformNewPasswordInput().type(agencyPassword, { log: false })
         agencyLoginPage.submitButton().click()
 
         // Verify Password has been reset 
