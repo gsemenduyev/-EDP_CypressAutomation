@@ -23,7 +23,7 @@
     },
     "messages": {
       "enabled": true,
-      "output": "cypress/reports/messages/cucumber-messages.ndjson"
+      "output": "cypress/reports/messages/cucumber-messages.json"
     },
     "html": {
       "enabled": true,

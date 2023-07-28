@@ -45,6 +45,22 @@ class MailinatorHomePage {
     userSearchBox() {
         return cy.get('#inbox_field');
     }
+    forgotPasswordEmail(milliseconds) {
+        return cy.contains('Forgot Password for RFP', { timeout: milliseconds }).first();
+    }
+    emailTiming() {
+        return cy.get('.ng-binding').eq(8);
+    }
+    publicInboxes() {
+        return cy.get("[href='inboxes.jsp']")
+    }
+    forgotPasswordLink() {
+        return cy.get('#texthtml_msg_body')
+            .its('0.contentDocument')
+            .then(cy.wrap)
+            .find('a')
+            .eq(0);
+    }
 
     /* 
     Utils function that searches for email in https://www.mailinator.com/v4/public/inboxes.jsp
@@ -70,8 +86,9 @@ class MailinatorHomePage {
             mailinatorHomePage.emailName().each((el) => {
                 if (el.text().trim().includes(emailTitle + newRfpName)) {
                     cy.log(el.text().trim());
-                    cy.wrap(el).click();
-                    mailinatorHomePage.publicMessageText().should('include.text', newRfpName);
+                    cy.wrap(el).click({ force: true });
+                    cy.wait(1000)
+                    mailinatorHomePage.publicMessageText(10000).should('include.text', newRfpName);
                     return false;
                 }
             })
