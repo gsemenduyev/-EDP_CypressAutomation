@@ -23,3 +23,8 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+//Verifies if element exists in DOM.
+//[@param] selectorSyntax - Syntax of CSS, class, id...
+//[@return] - boolean
+//

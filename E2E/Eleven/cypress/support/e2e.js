@@ -15,10 +15,12 @@
 import "cypress-cucumber-attach-screenshots-to-failed-steps";
 import './commands'
 import '@shelex/cypress-allure-plugin';
+import 'cypress-mochawesome-reporter/register';
+
 // import failOnConsoleError from 'cypress-fail-on-console-error'
 // failOnConsoleError();
 
 module.exports = (on, config) => {
-    on('file:preprocessor', cucumber())
-  
+    on('file:preprocessor', cucumber()),
+    require('cypress-mochawesome-reporter/plugin')(on);
     }

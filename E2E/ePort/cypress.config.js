@@ -2,7 +2,8 @@
 const { defineConfig } = require("cypress");
 const preprocessor = require("@badeball/cypress-cucumber-preprocessor");
 const browserify = require("@badeball/cypress-cucumber-preprocessor/browserify");
-const registerDataSession = require('cypress-data-session/src/plugin')
+const browserify = require('@cypress/browserify-preprocessor');
+const registerDataSession = require('cypress-data-session/src/plugin');
 async function setupNodeEvents(on, config) {
   await preprocessor.addCucumberPreprocessorPlugin(on, config);
   on("file:preprocessor", browserify.default(config));

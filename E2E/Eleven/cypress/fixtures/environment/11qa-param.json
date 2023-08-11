@@ -1,9 +1,8 @@
 {
-    "elvenUrl": "https://11qa.pregotostrata.com/11orders/Login.aspx",
+    "elevenUrl": "https://11qa.pregotostrata.com/11orders/Login.aspx",
     "elevenUsername": "hitesh_prta",
     "elevenPassword": "password1",
-    "aeInboxUrl": "",
-    "aeInboxUsername": "",
-    "aeInboxPassword": "",
+    "loggedInPerson": "Hitesh Patel (Pre-Release Testing Agency)",
     "env": "QA"
+   
 }
