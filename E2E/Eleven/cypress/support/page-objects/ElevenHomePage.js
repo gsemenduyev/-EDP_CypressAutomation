@@ -2,7 +2,7 @@ class ElevenHomePage{
     welcomeMessage(){
         return cy.get('.header-welcome');
     }
-    SettingsIcon(){
+    settingsIcon(){
         return cy.get('#setting-menu');
     }
     toggleHeaderOption(){

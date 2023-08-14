@@ -47,7 +47,7 @@ Given('Launch 11 url login into 11', string => {
 Given('Click on Settings icon, validate each option, capture Version Number', string => {
     
     //click on settings icon
-    elevenHomePage.SettingsIcon().click();
+    elevenHomePage.settingsIcon().click();
     cy.screenshot();
     elevenHomePage.supportOption().should('contain.text', 'Support');
     elevenHomePage.supportOption().click();
@@ -74,14 +74,14 @@ Given('Click on Settings icon, validate each option, capture Version Number', st
     cy.screenshot();
     //Assert each of the options in the settings menu and validate the functionality
     //Show Header/ Hide Header option
-    elevenHomePage.SettingsIcon().click();
+    elevenHomePage.settingsIcon().click();
     elevenHomePage.toggleHeaderOption().should('contain.text', 'Hide Header');
     elevenHomePage.headerSection().should('be.visible');
     elevenHomePage.toggleHeaderOption().click();
     elevenHomePage.headerSection().should('not.be.visible').then
     { cy.log("Verified that Header section is hidden !!") };
     cy.screenshot();
-    elevenHomePage.SettingsIcon().click();
+    elevenHomePage.settingsIcon().click();
     elevenHomePage.toggleHeaderOption().should('contain.text', 'Show Header');
     elevenHomePage.toggleHeaderOption().click();
     elevenHomePage.headerSection().should('be.visible').then
@@ -89,13 +89,13 @@ Given('Click on Settings icon, validate each option, capture Version Number', st
     cy.screenshot();
 
     //Hide Left Pane/Show Left Pane option
-    elevenHomePage.SettingsIcon().click();
+    elevenHomePage.settingsIcon().click();
     elevenHomePage.toggleLeftPaneOption().should('contain.text', 'Hide Left Pane');
     elevenHomePage.toggleLeftPaneOption().click();
     elevenHomePage.sideBarSection().should('not.be.visible').then
     { cy.log("Verified that Left section is hidden !!") };
     cy.screenshot();
-    elevenHomePage.SettingsIcon().click();
+    elevenHomePage.settingsIcon().click();
     elevenHomePage.toggleLeftPaneOption().should('contain.text', 'Show Left Pane');
     elevenHomePage.toggleLeftPaneOption().click();
     elevenHomePage.sideBarSection().should('be.visible').then
@@ -103,13 +103,13 @@ Given('Click on Settings icon, validate each option, capture Version Number', st
     cy.screenshot();
 
     //Show Filter/Hide Filter option
-    elevenHomePage.SettingsIcon().click();
+    elevenHomePage.settingsIcon().click();
     elevenHomePage.showFiltersOption().should('contain.text', 'Show Filter');
     elevenHomePage.showFiltersOption().click();
     elevenHomePage.filtersSection().should('be.visible').then
     { cy.log("Verified that filters section is Visible now !!") };
     cy.screenshot();
-    elevenHomePage.SettingsIcon().click();
+    elevenHomePage.settingsIcon().click();
     elevenHomePage.showFiltersOption().should('contain.text', 'Hide Filter');
     elevenHomePage.showFiltersOption().click();
     elevenHomePage.filtersSection().should('not.be.visible').then
@@ -117,13 +117,13 @@ Given('Click on Settings icon, validate each option, capture Version Number', st
     cy.screenshot();
 
     //Hide Rating/Show Rating Option
-    elevenHomePage.SettingsIcon().click();
+    elevenHomePage.settingsIcon().click();
     elevenHomePage.showRatingOption().should('contain.text', 'Hide Rating .00');
     elevenHomePage.showRatingOption().click();
     elevenHomePage.ratingOption().should('contain.text', 'GRP').then
     { cy.log("Verified that Rating.00 option is hidden !!") };
     cy.screenshot();
-    elevenHomePage.SettingsIcon().click();
+    elevenHomePage.settingsIcon().click();
     elevenHomePage.showRatingOption().should('contain.text', 'Show Rating .00');
     elevenHomePage.showRatingOption().click();
     elevenHomePage.rating00Option().should('contain.text', 'GRP.00').then
@@ -131,7 +131,7 @@ Given('Click on Settings icon, validate each option, capture Version Number', st
     cy.screenshot();
 
     // Manage Change Reason option
-    elevenHomePage.SettingsIcon().click();
+    elevenHomePage.settingsIcon().click();
     elevenHomePage.manageChangeOption().should('contain.text', 'Manage Change Reason');
     elevenHomePage.manageChangeOption().click();
     elevenHomePage.manageChangeReason().should('contain.text', 'Manage Change Reason').then
@@ -140,7 +140,7 @@ Given('Click on Settings icon, validate each option, capture Version Number', st
     elevenHomePage.changeReasonCancel().click();
 
     //Shortcuts option  
-    elevenHomePage.SettingsIcon().click();
+    elevenHomePage.settingsIcon().click();
     elevenHomePage.shortCutsOption().should('contain.text', 'Shortcuts');
     elevenHomePage.shortCutsOption().click();
     elevenHomePage.shortCutDialog().should('contain.text', 'Shortcuts').then
@@ -149,7 +149,7 @@ Given('Click on Settings icon, validate each option, capture Version Number', st
     elevenHomePage.okShortCutDialog().click();
 
     //Logout option
-    elevenHomePage.SettingsIcon().click();
+    elevenHomePage.settingsIcon().click();
     elevenHomePage.logoutOption().should('contain.text', 'LogOut');
 
     //Userguide option
