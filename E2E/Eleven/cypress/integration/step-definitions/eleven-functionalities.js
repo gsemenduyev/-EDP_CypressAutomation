@@ -1,12 +1,9 @@
-/// <reference types="Cypress" />
-/// <reference types="cypress-data-session" />
 import 'cypress-data-session'
 import {  Given } from "@badeball/cypress-cucumber-preprocessor";
 import EnvUtils from "../../support/utils/EnvUtils";
 import ElevenSigninPage from '../../support/page-objects/ElevenSigninPage';
 import ElevenHomePage from '../../support/page-objects/ElevenHomePage';
 import ElevenUserGuidePage from '../../support/page-objects/ElevenUserGuidePage';
-//import * as $ from 'jquery';
 
 const envUtils = new EnvUtils;
 const elevenSigninPage = new ElevenSigninPage;
@@ -16,13 +13,10 @@ const elevenUserGuidePage = new ElevenUserGuidePage;
 Given('Launch 11 url login into 11', string => {
     
     cy.visit(envUtils.getelevenUrl());
-    cy.screenshot();
-    
+    cy.screenshot();    
     elevenSigninPage.pageTitle().should('have.text', 'Sign in to Eleven');
 
     //assert the message if admin message element exists
-   
-
     if(envUtils.getenvironment === 'QA')
     {
         cy.get('#adminMessage').should('exist');
@@ -55,7 +49,7 @@ Given('Click on Settings icon, validate each option, capture Version Number', st
     //click on settings icon
     elevenHomePage.SettingsIcon().click();
     cy.screenshot();
-    elevenHomePage.supportOption().should('contain.text','Support');
+    elevenHomePage.supportOption().should('contain.text', 'Support');
     elevenHomePage.supportOption().click();
     cy.screenshot();
 
@@ -74,7 +68,7 @@ Given('Click on Settings icon, validate each option, capture Version Number', st
         })
     })
     elevenHomePage.versionOkBtn().click();
-    
+
     //select the first record
     elevenHomePage.firstRecordToDo().click();
     cy.screenshot();
@@ -85,83 +79,83 @@ Given('Click on Settings icon, validate each option, capture Version Number', st
     elevenHomePage.headerSection().should('be.visible');
     elevenHomePage.toggleHeaderOption().click();
     elevenHomePage.headerSection().should('not.be.visible').then
-        {   cy.log("Verified that Header section is hidden !!")   };
+    { cy.log("Verified that Header section is hidden !!") };
     cy.screenshot();
     elevenHomePage.SettingsIcon().click();
     elevenHomePage.toggleHeaderOption().should('contain.text', 'Show Header');
     elevenHomePage.toggleHeaderOption().click();
     elevenHomePage.headerSection().should('be.visible').then
-        {   cy.log("Verified that Header section is visible now !!")   };
+    { cy.log("Verified that Header section is visible now !!") };
     cy.screenshot();
-    
+
     //Hide Left Pane/Show Left Pane option
     elevenHomePage.SettingsIcon().click();
     elevenHomePage.toggleLeftPaneOption().should('contain.text', 'Hide Left Pane');
     elevenHomePage.toggleLeftPaneOption().click();
     elevenHomePage.sideBarSection().should('not.be.visible').then
-        {  cy.log("Verified that Left section is hidden !!")    };
+    { cy.log("Verified that Left section is hidden !!") };
     cy.screenshot();
     elevenHomePage.SettingsIcon().click();
     elevenHomePage.toggleLeftPaneOption().should('contain.text', 'Show Left Pane');
     elevenHomePage.toggleLeftPaneOption().click();
     elevenHomePage.sideBarSection().should('be.visible').then
-        {  cy.log("Verified that Left section is Visible now !!")    };
+    { cy.log("Verified that Left section is Visible now !!") };
     cy.screenshot();
 
     //Show Filter/Hide Filter option
     elevenHomePage.SettingsIcon().click();
-    elevenHomePage.showFiltersOption().should('contain.text','Show Filter');
+    elevenHomePage.showFiltersOption().should('contain.text', 'Show Filter');
     elevenHomePage.showFiltersOption().click();
     elevenHomePage.filtersSection().should('be.visible').then
-        {   cy.log("Verified that filters section is Visible now !!")   };
+    { cy.log("Verified that filters section is Visible now !!") };
     cy.screenshot();
     elevenHomePage.SettingsIcon().click();
-    elevenHomePage.showFiltersOption().should('contain.text','Hide Filter');
+    elevenHomePage.showFiltersOption().should('contain.text', 'Hide Filter');
     elevenHomePage.showFiltersOption().click();
     elevenHomePage.filtersSection().should('not.be.visible').then
-        {   cy.log("Verified that filters section is now Hidden !!")   };
+    { cy.log("Verified that filters section is now Hidden !!") };
     cy.screenshot();
 
     //Hide Rating/Show Rating Option
     elevenHomePage.SettingsIcon().click();
-    elevenHomePage.showRatingOption().should('contain.text','Hide Rating .00');
+    elevenHomePage.showRatingOption().should('contain.text', 'Hide Rating .00');
     elevenHomePage.showRatingOption().click();
-    elevenHomePage.ratingOption().should('contain.text','GRP').then
-        {   cy.log("Verified that Rating.00 option is hidden !!")   };
-    cy.screenshot();    
+    elevenHomePage.ratingOption().should('contain.text', 'GRP').then
+    { cy.log("Verified that Rating.00 option is hidden !!") };
+    cy.screenshot();
     elevenHomePage.SettingsIcon().click();
-    elevenHomePage.showRatingOption().should('contain.text','Show Rating .00');
+    elevenHomePage.showRatingOption().should('contain.text', 'Show Rating .00');
     elevenHomePage.showRatingOption().click();
-    elevenHomePage.rating00Option().should('contain.text','GRP.00').then
-        {   cy.log("Verified that Rating.00 option is visible now !!")   };
+    elevenHomePage.rating00Option().should('contain.text', 'GRP.00').then
+    { cy.log("Verified that Rating.00 option is visible now !!") };
     cy.screenshot();
 
     // Manage Change Reason option
     elevenHomePage.SettingsIcon().click();
-    elevenHomePage.manageChangeOption().should('contain.text','Manage Change Reason');
+    elevenHomePage.manageChangeOption().should('contain.text', 'Manage Change Reason');
     elevenHomePage.manageChangeOption().click();
-    elevenHomePage.manageChangeReason().should('contain.text','Manage Change Reason').then
-        {   cy.log("Verified that Manage Change Reason Dialog is displayed !!")    };
+    elevenHomePage.manageChangeReason().should('contain.text', 'Manage Change Reason').then
+    { cy.log("Verified that Manage Change Reason Dialog is displayed !!") };
     cy.screenshot();
     elevenHomePage.changeReasonCancel().click();
 
     //Shortcuts option  
     elevenHomePage.SettingsIcon().click();
-    elevenHomePage.shortCutsOption().should('contain.text','Shortcuts');
+    elevenHomePage.shortCutsOption().should('contain.text', 'Shortcuts');
     elevenHomePage.shortCutsOption().click();
-    elevenHomePage.shortCutDialog().should('contain.text','Shortcuts').then
-        {   cy.log("Verified that Shortcuts Dialog is displayed")   };
+    elevenHomePage.shortCutDialog().should('contain.text', 'Shortcuts').then
+    { cy.log("Verified that Shortcuts Dialog is displayed") };
     cy.screenshot();
     elevenHomePage.okShortCutDialog().click();
 
     //Logout option
     elevenHomePage.SettingsIcon().click();
-    elevenHomePage.logoutOption().should('contain.text','LogOut');
+    elevenHomePage.logoutOption().should('contain.text', 'LogOut');
 
     //Userguide option
-    elevenHomePage.userGuideOption().should('contain.text','User Guide');
+    elevenHomePage.userGuideOption().should('contain.text', 'User Guide');
     cy.visit(envUtils.getuserguideUrl());
-    
+
     /* limitation in cypress fails the below assertions. This seems to have been fixed in 12.8.0, once we switch to that version,
        will test this and then enable the assertions.
        https://github.com/cypress-io/cypress/issues/25885
@@ -170,6 +164,5 @@ Given('Click on Settings icon, validate each option, capture Version Number', st
     elevenUserGuidePage.logo().should('contain.value','STRATA Client KB and Case Portal');
     cy.screenshot();
     })
-    */  
-
+    */
 })

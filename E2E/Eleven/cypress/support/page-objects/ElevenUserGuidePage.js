@@ -4,7 +4,6 @@ class ElevenUserGuidePage{
     }
     logo() {
         return cy.get('#logo');
-    }
-     
+    }     
   }
 export default  ElevenUserGuidePage;
