@@ -1,11 +1,13 @@
 const { defineConfig } = require("cypress");
+const {downloadFile} = require('cypress-downloadfile/lib/addPlugin');
 const { addCucumberPreprocessorPlugin, afterRunHandler } = require("@badeball/cypress-cucumber-preprocessor");
 const browserify = require("@badeball/cypress-cucumber-preprocessor/browserify");
 const registerDataSession = require('cypress-data-session/src/plugin')
 const allureWriter = require('@shelex/cypress-allure-plugin/writer');
+const { verifyDownloadTasks } = require('cy-verify-downloads');
 //const TestRailReporter = require('cypress-testrail');
 const fs = require('fs');
-//const xlsx = require('node-xlsx').default;
+const xlsx = require('node-xlsx').default;
 const path = require('path')
 const RUN_ENV_FILE_PATH = 'cypress/reports/run-info/run-env.json';
 const delay = async (ms) => new Promise((res) => setTimeout(res, ms));
@@ -29,7 +31,8 @@ async function setupNodeEvents(cypressOn, config) {
       })
     }
   });
-
+  
+  on('task', verifyDownloadTasks);
 
   on('after:run', async (results) => {
     try {
