@@ -12,5 +12,6 @@ Feature: Validate the various functionalities in 11
 
   Scenario: Launch 11 url login into 11
     * Launch 11 url login into 11 
+    * Click on Settings icon, validate each option, capture Version Number
 
     

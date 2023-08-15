@@ -37,9 +37,8 @@ report.generate({
     title: 'Run Info',
     data: [
       { label: 'Environment', value: runInfo['env'] },
-      { label: 'Agency RFP URL', value: runInfo['agencyUrl'] },
-      { label: 'Stratasphere URL', value: runInfo['ssphereUrl'] },
-      { label: 'Email URL', value: runInfo['mailinatorUrl'] },
+      { label: 'Eleven URL', value: runInfo['elevenUrl'] },
+      { label: 'Eleven Version', value: runInfo['elevenVersion'] },
       { label: 'Cypress Version', value: runInfo['cypressVersion'] },
       { label: 'Node Version', value: runInfo['nodeVersion'] },
       {
