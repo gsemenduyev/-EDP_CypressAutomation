@@ -9,8 +9,8 @@ Feature: Validate the Smoke Testing scenarios in 11
   Validate all the options in Settings and capture the Version Number
 
 
-  Scenario: Validate the Smoke Testing scenarios in 11
-    * Launch 11 application and login into 11 
+  Scenario: Test the Smoke Testing scenarios in 11
+    * Launch 11 application and login into 11
 	  * Generate the xls reports - Order Detail, Order Detail with Totals By Calendar Month
     * Click on Settings icon, validate each option, capture Version Number
 
