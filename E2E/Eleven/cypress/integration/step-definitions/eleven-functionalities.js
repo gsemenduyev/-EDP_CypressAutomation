@@ -45,7 +45,7 @@ Given('Launch 11 application and login into 11', string => {
 
 Given('Generate the xls reports - Order Detail, Order Detail with Totals By Calendar Month', string => {
      //Filter for a particular Estimate number
-     elevenHomePage.searchEstimateNumber().type('8826');
+     elevenHomePage.searchEstimateNumber().type(envUtils.getEstimateNumber());
      elevenHomePage.btnGoSideBar().click();
     //Order Detail Report
     elevenHomePage.selectEvenCheckBox().check();

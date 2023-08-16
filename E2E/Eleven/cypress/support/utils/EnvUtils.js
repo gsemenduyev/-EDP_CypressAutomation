@@ -57,5 +57,8 @@ class EnvUtils {
     getuserguideUrl(){
         return ('https://service.gotostrata.com/login?ec=302&startURL=%2Fs%2Fknowledge%3Fkeyword%3Deleven');
     }
+    getEstimateNumber(){
+        return envProperties.estimateNumber;
+    }
 }
   export default EnvUtils;
