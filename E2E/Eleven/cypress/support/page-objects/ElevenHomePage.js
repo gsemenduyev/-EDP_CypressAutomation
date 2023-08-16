@@ -68,5 +68,23 @@ class ElevenHomePage{
     okShortCutDialog(){
         return cy.get('[aria-describedby="ui-id-5"] > .ui-dialog-buttonpane > .ui-dialog-buttonset > .btn-11');
     }
+    whatDoYouWantToDo(){
+        return cy.get('#lstActionName');
+    }
+    submitButton(){
+        return cy.get('.button-bar-main > .save');
+    }
+    selectEvenCheckBox(){
+        return cy.get('.even > .l0 > input');
+    }
+    expandEvenStation(){
+        return cy.get('.even > .l1 > .icon-expand-alt');
+    }
+    searchEstimateNumber(){
+        return cy.get('#gotoSidebarItem');
+    }
+    btnGoSideBar(){
+        return cy.get('#btnGotoSidebarItem')
+    }
   }
 export default  ElevenHomePage;

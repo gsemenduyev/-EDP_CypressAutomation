@@ -10,8 +10,7 @@ const elevenSigninPage = new ElevenSigninPage;
 const elevenHomePage = new ElevenHomePage;
 const elevenUserGuidePage = new ElevenUserGuidePage;
 
-Given('Launch 11 url login into 11', string => {
-    
+Given('Launch 11 application and login into 11',() => {    
     cy.visit(envUtils.getelevenUrl());
     cy.screenshot();    
     elevenSigninPage.pageTitle().should('have.text', 'Sign in to Eleven');
@@ -30,7 +29,7 @@ Given('Launch 11 url login into 11', string => {
     }  
     if(envUtils.getenvironment === 'Production')
     {
-        if (cy.get('#adminMessage').should('not.exist').then)
+        if (elevenSigninPage.noAdminMessage().should('not.exist').then)
         {
             cy.log( "Admin message section NOT present on home screen !!");
         }     
@@ -41,11 +40,61 @@ Given('Launch 11 url login into 11', string => {
     elevenSigninPage.signIn().click();
   
     elevenHomePage.welcomeMessage().should('have.text', ('Welcome '+ envUtils.getloggedInPerson())) ;   
-    cy.screenshot();
+    cy.screenshot();   
 })
 
-Given('Click on Settings icon, validate each option, capture Version Number', string => {
+Given('Generate the xls reports - Order Detail, Order Detail with Totals By Calendar Month', () => {
+     //Filter for a particular Estimate number
+     elevenHomePage.searchEstimateNumber().type(envUtils.getEstimateNumber());
+     elevenHomePage.btnGoSideBar().click();
+    //Order Detail Report
+    elevenHomePage.selectEvenCheckBox().check();
+    elevenHomePage.expandEvenStation().click();
+    elevenHomePage.whatDoYouWantToDo().should('be.visible').select('16');
+    elevenHomePage.submitButton().click();   
+    cy.screenshot();
+    cy.wait(2000); // Wait for the download to complete 
+    cy.verifyDownload('export.xls');
+    cy.log('Verified that Order Details report downloaded successfully !!');
+    //Compare the downloaded file against the saved file in the fixtures folder
+    cy.compare_Excel_Files('cypress/fixtures/comparisonReports/OrderDetail.xls', 'cypress/downloads/export.xls');
     
+    //Order Detail With Totals by Calendar Month
+    elevenHomePage.whatDoYouWantToDo().should('be.visible').select('20');
+    elevenHomePage.submitButton().click();   
+    cy.screenshot();
+    cy.wait(2000); // Wait for the download to complete 
+    cy.verifyDownload('export.xls');
+    cy.log('Verified that Order Details report downloaded successfully !!');
+    //Compare the downloaded file against the saved file in the fixtures folder
+    cy.compare_Excel_Files('cypress/fixtures/comparisonReports/OrderDetailWithTotals.xls', 'cypress/downloads/export.xls');
+    
+    //select the first record
+    //elevenHomePage.firstRecordToDo().click();
+    //select Order Confirmation Report from drop down
+    //elevenHomePage.whatDoYouWantToDo().should('be.visible').select('10');
+    //elevenHomePage.submitButton().click();
+    /*cy.task('https://11qa.pregotostrata.com/11Orders/rptOrder.aspx?oper=0&est_id=240047&hide_conf=0&sort_field=&sort_type=&grp_gimp_selection=1&show_columns=1_2_3_4_5_6_9_7_8&show_comments=false&is_rating_00=true').then($res => {
+        expect($res).to.equal('Eleven Order Confirmation Report')
+    })*/
+    // cy.screenshot();
+     //cy.get('@windowOpen').should('have.been.calledOnce','','Eleven Order Confirmation Report');
+     //cy.title().should('contain','Eleven Order Confirmation Report')
+     //cy.window().then((win) => {
+     //win.close();
+      //});
+    //elevenHomePage.submitButton().click();
+    
+  /*  cy.open('../rptOrder.aspx?oper=1').then((win) =>{
+        cy.spy(win, 'open').as ('open')        
+    })
+    cy.get('@open').should('have.been.calledOnce','','Eleven Order Confirmation Report');
+    cy.title().should('contain','Eleven Order Confirmation Report');*/
+
+})
+
+Given('Click on Settings icon, validate each option, capture Version Number', () => {
+	
     //click on settings icon
     elevenHomePage.settingsIcon().click();
     cy.screenshot();
@@ -54,7 +103,7 @@ Given('Click on Settings icon, validate each option, capture Version Number', st
     cy.screenshot();
 
     //capture 11 version
-    cy.get('#ui-id-5').then(function ($div) {
+    elevenHomePage.versionDialog().then(function ($div) {
         const text = ($div.text().split(': ')[1]);
         const regex = /\b\d+\.\d+\.\d+\.\d\b/g;
         const Ver = text.match(regex);
