@@ -10,7 +10,7 @@ const elevenSigninPage = new ElevenSigninPage;
 const elevenHomePage = new ElevenHomePage;
 const elevenUserGuidePage = new ElevenUserGuidePage;
 
-Given('Launch 11 application and login into 11 ', string => {    
+Given('Launch 11 application and login into 11', string => {    
     cy.visit(envUtils.getelevenUrl());
     cy.screenshot();    
     elevenSigninPage.pageTitle().should('have.text', 'Sign in to Eleven');
@@ -43,7 +43,7 @@ Given('Launch 11 application and login into 11 ', string => {
     cy.screenshot();   
 })
 
-Given('Generate the xls reports - Order Confirmation, Order Detail, Order Detail with Totals By Calendar Month', string => {
+Given('Generate the xls reports - Order Detail, Order Detail with Totals By Calendar Month', string => {
      //Filter for a particular Estimate number
      elevenHomePage.searchEstimateNumber().type('8826');
      elevenHomePage.btnGoSideBar().click();
