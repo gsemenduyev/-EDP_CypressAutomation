@@ -10,8 +10,8 @@ require('cy-verify-downloads').addCustomCommand();
 const fs = require('fs');
 const XLSX = require('xlsx');
 const cheerio = require('cheerio');
-
-Cypress.Commands.add("compareExcelFiles", (filePath1, filePath2) => {
+//Compare 2 excel files
+Cypress.Commands.add("compare_Excel_Files", (filePath1, filePath2) => {
   cy.readFile(filePath1, 'utf-8').then(file1Data => {
     cy.readFile(filePath2, 'utf-8').then(file2Data => {
       const title1 = getTitleFromHTML(file1Data);
@@ -26,12 +26,12 @@ Cypress.Commands.add("compareExcelFiles", (filePath1, filePath2) => {
     });
   });
 });
-
+//Exctract the HTML Tile from xls file
 function getTitleFromHTML(htmlContent) {
   const $ = cheerio.load(htmlContent);
   return $('title').text();
 }
-
+//Read data from the HTML File
 function getTableDataFromHTML(htmlContent) {
   const $ = cheerio.load(htmlContent);
   const tableData = [];
@@ -45,8 +45,6 @@ function getTableDataFromHTML(htmlContent) {
   });
   return tableData;
 }
-
-
 // Handles uncaught exception.
 Cypress.on('uncaught:exception', (err, runnable) => {
     // returning false here prevents Cypress from

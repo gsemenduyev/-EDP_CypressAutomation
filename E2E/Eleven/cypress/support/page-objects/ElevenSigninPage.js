@@ -14,6 +14,9 @@ class ElevenSigninPage{
     adminMessage(){
         return cy.get('#adminMessage');
     }
+    noAdminMessage(){
+        return '#adminMessage';
+    }
     welcomeMessage(){
         return cy.get('.header-welcome');
     }

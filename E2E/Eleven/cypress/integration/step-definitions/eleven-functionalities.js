@@ -10,7 +10,7 @@ const elevenSigninPage = new ElevenSigninPage;
 const elevenHomePage = new ElevenHomePage;
 const elevenUserGuidePage = new ElevenUserGuidePage;
 
-Given('Launch 11 application and login into 11', string => {    
+Given('Launch 11 application and login into 11',() => {    
     cy.visit(envUtils.getelevenUrl());
     cy.screenshot();    
     elevenSigninPage.pageTitle().should('have.text', 'Sign in to Eleven');
@@ -29,7 +29,7 @@ Given('Launch 11 application and login into 11', string => {
     }  
     if(envUtils.getenvironment === 'Production')
     {
-        if (cy.get('#adminMessage').should('not.exist').then)
+        if (elevenSigninPage.noAdminMessage().should('not.exist').then)
         {
             cy.log( "Admin message section NOT present on home screen !!");
         }     
@@ -43,7 +43,7 @@ Given('Launch 11 application and login into 11', string => {
     cy.screenshot();   
 })
 
-Given('Generate the xls reports - Order Detail, Order Detail with Totals By Calendar Month', string => {
+Given('Generate the xls reports - Order Detail, Order Detail with Totals By Calendar Month', () => {
      //Filter for a particular Estimate number
      elevenHomePage.searchEstimateNumber().type(envUtils.getEstimateNumber());
      elevenHomePage.btnGoSideBar().click();
@@ -57,7 +57,7 @@ Given('Generate the xls reports - Order Detail, Order Detail with Totals By Cale
     cy.verifyDownload('export.xls');
     cy.log('Verified that Order Details report downloaded successfully !!');
     //Compare the downloaded file against the saved file in the fixtures folder
-    cy.compareExcelFiles('cypress/fixtures/comparisonReports/OrderDetail.xls', 'cypress/downloads/export.xls');
+    cy.compare_Excel_Files('cypress/fixtures/comparisonReports/OrderDetail.xls', 'cypress/downloads/export.xls');
     
     //Order Detail With Totals by Calendar Month
     elevenHomePage.whatDoYouWantToDo().should('be.visible').select('20');
@@ -67,7 +67,7 @@ Given('Generate the xls reports - Order Detail, Order Detail with Totals By Cale
     cy.verifyDownload('export.xls');
     cy.log('Verified that Order Details report downloaded successfully !!');
     //Compare the downloaded file against the saved file in the fixtures folder
-    cy.compareExcelFiles('cypress/fixtures/comparisonReports/OrderDetailWithTotals.xls', 'cypress/downloads/export.xls');
+    cy.compare_Excel_Files('cypress/fixtures/comparisonReports/OrderDetailWithTotals.xls', 'cypress/downloads/export.xls');
     
     //select the first record
     //elevenHomePage.firstRecordToDo().click();
@@ -93,9 +93,8 @@ Given('Generate the xls reports - Order Detail, Order Detail with Totals By Cale
 
 })
 
-Given('Click on Settings icon, validate each option, capture Version Number', string => {
+Given('Click on Settings icon, validate each option, capture Version Number', () => {
 	
-    
     //click on settings icon
     elevenHomePage.settingsIcon().click();
     cy.screenshot();
@@ -104,7 +103,7 @@ Given('Click on Settings icon, validate each option, capture Version Number', st
     cy.screenshot();
 
     //capture 11 version
-    cy.get('#ui-id-5').then(function ($div) {
+    elevenHomePage.versionDialog().then(function ($div) {
         const text = ($div.text().split(': ')[1]);
         const regex = /\b\d+\.\d+\.\d+\.\d\b/g;
         const Ver = text.match(regex);
