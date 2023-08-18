@@ -15,7 +15,8 @@ Parse XLSX file.
 [@param] filePath- file path.
 */
 Cypress.Commands.add("parse_xlsx", (inputFile) => {
-    return cy.task('parseXlsx', { filePath: inputFile })
+    cy.readFile(inputFile).should('exist');
+    return cy.task('parseXlsx', { filePath: inputFile });
 });
 
 /*
