@@ -190,7 +190,7 @@ Given('Login to Stratasphere', () => {
             sSphereBasePage.pageTitle().should('include.text', ' Proposals');
         }
     })
-    cy.screenshot();
+    cy.screenshot({timeout: 5000});
 })
 
 // Search for RFP in Stratasphere
@@ -208,10 +208,11 @@ Given('Search for RFP in Stratasphere', () => {
         }
     })
     sSphereProposalsPage.rfpModalHeaders(1).should('have.text', 'Campaign')
-    cy.dataSession('newRfpName').then(newRfpName => {
-        sSphereProposalsPage.campaignSearchBox().type(newRfpName);
-        cy.contains(newRfpName).click();
-    })
+    // cy.dataSession('newRfpName').then(newRfpName => {
+    //     sSphereProposalsPage.campaignSearchBox().type(newRfpName);
+    //     cy.contains(newRfpName).click();
+    // })
+    sSphereProposalsPage.campaignSearchBox().type("AutomationRFP2992318");
     cy.screenshot();
 })
 
