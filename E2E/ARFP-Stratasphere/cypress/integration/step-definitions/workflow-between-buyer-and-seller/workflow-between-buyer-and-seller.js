@@ -183,6 +183,7 @@ Given('Login to Stratasphere', () => {
     sSphereLoginPage.passwordBox().type(envUtils.getSspherePassword(), { log: false });
     sSphereLoginPage.loginButton().click();
     sSphereBasePage.menuDropdownToggle().should('be.visible');
+    cy.screenshot();
     sSphereBasePage.pageTitle().then(function (titleText) {
         if (titleText.text().includes(' Home')) {
             sSphereHomePage.proposalsField().click();
@@ -190,7 +191,6 @@ Given('Login to Stratasphere', () => {
             sSphereBasePage.pageTitle().should('include.text', ' Proposals');
         }
     })
-    cy.screenshot({timeout: 5000});
 })
 
 // Search for RFP in Stratasphere
