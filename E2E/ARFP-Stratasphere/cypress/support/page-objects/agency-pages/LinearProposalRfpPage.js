@@ -1,6 +1,6 @@
 class LinearProposalRfpPage {
     campaignHeaderText(milliseconds) {
-        return cy.get(".campaign-header span", { timeout: milliseconds });
+        return cy.get("h2", { timeout: milliseconds }).first();
     }
     proposalRows() {
         return cy.get("div[role='row']", { log: false });
@@ -86,7 +86,7 @@ class LinearProposalRfpPage {
     alertBox() {
         return cy.get('.s-alert-box-inner > span');
     }
-    lineChangesMsg () {
+    lineChangesMsg() {
         return cy.get('.osu-banner-body').last();
     }
     sellerRateTexBoxValue() {
@@ -100,6 +100,12 @@ class LinearProposalRfpPage {
     }
     modalImportXmlButton() {
         return cy.contains("Import XML");
+    }
+    manageBuyerDataButton() {
+        return cy.get(".item.manager-buyer-data-item");
+    }
+    campaignHeaderTextProd(milliseconds) {
+        return cy.get(".campaign-header span", { timeout: milliseconds });
     }
 }
 export default LinearProposalRfpPage;

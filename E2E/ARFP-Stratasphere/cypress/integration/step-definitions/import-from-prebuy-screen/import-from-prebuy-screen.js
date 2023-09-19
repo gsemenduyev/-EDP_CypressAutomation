@@ -15,6 +15,10 @@ before(function () {
 
 // Import from prebuy screen
 Given('Import from prebuy screen', () => {
+    if (Cypress.env('ENV') !== 'Production') {
+        linearProposalRfpPage.actionsDropdown().click()
+        linearProposalRfpPage.manageBuyerDataButton().click()
+    };
     cy.upload_file(FILE_NAME, linearProposalRfpPage.importProposalXmlButton());
     linearProposalRfpPage.modalImportXmlButton().click();
     agencyBasePage.alertBox().should('have.text', 'Success! We imported the buylines from the proposal xml.');
