@@ -17,8 +17,6 @@ Cypress Tests
 * Navigate to ARFP-Stratasphere directory - `cd E2E/ARFP-Stratasphere`
 * Install libraries - `npm install`
 
-
-
 <p align="left">
   Description: Currently the ARFP-Stratasphere project could be executed in QA and Production environments.
 </p>
@@ -32,13 +30,11 @@ Cypress Tests
 * [Mailinator](https://www.mailinator.com/v4/public/inboxes.jsp)
 
 ## Execution modes 🤖 Starting up
-
 * Open the Cypress Test Runner
 
 `npx cypress open --env ENV="QA"`
 
 `npx cypress open --env ENV="Production"`
-
 
 * Run Cypress Tests using Cypress CLI
 
@@ -66,6 +62,10 @@ Report Path - `E2E\ARFP-Stratasphere\cypress\reports\multi-html-report\index.htm
 ## Jenkins pipelines
 * [ARFP_Stratasphere_CypressAutomation](https://jenkins-strata.freewheel.tv/job/Strata/job/TestAutomation/job/ARFP_Stratasphere_CypressAutomation/)
 * [Cypress_DockerTest](https://jenkins-strata.freewheel.tv/job/Strata/job/TestAutomation/job/Cypress_DockerTest/)
+
+## Recommendations for Future Development 
+* Use [VSCode](https://code.visualstudio.com/download) as source-code editor
+* Follow [coding standards](https://wiki.freewheel.tv/display/FWMVPD/Cypress+Knowledge+Base)
 
 ## Useful VSCode extensions
 * [Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker)
