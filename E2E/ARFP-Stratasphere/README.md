@@ -1,4 +1,4 @@
-<h1 align="center"> Cypress Code - JavaScript (Cucumber) - test on ARFP and Stratasphere applications)  </h1> <br>
+<h1 align="center"> Cypress Code - JavaScript (Cucumber) - for ARFP and Stratasphere applications  </h1> <br>
 
 <p align="center">
   Description: This is End to End automated Smoke test for ARFP and Stratasphere projects.
