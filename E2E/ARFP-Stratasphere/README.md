@@ -53,7 +53,7 @@ Report Path - `E2E\ARFP-Stratasphere\cypress\reports\multi-html-report\index.htm
 
 ## Save and share Cucumber report
 <p align="left">
-  Description: In order to save and share Cucumber report, first the multi-html-report (E2E\ARFP-Stratasphere\cypress\reports\multi-html-report) directory needs to deploy on Netlify app then use Save Page WE chrome extension to save the page.
+  Description: In order to save and share Cucumber report, first deploy the multi-html-report directory on Netlify app then use Save Page WE chrome extension to save the page.
 </p>
 
 * [Netlify](https://app.netlify.com/)
@@ -68,5 +68,5 @@ Report Path - `E2E\ARFP-Stratasphere\cypress\reports\multi-html-report\index.htm
 * [Cypress_DockerTest](https://jenkins-strata.freewheel.tv/job/Strata/job/TestAutomation/job/Cypress_DockerTest/)
 
 ## Useful VSCode extensions
-* Code Spell Checker
-* Cucumber (Gherkin) Full Support
+* [Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker)
+* [Cucumber (Gherkin) Full Support](https://marketplace.visualstudio.com/items?itemName=alexkrechik.cucumberautocomplete)
