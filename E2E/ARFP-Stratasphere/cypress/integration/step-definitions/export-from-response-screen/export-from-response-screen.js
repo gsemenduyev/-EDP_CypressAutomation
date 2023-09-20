@@ -13,15 +13,15 @@ const LINEAR_RESPONSE_FILE_PATH = 'cypress/downloads/Linear response detail.xlsx
 // Navigate to View and Edit Responses page
 Given('Navigate to View and Edit Responses page', () => {
     rfpDetailsPage.responseButton().click();
-    viewEditResponsesPage.responsesTable().should('exist').screenshot();
+    viewEditResponsesPage.responsesTable().should('exist');
 });
 
 // Export XLSX file from hamburger dropdown
 Given('Export XLSX file from hamburger dropdown', () => {
-    viewEditResponsesPage.hamburgerButton().should('be.visible')
-    viewEditResponsesPage.hamburgerButton().click();
-    viewEditResponsesPage.exportButton().should('be.visible')
-    viewEditResponsesPage.exportButton().click();
+    viewEditResponsesPage.hamburgerButton().should('be.visible');
+    viewEditResponsesPage.hamburgerButton().click({force: true});
+    viewEditResponsesPage.exportButton().should('be.visible');
+    viewEditResponsesPage.exportButton().click({force: true});
 
 });
 

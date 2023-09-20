@@ -164,7 +164,6 @@ Given('Validate RFP Creation', () => {
     });
     rfpDetailsPage.rfpStatus(1200000).contains('Sent', { timeout: 1200000 });
     rfpDetailsPage.rfpStatus().should('have.text', 'Sent');
-    rfpDetailsPage.launchPreBuyButton();
     cy.screenshot();
 })
 
@@ -183,6 +182,7 @@ Given('Login to Stratasphere', () => {
     sSphereLoginPage.passwordBox().type(envUtils.getSspherePassword(), { log: false });
     sSphereLoginPage.loginButton().click();
     sSphereBasePage.menuDropdownToggle().should('be.visible');
+    cy.screenshot();
     sSphereBasePage.pageTitle().then(function (titleText) {
         if (titleText.text().includes(' Home')) {
             sSphereHomePage.proposalsField().click();
@@ -190,7 +190,6 @@ Given('Login to Stratasphere', () => {
             sSphereBasePage.pageTitle().should('include.text', ' Proposals');
         }
     })
-    cy.screenshot();
 })
 
 // Search for RFP in Stratasphere
@@ -292,8 +291,12 @@ Given('Search for existing RFP', () => {
 
 // Click on Launch Pre-buy button
 Given('Click on Launch Pre-buy button', () => {
-    rfpDetailsPage.launchPreBuyButton().click();
-    cy.title('eq', 'Linear Proposal - RFP');
+    if (Cypress.env('ENV') !== 'Production') {
+        rfpDetailsPage.manageResponsesButton(10000).click()
+    } else {
+        rfpDetailsPage.launchPreBuyButton(10000).click();
+        cy.title('eq', 'Linear Proposal - RFP');
+    }
 })
 
 // Validate the response from Agency {string}
