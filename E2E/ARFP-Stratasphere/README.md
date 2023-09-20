@@ -12,7 +12,7 @@
 Cypress Tests
 
 ## Project Installation Instructions
-* [Clone EDP_Automation Project from GitHub](https://github.freewheel.tv/HS/EDP_CypressAutomation.git)
+* Clone EDP_Automation Project from GitHub - `https://github.freewheel.tv/HS/EDP_CypressAutomation.git`
 * Open Terminal
 * Navigate to ARFP-Stratasphere directory - `cd E2E/ARFP-Stratasphere`
 * Install libraries - `npm install`
