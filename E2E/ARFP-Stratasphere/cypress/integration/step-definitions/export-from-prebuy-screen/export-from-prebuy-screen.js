@@ -7,14 +7,23 @@ const FILE_NAME = 'cypress/downloads/Chicago - TV.prx'
 let exportProposalXmlParam
 
 before(function () {
-    cy.fixture('/agencyRFP/export-proposal-xml-expected-param').then(function (data) {
-        exportProposalXmlParam = data;
-    })
+    if (Cypress.env('ENV') === 'Production') {
+        cy.fixture('/agencyRFP/export-proposal-xml-expected-param-prod').then(function (data) {
+            exportProposalXmlParam = data;
+        });
+    } else {
+        cy.fixture('/agencyRFP/export-proposal-xml-expected-param-qa').then(function (data) {
+            exportProposalXmlParam = data;
+        });
+    }
 })
 
 // Export from prebuy screen and validate XML file
 Given('Export from prebuy screen and validate XML file', () => {
     linearProposalRfpPage.actionsDropdown().click({ force: true });
+    if (Cypress.env('ENV') !== 'Production') {
+        linearProposalRfpPage.manageBuyerDataButton().click()
+    };
     linearProposalRfpPage.exportProposalXmlButton().click({ force: true });
     cy.readFile(FILE_NAME).then((file) => {
         exportProposalXmlParam.forEach(text => {
