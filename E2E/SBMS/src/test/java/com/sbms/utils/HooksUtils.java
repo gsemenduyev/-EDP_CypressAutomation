@@ -2,7 +2,6 @@ package com.sbms.utils;
 import io.cucumber.java.After;
 import io.cucumber.java.Scenario;
 import org.openqa.selenium.By;
-import io.cucumber.java.Before;
 public class HooksUtils {
     private static boolean isFeatureStarted = false;
 

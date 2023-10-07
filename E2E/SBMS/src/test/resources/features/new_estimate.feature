@@ -1,6 +1,6 @@
-@wip
-Feature: Open SBMS
 
+Feature: Open SBMS
+  @wip
   Scenario: Open SBMS local
     * Launch SBMS
     * Click on Buy button

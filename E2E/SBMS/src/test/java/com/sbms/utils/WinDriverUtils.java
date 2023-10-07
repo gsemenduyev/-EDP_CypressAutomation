@@ -2,7 +2,6 @@ package com.sbms.utils;
 
 import io.appium.java_client.windows.WindowsDriver;
 import io.appium.java_client.windows.WindowsElement;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -18,15 +17,18 @@ import static java.lang.Integer.parseInt;
 public class WinDriverUtils {
 
     private static WindowsDriver<WindowsElement> winDriver;
+
     public static WebDriver getWinDriver() {
         if (winDriver == null) {
+
             try {
+                Thread.sleep(500);
                 DesiredCapabilities capabilities = new DesiredCapabilities();
                 capabilities.setCapability("app",
                         "C:\\CypressAutomation\\EDP_CypressAutomation_Old\\E2E\\SBMS\\Desktop\\SBMSNET.EXE");
-                //  start();
+                // start();
                 winDriver = new WindowsDriver<>(new URL("http://127.0.0.1:4723"), capabilities);
-                winDriver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+                winDriver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
                 // Perform your testing actions here
 
             } catch (Exception e) {
@@ -43,7 +45,7 @@ public class WinDriverUtils {
         }
     }
 
-    public static void start() {
+    public static void start() throws InterruptedException {
         try {
             Desktop desktop = Desktop.getDesktop();
             File file = new File("C:\\Program Files (x86)\\Windows Application Driver\\WinAppDriver.exe");
@@ -75,7 +77,6 @@ public class WinDriverUtils {
         }
     }
 
-
     private static WindowsDriver<WindowsElement> openWinDriver;
 
     public static WindowsDriver<WindowsElement> getOpenAppWinDriver() {
@@ -90,7 +91,8 @@ public class WinDriverUtils {
                 capability.setCapability("deviceName", "Windows10Machine");
                 openWinDriver = new WindowsDriver<>(new URL("http://127.0.0.1:4723"), capability);
 
-                WindowsElement windowsElement = openWinDriver.findElementByXPath("//*[starts-with(@Name,' SBMS for Spot')]");
+                WindowsElement windowsElement = openWinDriver
+                        .findElementByXPath("//*[starts-with(@Name,' SBMS for Spot')]");
                 String tempWindowHandle = windowsElement.getAttribute("NativeWindowHandle");
                 int num = parseInt(tempWindowHandle);
                 String topLevelWindowHandle1 = Integer.toHexString(num);
@@ -110,13 +112,10 @@ public class WinDriverUtils {
         return openWinDriver;
     }
 
-    public static void main(String[] args) {
-        start();
-        getWinDriver();
-     //   WinDriverUtils.getOpenAppWinDriver().findElement(By.name("Buy")).click();
-    }
-
-
-
+    // public static void main(String[] args) {
+    // start();
+    // getWinDriver();
+    // // WinDriverUtils.getOpenAppWinDriver().findElement(By.name("Buy")).click();
+    // }
 
 }

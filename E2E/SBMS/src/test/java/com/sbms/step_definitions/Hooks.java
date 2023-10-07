@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Hooks {
-    List<byte[]> screenshootsList = new ArrayList<byte[]>();
+    List<byte[]> screenshotsList = new ArrayList<byte[]>();
     // Launching WinAppDriver.exe"
     @Before
     public void setUp() throws InterruptedException {
@@ -30,10 +30,10 @@ public class Hooks {
             WinDriverUtils.closeWinDriver();
             WinDriverUtils.stop();
         }
-        for (byte[] screenshot :screenshootsList) {
+        for (byte[] screenshot :screenshotsList) {
             scenario.attach(screenshot, "image/png", scenario.getName());
         }
-        screenshootsList.clear();
+        screenshotsList.clear();
         WinDriverUtils.closeWinDriver();
         WinDriverUtils.stop();
     }
@@ -42,7 +42,7 @@ public class Hooks {
     public void afterStepScreenshot(Scenario scenario) {
         System.out.println("Takes Screenshot");
         byte[] screenshot = ((TakesScreenshot) WinDriverUtils.getWinDriver()).getScreenshotAs(OutputType.BYTES);
-        screenshootsList.add(screenshot);
+        screenshotsList.add(screenshot);
         scenario.attach(screenshot, "image/png", scenario.getName());
     }
 
