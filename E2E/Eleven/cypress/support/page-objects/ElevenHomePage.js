@@ -86,5 +86,17 @@ class ElevenHomePage{
     btnGoSideBar(){
         return cy.get('#btnGotoSidebarItem')
     }
+    disclaimerIcon(){
+        return cy.get('.icon-tablet');
+    }
+    disclaimerWindow(){
+        return cy.get('.ui-dialog-titlebar');
+    }
+    disclaimerText(){
+        return cy.get('#ui-id-5');
+    }
+    copyRightInfo(){
+        return cy.get('#copyright');
+    }
   }
 export default  ElevenHomePage;
