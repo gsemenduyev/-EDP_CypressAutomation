@@ -22,11 +22,7 @@ import java.util.List;
         "html:target/cucumber-report.html",
         "json:target/cucumber.json",
         "rerun:target/rerun.txt"
-}, features = "src/test/resources/features",
-        glue = "com/sbms/step_definitions",
-        dryRun = false,
-        tags = "@wip",
-        monochrome = true)
+}, features = "src/test/resources/features", glue = "com/sbms/step_definitions", dryRun = false, tags = "@wip", monochrome = true)
 
 public class SBMSRunner {
     @AfterClass
@@ -44,7 +40,6 @@ public class SBMSRunner {
         ReportBuilder reportBuilder = new ReportBuilder(jsonFiles, configuration);
         reportBuilder.generateReports();
 
-        // public static void main(String[] args) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             // Step 1: Read data from the source JSON file
@@ -54,7 +49,7 @@ public class SBMSRunner {
 
             // Step 2: Read data from the destination JSON file (if it exists)
             File destinationJsonFile = new File(
-                    "C:\\CypressAutomation\\EDP_CypressAutomation_Old\\E2E\\ARFP-Stratasphere\\cypress\\reports\\sbms-arfp-stratasphere-report\\sbms-arfp-stratasphere-report.json");
+                    "C:\\CypressAutomation\\EDP_CypressAutomation\\E2E\\ARFP-Stratasphere\\cypress\\reports\\sbms-arfp-stratasphere-report\\sbms-arfp-stratasphere-report.json");
             JsonNode destinationData = objectMapper.createObjectNode();
 
             if (destinationJsonFile.exists()) {
@@ -72,9 +67,12 @@ public class SBMSRunner {
 
             // Step 4: Write the updated data back to the destination JSON file
             ObjectWriter writer = objectMapper.writerWithDefaultPrettyPrinter();
-            writer.writeValue(destinationJsonFile, destinationData);
 
-            System.out.println("Data copied and appended successfully.");
+            if (destinationJsonFile.exists()) {
+                writer.writeValue(destinationJsonFile, destinationData);
+                System.out.println("Data copied and appended successfully.");
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

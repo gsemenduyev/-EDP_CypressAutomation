@@ -2,7 +2,10 @@ package com.sbms.utils;
 
 import io.appium.java_client.windows.WindowsDriver;
 import io.appium.java_client.windows.WindowsElement;
+import org.openqa.selenium.By;
+import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.awt.*;
@@ -10,6 +13,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.Integer.parseInt;
@@ -18,21 +23,58 @@ public class WinDriverUtils {
 
     private static WindowsDriver<WindowsElement> winDriver;
 
-    public static WebDriver getWinDriver() {
+    public static WindowsDriver getWinDriver() {
         if (winDriver == null) {
 
             try {
                 Thread.sleep(500);
                 DesiredCapabilities capabilities = new DesiredCapabilities();
-                capabilities.setCapability("app",
-                        "C:\\CypressAutomation\\EDP_CypressAutomation_Old\\E2E\\SBMS\\Desktop\\SBMSNET.EXE");
-                // start();
+                capabilities.setCapability("app", ConfigsReaderUtils.getProperty("SBMS_Path")
+                        );
+
                 winDriver = new WindowsDriver<>(new URL("http://127.0.0.1:4723"), capabilities);
                 winDriver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
-                // Perform your testing actions here
+
 
             } catch (Exception e) {
-                e.printStackTrace();
+                try {
+                    DesiredCapabilities capability = new DesiredCapabilities();
+
+                    capability.setCapability("ms:experimental-webdriver", true);
+                    capability.setCapability("app", "Root");
+                    capability.setCapability("platformName", "Windows");
+                    capability.setCapability("deviceName", "Windows10Machine");
+                    winDriver = new WindowsDriver<>(new URL("http://127.0.0.1:4723"), capability);
+
+                    WindowsElement windowsElement = null;
+                    for (int i = 0; i < 30000; i++) {
+                       List<WindowsElement> elements = winDriver.findElementsByName(ConfigsReaderUtils.getProperty("SBMS_Page"));
+//                        List<WindowsElement> elements = winDriver.findElementsByXPath("//*[contains(@Name,'" + ConfigsReaderUtils.getProperty("SBMS_Page") + "')]");
+
+                        if (elements.isEmpty()) {
+                            Thread.sleep(1000);
+                        } else{
+                            System.out.println("Connecting to open Desktop app");
+                            windowsElement = elements.get(0);
+                            break;
+                        }
+                    }
+
+                    assert windowsElement != null;
+                    String tempWindowHandle = windowsElement.getAttribute("NativeWindowHandle");
+                    int num = parseInt(tempWindowHandle);
+                    String topLevelWindowHandle1 = Integer.toHexString(num);
+
+                    DesiredCapabilities capability1 = new DesiredCapabilities();
+
+                    capability1.setCapability("deviceName", "WindowsPC");
+                    capability1.setCapability("appTopLevelWindow", topLevelWindowHandle1);
+                    winDriver = new WindowsDriver<>(new URL("http://127.0.0.1:4723"), capability1);
+                    winDriver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+
+                } catch (MalformedURLException | InterruptedException malformedURLException) {
+                    throw new RuntimeException(malformedURLException);
+                }
             }
         }
         return winDriver;
@@ -45,10 +87,10 @@ public class WinDriverUtils {
         }
     }
 
-    public static void start() throws InterruptedException {
+    public static void start() {
         try {
             Desktop desktop = Desktop.getDesktop();
-            File file = new File("C:\\Program Files (x86)\\Windows Application Driver\\WinAppDriver.exe");
+            File file = new File(ConfigsReaderUtils.getProperty("WinAppDriver_Path"));
             /* Check if there is support for Desktop or not */
             if (!Desktop.isDesktopSupported()) {
                 System.out.println("not supported");
@@ -117,5 +159,4 @@ public class WinDriverUtils {
     // getWinDriver();
     // // WinDriverUtils.getOpenAppWinDriver().findElement(By.name("Buy")).click();
     // }
-
 }

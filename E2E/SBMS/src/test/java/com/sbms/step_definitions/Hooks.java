@@ -1,5 +1,6 @@
 package com.sbms.step_definitions;
 
+import com.sbms.utils.ConfigsReaderUtils;
 import com.sbms.utils.WinDriverUtils;
 import io.cucumber.java.After;
 import io.cucumber.java.AfterStep;
@@ -34,8 +35,10 @@ public class Hooks {
             scenario.attach(screenshot, "image/png", scenario.getName());
         }
         screenshotsList.clear();
-        WinDriverUtils.closeWinDriver();
-        WinDriverUtils.stop();
+        if(!ConfigsReaderUtils.getProperty("Close_SBMS").equals("No")){
+            WinDriverUtils.closeWinDriver();
+            WinDriverUtils.stop();
+        }
     }
 
     @AfterStep

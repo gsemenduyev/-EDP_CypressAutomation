@@ -1,0 +1,3 @@
+
+C:\CypressAutomation\EDP_CypressAutomation\E2E\ARFP-Stratasphere
+sbms-runner.bat
