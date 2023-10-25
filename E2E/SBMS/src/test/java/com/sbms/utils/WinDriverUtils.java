@@ -29,9 +29,8 @@ public class WinDriverUtils {
             try {
                 Thread.sleep(500);
                 DesiredCapabilities capabilities = new DesiredCapabilities();
-                capabilities.setCapability("app", ConfigsReaderUtils.getProperty("SBMS_Path")
-                        );
-
+                capabilities.setCapability("app", ConfigsReaderUtils.getProperty("SBMS_Path"));
+                capabilities.setCapability("resolution", "800x600");
                 winDriver = new WindowsDriver<>(new URL("http://127.0.0.1:4723"), capabilities);
                 winDriver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
 
@@ -64,11 +63,12 @@ public class WinDriverUtils {
                     String tempWindowHandle = windowsElement.getAttribute("NativeWindowHandle");
                     int num = parseInt(tempWindowHandle);
                     String topLevelWindowHandle1 = Integer.toHexString(num);
-
+                    System.out.println("topLevelWindowHandle1 ----- " + topLevelWindowHandle1);
                     DesiredCapabilities capability1 = new DesiredCapabilities();
 
                     capability1.setCapability("deviceName", "WindowsPC");
                     capability1.setCapability("appTopLevelWindow", topLevelWindowHandle1);
+                    capability1.setCapability("resolution", "800x600");
                     winDriver = new WindowsDriver<>(new URL("http://127.0.0.1:4723"), capability1);
                     winDriver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 

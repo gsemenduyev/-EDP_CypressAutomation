@@ -28,16 +28,16 @@ public class Hooks {
             System.out.println("Takes Screenshot");
             byte[] screenshot = ((TakesScreenshot) WinDriverUtils.getWinDriver()).getScreenshotAs(OutputType.BYTES);
             scenario.attach(screenshot, "image/png", scenario.getName());
-            WinDriverUtils.closeWinDriver();
-            WinDriverUtils.stop();
+//            WinDriverUtils.closeWinDriver();
+//            WinDriverUtils.stop();
         }
         for (byte[] screenshot :screenshotsList) {
             scenario.attach(screenshot, "image/png", scenario.getName());
         }
         screenshotsList.clear();
         if(!ConfigsReaderUtils.getProperty("Close_SBMS").equals("No")){
-            WinDriverUtils.closeWinDriver();
-            WinDriverUtils.stop();
+//            WinDriverUtils.closeWinDriver();
+//            WinDriverUtils.stop();
         }
     }
 

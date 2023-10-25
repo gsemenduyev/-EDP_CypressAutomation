@@ -91,5 +91,13 @@ public class EstimatePage {
         return addMarketsButton;
     }
 
+    @FindBy(xpath = "//Button[@Name='Close'][@AutomationId='btnClose']")
+    private WebElement closeButton;
+    public WebElement getCloseButton() {
+        return closeButton;
+    }
+
+
+
 
 }

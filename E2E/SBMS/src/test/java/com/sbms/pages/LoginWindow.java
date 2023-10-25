@@ -1,9 +1,9 @@
 package com.sbms.pages;
 
+import io.appium.java_client.pagefactory.WindowsFindBy;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-
 import com.sbms.utils.WinDriverUtils;
 
 public class LoginWindow {
