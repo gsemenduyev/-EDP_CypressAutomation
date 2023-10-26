@@ -10,6 +10,7 @@ FindElementById	id	RuntimeId (decimal)	42.333896.3.1
 FindElementByName	name	Name	Calculator
 FindElementByTagName	tag name	LocalizedControlType (upper camel case)	Text
 FindElementByXPath	xpath	Any	//Button[0]
+.getAttribute("LegacyValue"))
 
 
 

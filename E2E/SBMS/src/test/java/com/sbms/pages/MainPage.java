@@ -27,4 +27,9 @@ public class MainPage {
     @FindBy(name = "Scheduling")
     private WebElement schedulingButton;
     public WebElement getSchedulingButton() { return schedulingButton; }
+
+    @FindBy(name = "Schedule Status")
+    private WebElement scheduleStatusButton;
+    public WebElement getScheduleStatusButton() { return scheduleStatusButton; }
 }
+

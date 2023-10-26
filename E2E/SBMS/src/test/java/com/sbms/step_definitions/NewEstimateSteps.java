@@ -4,21 +4,18 @@ import com.sbms.pages.*;
 import com.sbms.utils.WinDriverUtils;
 import io.appium.java_client.windows.WindowsDriver;
 import io.cucumber.java.en.Given;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class NewEstimate {
+public class NewEstimateSteps {
 
     WindowsDriver driver = WinDriverUtils.getWinDriver();
     WebDriverWait wait = new WebDriverWait(driver, 15);
@@ -28,6 +25,7 @@ public class NewEstimate {
 
     EstimateGoalsPage estimateGoalsPage = new EstimateGoalsPage();
     SchedulingPage schedulingPage = new SchedulingPage();
+    ScheduleStatusPage scheduleStatusPage = new ScheduleStatusPage();
     String estimateName;
 
     @Given("Launch SBMS")
@@ -66,7 +64,7 @@ public class NewEstimate {
     }
 
     @Given("Create Estimate header")
-    public void create_estimate_header() throws InterruptedException {
+    public void create_estimate_header() {
         wait.until(ExpectedConditions.elementToBeClickable(estimatePage.getAgencyNameTextBox())).sendKeys("ABC Agency");
         wait.until(ExpectedConditions.elementToBeClickable(estimatePage.getOfficeNameTextBox())).sendKeys("ABC Agency Office");
         wait.until(ExpectedConditions.elementToBeClickable(estimatePage.getClientNameTextBox())).sendKeys("ABC Client");
@@ -149,21 +147,31 @@ public class NewEstimate {
         assertEquals("Verify SBMS for Spot page title", " SBMS for Spot", driver.getTitle());
         wait.until(ExpectedConditions.elementToBeClickable(mainPage.getBuyButton())).click();
 
+        Actions actions = new Actions(driver);
+        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(mainPage.getScheduleStatusButton()));
+        actions.doubleClick(element).perform();
+
+        assertEquals("Verify SBMS Schedule Status page title", " SBMS for Spot - [Schedule Status]", driver.getTitle());
+        System.out.println(driver.getTitle());
+    }
+
+    @Given("Search for estimate in Schedule Status page")
+    public void search_for_estimate_in_schedule_status_page() throws InterruptedException {
+        scheduleStatusPage.sendText(scheduleStatusPage.getAgencyFilterTextBox(), "ABC Agency");
+        scheduleStatusPage.sendText(scheduleStatusPage.getOfficeFilterTextBox(), "ABC Agency Office");
+        wait.until(ExpectedConditions.elementToBeClickable(scheduleStatusPage.getEstimateFilterTextBox())).sendKeys(estimateName.substring(1, 5));
+        wait.until(ExpectedConditions.textToBePresentInElement(scheduleStatusPage.getClientFilterTextBox(), "ABC Client"));
+        scheduleStatusPage.getSearchButton().click();
+
     }
 
     @Given("Test")
     public void test() {
-
-        wait.until(ExpectedConditions.elementToBeClickable(schedulingPage.getStationTextBox())).sendKeys("WTMX-FM");
-        wait.until(ExpectedConditions.elementToBeClickable(schedulingPage.getStationTextBox()));
-        schedulingPage.sendKeysScheduleDaysCell("M");
-        schedulingPage.sendKeysScheduleStartTimeCell("10:00AM");
-        schedulingPage.sendKeysScheduleEndTimeCell("11:00AM");
-        schedulingPage.sendKeysScheduleDPCell("AM");
-        schedulingPage.sendKeysScheduleGrossRateCell("1000");
-        schedulingPage.sendKeysScheduleFirstWeekCell("8");
-        schedulingPage.sendKeysScheduleSecondWeekCell("10");
-
-        wait.until(ExpectedConditions.elementToBeClickable(schedulingPage.getCloseButton())).click();
+//        scheduleStatusPage.sendText(scheduleStatusPage.getAgencyFilterTextBox(), "ABC Agency");
+//        scheduleStatusPage.sendText(scheduleStatusPage.getOfficeFilterTextBox(), "ABC Agency Office");
+//
+//       wait.until(ExpectedConditions.elementToBeClickable(scheduleStatusPage.getEstimateFilterTextBox())).sendKeys("8923");
+        System.out.println("Hello ---- " + scheduleStatusPage.getClientFilterTextBox().getAttribute("LegacyValue"));
+        System.out.println("Hello ---- " + scheduleStatusPage.getClientFilterTextBox().getText());
     }
 }
