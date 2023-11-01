@@ -2,19 +2,16 @@ package com.sbms.utils;
 
 import io.appium.java_client.windows.WindowsDriver;
 import io.appium.java_client.windows.WindowsElement;
-import org.openqa.selenium.By;
-import org.openqa.selenium.SessionNotCreatedException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
+import org.apache.poi.ss.formula.functions.T;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import java.awt.*;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.Integer.parseInt;
@@ -30,10 +27,8 @@ public class WinDriverUtils {
                 Thread.sleep(500);
                 DesiredCapabilities capabilities = new DesiredCapabilities();
                 capabilities.setCapability("app", ConfigsReaderUtils.getProperty("SBMS_Path"));
-                capabilities.setCapability("resolution", "800x600");
                 winDriver = new WindowsDriver<>(new URL("http://127.0.0.1:4723"), capabilities);
                 winDriver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
-
 
             } catch (Exception e) {
                 try {
@@ -46,13 +41,16 @@ public class WinDriverUtils {
                     winDriver = new WindowsDriver<>(new URL("http://127.0.0.1:4723"), capability);
 
                     WindowsElement windowsElement = null;
-                    for (int i = 0; i < 30000; i++) {
-                       List<WindowsElement> elements = winDriver.findElementsByName(ConfigsReaderUtils.getProperty("SBMS_Page"));
-//                        List<WindowsElement> elements = winDriver.findElementsByXPath("//*[contains(@Name,'" + ConfigsReaderUtils.getProperty("SBMS_Page") + "')]");
+                    for (int i = 0; i < 300; i++) {
+                        List<WindowsElement> elements = winDriver
+                                .findElementsByName(ConfigsReaderUtils.getProperty("SBMS_Page"));
+                        // List<WindowsElement> elements =
+                        // winDriver.findElementsByXPath("//*[contains(@Name,'" +
+                        // ConfigsReaderUtils.getProperty("SBMS_Page") + "')]");
 
                         if (elements.isEmpty()) {
                             Thread.sleep(1000);
-                        } else{
+                        } else {
                             System.out.println("Connecting to open Desktop app");
                             windowsElement = elements.get(0);
                             break;
@@ -68,7 +66,6 @@ public class WinDriverUtils {
 
                     capability1.setCapability("deviceName", "WindowsPC");
                     capability1.setCapability("appTopLevelWindow", topLevelWindowHandle1);
-                    capability1.setCapability("resolution", "800x600");
                     winDriver = new WindowsDriver<>(new URL("http://127.0.0.1:4723"), capability1);
                     winDriver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
@@ -154,9 +151,9 @@ public class WinDriverUtils {
         return openWinDriver;
     }
 
-    // public static void main(String[] args) {
-    // start();
-    // getWinDriver();
-    // // WinDriverUtils.getOpenAppWinDriver().findElement(By.name("Buy")).click();
+    // public static void main(String[] args) throws IOException {
+    //     FileWriter fw = new FileWriter("src\\test\\resources\\test_parameters\\new_estimate.txt");
+    //     fw.write("Hello, world!");
+    //     fw.close();
     // }
 }

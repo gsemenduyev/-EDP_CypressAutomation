@@ -11,8 +11,9 @@ import org.openqa.selenium.support.PageFactory;
 
 public class SchedulingPage {
     WindowsDriver driver = WinDriverUtils.getWinDriver();
-    public SchedulingPage() { PageFactory.initElements(driver, this); }
     Actions actions = new Actions(driver);
+    public SchedulingPage() { PageFactory.initElements(driver, this); }
+
     @FindBy(xpath = "//Pane[@AutomationId='cmbEstimate']/Edit[starts-with(@ClassName,'WindowsForms10')]")
     private WebElement estimateTextBox;
     public WebElement getEstimateTextBox() {
