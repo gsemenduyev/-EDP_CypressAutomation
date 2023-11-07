@@ -31,7 +31,7 @@ class MailinatorHomePage {
         return cy.get('#pills-links-tab');
     }
     negotiationLinks(negotiate) {
-        return cy.get('#pills-links-content').contains(negotiate).siblings().children('a')
+        return cy.get('#pills-links-content').contains(negotiate).siblings().children('a');
     }
     deleteEmailButton() {
         return cy.get("a[onclick='deleteEmail();']");
@@ -52,10 +52,72 @@ class MailinatorHomePage {
         return cy.get('.ng-binding').eq(8);
     }
     publicInboxes() {
-        return cy.get("[href='inboxes.jsp']")
+        return cy.get("[href='inboxes.jsp']");
     }
     forgotPasswordLink() {
         return cy.get('#texthtml_msg_body')
+            .its('0.contentDocument')
+            .then(cy.wrap)
+            .find('a')
+            .eq(0);
+    };
+
+    sellerEmailBody() {
+        return cy.get('#html_msg_body')
+            .its('0.contentDocument')
+            .then(cy.wrap)
+            .find('a')
+            .eq(2)
+            .invoke('attr', 'href');
+    }
+
+    buyerEmailBody() {
+        return cy.get('#texthtml_msg_body')
+            .its('0.contentDocument')
+            .then(cy.wrap)
+            .find('body')
+            .contains('body', 'Please send questions regarding this notification to')
+    };
+
+    emailTitleSyntax(title) {
+        return `td:contains("${title}")`;
+    };
+
+    version() {
+        return cy.get('#html_msg_body')
+            .its('0.contentDocument')
+            .then(cy.wrap)
+            .find('.nowrapLabel + td')
+            .eq(0);
+    }
+
+    advertiser() {
+        return cy.get('#html_msg_body')
+            .its('0.contentDocument')
+            .then(cy.wrap)
+            .find('.nowrapLabel + td')
+            .eq(1);
+    }
+
+    flightDates() {
+        return cy.get('#html_msg_body')
+            .its('0.contentDocument')
+            .then(cy.wrap)
+            .find('.nowrapLabel + td')
+            .eq(2);
+    }
+
+
+    primaryDemo() {
+        return cy.get('#html_msg_body')
+            .its('0.contentDocument')
+            .then(cy.wrap)
+            .find('.nowrapLabel + td')
+            .eq(3);
+    }
+
+    redirectSsphereNegotiationLink() {
+        return cy.get('#html_msg_body')
             .its('0.contentDocument')
             .then(cy.wrap)
             .find('a')
@@ -71,38 +133,18 @@ class MailinatorHomePage {
         const mailinatorHomePage = new MailinatorHomePage;
         let index = 0;
         const checkEmailExists = () => {
-            cy.is_element_exists(mailinatorHomePage.newRfpEmailSyntax()).then(function (el) {
+            cy.is_element_exists(mailinatorHomePage.emailTitleSyntax(emailTitle + newRfpName)).then(function (el) {
                 if (index < 60 && !el) {
                     mailinatorHomePage.goButton().click();
                     cy.wait(5000);
                     index++;
                     checkEmailExists();
+                } else {
+                    cy.get(mailinatorHomePage.emailTitleSyntax(emailTitle + newRfpName)).click()
                 }
             })
         }
         checkEmailExists();
-        index = 0;
-        const checkEmailName = () => {
-            mailinatorHomePage.emailName().each((el) => {
-                if (el.text().trim().includes(emailTitle + newRfpName)) {
-                    cy.log(el.text().trim());
-                    cy.wrap(el).click({ force: true });
-                    cy.wait(1000)
-                    mailinatorHomePage.publicMessageText(10000).should('include.text', newRfpName);
-                    return false;
-                }
-            })
-            mailinatorHomePage.publicMessageText().then(function (titleRfp) {
-                if (index < 60 && (!titleRfp.text().trim().includes(emailTitle + newRfpName))) {
-                    mailinatorHomePage.goButton().click();
-                    cy.wait(5000);
-                    index++
-                    checkEmailName();
-                }
-            })
-        }
-        checkEmailName();
-        mailinatorHomePage.publicMessageText().should('include.text', newRfpName);
     }
 }
 export default MailinatorHomePage;

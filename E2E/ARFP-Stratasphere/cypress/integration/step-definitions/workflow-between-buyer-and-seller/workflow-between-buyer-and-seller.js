@@ -407,21 +407,12 @@ Given('Validate email for New Rate Request', () => {
     cy.dataSession('newRfpName').then(newRfpName => {
         mailinatorHomePage.search_email('New Rate Request for ', newRfpName);
     });
-
-    const getIframeBody = () => {
-        return mailinatorHomePage.emailMsgBodyIframe()
-            .its('0.contentDocument.body')
-            .then(cy.wrap);
-    }
-
-    getIframeBody(mailinatorHomePage.emailMsgBodyIframe()).find(mailinatorHomePage.emailDetailsSyntax()).eq(0).should('have.text', '2');
-    getIframeBody(mailinatorHomePage.emailMsgBodyIframe()).find(mailinatorHomePage.emailDetailsSyntax()).eq(1).should('have.text', newRfpParam.agency);
-    getIframeBody(mailinatorHomePage.emailMsgBodyIframe()).find(mailinatorHomePage.emailDetailsSyntax()).eq(2)
-        .should('include.text', newRfpParam.startDate.slice(0, 6) + '20' + newRfpParam.startDate.slice(6) + ' to '
-            + newRfpParam.endDate.slice(0, 6) + '20' + newRfpParam.endDate.slice(6));
-    getIframeBody(mailinatorHomePage.emailMsgBodyIframe()).find(mailinatorHomePage.emailDetailsSyntax()).eq(3).should('have.text', newRfpParam.primaryDemo);
-
-    getIframeBody(mailinatorHomePage.emailMsgBodyIframe()).find('a').eq(0).then(function (el) {
+    mailinatorHomePage.version().should('have.text', '2');
+    mailinatorHomePage.advertiser().should('have.text', newRfpParam.agency);
+    mailinatorHomePage.flightDates().should('include.text', newRfpParam.startDate.slice(0, 6) + '20' + newRfpParam.startDate.slice(6) + ' to '
+        + newRfpParam.endDate.slice(0, 6) + '20' + newRfpParam.endDate.slice(6));
+    mailinatorHomePage.primaryDemo().should('have.text', newRfpParam.primaryDemo);
+    mailinatorHomePage.redirectSsphereNegotiationLink().then(function (el) {
         const url = el.prop('href')
         cy.dataSession({
             name: 'redirectSsphereLink',
