@@ -85,8 +85,6 @@ Given('Login to Agency RFP with {string} password', string => {
 
 // Create New RFP
 Given('Create New RFP', () => {
-    const newRfpNameTemp = "AutomationRFP" + Math.round(Date.now() / 60000 - 24938000);
-
     agencyBasePage.startNewRfp().click({ force: true });
     agencyBasePage.pageTitle().should('have.text', 'Create RFP');
 
@@ -97,7 +95,7 @@ Given('Create New RFP', () => {
     createRfpPage.clientSearchBox().click({ force: true });
     createRfpPage.newRfpDropdownOptions(createRfpPage.clientSearchOptions(), newRfpParam.client);
 
-    createRfpPage.newRfpNameInputBox().type(newRfpNameTemp, { force: true });
+    createRfpPage.newRfpNameInputBox().type(new_rfp_name(), { force: true });
     createRfpPage.rfpBudgetInputBox().type(newRfpParam.budget, { force: true });
 
     createRfpPage.officeInputBox().should('have.text', newRfpParam.office);
@@ -525,4 +523,30 @@ function xml_proposal_map(param) {
         linesValueMap.set("Line " + (index + 1), tempList);
     })
     return linesValueMap;
+}
+
+function new_rfp_name() {
+    const filePath = 'cypress/fixtures/agencyRFP/new-frp-name.json';
+    const RFPAutomation = "AutomationRFP"
+    let newRfpNameTemp;
+    const createNewRfpName = () => {
+        const random = Math.floor(Math.random() * (1000000, 9999999)) + 1000000;
+        newRfpNameTemp = random;
+        cy.readFile(filePath).then((list) => {
+            if (list.length == 100) {
+                list = list.slice(0, -10);
+            }
+            if (!list.includes(newRfpNameTemp)) {
+                list.unshift(RFPAutomation + newRfpNameTemp)
+                newRfpNameTemp = null;
+            } else {
+                newRfpNameTemp = null;
+                createNewRfpName()
+            }
+            cy.writeFile(filePath, JSON.stringify(list))
+        })
+    }
+    createNewRfpName()
+    cy.log(RFPAutomation + newRfpNameTemp)
+    return RFPAutomation + newRfpNameTemp;
 }
