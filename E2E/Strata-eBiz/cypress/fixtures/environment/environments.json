@@ -1,0 +1,23 @@
+{
+    "arfpUrlQa": "https://2wayrfp.gotostrata.com/RFP",
+    "arfpUrlQaUsername": "FWAutomatedTesting@mailinator.com",
+    "arfpUrlPassword": "Freewheel@18",
+    "arfpUrlUat": "https://2wayrfp.gotostrata.com/RFP",
+    "arfpUrlUatUsername": "FWAutomatedTesting@mailinator.com",
+    "arfpUrlUatPassword": "Freewheel@18",
+    "ssphereUrlQa": "https://www.stratasphere.media/ui_new#/",
+    "ssphereQaUsername": "nsingh@mailinator.com",
+    "ssphereQaPassword": "abc123!",
+    "ssphereUrlUat": "https://www.stratasphere.media/ui_new#/",
+    "ssphereUatUsername": "nsingh@mailinator.com",
+    "ssphereUatPassword": "abc123!",
+    "sTrafficUrlQa": "https://strafficqa.pregotostrata.com",
+    "sTrafficQaUsername": "hs-qa@freewheel.com",
+    "sTrafficQaPassword": "bx6Ub8",
+    "sTrafficUrlUat": "https://strafficqa.pregotostrata.com",
+    "sTrafficUatUsername": "QATest",
+    "sTrafficUatPassword": "2fgJU7",
+    "elevenUrlQa": "https://11qa.pregotostrata.com/11Orders",
+    "elevenQaUsername": "hedupugantiqa",
+    "elevenQaPassword": "password1"
+}

@@ -1,0 +1,12 @@
+{
+    "editor.quickSuggestions": {
+        "comments": "on",
+        "strings": "on",
+        "other": "on"
+    },
+    "window.zoomLevel": 1.5,
+    "cucumberautocomplete.steps": [
+        "cypress/integration/step-definitions/**/*.js",
+    ],
+    "cucumberautocomplete.syncfeatures": "cypress/integration/step-definitions/**/*.feature",
+}
