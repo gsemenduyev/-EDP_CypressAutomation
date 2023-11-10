@@ -9,4 +9,7 @@
         "cypress/integration/step-definitions/**/*.js",
     ],
     "cucumberautocomplete.syncfeatures": "cypress/integration/step-definitions/**/*.feature",
+    "cSpell.words": [
+        "Straffic"
+    ],
 }
