@@ -6,16 +6,26 @@ const allureWriter = require('@shelex/cypress-allure-plugin/writer');
 const TestRailReporter = require('cypress-testrail');
 const fs = require('fs');
 const xlsx = require('node-xlsx').default;
-const path = require('path')
+
 const RUN_ENV_FILE_PATH = 'cypress/reports/run-info/run-env.json';
-const delay = async (ms) => new Promise((res) => setTimeout(res, ms));
+const ENVIRONMENT_FILE_PATH = 'cypress/fixtures/environment/environments.json'
+
 async function setupNodeEvents(cypressOn, config) {
   const on = require('cypress-on-fix')(cypressOn)
   await addCucumberPreprocessorPlugin(on, config, { omitAfterRunHandler: true, });
+
   on("file:preprocessor", browserify.default(config));
   allureWriter(on, config);
   registerDataSession(on, config);
   new TestRailReporter(on, config).register();
+
+  on('before:spec', () => {
+    fs.mkdir('cypress/reports/run-info/', { recursive: true }, (err) => {
+      if (err) {
+        console.log(err);
+      }
+    })
+  })
 
   on('task', {
     parseXlsx({ filePath }) {
@@ -32,18 +42,7 @@ async function setupNodeEvents(cypressOn, config) {
 
 
   on('after:run', async (results) => {
-    try {
-      fs.readFileSync(RUN_ENV_FILE_PATH, { encoding: 'utf8', flag: 'r' });
-    } catch (error) {
-      fs.writeFileSync(RUN_ENV_FILE_PATH,
-        JSON.stringify({
-          agencyUrl: "-",
-          ssphereUrl: "-",
-          mailinatorUrl: "-",
-          env: "-"
-        }))
-    }
-    const data = fs.readFileSync(RUN_ENV_FILE_PATH, { encoding: 'utf8', flag: 'r' });
+    const data = fs.readFileSync(ENVIRONMENT_FILE_PATH, { encoding: 'utf8', flag: 'r' });
     const runInfo = JSON.parse(data);
     if (results) {
       await afterRunHandler(config);
@@ -59,10 +58,13 @@ async function setupNodeEvents(cypressOn, config) {
             cypressVersion: results.cypressVersion,
             startedTestsAt: results.startedTestsAt,
             endedTestsAt: results.endedTestsAt,
-            env: runInfo['env'],
-            agencyUrl: runInfo['agencyUrl'],
-            ssphereUrl: runInfo['ssphereUrl'],
-            mailinatorUrl: runInfo['mailinatorUrl'],
+            arfpUrlQa: runInfo['arfpUrlQa'],
+            arfpUrlUat: runInfo['arfpUrlUat'],
+            ssphereUrlQa: runInfo['ssphereUrlQa'],
+            ssphereUrlUat: runInfo['ssphereUrlUat'],
+            sTrafficUrlQa: runInfo['sTrafficUrlQa'],
+            sTrafficUrlUat: runInfo['sTrafficUrlUat'],
+            elevenUrlQa: runInfo['elevenUrlQa'],
           },
           null,
           '\t',
@@ -76,8 +78,8 @@ async function setupNodeEvents(cypressOn, config) {
 module.exports = defineConfig({
   viewportWidth: 1920,
   viewportHeight: 1080,
-  defaultCommandTimeout: 15000,
-  pageLoadTimeout: 600000,
+  defaultCommandTimeout: 1500,
+  pageLoadTimeout: 15000,
   screenshotOnRunFailure: true,
   video: true,
   retries: {
