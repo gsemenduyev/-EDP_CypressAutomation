@@ -68,7 +68,7 @@ pipeline {
                         reporterConfig.put("testrail", testrail)
                         def json = JsonOutput.toJson(reporterConfig)
                         json = JsonOutput.prettyPrint(json)
-                        writeFile(file: 'E2E/AStrata-eBiz/cypress.env.json', text: json)
+                        writeFile(file: 'E2E/Strata-eBiz/cypress.env.json', text: json)
                     }
                 }
             }
