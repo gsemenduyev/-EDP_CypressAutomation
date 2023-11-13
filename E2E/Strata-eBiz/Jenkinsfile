@@ -96,7 +96,7 @@ pipeline {
         }
         success{
                 script {
-                mail (to: 'gsemenduyev@freewheel.tv',
+                mail (to: 'gsemenduyev@freewheel.tv', 'gsemendyev@yahoo.com',
                         subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) failed",
                         body: "Please visit ${env.BUILD_URL} for further information"
                 );
