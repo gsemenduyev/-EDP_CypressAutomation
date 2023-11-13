@@ -1,17 +1,15 @@
 const { defineConfig } = require("cypress");
 const { addCucumberPreprocessorPlugin, afterRunHandler } = require("@badeball/cypress-cucumber-preprocessor");
 const browserify = require("@badeball/cypress-cucumber-preprocessor/browserify");
-const registerDataSession = require('cypress-data-session/src/plugin')
+const registerDataSession = require('cypress-data-session/src/plugin');
 const allureWriter = require('@shelex/cypress-allure-plugin/writer');
 const TestRailReporter = require('cypress-testrail');
 const fs = require('fs');
 const xlsx = require('node-xlsx').default;
-
-const RUN_ENV_FILE_PATH = 'cypress/reports/run-info/run-env.json';
-const ENVIRONMENT_FILE_PATH = 'cypress/fixtures/environment/environments.json'
+const ENVIRONMENT_FILE_PATH = 'cypress/fixtures/environment/environments.json';
 
 async function setupNodeEvents(cypressOn, config) {
-  const on = require('cypress-on-fix')(cypressOn)
+  const on = require('cypress-on-fix')(cypressOn);
   await addCucumberPreprocessorPlugin(on, config, { omitAfterRunHandler: true, });
 
   on("file:preprocessor", browserify.default(config));
@@ -23,9 +21,9 @@ async function setupNodeEvents(cypressOn, config) {
     fs.mkdir('cypress/reports/run-info/', { recursive: true }, (err) => {
       if (err) {
         console.log(err);
-      }
-    })
-  })
+      };
+    });
+  });
 
   on('task', {
     parseXlsx({ filePath }) {
@@ -34,12 +32,11 @@ async function setupNodeEvents(cypressOn, config) {
           const jsonData = xlsx.parse(fs.readFileSync(filePath));
           resolve(jsonData);
         } catch (e) {
-          reject(e)
-        }
-      })
+          reject(e);
+        };
+      });
     }
   });
-
 
   on('after:run', async (results) => {
     const data = fs.readFileSync(ENVIRONMENT_FILE_PATH, { encoding: 'utf8', flag: 'r' });
@@ -70,7 +67,7 @@ async function setupNodeEvents(cypressOn, config) {
           '\t',
         ),
       );
-    }
+    };
   });
   return config;
 }
@@ -78,8 +75,8 @@ async function setupNodeEvents(cypressOn, config) {
 module.exports = defineConfig({
   viewportWidth: 1920,
   viewportHeight: 1080,
-  defaultCommandTimeout: 1500,
-  pageLoadTimeout: 15000,
+  defaultCommandTimeout: 10000,
+  pageLoadTimeout: 60000,
   screenshotOnRunFailure: true,
   video: true,
   retries: {
@@ -91,8 +88,7 @@ module.exports = defineConfig({
     allureOmitPreviousAttemptScreenshots: true,
     allureReuseAfterSpec: true,
     allureAddVideoOnPass: true,
-    allureResultsPath: "cypress/videos/allure-results",
-    //allureResultsPath: "cypress/reports/allure-results",
+    allureResultsPath: "cypress/videos/allure-results"
   },
   projectId: "",
   e2e: {
