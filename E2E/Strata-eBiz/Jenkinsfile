@@ -19,7 +19,7 @@ pipeline {
                         def domain = "https://testrail-strata.freewheel.tv/testrail/"
                         def username = "${USERNAME}"
                         def password = "${PASSWORD}"
-                        def runId = "${RUN_ID}"
+                        def runId = "R5383"
                         // Update cypress.env.json
                         def reporterConfig = readJSON file: 'E2E/Strata-eBiz/cypress.env.json'
                         def testrail = [
