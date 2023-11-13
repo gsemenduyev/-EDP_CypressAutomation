@@ -85,8 +85,6 @@ Given('Login to Agency RFP with {string} password', string => {
 
 // Create New RFP
 Given('Create New RFP', () => {
-    const newRfpNameTemp = "AutomationRFP" + Math.round(Date.now() / 60000 - 24938000);
-
     agencyBasePage.startNewRfp().click({ force: true });
     agencyBasePage.pageTitle().should('have.text', 'Create RFP');
 
@@ -97,7 +95,7 @@ Given('Create New RFP', () => {
     createRfpPage.clientSearchBox().click({ force: true });
     createRfpPage.newRfpDropdownOptions(createRfpPage.clientSearchOptions(), newRfpParam.client);
 
-    createRfpPage.newRfpNameInputBox().type(newRfpNameTemp, { force: true });
+    createRfpPage.newRfpNameInputBox().type(new_rfp_name(), { force: true });
     createRfpPage.rfpBudgetInputBox().type(newRfpParam.budget, { force: true });
 
     createRfpPage.officeInputBox().should('have.text', newRfpParam.office);
@@ -407,21 +405,12 @@ Given('Validate email for New Rate Request', () => {
     cy.dataSession('newRfpName').then(newRfpName => {
         mailinatorHomePage.search_email('New Rate Request for ', newRfpName);
     });
-
-    const getIframeBody = () => {
-        return mailinatorHomePage.emailMsgBodyIframe()
-            .its('0.contentDocument.body')
-            .then(cy.wrap);
-    }
-
-    getIframeBody(mailinatorHomePage.emailMsgBodyIframe()).find(mailinatorHomePage.emailDetailsSyntax()).eq(0).should('have.text', '2');
-    getIframeBody(mailinatorHomePage.emailMsgBodyIframe()).find(mailinatorHomePage.emailDetailsSyntax()).eq(1).should('have.text', newRfpParam.agency);
-    getIframeBody(mailinatorHomePage.emailMsgBodyIframe()).find(mailinatorHomePage.emailDetailsSyntax()).eq(2)
-        .should('include.text', newRfpParam.startDate.slice(0, 6) + '20' + newRfpParam.startDate.slice(6) + ' to '
-            + newRfpParam.endDate.slice(0, 6) + '20' + newRfpParam.endDate.slice(6));
-    getIframeBody(mailinatorHomePage.emailMsgBodyIframe()).find(mailinatorHomePage.emailDetailsSyntax()).eq(3).should('have.text', newRfpParam.primaryDemo);
-
-    getIframeBody(mailinatorHomePage.emailMsgBodyIframe()).find('a').eq(0).then(function (el) {
+    mailinatorHomePage.version().should('have.text', '2');
+    mailinatorHomePage.advertiser().should('have.text', newRfpParam.agency);
+    mailinatorHomePage.flightDates().should('include.text', newRfpParam.startDate.slice(0, 6) + '20' + newRfpParam.startDate.slice(6) + ' to '
+        + newRfpParam.endDate.slice(0, 6) + '20' + newRfpParam.endDate.slice(6));
+    mailinatorHomePage.primaryDemo().should('have.text', newRfpParam.primaryDemo);
+    mailinatorHomePage.redirectSsphereNegotiationLink().then(function (el) {
         const url = el.prop('href')
         cy.dataSession({
             name: 'redirectSsphereLink',
@@ -534,4 +523,30 @@ function xml_proposal_map(param) {
         linesValueMap.set("Line " + (index + 1), tempList);
     })
     return linesValueMap;
+}
+
+function new_rfp_name() {
+    const filePath = 'cypress/fixtures/agencyRFP/new-frp-name.json';
+    const RFPAutomation = "AutomationRFP"
+    let newRfpNameTemp;
+    const createNewRfpName = () => {
+        const random = Math.floor(Math.random() * (1000000, 9999999)) + 1000000;
+        newRfpNameTemp = random;
+        cy.readFile(filePath).then((list) => {
+            if (list.length == 100) {
+                list = list.slice(0, -10);
+            }
+            if (!list.includes(newRfpNameTemp)) {
+                list.unshift(RFPAutomation + newRfpNameTemp)
+                newRfpNameTemp = null;
+            } else {
+                newRfpNameTemp = null;
+                createNewRfpName()
+            }
+            cy.writeFile(filePath, JSON.stringify(list))
+        })
+    }
+    createNewRfpName()
+    cy.log(RFPAutomation + newRfpNameTemp)
+    return RFPAutomation + newRfpNameTemp;
 }

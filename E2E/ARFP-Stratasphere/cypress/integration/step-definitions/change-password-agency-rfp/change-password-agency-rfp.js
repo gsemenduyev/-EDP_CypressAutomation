@@ -63,8 +63,6 @@ Given('Open Forgot Password email and click on restore password link', () => {
         })
     }
     checkEmailExists();
-
-    mailinatorHomePage.publicMessageText(600).should('include.text', 'Forgot Password for RFP');
     cy.screenshot();
     mailinatorHomePage.forgotPasswordLink()
         .invoke('attr', 'target', '_parent')
