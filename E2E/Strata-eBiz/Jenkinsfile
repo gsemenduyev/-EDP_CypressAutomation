@@ -94,5 +94,13 @@ pipeline {
         reportName: 'Multi HTML Report',
         reportTitles: 'Multi HTML Report'])
         }
+        success{
+                script {
+                mail (to: 'gsemenduyev@freewheel.tv',
+                        subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) failed",
+                        body: "Please visit ${env.BUILD_URL} for further information"
+                );
+                }
+        }
     }
 }
