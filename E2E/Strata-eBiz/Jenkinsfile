@@ -8,12 +8,6 @@ pipeline {
             args '--ipc=host'
     }
 }
-    parameters{
-        choice(name: 'ENVIRONMENT', choices: ['Production', 'QA'], description: "Choose the Environment to run")
-        choice(name: 'PROJECTS', choices: ['Stratasphere', 'ARFP', 'WIP'], description: "Choose the Project to run")
-        string(name: 'RUN_ID', defaultValue: 'R5383', trim: true, description: "Choose the Test Rail Run ID")
-        string(name: 'VERSION',defaultValue: 'v 8.4.1.39508',  trim: true, description: "When ARFP project is selected, input Agency RFP version (Production and QA versions may vary)")
-    }
     options{
         ansiColor('xterm')
     }
@@ -27,7 +21,7 @@ pipeline {
                         def password = "${PASSWORD}"
                         def runId = "${RUN_ID}"
                         // Update cypress.env.json
-                        def reporterConfig = readJSON file: 'E2E/ARFP-Stratasphere/cypress.env.json'
+                        def reporterConfig = readJSON file: 'E2E/Strata-eBiz/cypress.env.json'
                         def testrail = [
                        'domain': (domain),
                        'username': (username),
@@ -37,9 +31,9 @@ pipeline {
                         reporterConfig.put("testrail", testrail)
                         def json = JsonOutput.toJson(reporterConfig)
                         json = JsonOutput.prettyPrint(json)
-                        writeFile(file: 'E2E/ARFP-Stratasphere/cypress.env.json', text: json)
+                        writeFile(file: 'E2E/Strata-eBiz/cypress.env.json', text: json)
 
-                       def reporterConfig1 = readJSON file: 'E2E/ARFP-Stratasphere/cypress.env.json'
+                       def reporterConfig1 = readJSON file: 'E2E/Strata-eBiz/cypress.env.json'
                        testrail = [
                        'domain': reporterConfig1.testrail.domain,
                        'username': reporterConfig1.testrail.username.values[0],
@@ -49,14 +43,14 @@ pipeline {
                         reporterConfig.put("testrail", testrail)
                         json = JsonOutput.toJson(reporterConfig)
                         json = JsonOutput.prettyPrint(json)
-                        writeFile(file: 'E2E/ARFP-Stratasphere/cypress.env.json', text: json)
+                        writeFile(file: 'E2E/Strata-eBiz/cypress.env.json', text: json)
                     }
                 }
             }
         }
         stage('Test') {
             steps {
-            sh "cd E2E/ARFP-Stratasphere && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome --env tags=\"@${PROJECTS}\",ENV=\"${ENVIRONMENT}\",VERSION=\"${VERSION}\""
+            sh "cd E2E/Strata-eBiz && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome"
             }
 
         }
@@ -64,7 +58,7 @@ pipeline {
             steps {
                 script {
                         // Update cypress.env.json
-                        def reporterConfig = readJSON file: 'E2E/ARFP-Stratasphere/cypress.env.json'
+                        def reporterConfig = readJSON file: 'E2E/Strata-eBiz/cypress.env.json'
                         def testrail = [
                        'domain': '-',
                        'username': '-',
@@ -74,7 +68,7 @@ pipeline {
                         reporterConfig.put("testrail", testrail)
                         def json = JsonOutput.toJson(reporterConfig)
                         json = JsonOutput.prettyPrint(json)
-                        writeFile(file: 'E2E/ARFP-Stratasphere/cypress.env.json', text: json)
+                        writeFile(file: 'E2E/AStrata-eBiz/cypress.env.json', text: json)
                     }
                 }
             }
@@ -83,19 +77,19 @@ pipeline {
     post{
         always{
             script {
-                sh "cd E2E/ARFP-Stratasphere && node ./cucumber-html-report.js"
+                sh "cd E2E/Strata-eBiz && node ./cucumber-html-report.js"
             }
       publishHTML (target : [allowMissing: true,
         alwaysLinkToLastBuild: true,
         keepAll: true,
-        reportDir: 'E2E/ARFP-Stratasphere/cypress/reports',
+        reportDir: 'E2E/Strata-eBiz/cypress/reports',
         reportFiles: 'cucumber-reports/cucumber-html-report/index.html',
         reportName: 'Cucumber Report',
         reportTitles: 'Cucumber Report'])
       publishHTML (target : [allowMissing: true,
         alwaysLinkToLastBuild: true,
         keepAll: true,
-        reportDir: 'E2E/ARFP-Stratasphere/cypress/reports',
+        reportDir: 'E2E/Strata-eBiz/cypress/reports',
         reportFiles: 'multi-html-report/index.html',
         reportName: 'Multi HTML Report',
         reportTitles: 'Multi HTML Report'])
