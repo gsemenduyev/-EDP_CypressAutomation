@@ -3,7 +3,7 @@ Feature: Verify user is able to access Strata eBiz applications
     Feature Description:
     Stratasphere, ARFP, sTraffic, Traffic, AEInbox, ePort, Eleven
 
-    Scenario: Verify user is able to access ARFP QA environment
+    Scenario:C624912: Verify user is able to access ARFP QA environment
         * Visit ARFP 'QA' environment
         * Login to 'QA' ARFP home page
         * Logout from ARFP

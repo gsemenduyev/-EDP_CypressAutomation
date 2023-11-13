@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'TestRail_GS', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME']])  {
-                        def domain = "https://testrail.stratag.com/"
+                        def domain = "https://testrail-strata.freewheel.tv/testrail/"
                         def username = "${USERNAME}"
                         def password = "${PASSWORD}"
                         def runId = "${RUN_ID}"
