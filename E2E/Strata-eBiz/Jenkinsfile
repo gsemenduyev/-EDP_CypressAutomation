@@ -106,26 +106,18 @@ pipeline {
                 }
         }
           failure{
-            sendEmail()
-            //     script {
-            // //    def reportContent = readFile(file: 'E2E/Strata-eBiz/cypress/reports/multi-html-report/index.html')
-            //     mail(
-            //           subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) failed",
-            //           body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information",
-            //           to: "gsemenduyev@freewheel.tv",
-            //           cc: "ghenikwork@gmail.com",
-            //                           );
-            //  }
+            
+                script {
+                   sh "zip -r my_website.zip E2E/Strata-eBiz/cypress/reports/multi-html-report"
+                   sh  "| mail -s -a my_website.zip gsemenduyev@freewheel.tv"
+            //    def reportContent = readFile(file: 'E2E/Strata-eBiz/cypress/reports/multi-html-report/index.html')
+                mail(
+                      subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) failed",
+                      body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information",
+                      to: "gsemenduyev@freewheel.tv",
+                      cc: "ghenikwork@gmail.com",
+                                      );
+             }
         }
     }
-}
-
-    def sendEmail() {
-    emailext (
-        subject: 'Email with attached folder',
-        body: 'Please find the attached folder.',
-        to: 'gsemenduyev@freewheel.tv',
-        from: 'sender@example.com',
-        attachLog: true,
-    )
 }
