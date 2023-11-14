@@ -15,7 +15,7 @@ def emailContact = "gsemenduyev@freewheel.tv";
         ansiColor('xterm')
     }
     triggers {
-        cron("46 15 * * *")
+        cron("53 15 * * *")
     }
     stages {
         stage('Create TestRail Run') {
