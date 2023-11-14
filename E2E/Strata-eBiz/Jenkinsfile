@@ -108,7 +108,7 @@ pipeline {
           failure{
                 script {
                 mail (to: "gsemenduyev@freewheel.tv",
-                      cc: 'gsemendyev@yahoo.com'
+                      cc: 'gsemendyev@yahoo.com',
                       subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) failed",
                       body: 'failure Please visit ${env.BUILD_URL} for further information ${FILE,path="E2E/Strata-eBiz/cypress/reports/multi-html-report/index.html"}'
                 );
