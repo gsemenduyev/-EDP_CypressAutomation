@@ -14,8 +14,8 @@ def emailContact = "gsemenduyev@freewheel.tv";
     options{
         ansiColor('xterm')
     }
-  triggers {
-        cron("40 14 * * *")
+    triggers {
+        cron("46 15 * * *")
     }
     stages {
         stage('Create TestRail Run') {
@@ -115,4 +115,3 @@ def emailContact = "gsemenduyev@freewheel.tv";
         }
     }
 }
-//env.TZ = TimeZone.getTimeZone('America/Chicago').id
