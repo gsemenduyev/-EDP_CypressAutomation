@@ -60,15 +60,15 @@ import groovy.json.*
             script {
                   def reporterConfig = readJSON file: 'E2E/Strata-eBiz/cypress.env.json'
                         def testrail = [
-                        'domain': '-',
-                        'username': '-',
-                        'password': '-',
-                        'runId': '-'
-                    ]
-                    reporterConfig.put("testrail", testrail)
-                        def json = JsonOutput.toJson(reporterConfig)
-                    json = JsonOutput.prettyPrint(json)
-                    writeFile(file: 'E2E/Strata-eBiz/cypress.env.json', text: json)
+                    'domain': '-',
+                    'username': '-',
+                    'password': '-',
+                    'runId': '-'
+                ]
+                reporterConfig.put("testrail", testrail)
+                def json = JsonOutput.toJson(reporterConfig)
+                json = JsonOutput.prettyPrint(json)
+                writeFile(file: 'E2E/Strata-eBiz/cypress.env.json', text: json)
                 sh "cd E2E/Strata-eBiz && node ./cucumber-html-report.js"
             }
             publishHTML(target : [allowMissing: true,
@@ -88,21 +88,27 @@ import groovy.json.*
         }
         success{
                 script {
-                mail(to: 'gsemenduyev@freewheel.tv', 'gsemendyev@yahoo.com',
-                    subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) failed",
-                    body: "Please visit ${env.BUILD_URL} for further information"
+                mail(
+                    subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
+                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information",
+                    to: "gsemenduyev@freewheel.tv",
                 );
             }
         }
-          failure{
-                script {
-                mail(
-                    subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) failed",
-                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information",
-                    to: "gsemenduyev@freewheel.tv",
-                    cc: "ghenikwork@gmail.com",
-                );
-            }
+        failure{
+
+            emailext to: "gsemenduyev@freewheel.tv",
+            subject: "Test Email",
+            body: "Test",
+            attachLog: true
+            //     script {
+            //     mail(
+            //         subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
+            //         body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information",
+            //         to: "gsemenduyev@freewheel.tv",
+            //         cc: "ghenikwork@gmail.com, ghena187@gmail.com",
+            //     );
+            // }
         }
     }
 }
