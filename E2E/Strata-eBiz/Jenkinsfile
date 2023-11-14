@@ -8,6 +8,9 @@ pipeline {
             args '--ipc=host'
     }
 }
+   environment {
+            EMAIL_INFORM = 'abc@gmail.com;def@gmail.com'
+        }
     options{
         ansiColor('xterm')
     }
@@ -99,6 +102,14 @@ pipeline {
                 mail (to: 'gsemenduyev@freewheel.tv', 'gsemendyev@yahoo.com',
                         subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) failed",
                         body: "Please visit ${env.BUILD_URL} for further information"
+                );
+                }
+        }
+          failure{
+                script {
+                mail (to: "${EMAIL_INFORM}",
+                        subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) failed",
+                        body: 'failure Please visit ${env.BUILD_URL} for further information ${FILE,path="E2E/Strata-eBiz/cypress/reports/multi-html-report/index.html"}'
                 );
                 }
         }
