@@ -107,10 +107,10 @@ pipeline {
         }
           failure{
                 script {
-                def reportContent = readFile(file: 'E2E/Strata-eBiz/cypress/reports/multi-html-report/index.html')
+            //    def reportContent = readFile(file: 'E2E/Strata-eBiz/cypress/reports/multi-html-report/index.html')
                  mail(
                       subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) failed",
-                      body: "failure Please visit ${env.BUILD_URL} for further information" + reportContent,
+                      body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information",
                   //    mimeType:'text/html',
                       to: "gsemenduyev@freewheel.tv",
                       cc: "ghenikwork@gmail.com",
