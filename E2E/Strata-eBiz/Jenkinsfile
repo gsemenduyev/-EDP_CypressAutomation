@@ -11,6 +11,9 @@ import groovy.json.*
     options{
         ansiColor('xterm')
     }
+  triggers {
+        cron("0 6 * * *")
+    }
     stages {
         stage('Create TestRail Run') {
             steps {
@@ -102,9 +105,10 @@ import groovy.json.*
                     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
                     body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information",
                     to: "gsemenduyev@freewheel.tv",
-                    cc: "ghenikwork@gmail.com;ghena187@gmail.com"
+                    cc: "ghenikwork@gmail.com, ghena187@gmail.com"
                 );
             }
         }
     }
 }
+env.TZ = TimeZone.getTimeZone('America/Chicago').id
