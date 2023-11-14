@@ -113,8 +113,8 @@ pipeline {
                       body: "failure Please visit ${env.BUILD_URL} for further information",
                   //    mimeType:'text/html',
                       to: "gsemenduyev@freewheel.tv",
-                    //  cc: "ghenikwork@gmail.com",
-                   //   attachLog: true,
+                      cc: "ghenikwork@gmail.com",
+                      attachLog: true,
                 //      attachmentsPattern: 'E2E/Strata-eBiz/cypress/reports/multi-html-report/index.html'
                 );
              }
