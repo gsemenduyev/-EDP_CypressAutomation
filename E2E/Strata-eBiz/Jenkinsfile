@@ -76,6 +76,7 @@ def emailContact = "gsemenduyev@freewheel.tv";
                 json = JsonOutput.prettyPrint(json)
                 writeFile(file: 'E2E/Strata-eBiz/cypress.env.json', text: json)
                 sh "cd E2E/Strata-eBiz && node ./cucumber-html-report.js"
+                sh 'date'
             }
             publishHTML(target : [allowMissing: true,
                 alwaysLinkToLastBuild: true,
