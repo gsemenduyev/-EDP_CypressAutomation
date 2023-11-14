@@ -9,17 +9,14 @@ const mailinatorHomePage = new MailinatorHomePage;
 const envUtils = new EnvUtils;
 
 // Validate email for New RFP Request
-Given('Validate email for {string}', string => {
+Given('Validate {string} email for {string}', (buyerSeller, string) => {
     cy.dataSession('newRfpName').then(newRfpName => {
         mailinatorHomePage.search_email(`${string} for `, newRfpName);
-        mailinatorHomePage.publicMessageText(10000).should('include.text', `${string} for ${newRfpName}`);
-        mailinatorHomePage.emailHeader(1).invoke('text').then(user => {
-            if (string === 'New RFP Request') {
-                expect(user.trim()).to.equal(envUtils.getSsphereUsername().substr(0, envUtils.getSsphereUsername().indexOf('@')).toLowerCase());
-            } else if (string === 'RFP Response Received') {
-                expect(user.trim()).to.equal(envUtils.getAgencyUsername().substr(0, envUtils.getAgencyUsername().indexOf('@')).toLowerCase());
-            }
-        })
+        if (buyerSeller === 'buyer') {
+            mailinatorHomePage.buyerEmailBody().should('include.text', `${envUtils.getSsphereUsername()}.`)
+        } else if (buyerSeller === 'seller') {
+            mailinatorHomePage.sellerEmailBody().should('contain', envUtils.getAgencyUsername())
+        }
     })
     cy.screenshot();
 })

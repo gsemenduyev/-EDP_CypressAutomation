@@ -9,8 +9,9 @@ const envUtils = new EnvUtils;
 const elevenSigninPage = new ElevenSigninPage;
 const elevenHomePage = new ElevenHomePage;
 const elevenUserGuidePage = new ElevenUserGuidePage;
+const year = new Date().getFullYear();
 
-Given('Launch 11 application and login into 11',() => {    
+Given('Launch 11 application and login into 11, verify the copyright info and Validate the cable disclaimer',() => {    
     cy.visit(envUtils.getelevenUrl());
     cy.screenshot();    
     elevenSigninPage.pageTitle().should('have.text', 'Sign in to Eleven');
@@ -40,7 +41,20 @@ Given('Launch 11 application and login into 11',() => {
     elevenSigninPage.signIn().click();
   
     elevenHomePage.welcomeMessage().should('have.text', ('Welcome '+ envUtils.getloggedInPerson())) ;   
+    //Verify the copright info is upto date
+    elevenHomePage.copyRightInfo().should('contain.text',('#copyright', `${year} FreeWheel Advertisers, Inc. - All Rights Reserved`));
+
     cy.screenshot();   
+    //Filter for a particular Estimate number
+    elevenHomePage.searchEstimateNumber().type(envUtils.getEstimateNumber());
+    elevenHomePage.btnGoSideBar().click();
+    //click on disclaimer
+    elevenHomePage.disclaimerIcon().click();
+    elevenHomePage.disclaimerWindow().should('contain.text','Disclaimer');
+    elevenHomePage.disclaimerText().should('contain.text','ABC Client Disclaimer--- Cable Disclaimer from SBMS');
+    cy.screenshot();
+    elevenHomePage.versionOkBtn().click();
+
 })
 
 Given('Generate the xls reports - Order Detail, Order Detail with Totals By Calendar Month', () => {

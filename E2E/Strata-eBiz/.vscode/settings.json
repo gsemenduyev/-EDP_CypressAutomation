@@ -4,14 +4,12 @@
         "strings": "on",
         "other": "on"
     },
-    "window.zoomLevel": 1.5,
+    "window.zoomLevel": 2,
     "cucumberautocomplete.steps": [
         "cypress/integration/step-definitions/**/*.js",
     ],
     "cucumberautocomplete.syncfeatures": "cypress/integration/step-definitions/**/*.feature",
     "cSpell.words": [
-        "Mailinator",
-        "ssphere",
-        "mailinator",
-    ]
+        "Straffic"
+    ],
 }

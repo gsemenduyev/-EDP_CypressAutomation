@@ -19,9 +19,8 @@ Given('Navigate to View and Edit Responses page', () => {
 // Export XLSX file from hamburger dropdown
 Given('Export XLSX file from hamburger dropdown', () => {
     viewEditResponsesPage.hamburgerButton().should('be.visible');
-    viewEditResponsesPage.hamburgerButton().click({force: true});
-    viewEditResponsesPage.exportButton().should('be.visible');
-    viewEditResponsesPage.exportButton().click({force: true});
+    viewEditResponsesPage.hamburgerButton().click({ force: true });
+    viewEditResponsesPage.exportButton().click({ force: true });
 
 });
 
@@ -35,6 +34,7 @@ Given('Validate XLSX file', () => {
             .should('deep.equal', expectedData))
         .then(expectedData => cy.readFile(UI_TABLE_JSON_FILE_PATH)
             .should('deep.equal', expectedData));
+    cy.screenshot();
 });
 
 // Parse XLSX file to Json file
