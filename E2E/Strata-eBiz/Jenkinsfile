@@ -1,8 +1,8 @@
 #!/usr/bin/env groovy
 import groovy.json.*
 
-def emailMultipleContacts  = "ghenikwork@gmail.com, ghena187@gmail.com";
-def emailContact = "gsemenduyev@freewheel.tv";
+def groupEmail  = "StrataeBusiness@freewheel.com";
+def personalEmail = "gsemenduyev@freewheel.tv";
     pipeline {
     agent {
         docker {
@@ -79,7 +79,8 @@ def emailContact = "gsemenduyev@freewheel.tv";
                 mail(
                     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
                     body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information",
-                    to: emailContact
+                    to: personalEmail,
+                    cc: groupEmail
                 );
             }
             publishHTML(target : [allowMissing: true,
@@ -102,8 +103,8 @@ def emailContact = "gsemenduyev@freewheel.tv";
                 mail(
                     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
                     body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information",
-                    to: emailContact,
-                    cc: emailMultipleContacts
+                    to: personalEmail,
+                    cc: groupEmail
                 );
             }
         }
