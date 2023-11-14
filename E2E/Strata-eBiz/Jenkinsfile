@@ -1,16 +1,13 @@
 #!/usr/bin/env groovy
 import groovy.json.*
-pipeline {
+    pipeline {
     agent {
         docker {
             label 'al2'
             image 'cypress/browsers:node18.12.0-chrome107'
             args '--ipc=host'
+        }
     }
-}
-//    environment {
-//             EMAIL_INFORM = 'gsemenduyev@freewheel.tv;gsemendyev@yahoo.com'
-//         }
     options{
         ansiColor('xterm')
     }
@@ -18,7 +15,7 @@ pipeline {
         stage('Create TestRail Run') {
             steps {
                 script {
-                        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'TestRail_GS', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME']])  {
+                    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'TestRail_GS', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME']])  {
                         def domain = "https://testrail-strata.freewheel.tv/testrail/"
                         def username = "${USERNAME}"
                         def password = "${PASSWORD}"
@@ -26,10 +23,10 @@ pipeline {
                         // Update cypress.env.json
                         def reporterConfig = readJSON file: 'E2E/Strata-eBiz/cypress.env.json'
                         def testrail = [
-                       'domain': (domain),
-                       'username': (username),
-                       'password': (password),
-                       'runId': (runId)
+                            'domain': (domain),
+                            'username': (username),
+                            'password': (password),
+                            'runId': (runId)
                         ]
                         reporterConfig.put("testrail", testrail)
                         def json = JsonOutput.toJson(reporterConfig)
@@ -37,11 +34,11 @@ pipeline {
                         writeFile(file: 'E2E/Strata-eBiz/cypress.env.json', text: json)
 
                        def reporterConfig1 = readJSON file: 'E2E/Strata-eBiz/cypress.env.json'
-                       testrail = [
-                       'domain': reporterConfig1.testrail.domain,
-                       'username': reporterConfig1.testrail.username.values[0],
-                       'password': reporterConfig1.testrail.password.values[0],
-                       'runId': reporterConfig1.testrail.runId
+                        testrail = [
+                            'domain': reporterConfig1.testrail.domain,
+                            'username': reporterConfig1.testrail.username.values[0],
+                            'password': reporterConfig1.testrail.password.values[0],
+                            'runId': reporterConfig1.testrail.runId
                         ]
                         reporterConfig.put("testrail", testrail)
                         json = JsonOutput.toJson(reporterConfig)
@@ -55,69 +52,57 @@ pipeline {
             steps {
             sh "cd E2E/Strata-eBiz && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome"
             }
-
         }
-        stage('Clear TestRail file') {
-            steps {
-                script {
-                        // Update cypress.env.json
-                        def reporterConfig = readJSON file: 'E2E/Strata-eBiz/cypress.env.json'
-                        def testrail = [
-                       'domain': '-',
-                       'username': '-',
-                       'password': '-',
-                       'runId': '-'
-                        ]
-                        reporterConfig.put("testrail", testrail)
-                        def json = JsonOutput.toJson(reporterConfig)
-                        json = JsonOutput.prettyPrint(json)
-                        writeFile(file: 'E2E/Strata-eBiz/cypress.env.json', text: json)
-                    }
-                }
-            }
- }
+    }
 
     post{
         always{
             script {
+                  def reporterConfig = readJSON file: 'E2E/Strata-eBiz/cypress.env.json'
+                        def testrail = [
+                        'domain': '-',
+                        'username': '-',
+                        'password': '-',
+                        'runId': '-'
+                    ]
+                    reporterConfig.put("testrail", testrail)
+                        def json = JsonOutput.toJson(reporterConfig)
+                    json = JsonOutput.prettyPrint(json)
+                    writeFile(file: 'E2E/Strata-eBiz/cypress.env.json', text: json)
                 sh "cd E2E/Strata-eBiz && node ./cucumber-html-report.js"
             }
-      publishHTML (target : [allowMissing: true,
-        alwaysLinkToLastBuild: true,
-        keepAll: true,
-        reportDir: 'E2E/Strata-eBiz/cypress/reports',
-        reportFiles: 'cucumber-reports/cucumber-html-report/index.html',
-        reportName: 'Cucumber Report',
-        reportTitles: 'Cucumber Report'])
-      publishHTML (target : [allowMissing: true,
-        alwaysLinkToLastBuild: true,
-        keepAll: true,
-        reportDir: 'E2E/Strata-eBiz/cypress/reports',
-        reportFiles: 'multi-html-report/index.html',
-        reportName: 'Multi HTML Report',
-        reportTitles: 'Multi HTML Report'])
+            publishHTML(target : [allowMissing: true,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'E2E/Strata-eBiz/cypress/reports',
+                reportFiles: 'cucumber-reports/cucumber-html-report/index.html',
+                reportName: 'Cucumber Report',
+                reportTitles: 'Cucumber Report'])
+            publishHTML(target : [allowMissing: true,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'E2E/Strata-eBiz/cypress/reports',
+                reportFiles: 'multi-html-report/index.html',
+                reportName: 'Multi HTML Report',
+                reportTitles: 'Multi HTML Report'])
         }
         success{
                 script {
-                mail (to: 'gsemenduyev@freewheel.tv', 'gsemendyev@yahoo.com',
-                        subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) failed",
-                        body: "Please visit ${env.BUILD_URL} for further information"
+                mail(to: 'gsemenduyev@freewheel.tv', 'gsemendyev@yahoo.com',
+                    subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) failed",
+                    body: "Please visit ${env.BUILD_URL} for further information"
                 );
-                }
+            }
         }
           failure{
-            
                 script {
-                   sh "zip -r my_website.zip E2E/Strata-eBiz/cypress/reports/multi-html-report"
-                   sh  "| mail -s -a my_website.zip gsemenduyev@freewheel.tv"
-            //    def reportContent = readFile(file: 'E2E/Strata-eBiz/cypress/reports/multi-html-report/index.html')
                 mail(
-                      subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) failed",
-                      body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information",
-                      to: "gsemenduyev@freewheel.tv",
-                      cc: "ghenikwork@gmail.com",
-                                      );
-             }
+                    subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) failed",
+                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information",
+                    to: "gsemenduyev@freewheel.tv",
+                    cc: "ghenikwork@gmail.com",
+                );
+            }
         }
     }
 }
