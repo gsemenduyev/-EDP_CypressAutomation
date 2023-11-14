@@ -92,23 +92,19 @@ import groovy.json.*
                     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
                     body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information",
                     to: "gsemenduyev@freewheel.tv",
+                    cc: "ghenikwork@gmail.com; ghena187@gmail.com"
                 );
             }
         }
         failure{
-
-            emailext to: "gsemenduyev@freewheel.tv",
-            subject: "Test Email",
-            body: "Test",
-            attachLog: true
-            //     script {
-            //     mail(
-            //         subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
-            //         body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information",
-            //         to: "gsemenduyev@freewheel.tv",
-            //         cc: "ghenikwork@gmail.com, ghena187@gmail.com",
-            //     );
-            // }
+                script {
+                mail(
+                    subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
+                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information",
+                    to: "gsemenduyev@freewheel.tv",
+                    cc: "ghenikwork@gmail.com; ghena187@gmail.com"
+                );
+            }
         }
     }
 }
