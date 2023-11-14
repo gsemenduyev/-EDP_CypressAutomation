@@ -45,7 +45,7 @@ Given('Login to {string} ARFP home page', environment => {
         arfpPages.passwordBox().type(environmentsParam.arfpUrlPasswordUat);
     };
     arfpPages.loginButton().click();
-    cy.title().should('eq', 'Home - RFP');
+    cy.title().should('eq', 'Home - RFP123');
     cy.screenshot();
 });
 

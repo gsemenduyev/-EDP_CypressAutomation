@@ -1,7 +1,7 @@
 #!/usr/bin/env groovy
 import groovy.json.*
 
-def groupEmail  = "StrataeBusiness@freewheel.com";
+def groupEmail  = "ghenikwork@gmail.com, ghena187@gmail.com, gsemendyev@yahoo.com";
 def personalEmail = "gsemenduyev@freewheel.tv";
     pipeline {
     agent {
@@ -102,8 +102,7 @@ def personalEmail = "gsemenduyev@freewheel.tv";
                 mail(
                     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
                     body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information",
-                    to: personalEmail,
-                    cc: groupEmail
+                    to: groupEmail
                 );
             }
         }
