@@ -18,7 +18,7 @@ def personalEmail = "gsemenduyev@freewheel.tv";
         cron("0 15 * * *")
     }
     stages {
-        stage('Create TestRail Run') {
+        stage('TestRail integration') {
             steps {
                 script {
                     withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'TestRail_GS', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME']])  {
@@ -79,8 +79,7 @@ def personalEmail = "gsemenduyev@freewheel.tv";
                 mail(
                     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
                     body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information",
-                    to: personalEmail,
-                    cc: groupEmail
+                    to: personalEmail
                 );
             }
             publishHTML(target : [allowMissing: true,
