@@ -9,7 +9,7 @@ pipeline {
     }
 }
    environment {
-            EMAIL_INFORM = 'abc@gmail.com;def@gmail.com'
+            EMAIL_INFORM = 'gsemenduyev@freewheel.tv;gsemendyev@yahoo.com'
         }
     options{
         ansiColor('xterm')
