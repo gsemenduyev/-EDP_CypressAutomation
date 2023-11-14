@@ -125,6 +125,7 @@ pipeline {
         subject: 'Email with attached folder',
         body: 'Please find the attached folder.',
         to: 'gsemenduyev@freewheel.tv',
-        attachBuildLog: true,
+        from: 'sender@example.com',
+        attachLog: true,
     )
 }
