@@ -1,8 +1,6 @@
 const { defineConfig } = require("cypress");
 const { addCucumberPreprocessorPlugin, afterRunHandler } = require("@badeball/cypress-cucumber-preprocessor");
 const browserify = require("@badeball/cypress-cucumber-preprocessor/browserify");
-const registerDataSession = require('cypress-data-session/src/plugin');
-const allureWriter = require('@shelex/cypress-allure-plugin/writer');
 const TestRailReporter = require('cypress-testrail');
 const fs = require('fs');
 const xlsx = require('node-xlsx').default;
@@ -11,10 +9,7 @@ const ENVIRONMENT_FILE_PATH = 'cypress/fixtures/environment/environments.json';
 async function setupNodeEvents(cypressOn, config) {
   const on = require('cypress-on-fix')(cypressOn);
   await addCucumberPreprocessorPlugin(on, config, { omitAfterRunHandler: true, });
-
   on("file:preprocessor", browserify.default(config));
-  allureWriter(on, config);
-  registerDataSession(on, config);
   new TestRailReporter(on, config).register();
 
   on('before:spec', () => {
@@ -61,7 +56,15 @@ async function setupNodeEvents(cypressOn, config) {
             ssphereUrlUat: runInfo['ssphereUrlUat'],
             sTrafficUrlQa: runInfo['sTrafficUrlQa'],
             sTrafficUrlUat: runInfo['sTrafficUrlUat'],
+            trafficUrlQa: runInfo['trafficUrlQa'],
+            trafficUrlUat: runInfo['arfpUrlUat'],
+            aeInboxUrlQa: runInfo['aeInboxUrlQa'],
+            aeInboxUrlUat: runInfo['aeInboxUrlUat'],
+            ePortUrlQa: runInfo['ePortUrlQa'],
+            ePortUrlUat: runInfo['ePortUrlUat'],
             elevenUrlQa: runInfo['elevenUrlQa'],
+            elevenUrlUat: runInfo['elevenUrlQa'],
+
           },
           null,
           '\t',
@@ -75,20 +78,13 @@ async function setupNodeEvents(cypressOn, config) {
 module.exports = defineConfig({
   viewportWidth: 1920,
   viewportHeight: 1080,
-  defaultCommandTimeout: 3000,
-  pageLoadTimeout: 3000,
+  defaultCommandTimeout: 20000,
+  pageLoadTimeout: 120000,
   screenshotOnRunFailure: true,
   video: true,
   retries: {
-    runMode: 0,
+    runMode: 2,
     openMode: 0
-  },
-  env: {
-    allure: true,
-    allureOmitPreviousAttemptScreenshots: true,
-    allureReuseAfterSpec: true,
-    allureAddVideoOnPass: true,
-    allureResultsPath: "cypress/videos/allure-results"
   },
   projectId: "",
   e2e: {

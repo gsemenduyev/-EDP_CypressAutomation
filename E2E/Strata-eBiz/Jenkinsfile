@@ -97,16 +97,6 @@ def emailContact = "gsemenduyev@freewheel.tv";
                 reportName: 'Multi HTML Report',
                 reportTitles: 'Multi HTML Report'])
         }
-        // success{
-        //         script {
-        //         mail(
-        //             subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
-        //             body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information",
-        //             to: emailContact,
-        //             cc: emailMultipleContacts
-        //         );
-        //     }
-        // }
         failure{
                 script {
                 mail(
