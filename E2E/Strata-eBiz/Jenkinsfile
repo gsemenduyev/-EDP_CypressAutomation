@@ -106,15 +106,25 @@ pipeline {
                 }
         }
           failure{
-                script {
-            //    def reportContent = readFile(file: 'E2E/Strata-eBiz/cypress/reports/multi-html-report/index.html')
-                sendEmail(
-                      subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) failed",
-                      body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information",
-                      to: "gsemenduyev@freewheel.tv",
-                      cc: "ghenikwork@gmail.com",
-                                      );
-             }
+            sendEmail()
+            //     script {
+            // //    def reportContent = readFile(file: 'E2E/Strata-eBiz/cypress/reports/multi-html-report/index.html')
+            //     mail(
+            //           subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) failed",
+            //           body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information",
+            //           to: "gsemenduyev@freewheel.tv",
+            //           cc: "ghenikwork@gmail.com",
+            //                           );
+            //  }
         }
     }
+}
+
+    def sendEmail() {
+    emailext (
+        subject: 'Email with attached folder',
+        body: 'Please find the attached folder.',
+        to: 'gsemenduyev@freewheel.tv',
+        attachBuildLog: true,
+    )
 }
