@@ -19,31 +19,24 @@ const elevenPages = new ElevenPages;
 const ePortPages = new EportPages;
 
 let environmentsParam;
+let testResultsFilPath = 'cypress/fixtures/results/test-results.json';
 
 before(function () {
+    cy.writeFile(testResultsFilPath, [])
     cy.fixture('/environment/environments.json').then((data) => {
         environmentsParam = data;
     });
 });
 
 afterEach(function () {
-    let filename = 'cypress/fixtures/results/test-results.json'
     const { title, state, parent: suite } = cy.state('test');
     cy.log(title, state, suite.title);
     if (state === 'failed') {
-        cy.readFile(filename).then((list) => {
+        cy.readFile(testResultsFilPath).then((list) => {
             list.push(title);
-            cy.writeFile(filename, JSON.stringify(list));
+            cy.writeFile(testResultsFilPath, JSON.stringify(list));
         })
     }
-});
-
-Given('Test', () => {
-    let filename = 'cypress/fixtures/results/test-results.json'
-    cy.readFile(filename).then((list) => {
-        list.push('example')
-        cy.writeFile(filename, JSON.stringify(list))
-    })
 });
 
 Given('Visit ARFP {string} environment', environment => {

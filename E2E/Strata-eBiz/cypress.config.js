@@ -18,7 +18,6 @@ async function setupNodeEvents(cypressOn, config) {
         console.log(err);
       };
     });
-    fs.writeFileSync('cypress/fixtures/results/test-results.json', JSON.stringify([]))
   });
 
   on('task', {
