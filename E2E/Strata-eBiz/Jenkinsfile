@@ -101,7 +101,7 @@ def personalEmail = "gsemenduyev@freewheel.tv";
                 script {
                     def fileContent = readFile(file: 'E2E/Strata-eBiz/cypress/fixtures/results/test-results.txt').trim()
                     def lines = fileContent.readLines()
-                    def formattedContent = lines.join('<br>')
+                    def formattedContent = '<br>' + lines.join('<br>')
                 mail(
                     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
                     body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. \n" + formattedContent,
