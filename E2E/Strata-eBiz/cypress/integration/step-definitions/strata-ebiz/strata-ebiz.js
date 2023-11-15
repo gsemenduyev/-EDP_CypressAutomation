@@ -19,8 +19,8 @@ const elevenPages = new ElevenPages;
 const ePortPages = new EportPages;
 
 let environmentsParam;
-let testResultsFilPath = 'cypress/fixtures/results/test-results.txt';
-
+let testResultsFilPath = 'cypress/reports/run-info/test-results.txt';
+let index = 1;
 before(function () {
     cy.writeFile(testResultsFilPath, "")
     cy.fixture('/environment/environments.json').then((data) => {
@@ -32,7 +32,7 @@ afterEach(function () {
     const { title, state, parent: suite } = cy.state('test');
     cy.log(title, state, suite.title);
     if (state === 'failed') {
-        cy.writeFile(testResultsFilPath, title + "\n", { flag: 'a+' });
+        cy.writeFile(testResultsFilPath, `${index}) ${title} \n`, { flag: 'a+' });
     }
 });
 
@@ -42,7 +42,7 @@ Given('Visit ARFP {string} environment', environment => {
     } else if (environment === 'UAT') {
         cy.visit(environmentsParam.arfpUrlUat);
     };
-    arfpPages.pageTitle().should('have.text', 'Sign In');
+    arfpPages.pageTitle().should('have.text', 'Sign In1');
     cy.screenshot();
 });
 
@@ -71,7 +71,7 @@ Given('Visit Stratasphere {string} environment', environment => {
     } else if (environment === 'UAT') {
         cy.visit(environmentsParam.ssphereUrlUat);
     };
-    sSpherePages.pageTitle().should('include.text', ' Login');
+    sSpherePages.pageTitle().should('include.text', ' Login1');
     cy.screenshot();
 });
 

@@ -6,4 +6,3 @@ cypress/fixtures/agencyRFP/parsed-xlsx-from-response-screen.json
 cypress/fixtures/agencyRFP/ui-table-from-response-screen.json
 cypress/downloads/Chicago - TV.prx
 cypress/downloads/Linear response detail.xlsx
-cypress/fixtures/results/test-results.txt
