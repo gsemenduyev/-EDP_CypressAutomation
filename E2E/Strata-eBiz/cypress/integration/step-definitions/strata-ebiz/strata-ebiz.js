@@ -26,6 +26,26 @@ before(function () {
     });
 });
 
+afterEach(function () {
+    let filename = 'cypress/fixtures/results/test-results.json'
+    const { title, state, parent: suite } = cy.state('test');
+    cy.log(title, state, suite.title);
+    if (state === 'failed') {
+        cy.readFile(filename).then((list) => {
+            list.push(title);
+            cy.writeFile(filename, JSON.stringify(list));
+        })
+    }
+});
+
+Given('Test', () => {
+    let filename = 'cypress/fixtures/results/test-results.json'
+    cy.readFile(filename).then((list) => {
+        list.push('example')
+        cy.writeFile(filename, JSON.stringify(list))
+    })
+});
+
 Given('Visit ARFP {string} environment', environment => {
     if (environment === 'QA') {
         cy.visit(environmentsParam.arfpUrlQa);
@@ -45,7 +65,7 @@ Given('Login to {string} ARFP home page', environment => {
         arfpPages.passwordBox().type(environmentsParam.arfpUrlPasswordUat);
     };
     arfpPages.loginButton().click();
-    cy.title().should('eq', 'Home - RFP');
+    cy.title().should('eq', 'Home - RFP1');
     cy.screenshot();
 });
 
@@ -241,6 +261,6 @@ Given('Login to {string} Eleven home page', environment => {
 
 Given('Logout from Eleven', () => {
     elevenPages.logoutButton().click({ force: true });
-    cy.title().should('eq', 'Eleven: Login');
+    cy.title().should('eq', 'Eleven: Login1');
     cy.screenshot();
 });

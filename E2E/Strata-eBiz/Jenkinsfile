@@ -1,7 +1,7 @@
 #!/usr/bin/env groovy
 import groovy.json.*
 
-def groupEmail  = "StrataeBusiness@freewheel.com, kvelvadapu@freewheel.com, syenumula@freewheel.com";
+//def groupEmail  = "StrataeBusiness@freewheel.com, kvelvadapu@freewheel.com, syenumula@freewheel.com";
 def personalEmail = "gsemenduyev@freewheel.tv";
     pipeline {
     agent {
@@ -99,10 +99,11 @@ def personalEmail = "gsemenduyev@freewheel.tv";
         }
         failure{
                 script {
+                    def reporterConfig = readJSON file: 'E2E/Strata-eBiz/cypress/fixtures/results/test-results.json'
                 mail(
                     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
-                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information",
-                    to: groupEmail
+                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information \n" + reporterConfig,
+                    to: personalEmail
                 );
             }
         }
