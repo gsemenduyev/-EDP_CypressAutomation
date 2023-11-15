@@ -104,7 +104,7 @@ def personalEmail = "gsemenduyev@freewheel.tv";
                     def formattedContent = lines.join('<br>')
                 mail(
                     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
-                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. \n" + lines.join('\n'),
+                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. \n" + formattedContent,
                     to: personalEmail, 
                     mimeType: 'text/html'
                 );
