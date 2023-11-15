@@ -19,10 +19,10 @@ const elevenPages = new ElevenPages;
 const ePortPages = new EportPages;
 
 let environmentsParam;
-let testResultsFilPath = 'cypress/fixtures/results/test-results.json';
+let testResultsFilPath = 'cypress/fixtures/results/test-results.txt';
 
 before(function () {
-    cy.writeFile(testResultsFilPath, [])
+    cy.writeFile(testResultsFilPath, "")
     cy.fixture('/environment/environments.json').then((data) => {
         environmentsParam = data;
     });
@@ -32,10 +32,7 @@ afterEach(function () {
     const { title, state, parent: suite } = cy.state('test');
     cy.log(title, state, suite.title);
     if (state === 'failed') {
-        cy.readFile(testResultsFilPath).then((list) => {
-            list.push(title);
-            cy.writeFile(testResultsFilPath, JSON.stringify(list));
-        })
+        cy.writeFile(testResultsFilPath, title + "\n", { flag: 'a+' });
     }
 });
 

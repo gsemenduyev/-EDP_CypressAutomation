@@ -99,10 +99,10 @@ def personalEmail = "gsemenduyev@freewheel.tv";
         }
         failure{
                 script {
-                    def reporterConfig = readJSON file: 'E2E/Strata-eBiz/cypress/fixtures/results/test-results.json'
+                    def reporterConfig = readJSON file: 'E2E/Strata-eBiz/cypress/fixtures/results/test-results.txt'
                 mail(
                     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
-                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information \n" + reporterConfig,
+                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. \n" + reporterConfig,
                     to: personalEmail
                 );
             }

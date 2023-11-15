@@ -3,7 +3,7 @@ Feature: Verify user is able to access Strata eBiz applications
     Feature Description: Strata-eBiz Daily Sanity Test for:
     Stratasphere, ARFP, sTraffic, Traffic, AEInbox, ePort, Eleven
 
-    Scenario:C624912: Verify user is able to access ARFP QA environment
+    Scenario: Verify user is able to access ARFP QA environment
         * Visit ARFP 'QA' environment
         * Login to 'QA' ARFP home page
         * Logout from ARFP
