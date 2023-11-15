@@ -76,10 +76,16 @@ def personalEmail = "gsemenduyev@freewheel.tv";
                 json = JsonOutput.prettyPrint(json)
                 writeFile(file: 'E2E/Strata-eBiz/cypress.env.json', text: json)
                 sh "cd E2E/Strata-eBiz && node ./cucumber-html-report.js"
+
+                def fileContent = readFile(file: 'E2E/Strata-eBiz/cypress/fixtures/results/test-results.txt').trim()
+                def lines = fileContent.readLines()
+                def formattedContent = '<br>' + lines.join('<br>')
+                
                 mail(
                     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
-                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information",
-                    to: personalEmail
+                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. \n ${currentBuild.currentResult}:" + formattedContent,
+                    to: personalEmail, 
+                    mimeType: 'text/html'
                 );
             }
             publishHTML(target : [allowMissing: true,
@@ -104,7 +110,7 @@ def personalEmail = "gsemenduyev@freewheel.tv";
                     def formattedContent = '<br>' + lines.join('<br>')
                 mail(
                     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
-                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. \n" + formattedContent,
+                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. \n ${currentBuild.currentResult}:" + formattedContent,
                     to: personalEmail, 
                     mimeType: 'text/html'
                 );
