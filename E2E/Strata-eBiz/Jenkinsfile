@@ -2,12 +2,12 @@
 import groovy.json.*
 
 import jenkins.model.Jenkins
-import jenkins.util.VirtualFile
+import hudson.model.FilesystemItem
 
 def printConfigFilePaths() {
     def configFilePaths = []
-    Jenkins.instance.getExtensionList(jenkins.model.JenkinsLocationConfiguration).each { locationConfig ->
-        def configFile = locationConfig.getXmlFile()
+    Jenkins.instance.getConfigs(FilesystemItem).each { config ->
+        def configFile = config.getConfigFile()
         if (configFile) {
             def filePath = configFile.getFile().getAbsolutePath()
             configFilePaths.add(filePath)
