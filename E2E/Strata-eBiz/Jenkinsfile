@@ -83,7 +83,7 @@ def personalEmail = "gsemenduyev@freewheel.tv";
 
                 mail(
                     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
-                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. \n" + formattedContent,
+                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. \n \n" + formattedContent,
                     to: personalEmail, 
                     mimeType: 'text/html'
                 );
@@ -110,7 +110,7 @@ def personalEmail = "gsemenduyev@freewheel.tv";
                     def formattedContent = '<br>' + lines.join('<br>')
                 mail(
                     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
-                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. \n" + formattedContent,
+                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. \n \n" + formattedContent,
                     to: personalEmail, 
                     mimeType: 'text/html'
                 );

@@ -82,7 +82,7 @@ Given('Visit Stratasphere {string} environment', environment => {
     } else if (environment === 'UAT') {
         cy.visit(environmentsParam.ssphereUrlUat);
     };
-    sSpherePages.pageTitle().should('include.text', ' Login1');
+    sSpherePages.pageTitle().should('include.text', ' Login');
     cy.screenshot();
 });
 
@@ -229,7 +229,7 @@ Given('Visit Eleven {string} environment', environment => {
     } else if (environment === 'UAT') {
         cy.visit(environmentsParam.elevenUrlUat);
     };
-    cy.title().should('eq', 'Eleven: Login1')
+    cy.title().should('eq', 'Eleven: Login')
     cy.screenshot();
 });
 
