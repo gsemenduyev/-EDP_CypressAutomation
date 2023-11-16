@@ -1,8 +1,9 @@
 #!/usr/bin/env groovy
 import groovy.json.*
 
-//def groupEmail  = "StrataeBusiness@freewheel.com, kvelvadapu@freewheel.com, syenumula@freewheel.com";
-def personalEmail = "gsemenduyev@freewheel.tv";
+// def strataEBizTeamEmail  = "StrataeBusiness@freewheel.com";
+// def qaTeamEmail = "cableqa@freewheel.com";
+def personalEmail = "gsemenduyev@freewheel.com"
     pipeline {
     agent {
         docker {

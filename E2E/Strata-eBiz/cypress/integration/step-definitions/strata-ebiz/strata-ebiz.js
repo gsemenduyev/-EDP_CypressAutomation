@@ -33,13 +33,18 @@ afterEach(function () {
     const { title, state, parent: suite } = cy.state('test');
     if (state === 'failed' && !failedScenarios.includes(title)) {
         failedScenarios.push(title);
+    } else if (state === 'passed' && failedScenarios.includes(title)) {
+        const index = failedScenarios.indexOf(title);
+        if (index > -1) {
+            failedScenarios.splice(index, 1);
+        }
     }
 });
 
 after(function () {
     if (failedScenarios.length > 1) {
         cy.writeFile(testResultsFilePath, 'Failed Scenarios: \n')
-    } else (
+    } else if (failedScenarios.length === 1) (
         cy.writeFile(testResultsFilePath, 'Failed Scenario: \n')
     )
     const numberedContent = failedScenarios.map((failedScenarios, index) => `${index + 1}. ${failedScenarios}`).join('\n');
