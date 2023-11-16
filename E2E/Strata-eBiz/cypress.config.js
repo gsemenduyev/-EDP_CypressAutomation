@@ -78,12 +78,12 @@ async function setupNodeEvents(cypressOn, config) {
 module.exports = defineConfig({
   viewportWidth: 1920,
   viewportHeight: 1080,
-  defaultCommandTimeout: 20000,
-  pageLoadTimeout: 60000,
+  defaultCommandTimeout: 2000,
+  pageLoadTimeout: 6000,
   screenshotOnRunFailure: true,
   video: true,
   retries: {
-    runMode: 1,
+    runMode: 0,
     openMode: 1
   },
   projectId: "",

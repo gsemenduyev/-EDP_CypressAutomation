@@ -52,6 +52,11 @@ def qaTeamEmail = "cableqa@freewheel.com";
                         json = JsonOutput.prettyPrint(json)
                         writeFile(file: 'E2E/Strata-eBiz/cypress.env.json', text: json)
                     }
+                // Copy paste Jenkins config file into current project
+                def configFilePath = configFileProvider([configFile(fileId: '16d93a3a-a4a4-4764-9cb5-231f80e7261f', variable: 'configFile')]).getPath();
+                def configFileContent = readFile(configFilePath);
+                def configData = readJSON(text: configFileContent);
+                writeFile(file: 'E2E/Strata-eBiz/cypress/fixtures/environment/environments.json', text: json)
                 }
             }
         }
@@ -78,16 +83,16 @@ def qaTeamEmail = "cableqa@freewheel.com";
                 writeFile(file: 'E2E/Strata-eBiz/cypress.env.json', text: json)
                 sh "cd E2E/Strata-eBiz && node ./cucumber-html-report.js"
 
-                def fileContent = readFile(file: 'E2E/Strata-eBiz/cypress/reports/run-info/failed-scenarios-title.txt').trim()
-                def lines = fileContent.readLines()
-                def formattedContent = '<br><br>' + lines.join('<br>')
+                // def fileContent = readFile(file: 'E2E/Strata-eBiz/cypress/reports/run-info/failed-scenarios-title.txt').trim()
+                // def lines = fileContent.readLines()
+                // def formattedContent = '<br><br>' + lines.join('<br>')
 
-                mail(
-                    subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
-                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information." + formattedContent,
-                    to: qaTeamEmail, 
-                    mimeType: 'text/html'
-                );
+                // mail(
+                //     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
+                //     body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information." + formattedContent,
+                //     to: qaTeamEmail, 
+                //     mimeType: 'text/html'
+                // );
             }
             publishHTML(target : [allowMissing: true,
                 alwaysLinkToLastBuild: true,
@@ -104,18 +109,18 @@ def qaTeamEmail = "cableqa@freewheel.com";
                 reportName: 'Multi HTML Report',
                 reportTitles: 'Multi HTML Report'])
         }
-        failure{
-                script {
-                    def fileContent = readFile(file: 'E2E/Strata-eBiz/cypress/reports/run-info/failed-scenarios-title.txt').trim()
-                    def lines = fileContent.readLines()
-                    def formattedContent = '<br><br>' + lines.join('<br>')
-                mail(
-                    subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
-                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information." + formattedContent,
-                    to: strataEBizTeamEmail, 
-                    mimeType: 'text/html'
-                );
-            }
-        }
+        // failure{
+        //         script {
+        //             def fileContent = readFile(file: 'E2E/Strata-eBiz/cypress/reports/run-info/failed-scenarios-title.txt').trim()
+        //             def lines = fileContent.readLines()
+        //             def formattedContent = '<br><br>' + lines.join('<br>')
+        //         mail(
+        //             subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
+        //             body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information." + formattedContent,
+        //             to: strataEBizTeamEmail, 
+        //             mimeType: 'text/html'
+        //         );
+        //     }
+        // }
     }
 }
