@@ -29,8 +29,7 @@ def qaTeamEmail = "cableqa@freewheel.com";
 
 
  
-                        def json = readJSON(text: configFile.getText())
-                        echo "JSON content: ${json}"
+                      echo "JSON file content: ${configFile.getText()}"
 
 
                         echo '++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
