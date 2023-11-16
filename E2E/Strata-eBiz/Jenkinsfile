@@ -58,7 +58,7 @@ def qaTeamEmail = "cableqa@freewheel.com";
                 // def configData = readJSON(text: configFileContent);
                 // writeFile(file: 'E2E/Strata-eBiz/cypress/fixtures/environment/environments.json', text: json
                 
-                if (fileExists('Strata-eBiz_Environments.json')) {
+                if (fileExists('config/Strata-eBiz_Environments.json')) {
                   println("Hello, World! Hello, World! Hello, World! Hello, World! Hello, World! Hello, World! Hello, World!")
                  } else {
                        error("Config file not found.")
