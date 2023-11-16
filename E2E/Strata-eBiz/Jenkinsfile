@@ -22,6 +22,7 @@ def qaTeamEmail = "cableqa@freewheel.com";
     stages {
         stage('TestRail integration') {
             steps {
+            configFileProvider([configFile(fileId: 'your-config-file-id', variable: 'configFile')]) {
                 script {
                     withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'TestRail_GS', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME']])  {
                         def domain = "https://testrail-strata.freewheel.tv/testrail/"
@@ -54,10 +55,14 @@ def qaTeamEmail = "cableqa@freewheel.com";
                         writeFile(file: 'E2E/Strata-eBiz/cypress.env.json', text: json)
                     }
                      echo "Hello, World! Hello, World! Hello, World! Hello, World! Hello, World! Hello, World! Hello, World!"
-                    configFileProvider([configFile(fileId: '16d93a3a-a4a4-4764-9cb5-231f80e7261f', variable: 'configFile')]) {
-                    // Access the config file contents using the 'configFile' variable
-                    sh 'echo "${configFile}"'
-                    }
+                    
+                    
+                        def json2 = readJSON(text: configFile.getText())
+                        def value = json2.propertyName // Replace 'propertyName' with the actual property name in the JSON file
+                        echo "The value is: ${value}"
+                     
+                     
+                     
                      echo "Hello, World! Hello, World! Hello, World! Hello, World! Hello, World! Hello, World! Hello, World!"
                 // Copy paste Jenkins config file into current project
                 // def configFilePath = configFileProvider([configFile(fileId: '16d93a3a-a4a4-4764-9cb5-231f80e7261f', variable: 'configFile')]).getPath();
@@ -73,7 +78,7 @@ def qaTeamEmail = "cableqa@freewheel.com";
                 
                 
                 
-                
+                }
                 
                 }
             }
