@@ -52,7 +52,7 @@ Given('Visit ARFP {string} environment', environment => {
     } else if (environment === 'UAT') {
         cy.visit(environmentsParam.arfpUrlUat);
     };
-    arfpPages.pageTitle().should('have.text', 'Sign In1');
+    arfpPages.pageTitle().should('have.text', 'Sign In');
     cy.screenshot();
 });
 
