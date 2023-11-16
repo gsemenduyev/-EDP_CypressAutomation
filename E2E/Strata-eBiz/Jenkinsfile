@@ -20,28 +20,28 @@ def qaTeamEmail = "cableqa@freewheel.com";
         cron("0 15 * * *")
     }
     stages {
-        stage('Config file test'){
-            steps {
-                echo '!-------------------------------------------------!'
-                configFileProvider([configFile(fileId: '16d93a3a-a4a4-4764-9cb5-231f80e7261f', variable: 'configFile')]) {
-                    script {
-                        echo '++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+        // stage('Config file test'){
+        //     steps {
+        //         echo '!-------------------------------------------------!'
+        //         configFileProvider([configFile(fileId: '16d93a3a-a4a4-4764-9cb5-231f80e7261f', variable: 'configFile')]) {
+        //             script {
+        //                 echo '++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
 
 
  
-                        def fileContent = readFile configFile
-                        def json = readJSON text: fileContent
-                        def firstValue = json.keySet().iterator().next()
-                        echo "The first value is: ${json[firstValue]}"
+        //                 def fileContent = readFile configFile
+        //                 def json = readJSON text: fileContent
+        //                 def firstValue = json.keySet().iterator().next()
+        //                 echo "The first value is: ${json[firstValue]}"
 
 
-                        echo '++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-                    }
-                }
-                echo '!-------------------------------------------------!'
-            }
+        //                 echo '++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+        //             }
+        //         }
+        //         echo '!-------------------------------------------------!'
+        //     }
 
-        }
+        // }
 
 
   stage('Copy Config File') {
