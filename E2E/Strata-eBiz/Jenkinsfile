@@ -25,8 +25,8 @@ def qaTeamEmail = "cableqa@freewheel.com";
                 echo '!-------------------------------------------------!'
                 configFileProvider([configFile(fileId: '16d93a3a-a4a4-4764-9cb5-231f80e7261f', variable: 'configFile')]) {
                     script {
-                        def json = readJSON(text: configFile.getText())
-                        def value = json.propertyName // Replace 'propertyName' with the actual property name in the JSON file
+                        def json3 = readJSON(text: configFile.getText())
+                        def value = json3.arfpUrlQa // Replace 'propertyName' with the actual property name in the JSON file
                         echo "The value is: ${value}"
                     }
                 }
