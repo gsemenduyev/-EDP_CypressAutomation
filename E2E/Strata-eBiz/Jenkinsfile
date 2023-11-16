@@ -42,6 +42,31 @@ def qaTeamEmail = "cableqa@freewheel.com";
             }
 
         }
+
+
+  stage('Copy Config File') {
+            steps {
+                configFileProvider([configFile(fileId: '16d93a3a-a4a4-4764-9cb5-231f80e7261f', variable: 'configFile')]) {
+                    script {
+                        // Stash the JSON config file
+                        stash includes: 'configFile', name: 'configFileStash'
+                    }
+                }
+            }
+        }
+        stage('Copy to Cypress') {
+            steps {
+                // Unstash the JSON config file in the Cypress project
+                unstash 'configFileStash'
+                sh 'cp configFile E2E/Strata-eBiz/cypress/fixtures/configFile.json'
+            }
+        }
+        
+
+
+
+
+
         stage('TestRail integration') {
             steps {
                 script {
