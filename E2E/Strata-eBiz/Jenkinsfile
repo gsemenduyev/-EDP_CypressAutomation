@@ -28,14 +28,10 @@ def qaTeamEmail = "cableqa@freewheel.com";
                         echo '++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
 
 
-                                            
-                        def json = readJSON(text: configFile.getText())
-                        def firstValue
-                        json.each { key, value ->
-                            firstValue = value
-                            return
-                        }
-                        echo "The first value is: ${firstValue}"
+ 
+                        def json1 = readJSON file: configFile
+                        JsonOutput.prettyPrint(json1)
+                        echo "The first value is"
 
 
                         echo '++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
