@@ -2,8 +2,8 @@
 import groovy.json.*
 
 
-def strataEBizTeamEmail  = "StrataeBusiness@freewheel.com";
-def qaTeamEmail = "cableqa@freewheel.com";
+    def strataEBizTeamEmail = "StrataeBusiness@freewheel.com";
+    def qaTeamEmail = "cableqa@freewheel.com";
 
     pipeline {
     agent {
@@ -22,22 +22,15 @@ def qaTeamEmail = "cableqa@freewheel.com";
     stages {
         stage('Config file test'){
             steps {
-                echo '!-------------------------------------------------!'
                 configFileProvider([configFile(fileId: '16d93a3a-a4a4-4764-9cb5-231f80e7261f', variable: 'configFile')]) {
-                    script {
-                        echo '++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-
+            script {
                 def fileContent = readFile configFile
                 def jsonFileContent = readJSON text: fileContent
                 def json = JsonOutput.toJson(jsonFileContent)
-                json = JsonOutput.prettyPrint(json)
-                writeFile(file: 'E2E/Strata-eBiz/cypress/fixtures/environment/environments.json', text: json)
-
-
-                        echo '++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+                        json = JsonOutput.prettyPrint(json)
+                        writeFile(file: 'E2E/Strata-eBiz/cypress/fixtures/environment/environments.json', text: json)
                     }
                 }
-                echo '!-------------------------------------------------!'
             }
 
         }
@@ -75,22 +68,22 @@ def qaTeamEmail = "cableqa@freewheel.com";
                         json = JsonOutput.prettyPrint(json)
                         writeFile(file: 'E2E/Strata-eBiz/cypress.env.json', text: json)
                     }
-                // Copy paste Jenkins config file into current project
-                // def configFilePath = configFileProvider([configFile(fileId: '16d93a3a-a4a4-4764-9cb5-231f80e7261f', variable: 'configFile')]).getPath();
-                // def configFileContent = readFile(configFilePath);
-                // def configData = readJSON(text: configFileContent);
-                // writeFile(file: 'E2E/Strata-eBiz/cypress/fixtures/environment/environments.json', text: json
-                
-                // if (fileExists('config/Strata-eBiz_Environments.json')) {
-                //   println("Hello, World! Hello, World! Hello, World! Hello, World! Hello, World! Hello, World! Hello, World!")
-                //  } else {
-                //        error("Config file not found.")
-                //  }
-                
-                
-                
-                
-                
+                    // Copy paste Jenkins config file into current project
+                    // def configFilePath = configFileProvider([configFile(fileId: '16d93a3a-a4a4-4764-9cb5-231f80e7261f', variable: 'configFile')]).getPath();
+                    // def configFileContent = readFile(configFilePath);
+                    // def configData = readJSON(text: configFileContent);
+                    // writeFile(file: 'E2E/Strata-eBiz/cypress/fixtures/environment/environments.json', text: json
+
+                    // if (fileExists('config/Strata-eBiz_Environments.json')) {
+                    //   println("Hello, World! Hello, World! Hello, World! Hello, World! Hello, World! Hello, World! Hello, World!")
+                    //  } else {
+                    //        error("Config file not found.")
+                    //  }
+
+
+
+
+
                 }
             }
         }
