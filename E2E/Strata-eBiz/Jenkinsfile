@@ -77,7 +77,7 @@ def personalEmail = "gsemenduyev@freewheel.tv";
                 writeFile(file: 'E2E/Strata-eBiz/cypress.env.json', text: json)
                 sh "cd E2E/Strata-eBiz && node ./cucumber-html-report.js"
 
-                def fileContent = readFile(file: 'E2E/Strata-eBiz/cypress/reports/run-info/test-results.txt').trim()
+                def fileContent = readFile(file: 'E2E/Strata-eBiz/cypress/reports/run-info/failed-scenarios-title.txt').trim()
                 def lines = fileContent.readLines()
                 def formattedContent = '<br>' + lines.join('<br>')
 
@@ -105,7 +105,7 @@ def personalEmail = "gsemenduyev@freewheel.tv";
         }
         failure{
                 script {
-                    def fileContent = readFile(file: 'E2E/Strata-eBiz/cypress/reports/run-info/test-results.txt').trim()
+                    def fileContent = readFile(file: 'E2E/Strata-eBiz/cypress/reports/run-info/failed-scenarios-title.txt').trim()
                     def lines = fileContent.readLines()
                     def formattedContent = '<br>' + lines.join('<br>')
                 mail(

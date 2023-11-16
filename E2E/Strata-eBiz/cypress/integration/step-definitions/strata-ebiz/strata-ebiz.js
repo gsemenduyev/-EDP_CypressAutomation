@@ -19,10 +19,11 @@ const elevenPages = new ElevenPages;
 const ePortPages = new EportPages;
 
 let environmentsParam;
-let testResultsFilPath = 'cypress/reports/run-info/test-results.txt';
+let testResultsFilePath = 'cypress/reports/run-info/failed-scenarios-title.txt';
+var failedScenarios = [];
 let index = 1;
 before(function () {
-    cy.writeFile(testResultsFilPath, "")
+    cy.writeFile(testResultsFilePath, "");
     cy.fixture('/environment/environments.json').then((data) => {
         environmentsParam = data;
     });
@@ -30,11 +31,21 @@ before(function () {
 
 afterEach(function () {
     const { title, state, parent: suite } = cy.state('test');
-    cy.log(title, state, suite.title);
-    if (state === 'failed') {
-        cy.writeFile(testResultsFilPath, `${index}) ${title} \n`, { flag: 'a+' });
+    if (state === 'failed' && !failedScenarios.includes(title)) {
+        failedScenarios.push(title);
+        index++;
     }
 });
+
+after(function () {
+    if (failedScenarios.length > 1) {
+        cy.writeFile(testResultsFilePath, 'Failed Scenarios: \n')
+    } else (
+        cy.writeFile(testResultsFilePath, 'Failed Scenario: \n')
+    )
+    const numberedContent = failedScenarios.map((failedScenarios, index) => `${index + 1}. ${failedScenarios}`).join('\n');
+    cy.writeFile(testResultsFilePath, numberedContent, { flag: 'a+' })
+})
 
 Given('Visit ARFP {string} environment', environment => {
     if (environment === 'QA') {
@@ -218,7 +229,7 @@ Given('Visit Eleven {string} environment', environment => {
     } else if (environment === 'UAT') {
         cy.visit(environmentsParam.elevenUrlUat);
     };
-    cy.title().should('eq', 'Eleven: Login')
+    cy.title().should('eq', 'Eleven: Login1')
     cy.screenshot();
 });
 
