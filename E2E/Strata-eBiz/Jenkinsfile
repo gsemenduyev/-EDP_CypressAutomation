@@ -1,9 +1,9 @@
 #!/usr/bin/env groovy
 import groovy.json.*
 
-// def strataEBizTeamEmail  = "StrataeBusiness@freewheel.com";
-// def qaTeamEmail = "cableqa@freewheel.com";
-def personalEmail = "gsemenduyev@freewheel.com"
+def strataEBizTeamEmail  = "StrataeBusiness@freewheel.com";
+def qaTeamEmail = "cableqa@freewheel.com";
+
     pipeline {
     agent {
         docker {
@@ -85,7 +85,7 @@ def personalEmail = "gsemenduyev@freewheel.com"
                 mail(
                     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
                     body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information." + formattedContent,
-                    to: personalEmail, 
+                    to: qaTeamEmail, 
                     mimeType: 'text/html'
                 );
             }
@@ -112,7 +112,7 @@ def personalEmail = "gsemenduyev@freewheel.com"
                 mail(
                     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
                     body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information." + formattedContent,
-                    to: personalEmail, 
+                    to: strataEBizTeamEmail, 
                     mimeType: 'text/html'
                 );
             }

@@ -20,7 +20,7 @@ const ePortPages = new EportPages;
 
 let environmentsParam;
 let testResultsFilePath = 'cypress/reports/run-info/failed-scenarios-title.txt';
-var failedScenarios = [];
+var failedScenariosList = [];
 
 before(function () {
     cy.writeFile(testResultsFilePath, "");
@@ -30,24 +30,27 @@ before(function () {
 });
 
 afterEach(function () {
+    // Stores failed scenarios into failedScenariosList
     const { title, state, parent: suite } = cy.state('test');
-    if (state === 'failed' && !failedScenarios.includes(title)) {
-        failedScenarios.push(title);
-    } else if (state === 'passed' && failedScenarios.includes(title)) {
-        const index = failedScenarios.indexOf(title);
+    if (state === 'failed' && !failedScenariosList.includes(title)) {
+        failedScenariosList.push(title);
+        // Removes failed scenarios from failedScenariosList if scenarios passed on retries
+    } else if (state === 'passed' && failedScenariosList.includes(title)) {
+        const index = failedScenariosList.indexOf(title);
         if (index > -1) {
-            failedScenarios.splice(index, 1);
+            failedScenariosList.splice(index, 1);
         }
     }
 });
 
 after(function () {
-    if (failedScenarios.length > 1) {
+    // Copies scenarios from failedScenariosList into file
+    if (failedScenariosList.length > 1) {
         cy.writeFile(testResultsFilePath, 'Failed Scenarios: \n')
-    } else if (failedScenarios.length === 1) (
+    } else if (failedScenariosList.length === 1) (
         cy.writeFile(testResultsFilePath, 'Failed Scenario: \n')
     )
-    const numberedContent = failedScenarios.map((failedScenarios, index) => `${index + 1}. ${failedScenarios}`).join('\n');
+    const numberedContent = failedScenariosList.map((failedScenarios, index) => `${index + 1}. ${failedScenarios}`).join('\n');
     cy.writeFile(testResultsFilePath, numberedContent, { flag: 'a+' })
 })
 
