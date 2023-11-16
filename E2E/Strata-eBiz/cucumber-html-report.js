@@ -45,12 +45,11 @@ report.generate({
   customData: {
     title: 'Run Info',
     data: [
-      { label: 'Environment', value: runInfo['env'] },
-      { label: 'Agency RFP URL', value: runInfo['agencyUrl'] },
-      { label: 'Stratasphere URL', value: runInfo['ssphereUrl'] },
-      { label: 'Email URL', value: runInfo['mailinatorUrl'] },
-      { label: 'Cypress Version', value: runInfo['cypressVersion'] },
-      { label: 'Node Version', value: runInfo['nodeVersion'] },
+      { label: 'ARFP QA Environment', value: runInfo['arfpUrlQa'] },
+      { label: 'ARFP UAT Environment', value: runInfo['arfpUrlUat'] },
+      { label: 'Stratasphere QA Environment', value: runInfo['ssphereUrlQa'] },
+      { label: 'Stratasphere UAT Environment', value: runInfo['ssphereUrlUat'] },
+      { label: 'sTraffic QA Environment', value: runInfo['sTrafficUrlQa'] },
       {
         label: 'Execution Start Time',
         value: dayjs(runInfo['startedTestsAt']).tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss'),
