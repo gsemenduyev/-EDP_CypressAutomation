@@ -20,57 +20,27 @@ def qaTeamEmail = "cableqa@freewheel.com";
         cron("0 15 * * *")
     }
     stages {
-        // stage('Config file test'){
-        //     steps {
-        //         echo '!-------------------------------------------------!'
-        //         configFileProvider([configFile(fileId: '16d93a3a-a4a4-4764-9cb5-231f80e7261f', variable: 'configFile')]) {
-        //             script {
-        //                 echo '++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+        stage('Config file test'){
+            steps {
+                echo '!-------------------------------------------------!'
+                configFileProvider([configFile(fileId: '16d93a3a-a4a4-4764-9cb5-231f80e7261f', variable: 'configFile')]) {
+                    script {
+                        echo '++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
 
 
  
-        //                 def fileContent = readFile configFile
-        //                 def json = readJSON text: fileContent
-        //                 def firstValue = json.keySet().iterator().next()
-        //                 echo "The first value is: ${json[firstValue]}"
+                        def fileContent = readFile configFile
+                        def json = readJSON text: fileContent
+                        echo "The first value is: ${json.Hello}"
 
 
-        //                 echo '++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-        //             }
-        //         }
-        //         echo '!-------------------------------------------------!'
-        //     }
-
-        // }
-
-
-  stage('Copy Config File') {
-            steps {
-                configFileProvider([configFile(fileId: '16d93a3a-a4a4-4764-9cb5-231f80e7261f', variable: 'configFile')]) {
-                   script {
-                        // Write the configFile to a temporary file
-                        def tempFilePath = "${env.WORKSPACE}/temp_config.json"
-                        writeFile file: tempFilePath, text: configFile.getText()
-                        
-                        // Stash the temporary config file
-                        stash includes: tempFilePath, name: 'configFileStash'
+                        echo '++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
                     }
-                
                 }
+                echo '!-------------------------------------------------!'
             }
+
         }
-        stage('Copy to Cypress') {
-            steps {
-                // Unstash the JSON config file in the Cypress project
-                unstash 'configFileStash'
-                sh 'cp configFile E2E/Strata-eBiz/cypress/fixtures/configFile.json'
-            }
-        }
-        
-
-
-
-
 
         stage('TestRail integration') {
             steps {
