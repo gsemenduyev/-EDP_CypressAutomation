@@ -21,7 +21,7 @@ const ePortPages = new EportPages;
 let environmentsParam;
 let testResultsFilePath = 'cypress/reports/run-info/failed-scenarios-title.txt';
 var failedScenarios = [];
-let index = 1;
+
 before(function () {
     cy.writeFile(testResultsFilePath, "");
     cy.fixture('/environment/environments.json').then((data) => {
@@ -33,7 +33,6 @@ afterEach(function () {
     const { title, state, parent: suite } = cy.state('test');
     if (state === 'failed' && !failedScenarios.includes(title)) {
         failedScenarios.push(title);
-        index++;
     }
 });
 
