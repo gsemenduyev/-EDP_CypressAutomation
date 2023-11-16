@@ -5,8 +5,8 @@ import jenkins.model.Jenkins
 
 def printConfigFilePaths() {
     def configFilePaths = []
-    Jenkins.instance.getConfigs().each { config ->
-        def configFile = config.getConfigFile()
+    Jenkins.instance.getAllItems().each { item ->
+        def configFile = item.getConfigFile()
         if (configFile) {
             def filePath = configFile.getFile().getAbsolutePath()
             configFilePaths.add(filePath)
