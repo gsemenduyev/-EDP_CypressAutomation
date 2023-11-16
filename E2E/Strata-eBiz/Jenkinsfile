@@ -2,11 +2,10 @@
 import groovy.json.*
 
 import jenkins.model.Jenkins
-import hudson.model.FilesystemItem
 
 def printConfigFilePaths() {
     def configFilePaths = []
-    Jenkins.instance.getConfigs(FilesystemItem).each { config ->
+    Jenkins.instance.getConfigs().each { config ->
         def configFile = config.getConfigFile()
         if (configFile) {
             def filePath = configFile.getFile().getAbsolutePath()
