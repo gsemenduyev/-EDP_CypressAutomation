@@ -27,16 +27,11 @@ def qaTeamEmail = "cableqa@freewheel.com";
                     script {
                         echo '++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
 
-
- 
-                        def fileContent = readFile configFile
-                        def jsonFileContent = readJSON text: fileContent
-               //         echo "The first value is: ${jsonFileContent.Hello}"
-
-
+                def fileContent = readFile configFile
+                def jsonFileContent = readJSON text: fileContent
                 def json = JsonOutput.toJson(jsonFileContent)
                 json = JsonOutput.prettyPrint(json)
-                writeFile(file: 'E2E/Strata-eBiz/configFile.json', text: json)
+                writeFile(file: 'E2E/Strata-eBiz/cypress/fixtures/environment/environments.json', text: json)
 
 
                         echo '++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
