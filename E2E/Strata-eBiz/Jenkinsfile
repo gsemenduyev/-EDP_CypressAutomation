@@ -26,9 +26,18 @@ def qaTeamEmail = "cableqa@freewheel.com";
                 configFileProvider([configFile(fileId: '16d93a3a-a4a4-4764-9cb5-231f80e7261f', variable: 'configFile')]) {
                     script {
                         echo '++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+
+
+                                            
                         def json = readJSON(text: configFile.getText())
-                        def firstValue = json.keySet().iterator().next()
-                        echo "The first value is: ${json[firstValue]}"
+                        def firstValue
+                        json.each { key, value ->
+                            firstValue = value
+                            return
+                        }
+                        echo "The first value is: ${firstValue}"
+
+
                         echo '++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
                     }
                 }
