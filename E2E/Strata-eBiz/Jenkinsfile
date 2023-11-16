@@ -79,11 +79,11 @@ def personalEmail = "gsemenduyev@freewheel.tv";
 
                 def fileContent = readFile(file: 'E2E/Strata-eBiz/cypress/reports/run-info/failed-scenarios-title.txt').trim()
                 def lines = fileContent.readLines()
-                def formattedContent = '<br>' + lines.join('<br>')
+                def formattedContent = '<br><br>' + lines.join('<br>')
 
                 mail(
                     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
-                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. \n \n" + formattedContent,
+                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information." + formattedContent,
                     to: personalEmail, 
                     mimeType: 'text/html'
                 );
@@ -107,10 +107,10 @@ def personalEmail = "gsemenduyev@freewheel.tv";
                 script {
                     def fileContent = readFile(file: 'E2E/Strata-eBiz/cypress/reports/run-info/failed-scenarios-title.txt').trim()
                     def lines = fileContent.readLines()
-                    def formattedContent = '<br>' + lines.join('<br>')
+                    def formattedContent = '<br><br>' + lines.join('<br>')
                 mail(
                     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
-                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. \n \n" + formattedContent,
+                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information." + formattedContent,
                     to: personalEmail, 
                     mimeType: 'text/html'
                 );
