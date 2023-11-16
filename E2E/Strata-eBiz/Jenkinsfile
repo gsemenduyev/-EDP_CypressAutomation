@@ -1,6 +1,25 @@
 #!/usr/bin/env groovy
 import groovy.json.*
 
+import jenkins.model.Jenkins
+import hudson.model.Items
+import hudson.model.ConfigFile
+
+def printConfigFilePaths() {
+    def configFilePaths = []
+    Jenkins.instance.getAllItems(ConfigFile).each { item ->
+        def configFile = item.target
+        if (configFile) {
+            def filePath = Items.getConfigFile(configFile).getFile().getAbsolutePath()
+            configFilePaths.add(filePath)
+            echo "Config file path: ${filePath}"
+        }
+    }
+    return configFilePaths
+}
+
+def allConfigFilePaths = printConfigFilePaths()
+
 def strataEBizTeamEmail  = "StrataeBusiness@freewheel.com";
 def qaTeamEmail = "cableqa@freewheel.com";
 
@@ -53,7 +72,7 @@ def qaTeamEmail = "cableqa@freewheel.com";
                         writeFile(file: 'E2E/Strata-eBiz/cypress.env.json', text: json)
                     }
                      echo "Hello, World! Hello, World! Hello, World! Hello, World! Hello, World! Hello, World! Hello, World!"
-                    checkout scm
+                     printConfigFilePaths()
                      echo "Hello, World! Hello, World! Hello, World! Hello, World! Hello, World! Hello, World! Hello, World!"
                 // Copy paste Jenkins config file into current project
                 // def configFilePath = configFileProvider([configFile(fileId: '16d93a3a-a4a4-4764-9cb5-231f80e7261f', variable: 'configFile')]).getPath();
