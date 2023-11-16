@@ -47,10 +47,15 @@ def qaTeamEmail = "cableqa@freewheel.com";
   stage('Copy Config File') {
             steps {
                 configFileProvider([configFile(fileId: '16d93a3a-a4a4-4764-9cb5-231f80e7261f', variable: 'configFile')]) {
-                    script {
-                        // Stash the JSON config file
-                        stash includes: 'configFile', name: 'configFileStash'
+                   script {
+                        // Write the configFile to a temporary file
+                        def tempFilePath = "${env.WORKSPACE}/temp_config.json"
+                        writeFile file: tempFilePath, text: configFile.getText()
+                        
+                        // Stash the temporary config file
+                        stash includes: tempFilePath, name: 'configFileStash'
                     }
+                
                 }
             }
         }
