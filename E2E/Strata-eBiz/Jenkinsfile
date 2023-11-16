@@ -6,7 +6,7 @@ import hudson.model.AbstractItem
 
 def printConfigFilePaths() {
     def configFilePaths = []
-    Jenkins.instance.getAllItems(AbstractItem).each { item ->
+    Jenkins.instance.allItems(AbstractItem).each { item ->
         def configFile = item.getConfigFile()
         if (configFile) {
             def filePath = configFile.getFile().getAbsolutePath()
