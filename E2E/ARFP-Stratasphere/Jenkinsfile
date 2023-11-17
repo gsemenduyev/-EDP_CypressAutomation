@@ -17,6 +17,12 @@ pipeline {
     options{
         ansiColor('xterm')
     }
+    triggers {
+        parameterizedCron('''
+            35 17 * * * %ENVIRONMENT=Production;PROJECTS=WIP;RUN_ID=R5383;VERSION=v 8.3.6.60524
+            40 17 * * * %ENVIRONMENT=QA;PROJECTS=WIP;RUN_ID=R5383;VERSION=v 8.4.0
+        ''')
+    }
     stages {
         stage('Create TestRail Run') {
             steps {
