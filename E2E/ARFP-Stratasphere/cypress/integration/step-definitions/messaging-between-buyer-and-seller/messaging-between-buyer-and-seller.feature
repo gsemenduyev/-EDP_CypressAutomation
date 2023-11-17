@@ -1,4 +1,4 @@
-@Stratasphere @ARFP
+@Stratasphere
 Feature: Messaging between Seller and Buyer
 
   Feature Description: Validate messaging between Seller and Buyer
