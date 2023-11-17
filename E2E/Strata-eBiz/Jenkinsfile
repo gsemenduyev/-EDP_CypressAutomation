@@ -1,7 +1,6 @@
 #!/usr/bin/env groovy
 import groovy.json.*
 
-
     def strataEBizTeamEmail = "StrataeBusiness@freewheel.com";
     def qaTeamEmail = "cableqa@freewheel.com";
 
@@ -20,24 +19,17 @@ import groovy.json.*
         cron("0 15 * * *")
     }
     stages {
-        stage('Config file test'){
-            steps {
-                configFileProvider([configFile(fileId: '16d93a3a-a4a4-4764-9cb5-231f80e7261f', variable: 'configFile')]) {
+        stage('Config file setup'){
+            steps {   
             script {
+                configFileProvider([configFile(fileId: '16d93a3a-a4a4-4764-9cb5-231f80e7261f', variable: 'configFile')]) {
                 def fileContent = readFile configFile
                 def jsonFileContent = readJSON text: fileContent
                 def json = JsonOutput.toJson(jsonFileContent)
                         json = JsonOutput.prettyPrint(json)
                         writeFile(file: 'E2E/Strata-eBiz/cypress/fixtures/environment/environments.json', text: json)
                     }
-                }
-            }
-
-        }
-
-        stage('TestRail integration') {
-            steps {
-                script {
+   
                     withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'TestRail_GS', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME']])  {
                         def domain = "https://testrail-strata.freewheel.tv/testrail/"
                         def username = "${USERNAME}"
@@ -98,12 +90,12 @@ import groovy.json.*
                 def lines = fileContent.readLines()
                 def formattedContent = '<br><br>' + lines.join('<br>')
 
-                mail(
-                    subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
-                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information." + formattedContent,
-                    to: qaTeamEmail, 
-                    mimeType: 'text/html'
-                );
+                // mail(
+                //     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
+                //     body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information." + formattedContent,
+                //     to: qaTeamEmail, 
+                //     mimeType: 'text/html'
+                // );
             }
             publishHTML(target : [allowMissing: true,
                 alwaysLinkToLastBuild: true,
@@ -125,12 +117,12 @@ import groovy.json.*
                     def fileContent = readFile(file: 'E2E/Strata-eBiz/cypress/reports/run-info/failed-scenarios-title.txt').trim()
                     def lines = fileContent.readLines()
                     def formattedContent = '<br><br>' + lines.join('<br>')
-                mail(
-                    subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
-                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information." + formattedContent,
-                    to: strataEBizTeamEmail, 
-                    mimeType: 'text/html'
-                );
+                // mail(
+                //     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
+                //     body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information." + formattedContent,
+                //     to: strataEBizTeamEmail, 
+                //     mimeType: 'text/html'
+                // );
             }
         }
     }
