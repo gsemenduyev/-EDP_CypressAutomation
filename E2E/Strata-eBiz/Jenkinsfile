@@ -21,21 +21,23 @@ import groovy.json.*
     stages {
         stage('Config file setup'){
             steps {   
-            script {
-                configFileProvider([configFile(fileId: '16d93a3a-a4a4-4764-9cb5-231f80e7261f', variable: 'configFile')]) {
-                def fileContent = readFile configFile
-                def jsonFileContent = readJSON text: fileContent
-                def json = JsonOutput.toJson(jsonFileContent)
+                script {
+
+                    // Copy paste environments.json file from Jenkins to current project
+                    configFileProvider([configFile(fileId: '16d93a3a-a4a4-4764-9cb5-231f80e7261f', variable: 'configFile')]) {
+                        def fileContent = readFile configFile
+                        def jsonFileContent = readJSON text: fileContent
+                        def json = JsonOutput.toJson(jsonFileContent)
                         json = JsonOutput.prettyPrint(json)
                         writeFile(file: 'E2E/Strata-eBiz/cypress/fixtures/environment/environments.json', text: json)
-                    }
-   
+                        }
+
+                    // Copy paste Test Rail Credentials from Jenkins to current project
                     withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'TestRail_GS', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME']])  {
                         def domain = "https://testrail-strata.freewheel.tv/testrail/"
                         def username = "${USERNAME}"
                         def password = "${PASSWORD}"
                         def runId = "R5383"
-                        // Update cypress.env.json
                         def reporterConfig = readJSON file: 'E2E/Strata-eBiz/cypress.env.json'
                         def testrail = [
                             'domain': (domain),
@@ -73,8 +75,10 @@ import groovy.json.*
     post{
         always{
             script {
-                  def reporterConfig = readJSON file: 'E2E/Strata-eBiz/cypress.env.json'
-                        def testrail = [
+
+                // Teardown cypress.env.json and environments.json files
+                def reporterConfig = readJSON file: 'E2E/Strata-eBiz/cypress.env.json'
+                def testrail = [
                     'domain': '-',
                     'username': '-',
                     'password': '-',
@@ -84,8 +88,9 @@ import groovy.json.*
                 def json = JsonOutput.toJson(reporterConfig)
                 json = JsonOutput.prettyPrint(json)
                 writeFile(file: 'E2E/Strata-eBiz/cypress.env.json', text: json)
-                sh "cd E2E/Strata-eBiz && node ./cucumber-html-report.js"
+                writeFile(file: 'E2E/Strata-eBiz/cypress/fixtures/environment/environments.json', text: json)
 
+                // Copy paste failed scenarios from failed-scenarios-title.txt into email
                 def fileContent = readFile(file: 'E2E/Strata-eBiz/cypress/reports/run-info/failed-scenarios-title.txt').trim()
                 def lines = fileContent.readLines()
                 def formattedContent = '<br><br>' + lines.join('<br>')
@@ -96,6 +101,8 @@ import groovy.json.*
                 //     to: qaTeamEmail, 
                 //     mimeType: 'text/html'
                 // );
+
+                sh "cd E2E/Strata-eBiz && node ./cucumber-html-report.js"
             }
             publishHTML(target : [allowMissing: true,
                 alwaysLinkToLastBuild: true,
