@@ -98,8 +98,7 @@ import groovy.json.*
                 mail(
                     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
                     body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. ${formattedContent}",
-                  //  to: qaTeamEmail, 
-                    to: 'gsemenduyev@freewheel.com',
+                    to: qaTeamEmail, 
                     mimeType: 'text/html'
                 );
 
@@ -125,12 +124,12 @@ import groovy.json.*
                     def fileContent = readFile(file: 'E2E/Strata-eBiz/cypress/reports/run-info/failed-scenarios-title.txt').trim()
                     def lines = fileContent.readLines()
                     def formattedContent = '<br><br>' + lines.join('<br>')
-                // mail(
-                //     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
-                //     body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. ${formattedContent}",
-                //     to: strataEBizTeamEmail, 
-                //     mimeType: 'text/html'
-                // );
+                mail(
+                    subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
+                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. ${formattedContent}",
+                    to: strataEBizTeamEmail, 
+                    mimeType: 'text/html'
+                );
             }
         }
     }
