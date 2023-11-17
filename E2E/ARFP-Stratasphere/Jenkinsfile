@@ -22,8 +22,8 @@ pipeline {
     }
     triggers {
         parameterizedCron('''
-            50 17 * * * %ENVIRONMENT=Production;PROJECTS=WIP;RUN_ID=R5383;VERSION=v 8.3.6.60524
-            55 17 * * * %ENVIRONMENT=QA;PROJECTS=WIP;RUN_ID=R5383;VERSION=v 8.4.0
+            55 17 * * * %ENVIRONMENT=Production;PROJECTS=WIP;RUN_ID=R5383;VERSION=v 8.3.6.60524
+            * 18 * * * %ENVIRONMENT=QA;PROJECTS=WIP;RUN_ID=R5383;VERSION=v 8.4.0
         ''')
     }
     stages {
