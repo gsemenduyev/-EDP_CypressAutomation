@@ -22,8 +22,8 @@ pipeline {
     }
     triggers {
         parameterizedCron('''
-            55 17 * * * %ENVIRONMENT=Production;PROJECTS=WIP;RUN_ID=R5383;VERSION=v 8.3.6.60524
-            * 18 * * * %ENVIRONMENT=QA;PROJECTS=WIP;RUN_ID=R5383;VERSION=v 8.4.0
+            10 18 * * * %ENVIRONMENT=Production;PROJECTS=WIP;RUN_ID=R5383;VERSION=v 8.3.6.60524
+            15 18 * * * %ENVIRONMENT=QA;PROJECTS=WIP;RUN_ID=R5383;VERSION=v 8.4.0
         ''')
     }
     stages {
@@ -94,7 +94,7 @@ pipeline {
             script {
                 mail(
                     subject: "${currentBuild.currentResult} ${params.PROJECTS} run for ${params.ENVIRONMENT}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
-                    body: "${currentBuild.currentResult} ${params.PROJECTS} run for ${params.ENVIRONMENT}: Please visit  ${env.BUILD_URL} for further information. ${formattedContent}",
+                    body: "${currentBuild.currentResult} ${params.PROJECTS} run for ${params.ENVIRONMENT}: Please visit  ${env.BUILD_URL} for further information.",
                     to: personalEmail, 
                 );
                 sh "cd E2E/ARFP-Stratasphere && node ./cucumber-html-report.js"
