@@ -1,5 +1,8 @@
 #!/usr/bin/env groovy
 import groovy.json.*
+
+def personalEmail = "gsemenduyev@freewheel.com";
+
 pipeline {
     agent {
         docker {
@@ -19,8 +22,8 @@ pipeline {
     }
     triggers {
         parameterizedCron('''
-            40 17 * * * %ENVIRONMENT=Production;PROJECTS=WIP;RUN_ID=R5383;VERSION=v 8.3.6.60524
-            45 17 * * * %ENVIRONMENT=QA;PROJECTS=WIP;RUN_ID=R5383;VERSION=v 8.4.0
+            50 17 * * * %ENVIRONMENT=Production;PROJECTS=WIP;RUN_ID=R5383;VERSION=v 8.3.6.60524
+            55 17 * * * %ENVIRONMENT=QA;PROJECTS=WIP;RUN_ID=R5383;VERSION=v 8.4.0
         ''')
     }
     stages {
@@ -89,6 +92,11 @@ pipeline {
     post{
         always{
             script {
+                mail(
+                    subject: "${currentBuild.currentResult} ${params.PROJECTS} run for ${params.ENVIRONMENT}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
+                    body: "${currentBuild.currentResult} ${params.PROJECTS} run for ${params.ENVIRONMENT}: Please visit  ${env.BUILD_URL} for further information. ${formattedContent}",
+                    to: personalEmail, 
+                );
                 sh "cd E2E/ARFP-Stratasphere && node ./cucumber-html-report.js"
             }
       publishHTML (target : [allowMissing: true,
