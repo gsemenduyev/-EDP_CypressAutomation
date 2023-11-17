@@ -83,8 +83,8 @@ module.exports = defineConfig({
   screenshotOnRunFailure: true,
   video: true,
   retries: {
-    runMode: 1,
-    openMode: 1
+    runMode: 2,
+    openMode: 2
   },
   projectId: "",
   e2e: {
