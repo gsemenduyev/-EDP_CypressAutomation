@@ -95,12 +95,13 @@ import groovy.json.*
                 def lines = fileContent.readLines()
                 def formattedContent = '<br><br>' + lines.join('<br>')
 
-                // mail(
-                //     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
-                //     body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information." + formattedContent,
-                //     to: qaTeamEmail, 
-                //     mimeType: 'text/html'
-                // );
+                mail(
+                    subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
+                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. ${formattedContent}",
+                  //  to: qaTeamEmail, 
+                    to: 'gsemenduyev@freewheel.com',
+                    mimeType: 'text/html'
+                );
 
                 sh "cd E2E/Strata-eBiz && node ./cucumber-html-report.js"
             }
@@ -126,7 +127,7 @@ import groovy.json.*
                     def formattedContent = '<br><br>' + lines.join('<br>')
                 // mail(
                 //     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
-                //     body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information." + formattedContent,
+                //     body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. ${formattedContent}",
                 //     to: strataEBizTeamEmail, 
                 //     mimeType: 'text/html'
                 // );
