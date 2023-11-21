@@ -1,11 +1,12 @@
 #!/usr/bin/env groovy
 import groovy.json.*
 
-    def CURRENT_PROJECT_PATH = 'E2E/Strata-eBiz'
+    def CURRENT_PROJECT_PATH = 'E2E/Strata-eBiz';
     def CONFIG_FILE_ID = '16d93a3a-a4a4-4764-9cb5-231f80e7261f';
     def CONFIG_FILE_DESTINATION = 'E2E/Strata-eBiz/cypress/fixtures/environment/environments.json';
     def TEST_RAIL_CONFIG_FILE_PATH = 'E2E/Strata-eBiz/cypress.env.json';
     def FAIED_SCENAROS_FILE_PATH = 'E2E/Strata-eBiz/cypress/reports/run-info/failed-scenarios-title.txt';
+    def REPORT_DIR = 'E2E/Strata-eBiz/cypress/reports';
     
     pipeline {
     agent {
@@ -27,46 +28,44 @@ import groovy.json.*
                 script {
 
                     // Copy paste environments.json file from Jenkins to current project
-                    inject_config_file(CONFIG_FILE_ID, CONFIG_FILE_DESTINATION)
-                    echo "The first value is: ${read_config_file(CONFIG_FILE_ID).strataEBizTeamEmail}"
-                    echo "The first value is: ${read_config_file(CONFIG_FILE_ID).qaTeamEmail}"
-
+                    inject_config_file(CONFIG_FILE_ID, CONFIG_FILE_DESTINATION);
+                  
                     // Copy paste Test Rail Credentials from Jenkins to current project
                     withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'TestRail_GS', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME']])  {
-                        def domain = "https://testrail-strata.freewheel.tv/testrail/"
-                        def username = "${USERNAME}"
-                        def password = "${PASSWORD}"
-                        def runId = "R5383"
-                        def reporterConfig = readJSON file: TEST_RAIL_CONFIG_FILE_PATH
+                        def domain = "https://testrail-strata.freewheel.tv/testrail/";
+                        def username = "${USERNAME}";
+                        def password = "${PASSWORD}";
+                        def runId = "R5383";
+                        def reporterConfig = readJSON file: TEST_RAIL_CONFIG_FILE_PATH;
                         def testrail = [
                             'domain': (domain),
                             'username': (username),
                             'password': (password),
                             'runId': (runId)
                         ]
-                        reporterConfig.put("testrail", testrail)
-                        def json = JsonOutput.toJson(reporterConfig)
-                        json = JsonOutput.prettyPrint(json)
-                        writeFile(file: TEST_RAIL_CONFIG_FILE_PATH, text: json)
+                        reporterConfig.put("testrail", testrail);
+                        def json = JsonOutput.toJson(reporterConfig);
+                        json = JsonOutput.prettyPrint(json);
+                        writeFile(file: TEST_RAIL_CONFIG_FILE_PATH, text: json);
 
-                       def reporterConfig1 = readJSON file: TEST_RAIL_CONFIG_FILE_PATH
+                       def reporterConfig1 = readJSON file: TEST_RAIL_CONFIG_FILE_PATH;
                         testrail = [
                             'domain': reporterConfig1.testrail.domain,
                             'username': reporterConfig1.testrail.username.values[0],
                             'password': reporterConfig1.testrail.password.values[0],
                             'runId': reporterConfig1.testrail.runId
                         ]
-                        reporterConfig.put("testrail", testrail)
-                        json = JsonOutput.toJson(reporterConfig)
-                        json = JsonOutput.prettyPrint(json)
-                        writeFile(file: TEST_RAIL_CONFIG_FILE_PATH, text: json)
+                        reporterConfig.put("testrail", testrail);
+                        json = JsonOutput.toJson(reporterConfig);
+                        json = JsonOutput.prettyPrint(json);
+                        writeFile(file: TEST_RAIL_CONFIG_FILE_PATH, text: json);
                     }
                 }
             }
         }
         stage('Test') {
             steps {
-            sh "cd ${CURRENT_PROJECT_PATH} && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome"
+            sh "cd ${CURRENT_PROJECT_PATH} && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome";
             }
         }
     }
@@ -76,57 +75,57 @@ import groovy.json.*
             script {
 
                 // Teardown cypress.env.json and environments.json files
-                def reporterConfig = readJSON file: TEST_RAIL_CONFIG_FILE_PATH
+                def reporterConfig = readJSON file: TEST_RAIL_CONFIG_FILE_PATH;
                 def testrail = [
                     'domain': '-',
                     'username': '-',
                     'password': '-',
                     'runId': '-'
-                ]
-                reporterConfig.put("testrail", testrail)
-                def json = JsonOutput.toJson(reporterConfig)
-                json = JsonOutput.prettyPrint(json)
-                writeFile(file: TEST_RAIL_CONFIG_FILE_PATH, text: json)
-                writeFile(file: CONFIG_FILE_DESTINATION, text: json)
+                ];
+                reporterConfig.put("testrail", testrail);
+                def json = JsonOutput.toJson(reporterConfig);
+                json = JsonOutput.prettyPrint(json);
+                writeFile(file: TEST_RAIL_CONFIG_FILE_PATH, text: json);
+                writeFile(file: CONFIG_FILE_DESTINATION, text: json);
 
                 // Copy paste failed scenarios from failed-scenarios-title.txt into email
-                def fileContent = readFile(file: FAIED_SCENAROS_FILE_PATH).trim()
-                def lines = fileContent.readLines()
-                def formattedContent = '<br><br>' + lines.join('<br>')
+                def fileContent = readFile(file: FAIED_SCENAROS_FILE_PATH).trim();
+                def lines = fileContent.readLines();
+                def formattedContent = '<br><br>' + lines.join('<br>');
 
                 // mail(
                 //     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
                 //     body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. ${formattedContent}",
-                //     to: qaTeamEmail, 
+                //     to: read_config_file(CONFIG_FILE_ID).strataEBizTeamEmail, 
                 //     mimeType: 'text/html'
                 // );
 
-                sh "cd ${CURRENT_PROJECT_PATH} && node ./cucumber-html-report.js"
+                sh "cd ${CURRENT_PROJECT_PATH} && node ./cucumber-html-report.js";
             }
             publishHTML(target : [allowMissing: true,
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
-                reportDir: 'E2E/Strata-eBiz/cypress/reports',
+                reportDir: REPORT_DIR,
                 reportFiles: 'cucumber-reports/cucumber-html-report/index.html',
                 reportName: 'Cucumber Report',
-                reportTitles: 'Cucumber Report'])
+                reportTitles: 'Cucumber Report']);
             publishHTML(target : [allowMissing: true,
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
-                reportDir: 'E2E/Strata-eBiz/cypress/reports',
+                reportDir: REPORT_DIR,
                 reportFiles: 'multi-html-report/index.html',
                 reportName: 'Multi HTML Report',
-                reportTitles: 'Multi HTML Report'])
+                reportTitles: 'Multi HTML Report']);
         }
         failure{
                 script {
-                    def fileContent = readFile(file: FAIED_SCENAROS_FILE_PATH).trim()
-                    def lines = fileContent.readLines()
-                    def formattedContent = '<br><br>' + lines.join('<br>')
+                    def fileContent = readFile(file: FAIED_SCENAROS_FILE_PATH).trim();
+                    def lines = fileContent.readLines();
+                    def formattedContent = '<br><br>' + lines.join('<br>');
                 // mail(
                 //     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
                 //     body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. ${formattedContent}",
-                //     to: strataEBizTeamEmail, 
+                //     to: read_config_file(CONFIG_FILE_ID).strataEBizTeamEmail, 
                 //     mimeType: 'text/html'
                 // );
             }
@@ -134,22 +133,31 @@ import groovy.json.*
     }
 }
 
-
+    /*
+      Reads the Jenkins config file
+      [@param] configFileId: accepts Jenkins config file unique ID
+      [@return] values of Jenkins config file
+     */ 
     def read_config_file(String configFileId){
             configFileProvider([configFile(fileId: configFileId, variable: 'configFile')]) {
-            def fileContent = readFile configFile
-            def jsonFileContent = readJSON text: fileContent
-            return jsonFileContent
+            def fileContent = readFile configFile;
+            def jsonFileContent = readJSON text: fileContent;
+            return jsonFileContent;
             } 
     }
 
+     /*
+      Copies the Jenkins configuration file and adds it to the current project
+      [@param] configFileId: accepts Jenkins config file unique ID
+      [@param] destinationFilePath: destination file path
+     */ 
     def inject_config_file(String configFileId, String destinationFilePath){
                 configFileProvider([configFile(fileId: configFileId, variable: 'configFile')]) {
-                    def fileContent = readFile configFile
-                    def jsonFileContent = readJSON text: fileContent
-                    def json = JsonOutput.toJson(jsonFileContent)
-                    json = JsonOutput.prettyPrint(json)
-                    writeFile(file: destinationFilePath, text: json)
+                    def fileContent = readFile configFile;
+                    def jsonFileContent = readJSON text: fileContent;
+                    def json = JsonOutput.toJson(jsonFileContent);
+                    json = JsonOutput.prettyPrint(json);
+                    writeFile(file: destinationFilePath, text: json);
                 }
             } 
     
