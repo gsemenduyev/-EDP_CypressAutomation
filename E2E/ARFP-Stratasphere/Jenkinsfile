@@ -85,7 +85,7 @@ pipeline {
     post{
         always{
             script {
-                // Update Config files clean up.
+                // Config files clean up.
                 def reporterConfig = readJSON file: TEST_RAIL_CONFIG_FILE_PATH;
                 def testrail = [
                     'domain': '-',
