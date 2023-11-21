@@ -142,7 +142,8 @@ import groovy.json.*
             configFileProvider([configFile(fileId: fileId, variable: 'configFile')]) {
             def fileContent = readFile configFile
             def jsonFileContent = readJSON text: fileContent
-            def json = JsonOutput.toJson(jsonFileContent)
-            return json = JsonOutput.prettyPrint(json)
+            // def json = JsonOutput.toJson(jsonFileContent)
+            // return json = JsonOutput.prettyPrint(json)
+            return jsonFileContent
             } 
     }
