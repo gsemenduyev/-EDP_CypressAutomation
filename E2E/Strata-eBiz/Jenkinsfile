@@ -1,8 +1,8 @@
 #!/usr/bin/env groovy
 import groovy.json.*
 
-    def strataEBizTeamEmail = "StrataeBusiness@freewheel.com";
-    def qaTeamEmail = "cableqa@freewheel.com";
+    // def strataEBizTeamEmail = "StrataeBusiness@freewheel.com";
+    // def qaTeamEmail = "cableqa@freewheel.com";
 
 
     pipeline {
@@ -97,12 +97,12 @@ import groovy.json.*
                 def lines = fileContent.readLines()
                 def formattedContent = '<br><br>' + lines.join('<br>')
 
-                mail(
-                    subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
-                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. ${formattedContent}",
-                    to: qaTeamEmail, 
-                    mimeType: 'text/html'
-                );
+                // mail(
+                //     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
+                //     body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. ${formattedContent}",
+                //     to: qaTeamEmail, 
+                //     mimeType: 'text/html'
+                // );
 
                 sh "cd E2E/Strata-eBiz && node ./cucumber-html-report.js"
             }
@@ -126,12 +126,12 @@ import groovy.json.*
                     def fileContent = readFile(file: 'E2E/Strata-eBiz/cypress/reports/run-info/failed-scenarios-title.txt').trim()
                     def lines = fileContent.readLines()
                     def formattedContent = '<br><br>' + lines.join('<br>')
-                mail(
-                    subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
-                    body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. ${formattedContent}",
-                    to: strataEBizTeamEmail, 
-                    mimeType: 'text/html'
-                );
+                // mail(
+                //     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
+                //     body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. ${formattedContent}",
+                //     to: strataEBizTeamEmail, 
+                //     mimeType: 'text/html'
+                // );
             }
         }
     }
