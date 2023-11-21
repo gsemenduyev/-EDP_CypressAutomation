@@ -32,7 +32,9 @@ import groovy.json.*
                     //     json = JsonOutput.prettyPrint(json)
                     //     writeFile(file: 'E2E/Strata-eBiz/cypress/fixtures/environment/environments.json', text: json)
                     //     }
-                    writeFile(file: 'E2E/Strata-eBiz/cypress/fixtures/environment/environments.json', text: read_config_file('16d93a3a-a4a4-4764-9cb5-231f80e7261f'))
+
+                    def json = JsonOutput.toJson(text: read_config_file('16d93a3a-a4a4-4764-9cb5-231f80e7261f'))
+                    writeFile(file: 'E2E/Strata-eBiz/cypress/fixtures/environment/environments.json', text: json)
                     echo "The first value is: ${read_config_file('16d93a3a-a4a4-4764-9cb5-231f80e7261f').arfpUrlUsernameQa}"
                     // Copy paste Test Rail Credentials from Jenkins to current project
                     withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'TestRail_GS', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME']])  {
