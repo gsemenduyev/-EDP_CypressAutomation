@@ -4,6 +4,7 @@ import groovy.json.*
     def strataEBizTeamEmail = "StrataeBusiness@freewheel.com";
     def qaTeamEmail = "cableqa@freewheel.com";
 
+
     pipeline {
     agent {
         docker {
@@ -24,14 +25,15 @@ import groovy.json.*
                 script {
 
                     // Copy paste environments.json file from Jenkins to current project
-                    configFileProvider([configFile(fileId: '16d93a3a-a4a4-4764-9cb5-231f80e7261f', variable: 'configFile')]) {
-                        def fileContent = readFile configFile
-                        def jsonFileContent = readJSON text: fileContent
-                        def json = JsonOutput.toJson(jsonFileContent)
-                        json = JsonOutput.prettyPrint(json)
-                        writeFile(file: 'E2E/Strata-eBiz/cypress/fixtures/environment/environments.json', text: json)
-                        }
-
+                    // configFileProvider([configFile(fileId: '16d93a3a-a4a4-4764-9cb5-231f80e7261f', variable: 'configFile')]) {
+                    //     def fileContent = readFile configFile
+                    //     def jsonFileContent = readJSON text: fileContent
+                    //     def json = JsonOutput.toJson(jsonFileContent)
+                    //     json = JsonOutput.prettyPrint(json)
+                    //     writeFile(file: 'E2E/Strata-eBiz/cypress/fixtures/environment/environments.json', text: json)
+                    //     }
+                    writeFile(file: 'E2E/Strata-eBiz/cypress/fixtures/environment/environments.json', text: read_config_file('16d93a3a-a4a4-4764-9cb5-231f80e7261f'))
+                    echo "The first value is: ${read_config_file('16d93a3a-a4a4-4764-9cb5-231f80e7261f').arfpUrlUsernameQa}"
                     // Copy paste Test Rail Credentials from Jenkins to current project
                     withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'TestRail_GS', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME']])  {
                         def domain = "https://testrail-strata.freewheel.tv/testrail/"
@@ -134,3 +136,13 @@ import groovy.json.*
         }
     }
 }
+
+
+    def read_config_file = { String fileId ->
+        configFileProvider([configFile(fileId: fileId, variable: 'configFile')]) {
+            def fileContent = readFile configFile
+            def jsonFileContent = readJSON text: fileContent
+            def json = JsonOutput.toJson(jsonFileContent)
+            return json = JsonOutput.prettyPrint(json)
+        }
+    }
