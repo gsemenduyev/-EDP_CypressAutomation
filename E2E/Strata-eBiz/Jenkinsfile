@@ -4,6 +4,9 @@ import groovy.json.*
     // def strataEBizTeamEmail = "StrataeBusiness@freewheel.com";
     // def qaTeamEmail = "cableqa@freewheel.com";
 
+    def CONFIG_FILE_ID = '16d93a3a-a4a4-4764-9cb5-231f80e7261f';
+    def CONFIG_FILE_DESTINATION = 'E2E/Strata-eBiz/cypress/fixtures/environment/environments.json';
+
 
     pipeline {
     agent {
@@ -33,9 +36,9 @@ import groovy.json.*
                     //     writeFile(file: 'E2E/Strata-eBiz/cypress/fixtures/environment/environments.json', text: json)
                     //     }
 
-                    // def json = JsonOutput.toJson(text: read_config_file('16d93a3a-a4a4-4764-9cb5-231f80e7261f'))
-                    // writeFile(file: 'E2E/Strata-eBiz/cypress/fixtures/environment/environments.json', text: json)
-                    echo "The first value is: ${read_config_file('16d93a3a-a4a4-4764-9cb5-231f80e7261f').arfpUrlUsernameQa}"
+                    inject_config_file(CONFIG_FILE_ID, CONFIG_FILE_DESTINATION)
+
+                    echo "The first value is: ${read_config_file(CONFIG_FILE_ID).arfpUrlUsernameQa}"
                     // Copy paste Test Rail Credentials from Jenkins to current project
                     withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'TestRail_GS', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME']])  {
                         def domain = "https://testrail-strata.freewheel.tv/testrail/"
@@ -140,12 +143,21 @@ import groovy.json.*
 }
 
 
-    def read_config_file(String fileId){
-            configFileProvider([configFile(fileId: fileId, variable: 'configFile')]) {
+    def read_config_file(String configFileId){
+            configFileProvider([configFile(fileId: configFileId, variable: 'configFile')]) {
             def fileContent = readFile configFile
-            def jsonFileContent = readJSON text: fileContent
-            // def json = JsonOutput.toJson(jsonFileContent)
-            // return json = JsonOutput.prettyPrint(json)
-            return jsonFileContent
+          //  def jsonFileContent = readJSON text: fileContent
+            return readJSON text: fileContent
             } 
     }
+
+    def inject_config_file(String configFileId, String destinationFilePath){
+                configFileProvider([configFile(fileId: configFileId, variable: 'configFile')]) {
+                    def fileContent = readFile configFile
+                    def jsonFileContent = readJSON text: fileContent
+                    def json = JsonOutput.toJson(jsonFileContent)
+                    json = JsonOutput.prettyPrint(json)
+                    writeFile(file: destinationFilePath, text: json)
+                }
+            } 
+    
