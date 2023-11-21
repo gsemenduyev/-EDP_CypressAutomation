@@ -19,22 +19,22 @@ pipeline {
     }
 }
     parameters{
-        choice(name: 'ENVIRONMENT', choices: ['Production', 'QA'], description: "Choose the Environment to run")
-        choice(name: 'PROJECTS', choices: ['Stratasphere', 'ARFP', 'WIP'], description: "Choose the Project to run")
-        string(name: 'RUN_ID', defaultValue: 'R5383', trim: true, description: "Choose the Test Rail Run ID")
-        string(name: 'VERSION',defaultValue: 'v 8.4.1.39508',  trim: true, description: "When ARFP project is selected, input Agency RFP version (Production and QA versions may vary)")
+        choice(name: 'ENVIRONMENT', choices: ['Production', 'QA'], description: "Choose the Environment to run");
+        choice(name: 'PROJECTS', choices: ['Stratasphere', 'ARFP', 'WIP'], description: "Choose the Project to run");
+        string(name: 'RUN_ID', defaultValue: 'R5383', trim: true, description: "Choose the Test Rail Run ID");
+        string(name: 'VERSION',defaultValue: 'v 8.4.1.39508',  trim: true, description: "When ARFP project is selected, input Agency RFP version (Production and QA versions may vary)");
     }
     options{
         ansiColor('xterm')
     }
     triggers {
         parameterizedCron('''
-            * 22 * * 7 %ENVIRONMENT=Production;PROJECTS=ARFP;RUN_ID=R5383;VERSION=v 8.3.6.60524
-            * 23 * * 7 %ENVIRONMENT=QA;PROJECTS=ARFP;RUN_ID=R5383;VERSION=v 8.4.0
+            0 22 * * 0 %ENVIRONMENT=Production;PROJECTS=ARFP;RUN_ID=R5383;VERSION=v 8.3.6.60524
+            0 23 * * 0 %ENVIRONMENT=QA;PROJECTS=ARFP;RUN_ID=R5383;VERSION=v 8.4.0
         ''')
     }
     stages {
-        stage('Config file setup') {
+        stage('Config file setup'){
             steps {
                 script {
 
@@ -44,89 +44,82 @@ pipeline {
                   
                         // Copy paste Test Rail Credentials from Jenkins to current project
                         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'TestRail_GS', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME']])  {
-                        def domain = "https://testrail-strata.freewheel.tv/testrail/"
-                        def username = "${USERNAME}"
-                        def password = "${PASSWORD}"
-                        def runId = "${RUN_ID}"
+                        def domain = "https://testrail-strata.freewheel.tv/testrail/";
+                        def username = "${USERNAME}";
+                        def password = "${PASSWORD}";
+                        def runId = "${RUN_ID}";
                         // Update cypress.env.json
-                        def reporterConfig = readJSON file: TEST_RAIL_CONFIG_FILE_PATH
+                        def reporterConfig = readJSON file: TEST_RAIL_CONFIG_FILE_PATH;
                         def testrail = [
                        'domain': (domain),
                        'username': (username),
                        'password': (password),
                        'runId': (runId)
-                        ]
-                        reporterConfig.put("testrail", testrail)
-                        def json = JsonOutput.toJson(reporterConfig)
-                        json = JsonOutput.prettyPrint(json)
-                        writeFile(file: TEST_RAIL_CONFIG_FILE_PATH, text: json)
+                        ];
+                        reporterConfig.put("testrail", testrail);
+                        def json = JsonOutput.toJson(reporterConfig);
+                        json = JsonOutput.prettyPrint(json);
+                        writeFile(file: TEST_RAIL_CONFIG_FILE_PATH, text: json);
 
-                       def reporterConfig1 = readJSON file: TEST_RAIL_CONFIG_FILE_PATH
+                       def reporterConfig1 = readJSON file: TEST_RAIL_CONFIG_FILE_PATH;
                        testrail = [
                        'domain': reporterConfig1.testrail.domain,
                        'username': reporterConfig1.testrail.username.values[0],
                        'password': reporterConfig1.testrail.password.values[0],
                        'runId': reporterConfig1.testrail.runId.values[0]
-                        ]
-                        reporterConfig.put("testrail", testrail)
-                        json = JsonOutput.toJson(reporterConfig)
-                        json = JsonOutput.prettyPrint(json)
-                        writeFile(file: TEST_RAIL_CONFIG_FILE_PATH, text: json)
+                        ];
+                        reporterConfig.put("testrail", testrail);
+                        json = JsonOutput.toJson(reporterConfig);
+                        json = JsonOutput.prettyPrint(json);
+                        writeFile(file: TEST_RAIL_CONFIG_FILE_PATH, text: json);
                     }
                 }
             }
         }
         stage('Test') {
             steps {
-            sh "cd ${CURRENT_PROJECT_PATH} && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome --env tags=\"@${PROJECTS}\",ENV=\"${ENVIRONMENT}\",VERSION=\"${VERSION}\""
+            sh "cd ${CURRENT_PROJECT_PATH} && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome --env tags=\"@${PROJECTS}\",ENV=\"${ENVIRONMENT}\",VERSION=\"${VERSION}\"";
             }
-
         }
-        stage('Clear TestRail file') {
-            steps {
-                script {
-                        // Update cypress.env.json
-                        def reporterConfig = readJSON file: TEST_RAIL_CONFIG_FILE_PATH
-                        def testrail = [
-                       'domain': '-',
-                       'username': '-',
-                       'password': '-',
-                       'runId': '-'
-                        ]
-                        reporterConfig.put("testrail", testrail)
-                        def json = JsonOutput.toJson(reporterConfig)
-                        json = JsonOutput.prettyPrint(json)
-                        writeFile(file: TEST_RAIL_CONFIG_FILE_PATH, text: json)
-                    }
-                }
-            }
- }
-
+    }
     post{
         always{
             script {
-                // mail(
-                //     subject: "${currentBuild.currentResult} ${params.PROJECTS} run for ${params.ENVIRONMENT}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
-                //     body: "${currentBuild.currentResult} ${params.PROJECTS} run for ${params.ENVIRONMENT}: Please visit  ${env.BUILD_URL} for further information.",
-                //     to: read_config_file(CONFIG_FILE_ID).qaTeamEmail, 
-                // );
-                echo "HELLO -------------> ${read_config_file(CONFIG_FILE_ID).qaTeamEmail}"
+                // Update Config files clean up.
+                def reporterConfig = readJSON file: TEST_RAIL_CONFIG_FILE_PATH;
+                def testrail = [
+                    'domain': '-',
+                    'username': '-',
+                    'password': '-',
+                    'runId': '-'
+                        ];
+                    reporterConfig.put("testrail", testrail);
+                def json = JsonOutput.toJson(reporterConfig);
+                    json = JsonOutput.prettyPrint(json);
+                    writeFile(file: TEST_RAIL_CONFIG_FILE_PATH, text: json);
+                    writeFile(file: QA_CONFIG_FILE_DESTINATION, text: json);
+                    writeFile(file: PROD_CONFIG_FILE_DESTINATION, text: json);
+                mail(
+                    subject: "${currentBuild.currentResult} ${params.PROJECTS} run for ${params.ENVIRONMENT}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
+                    body: "${currentBuild.currentResult} ${params.PROJECTS} run for ${params.ENVIRONMENT}: Please visit  ${env.BUILD_URL} for further information.",
+                    to: read_config_file(CONFIG_FILE_ID).qaTeamEmail, 
+                );
                 sh "cd ${CURRENT_PROJECT_PATH} && node ./cucumber-html-report.js";
             }
-      publishHTML (target : [allowMissing: true,
-        alwaysLinkToLastBuild: true,
-        keepAll: true,
-        reportDir: REPORT_DIR,
-        reportFiles: 'cucumber-reports/cucumber-html-report/index.html',
-        reportName: 'Cucumber Report',
-        reportTitles: 'Cucumber Report'])
-      publishHTML (target : [allowMissing: true,
-        alwaysLinkToLastBuild: true,
-        keepAll: true,
-        reportDir: REPORT_DIR,
-        reportFiles: 'multi-html-report/index.html',
-        reportName: 'Multi HTML Report',
-        reportTitles: 'Multi HTML Report'])
+            publishHTML (target : [allowMissing: true,
+            alwaysLinkToLastBuild: true,
+            keepAll: true,
+            reportDir: REPORT_DIR,
+            reportFiles: 'cucumber-reports/cucumber-html-report/index.html',
+            reportName: 'Cucumber Report',
+            reportTitles: 'Cucumber Report']);
+            publishHTML (target : [allowMissing: true,
+            alwaysLinkToLastBuild: true,
+            keepAll: true,
+            reportDir: REPORT_DIR,
+            reportFiles: 'multi-html-report/index.html',
+            reportName: 'Multi HTML Report',
+            reportTitles: 'Multi HTML Report']);
         }
     }
 }
@@ -137,11 +130,11 @@ pipeline {
       [@return] values of Jenkins config file
      */ 
     def read_config_file(String configFileId){
-            configFileProvider([configFile(fileId: configFileId, variable: 'configFile')]) {
+        configFileProvider([configFile(fileId: configFileId, variable: 'configFile')]) {
             def fileContent = readFile configFile;
             def jsonFileContent = readJSON text: fileContent;
             return jsonFileContent;
-            } 
+        } 
     }
 
      /*
@@ -149,12 +142,12 @@ pipeline {
       [@param] configFileId: accepts Jenkins config file unique ID
       [@param] destinationFilePath: destination file path
      */ 
-    def inject_config_file(String configFileId, String destinationFilePath){
-                configFileProvider([configFile(fileId: configFileId, variable: 'configFile')]) {
-                    def fileContent = readFile configFile;
-                    def jsonFileContent = readJSON text: fileContent;
-                    def json = JsonOutput.toJson(jsonFileContent);
-                    json = JsonOutput.prettyPrint(json);
-                    writeFile(file: destinationFilePath, text: json);
-                }
-            } 
+    def inject_config_file(String configFileId, String destinationFilePath){    
+        configFileProvider([configFile(fileId: configFileId, variable: 'configFile')]) {
+            def fileContent = readFile configFile;
+            def jsonFileContent = readJSON text: fileContent;
+            def json = JsonOutput.toJson(jsonFileContent);
+            json = JsonOutput.prettyPrint(json);
+            writeFile(file: destinationFilePath, text: json);
+        }
+    } 
