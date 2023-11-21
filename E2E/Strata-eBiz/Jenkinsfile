@@ -6,8 +6,8 @@ import groovy.json.*
     def CONFIG_FILE_ID = '16d93a3a-a4a4-4764-9cb5-231f80e7261f';
     def CONFIG_FILE_DESTINATION = 'E2E/Strata-eBiz/cypress/fixtures/environment/environments.json';
     
-    def STRATA_TEAM_EBIZ_EMAIL = read_config_file(CONFIG_FILE_ID).strataEBizTeamEmail;
-    def QA_TEAM_EMAIL = read_config_file(CONFIG_FILE_ID).qaTeamEmail;
+    // def STRATA_TEAM_EBIZ_EMAIL = read_config_file(CONFIG_FILE_ID).strataEBizTeamEmail;
+    // def QA_TEAM_EMAIL = read_config_file(CONFIG_FILE_ID).qaTeamEmail;
 
     pipeline {
     agent {
@@ -39,8 +39,8 @@ import groovy.json.*
 
                     inject_config_file(CONFIG_FILE_ID, CONFIG_FILE_DESTINATION)
 
-                    echo "The first value is: ${STRATA_TEAM_EBIZ_EMAIL}"
-                    echo "The first value is: ${QA_TEAM_EMAIL}"
+                    echo "The first value is: ${read_config_file(CONFIG_FILE_ID).strataEBizTeamEmail}"
+                    echo "The first value is: ${read_config_file(CONFIG_FILE_ID).qaTeamEmail}"
                     // Copy paste Test Rail Credentials from Jenkins to current project
                     withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'TestRail_GS', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME']])  {
                         def domain = "https://testrail-strata.freewheel.tv/testrail/"
