@@ -45,18 +45,20 @@ report.generate({
   customData: {
     title: 'Run Info',
     data: [
-      { label: 'ARFP QA Environment', value: runInfo['arfpUrlQa'] },
-      { label: 'ARFP UAT Environment', value: runInfo['arfpUrlUat'] },
-      { label: 'Stratasphere QA Environment', value: runInfo['ssphereUrlQa'] },
-      { label: 'Stratasphere UAT Environment', value: runInfo['ssphereUrlUat'] },
-      { label: 'sTraffic QA Environment', value: runInfo['sTrafficUrlQa'] },
+      { label: 'ARFP QA Env', value: runInfo['arfpUrlQa'] },
+      { label: 'Stratasphere QA Env', value: runInfo['ssphereUrlQa'] },
+      { label: 'sTraffic QA Env', value: runInfo['sTrafficUrlQa'] },
+      { label: 'Traffic QA Env', value: runInfo['trafficUrlQa'] },
+      { label: 'AEInbox QA Env', value: runInfo['aeInboxUrlQa'] },
+      { label: 'ePort QA Env', value: runInfo['ePortUrlQa'] },
+      { label: 'Eleven QA Env', value: runInfo['elevenUrlQa'] },
       {
-        label: 'Execution Start Time',
-        value: dayjs(runInfo['startedTestsAt']).tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss'),
-      },
-      {
-        label: 'Execution End Time',
-        value: dayjs(runInfo['endedTestsAt']).tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss'),
+        label: 'Execution Time',
+        value:
+          dayjs(runInfo['startedTestsAt']).tz('America/Chicago').format('HH:mm:ss - ') +
+          dayjs(runInfo['endedTestsAt']).tz('America/Chicago').format('HH:mm:ss MM-DD-YYYY')
+
+
       },
     ],
   },

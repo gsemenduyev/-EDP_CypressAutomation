@@ -11,5 +11,8 @@ class ElevenPages {
     logoutButton() {
         return cy.get('[data-menu="logout"]');
     };
+    skipButtonSyntax() {
+        return '.ui-dialog-buttonset > :nth-child(2)';
+    };
 };
 export default ElevenPages;

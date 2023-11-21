@@ -221,6 +221,20 @@ Given('Login to {string} Eleven home page', environment => {
         elevenPages.passwordBox().type(environmentsParam.elevenPasswordUat);
     };
     elevenPages.loginButton().click();
+    var index = 1;
+    const checkXmlValidated = () => {
+        cy.wait(1000)
+        cy.is_element_exists(elevenPages.skipButtonSyntax()).then(elementExists => {
+            if (elementExists === true) {
+                cy.get(elevenPages.skipButtonSyntax()).click();
+                index = 15;
+            } else if (index < 15 && elementExists === false) {
+                index++;
+                checkXmlValidated();
+            }
+        })
+    }
+    checkXmlValidated();
     cy.title().should('eq', 'Eleven');
     cy.screenshot();
 });

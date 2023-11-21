@@ -7,31 +7,6 @@
 // commands please read more here:
 // https://on.cypress.io/custom-commands
 // ***********************************************
-/// <reference types="cypress-data-session" />
-import 'cypress-file-upload';
-
-/*
-Parse XLSX file.
-[@param] filePath- file path.
-*/
-Cypress.Commands.add("parse_xlsx", (inputFile) => {
-    cy.readFile(inputFile).should('exist');
-    return cy.task('parseXlsx', { filePath: inputFile });
-});
-
-/*
-Upload File into Webpage.
-[@param] fileName - name of the file.
-[@param] element - input location
-*/
-Cypress.Commands.add("upload_file", (fileName, element) => {
-    cy.fixture(fileName, 'binary')
-        .then(Cypress.Blob.binaryStringToBlob)
-        .then(fileContent => {
-            element.attachFile({ fileContent, fileName, mimeType: 'text/xml', encoding: 'utf8' })
-        })
-})
-
 /* 
 Verifies if element exists in DOM.
 [@param] selectorSyntax - Syntax of CSS, class, id...
@@ -49,24 +24,4 @@ Cypress.Commands.add("is_element_exists", (selectorSyntax) => {
         }
         return cy.wrap(elementExist);
     });
-})
-
-/*
-Compares two maps
-[@param] map1 - first map
-[@param] map2 - second map
-*/
-Cypress.Commands.add("compare_two_maps", (map1, map2) => {
-    map1.forEach((v, k) => {
-        map1.get(k).forEach((lines, index) => {
-            expect(lines, k).to.equal(map2.get(k)[index]);
-        })
-    });
-})
-
-// Handles uncaught exception.
-Cypress.on('uncaught:exception', (err, runnable) => {
-    // returning false here prevents Cypress from
-    // failing the test
-    return false
 })
