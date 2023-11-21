@@ -146,8 +146,8 @@ import groovy.json.*
     def read_config_file(String configFileId){
             configFileProvider([configFile(fileId: configFileId, variable: 'configFile')]) {
             def fileContent = readFile configFile
-          //  def jsonFileContent = readJSON text: fileContent
-            return readJSON text: fileContent
+            def jsonFileContent = readJSON text: fileContent
+            return jsonFileContent
             } 
     }
 
