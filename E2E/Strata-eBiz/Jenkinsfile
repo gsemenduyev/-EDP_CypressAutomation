@@ -2,13 +2,12 @@
 import groovy.json.*
 
     
-
+    def CURRENT_PROJECT_PATH = 'E2E/Strata-eBiz'
     def CONFIG_FILE_ID = '16d93a3a-a4a4-4764-9cb5-231f80e7261f';
-    def CONFIG_FILE_DESTINATION = 'E2E/Strata-eBiz/cypress/fixtures/environment/environments.json';
+    def CONFIG_FILE_DESTINATION = '${CURRENT_PROJECT_PATH}/cypress/fixtures/environment/environments.json';
+    def TEST_RAIL_CONFIG-FILE_PATH = '${CURRENT_PROJECT_PATH}/cypress.env.json';
     
-    // def STRATA_TEAM_EBIZ_EMAIL = read_config_file(CONFIG_FILE_ID).strataEBizTeamEmail;
-    // def QA_TEAM_EMAIL = read_config_file(CONFIG_FILE_ID).qaTeamEmail;
-
+    
     pipeline {
     agent {
         docker {
@@ -29,25 +28,17 @@ import groovy.json.*
                 script {
 
                     // Copy paste environments.json file from Jenkins to current project
-                    // configFileProvider([configFile(fileId: '16d93a3a-a4a4-4764-9cb5-231f80e7261f', variable: 'configFile')]) {
-                    //     def fileContent = readFile configFile
-                    //     def jsonFileContent = readJSON text: fileContent
-                    //     def json = JsonOutput.toJson(jsonFileContent)
-                    //     json = JsonOutput.prettyPrint(json)
-                    //     writeFile(file: 'E2E/Strata-eBiz/cypress/fixtures/environment/environments.json', text: json)
-                    //     }
-
                     inject_config_file(CONFIG_FILE_ID, CONFIG_FILE_DESTINATION)
-
                     echo "The first value is: ${read_config_file(CONFIG_FILE_ID).strataEBizTeamEmail}"
                     echo "The first value is: ${read_config_file(CONFIG_FILE_ID).qaTeamEmail}"
+
                     // Copy paste Test Rail Credentials from Jenkins to current project
                     withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'TestRail_GS', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME']])  {
                         def domain = "https://testrail-strata.freewheel.tv/testrail/"
                         def username = "${USERNAME}"
                         def password = "${PASSWORD}"
                         def runId = "R5383"
-                        def reporterConfig = readJSON file: 'E2E/Strata-eBiz/cypress.env.json'
+                        def reporterConfig = readJSON file: TEST_RAIL_CONFIG-FILE_PATH
                         def testrail = [
                             'domain': (domain),
                             'username': (username),
@@ -57,9 +48,9 @@ import groovy.json.*
                         reporterConfig.put("testrail", testrail)
                         def json = JsonOutput.toJson(reporterConfig)
                         json = JsonOutput.prettyPrint(json)
-                        writeFile(file: 'E2E/Strata-eBiz/cypress.env.json', text: json)
+                        writeFile(file: TEST_RAIL_CONFIG-FILE_PATH, text: json)
 
-                       def reporterConfig1 = readJSON file: 'E2E/Strata-eBiz/cypress.env.json'
+                       def reporterConfig1 = readJSON file: TEST_RAIL_CONFIG-FILE_PATH
                         testrail = [
                             'domain': reporterConfig1.testrail.domain,
                             'username': reporterConfig1.testrail.username.values[0],
@@ -69,14 +60,14 @@ import groovy.json.*
                         reporterConfig.put("testrail", testrail)
                         json = JsonOutput.toJson(reporterConfig)
                         json = JsonOutput.prettyPrint(json)
-                        writeFile(file: 'E2E/Strata-eBiz/cypress.env.json', text: json)
+                        writeFile(file: TEST_RAIL_CONFIG-FILE_PATH, text: json)
                     }
                 }
             }
         }
         stage('Test') {
             steps {
-            sh "cd E2E/Strata-eBiz && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome"
+            sh "cd ${CURRENT_PROJECT_PATH} && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome"
             }
         }
     }
@@ -86,7 +77,7 @@ import groovy.json.*
             script {
 
                 // Teardown cypress.env.json and environments.json files
-                def reporterConfig = readJSON file: 'E2E/Strata-eBiz/cypress.env.json'
+                def reporterConfig = readJSON file: TEST_RAIL_CONFIG-FILE_PATH
                 def testrail = [
                     'domain': '-',
                     'username': '-',
@@ -96,11 +87,11 @@ import groovy.json.*
                 reporterConfig.put("testrail", testrail)
                 def json = JsonOutput.toJson(reporterConfig)
                 json = JsonOutput.prettyPrint(json)
-                writeFile(file: 'E2E/Strata-eBiz/cypress.env.json', text: json)
-                writeFile(file: 'E2E/Strata-eBiz/cypress/fixtures/environment/environments.json', text: json)
+                writeFile(file: TEST_RAIL_CONFIG-FILE_PATH, text: json)
+                writeFile(file: CONFIG_FILE_DESTINATION, text: json)
 
                 // Copy paste failed scenarios from failed-scenarios-title.txt into email
-                def fileContent = readFile(file: 'E2E/Strata-eBiz/cypress/reports/run-info/failed-scenarios-title.txt').trim()
+                def fileContent = readFile(file: '${CURRENT_PROJECT_PATH}/cypress/reports/run-info/failed-scenarios-title.txt').trim()
                 def lines = fileContent.readLines()
                 def formattedContent = '<br><br>' + lines.join('<br>')
 
@@ -111,26 +102,26 @@ import groovy.json.*
                 //     mimeType: 'text/html'
                 // );
 
-                sh "cd E2E/Strata-eBiz && node ./cucumber-html-report.js"
+                sh "cd ${CURRENT_PROJECT_PATH} && node ./cucumber-html-report.js"
             }
             publishHTML(target : [allowMissing: true,
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
-                reportDir: 'E2E/Strata-eBiz/cypress/reports',
+                reportDir: '${CURRENT_PROJECT_PATH}/cypress/reports',
                 reportFiles: 'cucumber-reports/cucumber-html-report/index.html',
                 reportName: 'Cucumber Report',
                 reportTitles: 'Cucumber Report'])
             publishHTML(target : [allowMissing: true,
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
-                reportDir: 'E2E/Strata-eBiz/cypress/reports',
+                reportDir: '${CURRENT_PROJECT_PATH}/cypress/reports',
                 reportFiles: 'multi-html-report/index.html',
                 reportName: 'Multi HTML Report',
                 reportTitles: 'Multi HTML Report'])
         }
         failure{
                 script {
-                    def fileContent = readFile(file: 'E2E/Strata-eBiz/cypress/reports/run-info/failed-scenarios-title.txt').trim()
+                    def fileContent = readFile(file: '${CURRENT_PROJECT_PATH}/cypress/reports/run-info/failed-scenarios-title.txt').trim()
                     def lines = fileContent.readLines()
                     def formattedContent = '<br><br>' + lines.join('<br>')
                 // mail(
