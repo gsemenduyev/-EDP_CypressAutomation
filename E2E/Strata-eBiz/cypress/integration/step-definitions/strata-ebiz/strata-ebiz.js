@@ -23,7 +23,7 @@ let testResultsFilePath = 'cypress/reports/run-info/failed-scenarios-title.txt';
 var failedScenariosList = [];
 
 before(function () {
-    // cy.writeFile(testResultsFilePath, "");
+    cy.writeFile(testResultsFilePath, "");
     cy.fixture('/environment/environments.json').then((data) => {
         environmentsParam = data;
     });
