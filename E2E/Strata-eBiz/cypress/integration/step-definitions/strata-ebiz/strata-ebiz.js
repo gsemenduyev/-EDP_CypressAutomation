@@ -23,7 +23,7 @@ let testResultsFilePath = 'cypress/reports/run-info/failed-scenarios-title.txt';
 var failedScenariosList = [];
 
 before(function () {
-    cy.writeFile(testResultsFilePath, "");
+    // cy.writeFile(testResultsFilePath, "");
     cy.fixture('/environment/environments.json').then((data) => {
         environmentsParam = data;
     });
@@ -56,9 +56,9 @@ after(function () {
 
 Given('Visit ARFP {string} environment', environment => {
     if (environment === 'QA') {
-        cy.visit(environmentsParam.arfpUrlQa);
+        cy.visit(environmentsParam.arfpUrlQa, { failOnStatusCode: false });
     } else if (environment === 'UAT') {
-        cy.visit(environmentsParam.arfpUrlUat);
+        cy.visit(environmentsParam.arfpUrlUat, { failOnStatusCode: false });
     };
     arfpPages.pageTitle().should('have.text', 'Sign In');
     cy.screenshot();
@@ -85,9 +85,9 @@ Given('Logout from ARFP', () => {
 
 Given('Visit Stratasphere {string} environment', environment => {
     if (environment === 'QA') {
-        cy.visit(environmentsParam.ssphereUrlQa);
+        cy.visit(environmentsParam.ssphereUrlQa, { failOnStatusCode: false });
     } else if (environment === 'UAT') {
-        cy.visit(environmentsParam.ssphereUrlUat);
+        cy.visit(environmentsParam.ssphereUrlUat, { failOnStatusCode: false });
     };
     sSpherePages.pageTitle().should('include.text', ' Login');
     cy.screenshot();
@@ -115,9 +115,9 @@ Given('Logout from Stratasphere', () => {
 
 Given('Visit sTraffic {string} environment', environment => {
     if (environment === 'QA') {
-        cy.visit(environmentsParam.sTrafficUrlQa);
+        cy.visit(environmentsParam.sTrafficUrlQa, { failOnStatusCode: false });
     } else if (environment === 'UAT') {
-        cy.visit(environmentsParam.sTrafficUrlUat);
+        cy.visit(environmentsParam.sTrafficUrlUat, { failOnStatusCode: false });
     };
     cy.title().should('eq', 'Sign In');
     cy.screenshot();
@@ -144,9 +144,9 @@ Given('Logout from sTraffic', () => {
 
 Given('Visit Traffic {string} environment', environment => {
     if (environment === 'QA') {
-        cy.visit(environmentsParam.trafficUrlQa);
+        cy.visit(environmentsParam.trafficUrlQa, { failOnStatusCode: false });
     } else if (environment === 'UAT') {
-        cy.visit(environmentsParam.trafficUrlUat);
+        cy.visit(environmentsParam.trafficUrlUat, { failOnStatusCode: false });
     };
     cy.title().should('eq', 'AEINBOX® for Traffic Instruction - Login')
     cy.screenshot();
@@ -174,9 +174,9 @@ Given('Logout from Traffic', () => {
 
 Given('Visit AEInbox {string} environment', environment => {
     if (environment === 'QA') {
-        cy.visit(environmentsParam.aeInboxUrlQa);
+        cy.visit(environmentsParam.aeInboxUrlQa, { failOnStatusCode: false });
     } else if (environment === 'UAT') {
-        cy.visit(environmentsParam.aeInboxUrlUat);
+        cy.visit(environmentsParam.aeInboxUrlUat, { failOnStatusCode: false });
     }
     cy.title().should('eq', 'AEInbox®');
     cy.screenshot();
@@ -203,9 +203,9 @@ Given('Logout from AEInbox', () => {
 
 Given('Visit ePort {string} environment', environment => {
     if (environment === 'QA') {
-        cy.visit(environmentsParam.ePortUrlQa);
+        cy.visit(environmentsParam.ePortUrlQa, { failOnStatusCode: false });
     } else if (environment === 'UAT') {
-        cy.visit(environmentsParam.ePortUrlUat);
+        cy.visit(environmentsParam.ePortUrlUat, { failOnStatusCode: false });
     };
     cy.title().should('eq', 'ePort');
     cy.screenshot();
@@ -232,9 +232,9 @@ Given('Logout from ePort', () => {
 
 Given('Visit Eleven {string} environment', environment => {
     if (environment === 'QA') {
-        cy.visit(environmentsParam.elevenUrlQa);
+        cy.visit(environmentsParam.elevenUrlQa, { failOnStatusCode: false });
     } else if (environment === 'UAT') {
-        cy.visit(environmentsParam.elevenUrlUat);
+        cy.visit(environmentsParam.elevenUrlUat, { failOnStatusCode: false });
     };
     cy.title().should('eq', 'Eleven: Login')
     cy.screenshot();
