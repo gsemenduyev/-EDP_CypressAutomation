@@ -16,6 +16,8 @@ Cypress Tests
 * Open Terminal
 * Navigate to ARFP-Stratasphere directory - `cd E2E/ARFP-Stratasphere`
 * Install libraries - `npm install`
+* Copy paste [QA config file](https://jenkins-strata.freewheel.tv/job/Strata/job/TestAutomation/configfiles/editConfig?id=2a6e4dde-90fd-4b33-870c-94e1ac74261e) to the current project - `cypress/fixtures/environment/qa-param.json`
+* Copy paste [PROD config file](https://jenkins-strata.freewheel.tv/job/Strata/job/TestAutomation/configfiles/editConfig?id=1ad0b80a-404d-45ac-81b1-71cd259794d1) to the current project - `cypress/fixtures/environment/prod-param.json`
 
 <p align="left">
   Description: Currently the ARFP-Stratasphere project could be executed in QA and Production environments.
@@ -59,9 +61,9 @@ Report Path - `E2E\ARFP-Stratasphere\cypress\reports\multi-html-report\index.htm
 * `npm run test-Stratasphere`
 * `allure open 'cypress/reports/allure-report'`
 
-## Jenkins pipelines
+## Jenkins pipeline
 * [ARFP_Stratasphere_CypressAutomation](https://jenkins-strata.freewheel.tv/job/Strata/job/TestAutomation/job/ARFP_Stratasphere_CypressAutomation/)
-* [Cypress_DockerTest](https://jenkins-strata.freewheel.tv/job/Strata/job/TestAutomation/job/Cypress_DockerTest/)
+
 
 ## Recommendations for Future Development 
 * Use [VSCode](https://code.visualstudio.com/download) as source-code editor
