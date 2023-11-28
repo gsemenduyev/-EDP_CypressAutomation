@@ -79,12 +79,12 @@ module.exports = defineConfig({
   viewportWidth: 1920,
   viewportHeight: 1080,
   defaultCommandTimeout: 20000,
-  pageLoadTimeout: 120000,
+  pageLoadTimeout: 60000,
   screenshotOnRunFailure: true,
   video: true,
   retries: {
     runMode: 2,
-    openMode: 0
+    openMode: 2
   },
   projectId: "",
   e2e: {
