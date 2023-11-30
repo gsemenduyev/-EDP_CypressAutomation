@@ -14,6 +14,7 @@ import java.util.List;
 
 public class Hooks {
     List<byte[]> screenshotsList = new ArrayList<byte[]>();
+
     // Launching WinAppDriver.exe"
     @Before
     public void setUp() throws InterruptedException {
@@ -28,16 +29,16 @@ public class Hooks {
             System.out.println("Takes Screenshot");
             byte[] screenshot = ((TakesScreenshot) WinDriverUtils.getWinDriver()).getScreenshotAs(OutputType.BYTES);
             scenario.attach(screenshot, "image/png", scenario.getName());
-            WinDriverUtils.closeWinDriver();
-            WinDriverUtils.stop();
+            // WinDriverUtils.closeWinDriver();
+            // WinDriverUtils.stop();
         }
-        for (byte[] screenshot :screenshotsList) {
+        for (byte[] screenshot : screenshotsList) {
             scenario.attach(screenshot, "image/png", scenario.getName());
         }
         screenshotsList.clear();
-        if(!ConfigsReaderUtils.getProperty("Close_SBMS").equals("No")){
-//            WinDriverUtils.closeWinDriver();
-//            WinDriverUtils.stop();
+        if (!ConfigsReaderUtils.getProperty("Close_SBMS").equals("No")) {
+            WinDriverUtils.closeWinDriver();
+            WinDriverUtils.stop();
         }
     }
 
@@ -49,9 +50,9 @@ public class Hooks {
         scenario.attach(screenshot, "image/png", scenario.getName());
     }
 
-//    @After(order = 1)
-//    public void tearDown() {
-//        WinDriverUtils.closeWinDriver();
-//        WinDriverUtils.stop();
-//    }
+    // @After(order = 1)
+    // public void tearDown() {
+    // WinDriverUtils.closeWinDriver();
+    // WinDriverUtils.stop();
+    // }
 }

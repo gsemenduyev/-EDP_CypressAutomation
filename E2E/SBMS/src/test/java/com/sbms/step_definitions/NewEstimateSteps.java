@@ -18,7 +18,7 @@ import static org.junit.Assert.assertTrue;
 
 public class NewEstimateSteps {
 
-        WindowsDriver driver = WinDriverUtils.getWinDriver();
+        WindowsDriver<?> driver = WinDriverUtils.getWinDriver();
         WebDriverWait wait = new WebDriverWait(driver, 30);
         LoginWindow loginWindow = new LoginWindow();
         MainPage mainPage = new MainPage();
@@ -157,7 +157,7 @@ public class NewEstimateSteps {
 
                 wait.until(ExpectedConditions.elementToBeClickable(schedulingPage.getStationTextBox()))
                                 .sendKeys("WTMX-FM");
-                wait.until(ExpectedConditions.elementToBeClickable(schedulingPage.getStationTextBox()));
+                wait.until(ExpectedConditions.elementToBeClickable(schedulingPage.getSearchButton())).click();
 
                 // Dimension newDimension = new Dimension(1920, 1040);
                 // driver.manage().window().setSize(newDimension);

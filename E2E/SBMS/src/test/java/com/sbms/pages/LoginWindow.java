@@ -1,6 +1,5 @@
 package com.sbms.pages;
 
-import io.appium.java_client.pagefactory.WindowsFindBy;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -13,12 +12,14 @@ public class LoginWindow {
 
     @FindBy(xpath = "//Edit[@AutomationId='txtUserName']")
     private WebElement userNameTextBox;
+
     public WebElement getUserNameTextBox() {
         return userNameTextBox;
     }
 
     @FindBy(name = "OK")
     private WebElement okButton;
+
     public WebElement getOkButton() {
         return okButton;
     }

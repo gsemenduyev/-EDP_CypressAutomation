@@ -2,12 +2,9 @@ package com.sbms.utils;
 
 import io.appium.java_client.windows.WindowsDriver;
 import io.appium.java_client.windows.WindowsElement;
-
-import org.apache.poi.ss.formula.functions.T;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import java.awt.*;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -20,7 +17,7 @@ public class WinDriverUtils {
 
     private static WindowsDriver<WindowsElement> winDriver;
 
-    public static WindowsDriver getWinDriver() {
+    public static WindowsDriver<?> getWinDriver() {
         if (winDriver == null) {
 
             try {
@@ -152,8 +149,9 @@ public class WinDriverUtils {
     }
 
     // public static void main(String[] args) throws IOException {
-    //     FileWriter fw = new FileWriter("src\\test\\resources\\test_parameters\\new_estimate.txt");
-    //     fw.write("Hello, world!");
-    //     fw.close();
+    // FileWriter fw = new
+    // FileWriter("src\\test\\resources\\test_parameters\\new_estimate.txt");
+    // fw.write("Hello, world!");
+    // fw.close();
     // }
 }

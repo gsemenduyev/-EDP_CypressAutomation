@@ -5,14 +5,13 @@ import io.appium.java_client.windows.WindowsDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class ScheduleStatusPage {
-    WindowsDriver driver = WinDriverUtils.getWinDriver();
+    WindowsDriver<?> driver = WinDriverUtils.getWinDriver();
     Actions actions = new Actions(driver);
 
     public ScheduleStatusPage() {
@@ -99,8 +98,6 @@ public class ScheduleStatusPage {
 
     @FindBy(name = " Schedule Status")
     private WebElement scheduleStatusWindow;
-//Name	 Schedule Status
-
 
     public WebElement getScheduleStatusWindow() {
         return scheduleStatusWindow;
@@ -123,7 +120,7 @@ public class ScheduleStatusPage {
         if (!driver.findElements(By.name(" Schedule Status")).isEmpty()) {
             wait.until(ExpectedConditions.numberOfElementsToBeLessThan(By.name(" Schedule Status"), 1));
         }
-        
+
     }
 
 }
