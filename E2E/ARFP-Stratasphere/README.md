@@ -20,14 +20,16 @@ Cypress Tests
 * Copy paste [PROD config file](https://jenkins-strata.freewheel.tv/job/Strata/job/TestAutomation/configfiles/editConfig?id=1ad0b80a-404d-45ac-81b1-71cd259794d1) to the current project - `cypress/fixtures/environment/prod-param.json`
 
 <p align="left">
-  Description: Currently the ARFP-Stratasphere project could be executed in QA and Production environments.
+  Description: Currently the ARFP-Stratasphere project could be executed in QA, UAT and Production environments.
 </p>
 
 * ARFP 
 [QA](https://2wayrfpqa.pregotostrata.com/RFP)
+[UAT](https://2wayrfpuat.gotostrata.com/RFP)
 [Production](https://2wayrfp.gotostrata.com/RFP)
 * Stratasphere 
 [QA](https://ssphereqa.pregotostrata.com/ui_new#/)
+[UAT](https://ssphereuat.gotostrata.com/ui_new#/)
 [Production](https://2wayrfp.gotostrata.com/RFP)
 * [Mailinator](https://www.mailinator.com/v4/public/inboxes.jsp)
 
@@ -36,11 +38,15 @@ Cypress Tests
 
 `npx cypress open --env ENV="QA"`
 
+`npx cypress open --env ENV="UAT"`
+
 `npx cypress open --env ENV="Production"`
 
 * Run Cypress Tests using Cypress CLI
 
 `npx cypress run --browser chrome --headed --env tags="@ARFP",ENV="QA",VERSION="v 8.4.0"`
+
+`npx cypress run --browser chrome --headed --env tags="@ARFP",ENV="UAT",VERSION="v 8.4.0"`
 
 `npx cypress run --browser chrome --headed --env tags="@ARFP",ENV="Production",VERSION="v 8.3.6.60524"`
 

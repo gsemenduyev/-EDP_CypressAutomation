@@ -5,8 +5,10 @@ def CURRENT_PROJECT_PATH = 'E2E/ARFP-Stratasphere';
 def CONFIG_FILE_ID = '16d93a3a-a4a4-4764-9cb5-231f80e7261f';
 def PROD_CONFIG_FILE_ID = '1ad0b80a-404d-45ac-81b1-71cd259794d1';
 def QA_CONFIG_FILE_ID = '2a6e4dde-90fd-4b33-870c-94e1ac74261e';
+def UAT_CONFIG_FILE_ID = '10596465-25c2-4869-93fe-1b8c63a3dec6';
 def PROD_CONFIG_FILE_DESTINATION = 'E2E/ARFP-Stratasphere/cypress/fixtures/environment/prod-param.json';
 def QA_CONFIG_FILE_DESTINATION = 'E2E/ARFP-Stratasphere/cypress/fixtures/environment/qa-param.json';
+def UAT_CONFIG_FILE_DESTINATION = 'E2E/ARFP-Stratasphere/cypress/fixtures/environment/uat-param.json';
 def TEST_RAIL_CONFIG_FILE_PATH = 'E2E/ARFP-Stratasphere/cypress.env.json';
 def REPORT_DIR = 'E2E/ARFP-Stratasphere/cypress/reports';
 
@@ -19,7 +21,7 @@ pipeline {
     }
 }
     parameters{
-        choice(name: 'ENVIRONMENT', choices: ['Production', 'QA'], description: "Choose the Environment to run");
+        choice(name: 'ENVIRONMENT', choices: ['Production', 'QA', 'UAT'], description: "Choose the Environment to run");
         choice(name: 'PROJECTS', choices: ['Stratasphere', 'ARFP', 'WIP'], description: "Choose the Project to run");
         string(name: 'RUN_ID', defaultValue: 'R5383', trim: true, description: "Choose the Test Rail Run ID");
         string(name: 'VERSION',defaultValue: 'v 8.4.1.39508',  trim: true, description: "When ARFP project is selected, input Agency RFP version (Production and QA versions may vary)");
@@ -29,8 +31,9 @@ pipeline {
     }
     triggers {
         parameterizedCron('''
-            0 22 * * 0 %ENVIRONMENT=Production;PROJECTS=ARFP;RUN_ID=R5383;VERSION=v 8.3.6.60524
-            0 23 * * 0 %ENVIRONMENT=QA;PROJECTS=ARFP;RUN_ID=R5383;VERSION=v 8.4.0
+            0 21 * * 0 %ENVIRONMENT=QA;PROJECTS=ARFP;RUN_ID=R5383;VERSION=v 8.4.0
+            0 22 * * 0 %ENVIRONMENT=UAT;PROJECTS=ARFP;RUN_ID=R5383;VERSION=v 8.4.0
+            0 23 * * 0 %ENVIRONMENT=Production;PROJECTS=ARFP;RUN_ID=R5383;VERSION=v 8.3.6.60524
         ''')
     }
     stages {
@@ -40,6 +43,7 @@ pipeline {
 
                         // Copy paste environments.json file from Jenkins to current project
                         inject_config_file(QA_CONFIG_FILE_ID, QA_CONFIG_FILE_DESTINATION);
+                        inject_config_file(UAT_CONFIG_FILE_ID, UAT_CONFIG_FILE_DESTINATION);
                         inject_config_file(PROD_CONFIG_FILE_ID, PROD_CONFIG_FILE_DESTINATION);
                   
                         // Copy paste Test Rail Credentials from Jenkins to current project
@@ -98,6 +102,7 @@ pipeline {
                     json = JsonOutput.prettyPrint(json);
                     writeFile(file: TEST_RAIL_CONFIG_FILE_PATH, text: json);
                     writeFile(file: QA_CONFIG_FILE_DESTINATION, text: json);
+                    writeFile(file: UAT_CONFIG_FILE_DESTINATION, text: json);
                     writeFile(file: PROD_CONFIG_FILE_DESTINATION, text: json);
                 mail(
                     subject: "${currentBuild.currentResult} ${params.PROJECTS} run for ${params.ENVIRONMENT}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
