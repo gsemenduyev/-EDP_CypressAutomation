@@ -8,3 +8,4 @@ cypress/downloads/Chicago - TV.prx
 cypress/downloads/Linear response detail.xlsx
 cypress/fixtures/environment/prod-param.json
 cypress/fixtures/environment/qa-param.json
+cypress/fixtures/environment/uat-param.json

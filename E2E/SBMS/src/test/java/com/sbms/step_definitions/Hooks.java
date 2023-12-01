@@ -43,8 +43,9 @@ public class Hooks {
     }
 
     @AfterStep
-    public void afterStepScreenshot(Scenario scenario) {
+    public void afterStepScreenshot(Scenario scenario) throws InterruptedException {
         System.out.println("Takes Screenshot");
+        Thread.sleep(500);
         byte[] screenshot = ((TakesScreenshot) WinDriverUtils.getWinDriver()).getScreenshotAs(OutputType.BYTES);
         screenshotsList.add(screenshot);
         scenario.attach(screenshot, "image/png", scenario.getName());
