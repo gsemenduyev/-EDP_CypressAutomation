@@ -193,17 +193,36 @@ Given('Login to Stratasphere', () => {
 // Search for RFP in Stratasphere
 Given('Search for RFP in Stratasphere', () => {
     sSphereProposalsPage.rfpModalHeaders(1).should('be.visible');
-    sSphereProposalsPage.rfpModalHeaders(1).invoke('text').then(header => {
-        if (header !== 'Campaign') {
-            sSphereProposalsPage.hamburgerButton(0).click();
-            sSphereProposalsPage.campaignFilterOptions().then(function (el) {
-                if (el.prop('class').includes('cancel')) {
-                    sSphereProposalsPage.campaignFilterOptions().should('be.visible').click();
+    var tries = 20;
+    var index = 0;
+    const clickOnHamburgerButton = () => {
+        sSphereProposalsPage.hamburgerButton(0).click();
+        cy.wait(500);
+        sSphereProposalsPage.filtersGridMenu().then(($element) => {
+            if ($element.is(':visible') && index < tries) {
+                var innerIndex = 0;
+                // This recursive function clicks on each unchecked Filter Item
+                const clickOnFilterItem = () => {
+                    cy.is_element_exists(sSphereProposalsPage.uncheckedFilterItem()).then($uncheckedFilter => {
+                        if ($element.is(':visible') && $uncheckedFilter === true && innerIndex < tries) {
+                            cy.get(sSphereProposalsPage.uncheckedFilterItem()).eq(0).click();
+                            clickOnFilterItem();
+                        } else if (innerIndex < tries && $uncheckedFilter === false) {
+                            innerIndex = tries;
+                            index = tries;
+                        }
+                    })
                 }
-            })
-            sSphereProposalsPage.hamburgerButton(0).click();
-        }
-    })
+                clickOnFilterItem();
+            } else if (index < tries && !$element.is(':visible')) {
+                index++;
+                clickOnHamburgerButton();
+            }
+        });
+    }
+    clickOnHamburgerButton();
+
+    sSphereProposalsPage.hamburgerButton(0).click();
     sSphereProposalsPage.rfpModalHeaders(1).should('have.text', 'Campaign')
     cy.dataSession('newRfpName').then(newRfpName => {
         sSphereProposalsPage.campaignSearchBox().type(newRfpName);
@@ -315,7 +334,6 @@ Given('Validate the response from {string}', string => {
                 for (let columnIndex = 0; columnIndex < value.length; columnIndex++) {
                     linearProposalRfpPage.proposalHeader(columnIndex).then(function (headerText) {
                         headerText1 = headerText.text();
-
                     });
                     linearProposalRfpPage.proposalCell(cellIndex++).then(function (cellText) {
                         var cellTextTemp = cellText.text();

@@ -16,12 +16,12 @@ async function setupNodeEvents(cypressOn, config) {
   allureWriter(on, config);
   registerDataSession(on, config);
   new TestRailReporter(on, config).register();
-  
-  on('task', { 
-    parseXlsx({ filePath }) { 
-      return new Promise((resolve, reject) => { 
+
+  on('task', {
+    parseXlsx({ filePath }) {
+      return new Promise((resolve, reject) => {
         try {
-          const jsonData = xlsx.parse(fs.readFileSync(filePath)); 
+          const jsonData = xlsx.parse(fs.readFileSync(filePath));
           resolve(jsonData);
         } catch (e) {
           reject(e)

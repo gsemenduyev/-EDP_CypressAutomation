@@ -44,7 +44,7 @@ Cypress.Commands.add("is_element_exists", (selectorSyntax) => {
             cy.log('Element Exists')
             elementExist = true;
         } else {
-            cy.log("Element doesn't Exists")
+            cy.log("Element doesn't Exist")
             elementExist = false;
         }
         return cy.wrap(elementExist);
