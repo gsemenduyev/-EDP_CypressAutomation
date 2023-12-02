@@ -104,11 +104,11 @@ pipeline {
                     writeFile(file: QA_CONFIG_FILE_DESTINATION, text: json);
                     writeFile(file: UAT_CONFIG_FILE_DESTINATION, text: json);
                     writeFile(file: PROD_CONFIG_FILE_DESTINATION, text: json);
-                // mail(
-                //     subject: "${currentBuild.currentResult} ${params.PROJECTS} run for ${params.ENVIRONMENT}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
-                //     body: "${currentBuild.currentResult} ${params.PROJECTS} run for ${params.ENVIRONMENT}: Please visit  ${env.BUILD_URL} for further information.",
-                //     to: read_config_file(CONFIG_FILE_ID).qaTeamEmail, 
-                // );
+                mail(
+                    subject: "${currentBuild.currentResult} ${params.PROJECTS} run for ${params.ENVIRONMENT}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
+                    body: "${currentBuild.currentResult} ${params.PROJECTS} run for ${params.ENVIRONMENT}: Please visit  ${env.BUILD_URL} for further information.",
+                    to: read_config_file(CONFIG_FILE_ID).qaTeamEmail, 
+                );
                 sh "cd ${CURRENT_PROJECT_PATH} && node ./cucumber-html-report.js";
             }
             publishHTML (target : [allowMissing: true,
