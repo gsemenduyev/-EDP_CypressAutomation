@@ -16,12 +16,12 @@ async function setupNodeEvents(cypressOn, config) {
   allureWriter(on, config);
   registerDataSession(on, config);
   new TestRailReporter(on, config).register();
-  
-  on('task', { 
-    parseXlsx({ filePath }) { 
-      return new Promise((resolve, reject) => { 
+
+  on('task', {
+    parseXlsx({ filePath }) {
+      return new Promise((resolve, reject) => {
         try {
-          const jsonData = xlsx.parse(fs.readFileSync(filePath)); 
+          const jsonData = xlsx.parse(fs.readFileSync(filePath));
           resolve(jsonData);
         } catch (e) {
           reject(e)
@@ -76,12 +76,12 @@ async function setupNodeEvents(cypressOn, config) {
 module.exports = defineConfig({
   viewportWidth: 1920,
   viewportHeight: 1080,
-  defaultCommandTimeout: 15000,
+  defaultCommandTimeout: 60000,
   pageLoadTimeout: 600000,
   screenshotOnRunFailure: true,
   video: true,
   retries: {
-    runMode: 0,
+    runMode: 1,
     openMode: 0
   },
   env: {

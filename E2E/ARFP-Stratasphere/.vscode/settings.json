@@ -10,8 +10,9 @@
     ],
     "cucumberautocomplete.syncfeatures": "cypress/integration/step-definitions/**/*.feature",
     "cSpell.words": [
-        "Mailinator",
-        "ssphere",
+        "badeball",
         "mailinator",
+        "Mailinator",
+        "ssphere"
     ]
 }
