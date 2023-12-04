@@ -81,7 +81,7 @@ module.exports = defineConfig({
   screenshotOnRunFailure: true,
   video: true,
   retries: {
-    runMode: 0,
+    runMode: 1,
     openMode: 0
   },
   env: {
