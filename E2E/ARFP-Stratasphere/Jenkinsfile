@@ -33,7 +33,6 @@ pipeline {
         parameterizedCron('''
             0 21 * * 0 %ENVIRONMENT=QA;PROJECTS=ARFP;RUN_ID=R5383;VERSION=v 8.4.0
             0 22 * * 0 %ENVIRONMENT=UAT;PROJECTS=ARFP;RUN_ID=R5383;VERSION=v 8.4.0
-            0 23 * * 0 %ENVIRONMENT=Production;PROJECTS=ARFP;RUN_ID=R5383;VERSION=v 8.3.6.60524
         ''')
     }
     stages {
