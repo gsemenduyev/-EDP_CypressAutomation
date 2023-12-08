@@ -4,19 +4,13 @@ import LinearProposalRfpPage from "../../../support/page-objects/agency-pages/Li
 
 const linearProposalRfpPage = new LinearProposalRfpPage;
 const FILE_NAME = 'cypress/downloads/Chicago - TV.prx'
-let exportProposalXmlParam
+let exportProposalXmlParam =
 
-before(function () {
-    if (Cypress.env('ENV') === 'Production') {
-        cy.fixture('/agencyRFP/export-proposal-xml-expected-param-prod').then(function (data) {
+    before(function () {
+        cy.fixture('/agencyRFP/export-proposal-xml-expected-param').then(function (data) {
             exportProposalXmlParam = data;
         });
-    } else {
-        cy.fixture('/agencyRFP/export-proposal-xml-expected-param-qa').then(function (data) {
-            exportProposalXmlParam = data;
-        });
-    }
-})
+    })
 
 // Export from prebuy screen and validate XML file
 Given('Export from prebuy screen and validate XML file', () => {
