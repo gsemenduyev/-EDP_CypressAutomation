@@ -21,9 +21,7 @@ before(function () {
 // Export from prebuy screen and validate XML file
 Given('Export from prebuy screen and validate XML file', () => {
     linearProposalRfpPage.actionsDropdown().click({ force: true });
-    if (Cypress.env('ENV') !== 'Production') {
-        linearProposalRfpPage.manageBuyerDataButton().click()
-    };
+    linearProposalRfpPage.manageBuyerDataButton().click()
     linearProposalRfpPage.exportProposalXmlButton().click({ force: true });
     cy.readFile(FILE_NAME).then((file) => {
         exportProposalXmlParam.forEach(text => {

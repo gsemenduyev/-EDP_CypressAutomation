@@ -308,12 +308,7 @@ Given('Search for existing RFP', () => {
 
 // Click on Launch Pre-buy button
 Given('Click on Launch Pre-buy button', () => {
-    if (Cypress.env('ENV') !== 'Production') {
-        rfpDetailsPage.manageResponsesButton(10000).click()
-    } else {
-        rfpDetailsPage.launchPreBuyButton(10000).click();
-        cy.title('eq', 'Linear Proposal - RFP');
-    }
+    rfpDetailsPage.manageResponsesButton(10000).click()
 })
 
 // Validate the response from Agency {string}
