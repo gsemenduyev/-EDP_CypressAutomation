@@ -192,7 +192,7 @@ Given('Login to Stratasphere', () => {
 
 // Search for RFP in Stratasphere
 Given('Search for RFP in Stratasphere', () => {
-
+    sSphereProposalsPage.showPastRfpLabel().should('have.text', 'Show Past RFPs and Proposals')
     cy.is_element_exists(sSphereProposalsPage.showPastRfpNoButtonSyntax()).then(($isElementExists) => {
         if ($isElementExists) {
             cy.get(sSphereProposalsPage.showPastRfpNoButtonSyntax()).click();

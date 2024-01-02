@@ -173,5 +173,8 @@ class SSphereProposalsPage {
     rfpChevronButton() {
         return cy.get('.pull-left.glyphicon.glyphicon-chevron-right');
     }
+    showPastRfpLabel() {
+        return cy.get('label').eq(2);
+    }
 }
 export default SSphereProposalsPage;
