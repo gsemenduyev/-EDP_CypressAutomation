@@ -192,6 +192,19 @@ Given('Login to Stratasphere', () => {
 
 // Search for RFP in Stratasphere
 Given('Search for RFP in Stratasphere', () => {
+
+    cy.is_element_exists(sSphereProposalsPage.showPastRfpNoButtonSyntax()).then(($isElementExists) => {
+        if ($isElementExists) {
+            cy.get(sSphereProposalsPage.showPastRfpNoButtonSyntax()).click();
+        }
+    })
+
+    sSphereProposalsPage.rfpModalHeaders(1).then(($element) => {
+        if (!$element.is(':visible')) {
+            sSphereProposalsPage.rfpChevronButton().click();
+        }
+    })
+
     sSphereProposalsPage.rfpModalHeaders(1).should('be.visible');
     var tries = 20;
     var index = 0;
