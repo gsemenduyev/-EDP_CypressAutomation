@@ -5,9 +5,6 @@ class RfpDetailsPage {
     pageTitle(milliseconds) {
         return cy.get('#page-title', { timeout: milliseconds });
     }
-    launchPreBuyButton(milliseconds) {
-        return cy.get('.btn-link', { timeout: milliseconds });
-    }
     responseButton(milliseconds) {
         return cy.get("[ng-show='!request.$hideResponses'] a", { timeout: milliseconds });
     }
