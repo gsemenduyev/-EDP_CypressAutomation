@@ -422,8 +422,6 @@ Given('Search for {string} user in Mailinator', string => {
         mailinatorHomePage.userSearchBox().type(envUtils.getAgencyUsername());
     }
     mailinatorHomePage.goButton().click({ force: true });
-    cy.screenshot();
-
 })
 
 // Validate email for New Rate Request
