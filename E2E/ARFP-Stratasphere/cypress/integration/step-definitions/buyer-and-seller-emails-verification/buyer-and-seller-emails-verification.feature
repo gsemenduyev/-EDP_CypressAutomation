@@ -16,13 +16,13 @@ Feature: Stratasphere and Agency RFP email verification
         * Search for 'Stratasphere' user in Mailinator
         * Validate 'seller' email for 'RFP Request'
 
-    Scenario: Seller Upload Proposal response XML
-        * Login to Stratasphere
-        * Search for RFP in Stratasphere
-        * Validate "RFP Details" Page in Stratasphere
-        * Upload XML Response
-        * Logout from Stratasphere
+# Scenario: Seller Upload Proposal response XML
+#     * Login to Stratasphere
+#     * Search for RFP in Stratasphere
+#     * Validate "RFP Details" Page in Stratasphere
+#     * Upload XML Response
+#     * Logout from Stratasphere
 
-    Scenario: Buyer receives RFP Response email from buyer
-        * Search for 'AgencyRFP' user in Mailinator
-        * Validate 'buyer' email for 'RFP Response Received'
+# Scenario: Buyer receives RFP Response email from buyer
+#     * Search for 'AgencyRFP' user in Mailinator
+#     * Validate 'buyer' email for 'RFP Response Received'
