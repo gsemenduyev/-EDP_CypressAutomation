@@ -12,8 +12,6 @@ const envUtils = new EnvUtils;
 Given('Validate {string} email for {string}', (buyerSeller, string) => {
     cy.dataSession('newRfpName').then(newRfpName => {
         mailinatorHomePage.search_email(`${string} for `, newRfpName);
-        cy.get('#pills-json-tab').click();
-        cy.reload();
         if (buyerSeller === 'buyer') {
             mailinatorHomePage.buyerEmailBody().should('include.text', `${envUtils.getSsphereUsername()}.`)
         } else if (buyerSeller === 'seller') {
