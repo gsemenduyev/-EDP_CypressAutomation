@@ -1,4 +1,4 @@
-@ARFP, @WIP
+@ARFP
 Feature: Stratasphere and Agency RFP email verification
 
     Feature Description:
