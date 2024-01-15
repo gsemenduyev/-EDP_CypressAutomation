@@ -71,8 +71,6 @@ Given('Open Forgot Password email and click on restore password link', () => {
     mailinatorHomePage.forgotPasswordLink()
         .invoke('attr', 'target', '_parent')
         .click({ force: true });
-    cy.screenshot();
-
 })
 
 // Set 'Temporary, Permanent' password
