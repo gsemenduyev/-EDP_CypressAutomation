@@ -33,7 +33,7 @@ const searchRfpPage = new SearchRfpPage;
 const rfpDetailsPage = new RfpDetailsPage;
 const envUtils = new EnvUtils;
 
-const FILE_NAME = 'stores/TEST Dallas RTG_IMP Dec2023.xml';
+const FILE_NAME = 'stores/TEST Dallas RTG_IMP.xml';
 const SELLER_REVISION_RATE = '8';
 const BUYER_REVISION_RATE = '$ 5.00';
 

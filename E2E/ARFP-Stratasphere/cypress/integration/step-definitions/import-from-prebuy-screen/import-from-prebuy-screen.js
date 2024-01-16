@@ -6,7 +6,7 @@ import AgencyBasePage from "../../../support/page-objects/agency-pages/AgencyBas
 const linearProposalRfpPage = new LinearProposalRfpPage;
 const agencyBasePage = new AgencyBasePage;
 let exportProposalXmlParam
-const FILE_NAME = 'stores/TEST Dallas RTG_IMP Dec2023.xml';
+const FILE_NAME = 'stores/TEST Dallas RTG_IMP.xml';
 before(function () {
     cy.fixture('/agencyRFP/import-xml-prebuy-screen-param').then(function (data) {
         exportProposalXmlParam = data;
