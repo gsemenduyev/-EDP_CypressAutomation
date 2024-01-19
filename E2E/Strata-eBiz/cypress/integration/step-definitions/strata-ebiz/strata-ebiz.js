@@ -61,6 +61,11 @@ Given('Visit ARFP {string} environment', environment => {
         cy.visit(environmentsParam.arfpUrlUat, { failOnStatusCode: false });
     };
     arfpPages.pageTitle().should('have.text', 'Sign In');
+    arfpPages.loginButton()
+        .should('have.css', 'color')
+        .then((color) => {
+            expect(color).to.equal('rgb(255, 255, 255)');
+        });
     cy.screenshot();
 });
 

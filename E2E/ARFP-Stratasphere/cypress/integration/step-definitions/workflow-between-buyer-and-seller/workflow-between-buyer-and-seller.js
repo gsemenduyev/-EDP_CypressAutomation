@@ -33,7 +33,7 @@ const searchRfpPage = new SearchRfpPage;
 const rfpDetailsPage = new RfpDetailsPage;
 const envUtils = new EnvUtils;
 
-const FILE_NAME = 'stores/TEST Dallas RTG_IMP Dec2023.xml';
+const FILE_NAME = 'stores/TEST Dallas RTG_IMP.xml';
 const SELLER_REVISION_RATE = '8';
 const BUYER_REVISION_RATE = '$ 5.00';
 
@@ -192,6 +192,19 @@ Given('Login to Stratasphere', () => {
 
 // Search for RFP in Stratasphere
 Given('Search for RFP in Stratasphere', () => {
+    sSphereProposalsPage.showPastRfpLabel().should('have.text', 'Show Past RFPs and Proposals')
+    cy.is_element_exists(sSphereProposalsPage.showPastRfpNoButtonSyntax()).then(($isElementExists) => {
+        if ($isElementExists) {
+            cy.get(sSphereProposalsPage.showPastRfpNoButtonSyntax()).click();
+        }
+    })
+
+    sSphereProposalsPage.rfpModalHeaders(1).then(($element) => {
+        if (!$element.is(':visible')) {
+            sSphereProposalsPage.rfpChevronButton().click();
+        }
+    })
+
     sSphereProposalsPage.rfpModalHeaders(1).should('be.visible');
     var tries = 20;
     var index = 0;
@@ -409,8 +422,6 @@ Given('Search for {string} user in Mailinator', string => {
         mailinatorHomePage.userSearchBox().type(envUtils.getAgencyUsername());
     }
     mailinatorHomePage.goButton().click({ force: true });
-    cy.screenshot();
-
 })
 
 // Validate email for New Rate Request

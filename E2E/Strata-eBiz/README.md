@@ -39,7 +39,7 @@ Cypress Tests
 ## Execution modes 🤖 Starting up
 * Open the Cypress Test Runner
 
-`npx cypress open --env`
+`npx cypress open`
 
 * Run Cypress Tests using Cypress CLI
 

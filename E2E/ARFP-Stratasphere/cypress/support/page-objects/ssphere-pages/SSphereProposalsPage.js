@@ -167,5 +167,14 @@ class SSphereProposalsPage {
     uncheckedFilterItem() {
         return '.ui-grid-menu .ui-grid-icon-cancel';
     }
+    showPastRfpNoButtonSyntax() {
+        return '.btn.toggle-off-pad.active.btn_xs.btn-default.toggle-off';
+    }
+    rfpChevronButton() {
+        return cy.get('.pull-left.glyphicon.glyphicon-chevron-right');
+    }
+    showPastRfpLabel() {
+        return cy.get('label').eq(2);
+    }
 }
 export default SSphereProposalsPage;
