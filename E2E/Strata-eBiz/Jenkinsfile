@@ -92,9 +92,9 @@ import groovy.json.*
 
                                 
                                 
-                def color = 'danger'
+                def color = 'warning'
                  if (currentBuild.currentResult == "FAILURE") {
-                    color = 'warning'
+                    color = 'danger'
                  } else if (currentBuild.currentResult == "SUCCESS") {
                     color = 'good'
                  }
