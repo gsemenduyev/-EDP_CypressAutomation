@@ -88,8 +88,11 @@ import groovy.json.*
                 writeFile(file: TEST_RAIL_CONFIG_FILE_PATH, text: json);
                 writeFile(file: CONFIG_FILE_DESTINATION, text: json);
 
-                notifySlack(slackChannel, currentBuild.currentResult)
-
+                // Copy paste failed scenarios from failed-scenarios-title.txt into email
+                def fileContent = readFile(file: FAIED_SCENAROS_FILE_PATH).trim();
+                def lines = fileContent.readLines();
+                def formattedContent = '<br><br>' + lines.join('<br>');
+                slackSend channel: '#agency-ebiz-autobuild', message: '${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. ${formattedContent}'
                 sh "cd ${CURRENT_PROJECT_PATH} && node ./cucumber-html-report.js";
             }
             publishHTML(target : [allowMissing: true,
