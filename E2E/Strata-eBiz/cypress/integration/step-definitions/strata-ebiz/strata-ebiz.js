@@ -78,7 +78,7 @@ Given('Login to {string} ARFP home page', environment => {
         arfpPages.passwordBox().type(environmentsParam.arfpUrlPasswordUat);
     };
     arfpPages.loginButton().click();
-    cy.title().should('eq', 'Home - RFP1');
+    cy.title().should('eq', 'Home - RFP');
     cy.screenshot();
 });
 
@@ -94,7 +94,7 @@ Given('Visit Stratasphere {string} environment', environment => {
     } else if (environment === 'UAT') {
         cy.visit(environmentsParam.ssphereUrlUat, { failOnStatusCode: false });
     };
-    sSpherePages.pageTitle().should('include.text', ' Login1');
+    sSpherePages.pageTitle().should('include.text', ' Login');
     cy.screenshot();
 });
 

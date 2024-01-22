@@ -88,19 +88,15 @@ import groovy.json.*
                 writeFile(file: TEST_RAIL_CONFIG_FILE_PATH, text: json);
                 writeFile(file: CONFIG_FILE_DESTINATION, text: json);
 
-                // Copy paste failed scenarios from failed-scenarios-title.txt into email
-
-                                
-                                
+                // Sends daily build results to Slack
                 def color = 'warning'
                  if (currentBuild.currentResult == "FAILURE") {
                     color = 'danger'
                  } else if (currentBuild.currentResult == "SUCCESS") {
                     color = 'good'
                  }
-                def fileContent = readFile(file: FAIED_SCENARIOS_FILE_PATH).trim()
-                def formattedContent = '\n\n' + fileContent.replaceAll(", ", "\n")
-                slackSend channel: '@Gennadiy Semenduyev', message: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. ${formattedContent}", color: color
+                slackSend channel: '#agency-ebiz-autobuild', message: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. ${formattedContent}", color: color
+                
                 sh "cd ${CURRENT_PROJECT_PATH} && node ./cucumber-html-report.js";
             }
             publishHTML(target : [allowMissing: true,
