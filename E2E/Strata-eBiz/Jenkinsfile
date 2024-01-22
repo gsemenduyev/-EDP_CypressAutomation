@@ -96,7 +96,8 @@ import groovy.json.*
                 mail(
                     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
                     body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. ${formattedContent}",
-                    to: read_config_file(CONFIG_FILE_ID).qaTeamEmail, 
+                    to: read_config_file(CONFIG_FILE_ID).strataEBizTeamEmail,
+                    cc: read_config_file(CONFIG_FILE_ID).qaTeamEmail 
                     mimeType: 'text/html'
                 );
 
@@ -125,7 +126,8 @@ import groovy.json.*
                 mail(
                     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
                     body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. ${formattedContent}",
-                    to: read_config_file(CONFIG_FILE_ID).strataEBizTeamEmail, 
+                    to: read_config_file(CONFIG_FILE_ID).strataEBizTeamEmail,
+                    cc: read_config_file(CONFIG_FILE_ID).qaTeamEmail
                     mimeType: 'text/html'
                 );
             }

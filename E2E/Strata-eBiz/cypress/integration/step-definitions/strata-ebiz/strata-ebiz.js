@@ -225,7 +225,7 @@ Given('Login to {string} ePort home page', environment => {
         ePortPages.passwordBox().type(environmentsParam.ePortPasswordUat);
     };
     ePortPages.loginButton().click();
-    cy.title().should('eq', 'ePort');
+    ePortPages.welcomeText().should('contain.text', 'You are viewing documents')
     cy.screenshot();
 });
 
