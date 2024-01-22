@@ -92,16 +92,16 @@ import groovy.json.*
 
                                 
                                 
-                def color = 'good' // Default color
-                 if (someCondition) {
+                def color = 'danger'
+                 if (currentBuild.currentResult == "FAILURE") {
                     color = 'warning'
-                 } else if (anotherCondition) {
-                    color = 'danger'
+                 } else if (currentBuild.currentResult == "SUCCESS") {
+                    color = 'good'
                  }
                 def fileContent = readFile(file: FAIED_SCENAROS_FILE_PATH).trim();
                 def lines = fileContent.readLines();
                 def formattedContent = '<br><br>' + lines.join('<br>');
-                slackSend channel: '#agency-ebiz-autobuild', message: "Build result: ${BUILD_URL}", color: color
+                slackSend channel: '#agency-ebiz-autobuild', message: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. ${formattedContent}", color: color
                 
                 sh "cd ${CURRENT_PROJECT_PATH} && node ./cucumber-html-report.js";
             }
