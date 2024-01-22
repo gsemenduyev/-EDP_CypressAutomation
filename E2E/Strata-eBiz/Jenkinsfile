@@ -99,8 +99,9 @@ import groovy.json.*
                     color = 'good'
                  }
                 def fileContent = readFile(file: FAIED_SCENAROS_FILE_PATH).trim();
+                def formattedContent = '\n\n' + lines.join('\n');
                 def lines = fileContent.readLines();
-                slackSend channel: '#agency-ebiz-autobuild', message: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. ${lines}", color: color
+                slackSend channel: '#agency-ebiz-autobuild', message: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. ${formattedContent}", color: color
                 
                 sh "cd ${CURRENT_PROJECT_PATH} && node ./cucumber-html-report.js";
             }
