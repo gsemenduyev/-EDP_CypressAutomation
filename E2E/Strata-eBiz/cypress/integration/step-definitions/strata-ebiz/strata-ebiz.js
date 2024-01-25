@@ -78,7 +78,7 @@ Given('Login to {string} ARFP home page', environment => {
         arfpPages.passwordBox().type(environmentsParam.arfpUrlPasswordUat);
     };
     arfpPages.loginButton().click();
-    cy.title().should('eq', 'Home - RFP1');
+    cy.title().should('eq', 'Home - RFP');
     cy.screenshot();
 });
 
@@ -268,7 +268,7 @@ Given('Login to {string} Eleven home page', environment => {
         })
     }
     checkXmlValidated();
-    cy.title().should('eq', 'Eleven1');
+    cy.title().should('eq', 'Eleven');
     cy.screenshot();
 });
 
