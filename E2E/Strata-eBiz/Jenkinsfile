@@ -95,7 +95,7 @@ import groovy.json.*
                  } else if (currentBuild.currentResult == "SUCCESS") {
                     color = 'good'
                  }
-                slackSend channel: '@jenkinsaws2', message: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information.", color: color
+                slackSend channel: 'gsemenduyev@freewheel.com', message: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information.", color: color
                 
                 sh "cd ${CURRENT_PROJECT_PATH} && node ./cucumber-html-report.js";
             }
