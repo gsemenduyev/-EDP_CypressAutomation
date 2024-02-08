@@ -182,7 +182,8 @@ Given('Logout Agency RFP', () => {
     agencyBasePage.signOutButton().click({ force: true });
     cy.url().then(($url) => {
         if (!$url.includes(envUtils.getAgencyUrl())) {
-            cy.title().should('eq', 'FREEWHEEL - A COMCAST COMPANY')
+            agencyLoginPage.centralLoginNextButton().should('be.visible')
+            cy.title().should('eq', 'FREEWHEEL - A COMCAST COMPANY');
         } else {
             agencyBasePage.pageTitle().should('have.text', 'Sign In');
         }
