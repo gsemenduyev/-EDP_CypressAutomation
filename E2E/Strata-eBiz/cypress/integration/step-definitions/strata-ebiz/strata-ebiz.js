@@ -107,7 +107,8 @@ Given('Logout from ARFP', () => {
     arfpPages.signOutButton().click({ force: true });
     cy.url().then(($url) => {
         if (!$url.includes(rfpUrl)) {
-            cy.title().should('eq', 'FREEWHEEL - A COMCAST COMPANY')
+            arfpPages.centralLoginNextButton().should('be.visible');
+            cy.title().should('eq', 'FREEWHEEL - A COMCAST COMPANY');
         } else {
             arfpPages.pageTitle().should('have.text', 'Sign In');
         }
