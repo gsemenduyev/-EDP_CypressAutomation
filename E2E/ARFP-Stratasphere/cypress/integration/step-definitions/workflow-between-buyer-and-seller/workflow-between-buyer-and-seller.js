@@ -61,10 +61,22 @@ Given('Login to Agency RFP with {string} password', string => {
         agencyPassword = envUtils.getAgencyPassword();
     }
     cy.visit(envUtils.getAgencyUrl());
-    agencyBasePage.pageTitle().should('have.text', 'Sign In');
-    agencyLoginPage.usernameBox().type(envUtils.getAgencyUsername());
-    agencyLoginPage.passwordBox().type(agencyPassword, { log: false });
-    agencyLoginPage.loginButton().click();
+
+    cy.url().then(($url) => {
+        if (!$url.includes(envUtils.getAgencyUrl())) {
+            cy.title().should('eq', 'FREEWHEEL - A COMCAST COMPANY')
+            agencyLoginPage.centralLoginEmail().type(envUtils.getAgencyUsername());
+            agencyLoginPage.centralLoginNextButton().click();
+            agencyLoginPage.centralLoginPassword().type(agencyPassword, { log: false });
+            agencyLoginPage.centralLoginButton().click();
+        } else {
+            agencyBasePage.pageTitle().should('have.text', 'Sign In');
+            agencyLoginPage.usernameBox().type(envUtils.getAgencyUsername());
+            agencyLoginPage.passwordBox().type(agencyPassword, { log: false });
+            agencyLoginPage.loginButton().click();
+        }
+    });
+
     cy.title().should('eq', 'Home - RFP');
     var index = 0;
     const checkXmlValidated = () => {
@@ -168,9 +180,15 @@ Given('Validate RFP Creation', () => {
 // Logout Agency RFP
 Given('Logout Agency RFP', () => {
     agencyBasePage.signOutButton().click({ force: true });
-    agencyBasePage.pageTitle().should('have.text', 'Sign In');
-    cy.screenshot();
-})
+    cy.url().then(($url) => {
+        if (!$url.includes(envUtils.getAgencyUrl())) {
+            cy.title().should('eq', 'FREEWHEEL - A COMCAST COMPANY')
+        } else {
+            agencyBasePage.pageTitle().should('have.text', 'Sign In');
+        }
+    });
+    cy.screenshot({ timeout: 10000 });
+});
 
 // Login to Stratasphere
 Given('Login to Stratasphere', () => {
