@@ -33,7 +33,7 @@ const searchRfpPage = new SearchRfpPage;
 const rfpDetailsPage = new RfpDetailsPage;
 const envUtils = new EnvUtils;
 
-const FILE_NAME = 'stores/TEST Dallas RTG_IMP Dec2023.xml';
+const FILE_NAME = 'stores/TEST Dallas RTG_IMP.xml';
 const SELLER_REVISION_RATE = '8';
 const BUYER_REVISION_RATE = '$ 5.00';
 
@@ -61,10 +61,22 @@ Given('Login to Agency RFP with {string} password', string => {
         agencyPassword = envUtils.getAgencyPassword();
     }
     cy.visit(envUtils.getAgencyUrl());
-    agencyBasePage.pageTitle().should('have.text', 'Sign In');
-    agencyLoginPage.usernameBox().type(envUtils.getAgencyUsername());
-    agencyLoginPage.passwordBox().type(agencyPassword, { log: false });
-    agencyLoginPage.loginButton().click();
+
+    cy.url().then(($url) => {
+        if (!$url.includes(envUtils.getAgencyUrl())) {
+            cy.title().should('eq', 'FREEWHEEL - A COMCAST COMPANY')
+            agencyLoginPage.centralLoginEmail().type(envUtils.getAgencyUsername());
+            agencyLoginPage.centralLoginNextButton().click();
+            agencyLoginPage.centralLoginPassword().type(agencyPassword, { log: false });
+            agencyLoginPage.centralLoginButton().click();
+        } else {
+            agencyBasePage.pageTitle().should('have.text', 'Sign In');
+            agencyLoginPage.usernameBox().type(envUtils.getAgencyUsername());
+            agencyLoginPage.passwordBox().type(agencyPassword, { log: false });
+            agencyLoginPage.loginButton().click();
+        }
+    });
+
     cy.title().should('eq', 'Home - RFP');
     var index = 0;
     const checkXmlValidated = () => {
@@ -168,9 +180,16 @@ Given('Validate RFP Creation', () => {
 // Logout Agency RFP
 Given('Logout Agency RFP', () => {
     agencyBasePage.signOutButton().click({ force: true });
-    agencyBasePage.pageTitle().should('have.text', 'Sign In');
-    cy.screenshot();
-})
+    cy.url().then(($url) => {
+        if (!$url.includes(envUtils.getAgencyUrl())) {
+            agencyLoginPage.centralLoginNextButton().should('be.visible')
+            cy.title().should('eq', 'FREEWHEEL - A COMCAST COMPANY');
+        } else {
+            agencyBasePage.pageTitle().should('have.text', 'Sign In');
+        }
+    });
+    cy.screenshot({ timeout: 10000 });
+});
 
 // Login to Stratasphere
 Given('Login to Stratasphere', () => {
@@ -192,18 +211,50 @@ Given('Login to Stratasphere', () => {
 
 // Search for RFP in Stratasphere
 Given('Search for RFP in Stratasphere', () => {
-    sSphereProposalsPage.rfpModalHeaders(1).should('be.visible');
-    sSphereProposalsPage.rfpModalHeaders(1).invoke('text').then(header => {
-        if (header !== 'Campaign') {
-            sSphereProposalsPage.hamburgerButton(0).click();
-            sSphereProposalsPage.campaignFilterOptions().then(function (el) {
-                if (el.prop('class').includes('cancel')) {
-                    sSphereProposalsPage.campaignFilterOptions().should('be.visible').click();
-                }
-            })
-            sSphereProposalsPage.hamburgerButton(0).click();
+    sSphereProposalsPage.showPastRfpLabel().should('have.text', 'Show Past RFPs and Proposals')
+    cy.is_element_exists(sSphereProposalsPage.showPastRfpNoButtonSyntax()).then(($isElementExists) => {
+        if ($isElementExists) {
+            cy.get(sSphereProposalsPage.showPastRfpNoButtonSyntax()).click();
         }
     })
+
+    sSphereProposalsPage.rfpModalHeaders(1).then(($element) => {
+        if (!$element.is(':visible')) {
+            sSphereProposalsPage.rfpChevronButton().click();
+        }
+    })
+
+    sSphereProposalsPage.rfpModalHeaders(1).should('be.visible');
+    var tries = 20;
+    var index = 0;
+    const clickOnHamburgerButton = () => {
+        sSphereProposalsPage.hamburgerButton(0).click();
+        cy.wait(500);
+        sSphereProposalsPage.filtersGridMenu().then(($element) => {
+            if ($element.is(':visible') && index < tries) {
+                var innerIndex = 0;
+                // This recursive function clicks on each unchecked Filter Item
+                const clickOnFilterItem = () => {
+                    cy.is_element_exists(sSphereProposalsPage.uncheckedFilterItem()).then($uncheckedFilter => {
+                        if ($element.is(':visible') && $uncheckedFilter === true && innerIndex < tries) {
+                            cy.get(sSphereProposalsPage.uncheckedFilterItem()).eq(0).click();
+                            clickOnFilterItem();
+                        } else if (innerIndex < tries && $uncheckedFilter === false) {
+                            innerIndex = tries;
+                            index = tries;
+                        }
+                    })
+                }
+                clickOnFilterItem();
+            } else if (index < tries && !$element.is(':visible')) {
+                index++;
+                clickOnHamburgerButton();
+            }
+        });
+    }
+    clickOnHamburgerButton();
+
+    sSphereProposalsPage.hamburgerButton(0).click();
     sSphereProposalsPage.rfpModalHeaders(1).should('have.text', 'Campaign')
     cy.dataSession('newRfpName').then(newRfpName => {
         sSphereProposalsPage.campaignSearchBox().type(newRfpName);
@@ -289,12 +340,7 @@ Given('Search for existing RFP', () => {
 
 // Click on Launch Pre-buy button
 Given('Click on Launch Pre-buy button', () => {
-    if (Cypress.env('ENV') !== 'Production') {
-        rfpDetailsPage.manageResponsesButton(10000).click()
-    } else {
-        rfpDetailsPage.launchPreBuyButton(10000).click();
-        cy.title('eq', 'Linear Proposal - RFP');
-    }
+    rfpDetailsPage.manageResponsesButton(10000).click()
 })
 
 // Validate the response from Agency {string}
@@ -315,7 +361,6 @@ Given('Validate the response from {string}', string => {
                 for (let columnIndex = 0; columnIndex < value.length; columnIndex++) {
                     linearProposalRfpPage.proposalHeader(columnIndex).then(function (headerText) {
                         headerText1 = headerText.text();
-
                     });
                     linearProposalRfpPage.proposalCell(cellIndex++).then(function (cellText) {
                         var cellTextTemp = cellText.text();
@@ -396,8 +441,6 @@ Given('Search for {string} user in Mailinator', string => {
         mailinatorHomePage.userSearchBox().type(envUtils.getAgencyUsername());
     }
     mailinatorHomePage.goButton().click({ force: true });
-    cy.screenshot();
-
 })
 
 // Validate email for New Rate Request

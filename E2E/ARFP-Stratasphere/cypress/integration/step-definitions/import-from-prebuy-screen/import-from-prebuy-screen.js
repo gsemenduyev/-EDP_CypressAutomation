@@ -6,7 +6,7 @@ import AgencyBasePage from "../../../support/page-objects/agency-pages/AgencyBas
 const linearProposalRfpPage = new LinearProposalRfpPage;
 const agencyBasePage = new AgencyBasePage;
 let exportProposalXmlParam
-const FILE_NAME = 'stores/TEST Dallas RTG_IMP Dec2023.xml';
+const FILE_NAME = 'stores/TEST Dallas RTG_IMP.xml';
 before(function () {
     cy.fixture('/agencyRFP/import-xml-prebuy-screen-param').then(function (data) {
         exportProposalXmlParam = data;
@@ -15,10 +15,8 @@ before(function () {
 
 // Import from prebuy screen
 Given('Import from prebuy screen', () => {
-    if (Cypress.env('ENV') !== 'Production') {
-        linearProposalRfpPage.actionsDropdown().click()
-        linearProposalRfpPage.manageBuyerDataButton().click()
-    };
+    linearProposalRfpPage.actionsDropdown().click()
+    linearProposalRfpPage.manageBuyerDataButton().click()
     cy.upload_file(FILE_NAME, linearProposalRfpPage.importProposalXmlButton());
     linearProposalRfpPage.modalImportXmlButton().click();
     agencyBasePage.alertBox().should('have.text', 'Success! We imported the buylines from the proposal xml.');

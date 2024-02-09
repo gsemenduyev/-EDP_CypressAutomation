@@ -8,7 +8,7 @@
 		<Action>New</Action>
 		<UniqueMessageID>IDAXILFB</UniqueMessageID>
 	</AAAA-Values>
-	<Proposal uniqueIdentifier="N/A" version="1" sendDateTime="2019-01-11T18:17:37" weekStartDay="Tu" startDate="2023-11-27" endDate="2023-12-24">
+	<Proposal uniqueIdentifier="N/A" version="1" sendDateTime="2019-01-11T18:17:37" weekStartDay="Tu" startDate="2024-11-27" endDate="2024-12-24">
 		<Seller companyName="N/A">
 			<Salesperson name="N/A"/>
 		</Seller>
@@ -20,7 +20,7 @@
 		<Outlets>
 			<TelevisionStation callLetters="TEST" parentPlus="N" outletId="OUT0"/>
 		</Outlets>
-		<AvailList startDate="2023-11-27" endDate="2023-12-24" identifier="AL001" isPackage="N">
+		<AvailList startDate="2024-11-27" endDate="2024-12-24" identifier="AL001" isPackage="N">
 			<Name>Television Schedule - Dallas-Ft. Worth Sep17 DMA Nielsen Live+7</Name>
 			<OutletReferences>
 				<OutletReference outletFromProposalRef="OUT0" outletForListId="OUL0"/>
@@ -56,7 +56,7 @@
 				<AvailName>5</AvailName>
 				<SpotLength>00:00:30</SpotLength>
 				<Periods>
-					<DetailedPeriod startDate="2023-11-27" endDate="2023-12-24">
+					<DetailedPeriod startDate="2024-11-27" endDate="2024-12-24">
 						<Rate>10.00</Rate>
 						<SpotsPerWeek>5</SpotsPerWeek>
 						<DemoValues>
@@ -87,7 +87,7 @@
 				<AvailName>6</AvailName>
 				<SpotLength>00:00:30</SpotLength>
 				<Periods>
-					<DetailedPeriod startDate="2023-11-27" endDate="2023-12-24">
+					<DetailedPeriod startDate="2024-11-27" endDate="2024-12-24">
 						<Rate>20.00</Rate>
 						<SpotsPerWeek>5</SpotsPerWeek>
 						<DemoValues>
@@ -118,7 +118,7 @@
 				<AvailName>7</AvailName>
 				<SpotLength>00:00:30</SpotLength>
 				<Periods>
-					<DetailedPeriod startDate="2023-11-27" endDate="2023-12-24">
+					<DetailedPeriod startDate="2024-11-27" endDate="2024-12-24">
 						<Rate>30.00</Rate>
 						<SpotsPerWeek>5</SpotsPerWeek>
 						<DemoValues>
@@ -149,7 +149,7 @@
 				<AvailName>8</AvailName>
 				<SpotLength>00:00:30</SpotLength>
 				<Periods>
-					<DetailedPeriod startDate="2023-11-27" endDate="2023-12-24">
+					<DetailedPeriod startDate="2024-11-27" endDate="2024-12-24">
 						<Rate>40.00</Rate>
 						<SpotsPerWeek>5</SpotsPerWeek>
 						<DemoValues>
@@ -180,7 +180,7 @@
 				<AvailName>9</AvailName>
 				<SpotLength>00:00:30</SpotLength>
 				<Periods>
-					<DetailedPeriod startDate="2023-11-27" endDate="2023-12-24">
+					<DetailedPeriod startDate="2024-11-27" endDate="2024-12-24">
 						<Rate>50.00</Rate>
 						<SpotsPerWeek>5</SpotsPerWeek>
 						<DemoValues>
@@ -211,7 +211,7 @@
 				<AvailName>9</AvailName>
 				<SpotLength>00:00:30</SpotLength>
 				<Periods>
-					<DetailedPeriod startDate="2023-11-27" endDate="2023-12-24">
+					<DetailedPeriod startDate="2024-11-27" endDate="2024-12-24">
 						<Rate>60.00</Rate>
 						<SpotsPerWeek>5</SpotsPerWeek>
 						<DemoValues>

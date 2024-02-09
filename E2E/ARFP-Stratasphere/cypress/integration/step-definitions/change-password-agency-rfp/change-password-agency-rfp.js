@@ -20,6 +20,11 @@ before(function () {
         cy.fixture('/environment/qa-param.json').then(function (data) {
             envProperties = data;
         });
+    } else if (ENV === 'UAT') {
+        cy.log(`Environment - ${ENV}`);
+        cy.fixture('/environment/uat-param.json').then(function (data) {
+            envProperties = data;
+        });
     }
 });
 
@@ -63,11 +68,9 @@ Given('Open Forgot Password email and click on restore password link', () => {
         })
     }
     checkEmailExists();
-    cy.screenshot();
     mailinatorHomePage.forgotPasswordLink()
         .invoke('attr', 'target', '_parent')
         .click({ force: true });
-
 })
 
 // Set 'Temporary, Permanent' password

@@ -153,13 +153,28 @@ class SSphereProposalsPage {
         return '.modal-body';
     }
     rfpModalHeaders(index) {
-        return cy.get('.ui-grid-header-cell-label').eq(index)
+        return cy.get('.ui-grid-header-cell-label').eq(index);
     }
     campaignFilterOptions() {
-        return cy.get('.ui-grid-menu-item').eq(2).children()
+        return cy.get('.ui-grid-menu-item').eq(2).children();
     }
     hamburgerButton(index) {
-        return cy.get('.ui-grid-icon-menu').eq(index)
+        return cy.get('.ui-grid-icon-menu').eq(index);
+    }
+    filtersGridMenu() {
+        return cy.get('.ui-grid-menu');
+    }
+    uncheckedFilterItem() {
+        return '.ui-grid-menu .ui-grid-icon-cancel';
+    }
+    showPastRfpNoButtonSyntax() {
+        return '.btn.toggle-off-pad.active.btn_xs.btn-default.toggle-off';
+    }
+    rfpChevronButton() {
+        return cy.get('.pull-left.glyphicon.glyphicon-chevron-right');
+    }
+    showPastRfpLabel() {
+        return cy.get('label').eq(2);
     }
 }
 export default SSphereProposalsPage;

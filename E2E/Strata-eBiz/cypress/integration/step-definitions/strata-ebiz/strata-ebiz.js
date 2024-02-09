@@ -21,7 +21,7 @@ const ePortPages = new EportPages;
 let environmentsParam;
 let testResultsFilePath = 'cypress/reports/run-info/failed-scenarios-title.txt';
 var failedScenariosList = [];
-
+let rfpUrl;
 before(function () {
     cy.writeFile(testResultsFilePath, "");
     cy.fixture('/environment/environments.json').then((data) => {
@@ -56,31 +56,64 @@ after(function () {
 
 Given('Visit ARFP {string} environment', environment => {
     if (environment === 'QA') {
-        cy.visit(environmentsParam.arfpUrlQa, { failOnStatusCode: false });
+        rfpUrl = environmentsParam.arfpUrlQa;
     } else if (environment === 'UAT') {
-        cy.visit(environmentsParam.arfpUrlUat, { failOnStatusCode: false });
+        rfpUrl = environmentsParam.arfpUrlUat;
     };
-    arfpPages.pageTitle().should('have.text', 'Sign In');
+    cy.visit(rfpUrl, { failOnStatusCode: false });
+    cy.url().then(($url) => {
+        if (!$url.includes(rfpUrl)) {
+            cy.title().should('eq', 'FREEWHEEL - A COMCAST COMPANY')
+        } else {
+            arfpPages.pageTitle().should('have.text', 'Sign In');
+            arfpPages.loginButton()
+                .should('have.css', 'color')
+                .then((color) => {
+                    expect(color).to.equal('rgb(255, 255, 255)');
+                });
+        }
+    })
     cy.screenshot();
 });
 
 Given('Login to {string} ARFP home page', environment => {
+    let userName;
+    let password;
     if (environment === 'QA') {
-        arfpPages.usernameBox().type(environmentsParam.arfpUrlUsernameQa);
-        arfpPages.passwordBox().type(environmentsParam.arfpUrlPasswordQa);
+        userName = environmentsParam.arfpUrlUsernameQa;
+        password = environmentsParam.arfpUrlPasswordQa;
     } else if (environment === 'UAT') {
-        arfpPages.usernameBox().type(environmentsParam.arfpUrlUsernameUat);
-        arfpPages.passwordBox().type(environmentsParam.arfpUrlPasswordUat);
+        userName = environmentsParam.arfpUrlUsernameQa;
+        password = environmentsParam.arfpUrlPasswordQa;
     };
-    arfpPages.loginButton().click();
-    cy.title().should('eq', 'Home - RFP');
+    cy.url().then(($url) => {
+        if (!$url.includes(rfpUrl)) {
+            cy.title().should('eq', 'FREEWHEEL - A COMCAST COMPANY')
+            arfpPages.centralLoginEmail().type(userName);
+            arfpPages.centralLoginNextButton().click();
+            arfpPages.centralLoginPassword().type(password, { log: false });
+            arfpPages.centralLoginButton().click();
+        } else {
+            arfpPages.usernameBox().type(userName);
+            arfpPages.passwordBox().type(password);
+            arfpPages.loginButton().click();
+            cy.title().should('eq', 'Home - RFP');
+        }
+    });
     cy.screenshot();
 });
 
 Given('Logout from ARFP', () => {
     arfpPages.signOutButton().click({ force: true });
-    arfpPages.pageTitle().should('have.text', 'Sign In');
-    cy.screenshot();
+    cy.url().then(($url) => {
+        if (!$url.includes(rfpUrl)) {
+            arfpPages.centralLoginNextButton().should('be.visible');
+            cy.title().should('eq', 'FREEWHEEL - A COMCAST COMPANY');
+        } else {
+            arfpPages.pageTitle().should('have.text', 'Sign In');
+        }
+    });
+    cy.screenshot({ timeout: 10000 });
 });
 
 Given('Visit Stratasphere {string} environment', environment => {
@@ -161,7 +194,7 @@ Given('Login to {string} Traffic home page', environment => {
         trafficPages.passwordBox().type(environmentsParam.trafficPasswordUat);
     };
     trafficPages.loginButton().click();
-    cy.title().should('eq', 'Traffic Instruction - Manage User');
+    cy.title().should('eq', 'Traffic Instruction - Inbox');
     cy.screenshot();
 
 });
@@ -220,7 +253,7 @@ Given('Login to {string} ePort home page', environment => {
         ePortPages.passwordBox().type(environmentsParam.ePortPasswordUat);
     };
     ePortPages.loginButton().click();
-    cy.title().should('eq', 'ePort');
+    ePortPages.welcomeText().should('contain.text', 'You are viewing documents')
     cy.screenshot();
 });
 
