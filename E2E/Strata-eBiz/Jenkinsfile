@@ -5,7 +5,7 @@ import groovy.json.*
     def CONFIG_FILE_ID = '16d93a3a-a4a4-4764-9cb5-231f80e7261f';
     def CONFIG_FILE_DESTINATION = 'E2E/Strata-eBiz/cypress/fixtures/environment/environments.json';
     def TEST_RAIL_CONFIG_FILE_PATH = 'E2E/Strata-eBiz/cypress.env.json';
-    def FAIED_SCENARIOS_FILE_PATH = 'E2E/Strata-eBiz/cypress/reports/run-info/failed-scenarios-title.txt';
+    def FAILED_SCENARIOS_FILE_PATH = 'E2E/Strata-eBiz/cypress/reports/run-info/failed-scenarios-title.txt';
     def REPORT_DIR = 'E2E/Strata-eBiz/cypress/reports';
     
     pipeline {
@@ -116,7 +116,7 @@ import groovy.json.*
         }
         failure{
                 script {
-                    def fileContent = readFile(file: FAIED_SCENARIOS_FILE_PATH).trim();
+                    def fileContent = readFile(file: FAILED_SCENARIOS_FILE_PATH).trim();
                     def lines = fileContent.readLines();
                     def formattedContent = '<br><br>' + lines.join('<br>');
                 mail(
