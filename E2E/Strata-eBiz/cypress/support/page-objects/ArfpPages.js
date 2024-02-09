@@ -14,5 +14,17 @@ class ArfpPages {
     signOutButton() {
         return cy.get("[href='/RFP/login/SignOut']");
     }
+    centralLoginEmail(milliseconds) {
+        return cy.get('#email', { timeout: milliseconds });
+    }
+    centralLoginNextButton(milliseconds) {
+        return cy.get('#btnNext', { timeout: milliseconds });
+    }
+    centralLoginPassword(milliseconds) {
+        return cy.get('#password', { timeout: milliseconds });
+    }
+    centralLoginButton(milliseconds) {
+        return cy.get('#btnLogin', { timeout: milliseconds });
+    }
 }
 export default ArfpPages;
