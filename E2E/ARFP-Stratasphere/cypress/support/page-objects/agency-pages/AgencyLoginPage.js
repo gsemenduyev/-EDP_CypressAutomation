@@ -32,17 +32,5 @@ class AgencyLoginPage {
     pageTitle(milliseconds) {
         return cy.get('#page-title', { timeout: milliseconds });
     }
-    centralLoginEmail(milliseconds) {
-        return cy.get('#email', { timeout: milliseconds });
-    }
-    centralLoginNextButton(milliseconds) {
-        return cy.get('#btnNext', { timeout: milliseconds });
-    }
-    centralLoginPassword(milliseconds) {
-        return cy.get('#password', { timeout: milliseconds });
-    }
-    centralLoginButton(milliseconds) {
-        return cy.get('#btnLogin', { timeout: milliseconds });
-    }
 }
 export default AgencyLoginPage;
