@@ -69,7 +69,7 @@ pipeline {
                        'domain': reporterConfig1.testrail.domain,
                        'username': reporterConfig1.testrail.username.values[0],
                        'password': reporterConfig1.testrail.password.values[0],
-                       'runId': reporterConfig1.testrail.runId.values[0]
+                       'runId': runId
                         ];
                         reporterConfig.put("testrail", testrail);
                         json = JsonOutput.toJson(reporterConfig);
@@ -117,7 +117,7 @@ pipeline {
                     color = 'good'
                  }
 
-                slackSend channel: "${read_config_file(EMAILS_SLACK_CONTACTS).agency-ebiz-autobuild}", message: "${currentBuild.currentResult} run for ${params.ENVIRONMENT} environment: ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", color: color
+                slackSend channel: "${read_config_file(EMAILS_SLACK_CONTACTS).agencyEbizAutobuild}", message: "${currentBuild.currentResult} run for ${params.ENVIRONMENT} environment: ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", color: color
                 
                 sh "cd ${CURRENT_PROJECT_PATH} && node ./cucumber-html-report.js";
             }
