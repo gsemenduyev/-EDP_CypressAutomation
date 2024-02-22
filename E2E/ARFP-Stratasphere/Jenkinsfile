@@ -2,10 +2,10 @@
 import groovy.json.*
 
 def CURRENT_PROJECT_PATH = 'E2E/ARFP-Stratasphere';
-def CONFIG_FILE_ID = '16d93a3a-a4a4-4764-9cb5-231f80e7261f';
 def PROD_CONFIG_FILE_ID = '1ad0b80a-404d-45ac-81b1-71cd259794d1';
 def QA_CONFIG_FILE_ID = '2a6e4dde-90fd-4b33-870c-94e1ac74261e';
 def UAT_CONFIG_FILE_ID = '10596465-25c2-4869-93fe-1b8c63a3dec6';
+def EMAILS_SLACK_CONTACTS = '72f4f5fc-2d3c-415d-891d-943c990e74a1';
 def PROD_CONFIG_FILE_DESTINATION = 'E2E/ARFP-Stratasphere/cypress/fixtures/environment/prod-param.json';
 def QA_CONFIG_FILE_DESTINATION = 'E2E/ARFP-Stratasphere/cypress/fixtures/environment/qa-param.json';
 def UAT_CONFIG_FILE_DESTINATION = 'E2E/ARFP-Stratasphere/cypress/fixtures/environment/uat-param.json';
@@ -23,7 +23,6 @@ pipeline {
     parameters{
         choice(name: 'ENVIRONMENT', choices: ['Production', 'QA', 'UAT'], description: "Choose the Environment to run");
         choice(name: 'PROJECTS', choices: ['Stratasphere', 'ARFP', 'WIP'], description: "Choose the Project to run");
-        string(name: 'RUN_ID', defaultValue: 'R5383', trim: true, description: "Choose the Test Rail Run ID");
         string(name: 'VERSION',defaultValue: 'v 8.4.0',  trim: true, description: "When ARFP project is selected, input Agency RFP version (Production and QA versions may vary)");
     }
     options{
@@ -31,9 +30,9 @@ pipeline {
     }
     triggers {
         parameterizedCron('''
-            H 21 * * 0 %ENVIRONMENT=QA;PROJECTS=ARFP;RUN_ID=R5383;VERSION=v 8.4.0
-            H 22 * * 0 %ENVIRONMENT=UAT;PROJECTS=ARFP;RUN_ID=R5383;VERSION=v 8.4.0
-            H 23 * * 0 %ENVIRONMENT=Production;PROJECTS=ARFP;RUN_ID=R5383;VERSION=v 8.4.0
+            H 21 * * 0 %ENVIRONMENT=QA;PROJECTS=ARFP;VERSION=v 8.4.0
+            H 22 * * 0 %ENVIRONMENT=UAT;PROJECTS=ARFP;VERSION=v 8.4.0
+            H 23 * * 0 %ENVIRONMENT=Production;PROJECTS=ARFP;VERSION=v 8.4.0
         ''')
     }
     stages {
@@ -51,7 +50,7 @@ pipeline {
                         def domain = "https://testrail-strata.freewheel.tv/testrail/";
                         def username = "${USERNAME}";
                         def password = "${PASSWORD}";
-                        def runId = "${RUN_ID}";
+                        def runId = "R5383";
                         // Update cypress.env.json
                         def reporterConfig = readJSON file: TEST_RAIL_CONFIG_FILE_PATH;
                         def testrail = [
@@ -107,8 +106,21 @@ pipeline {
                 mail(
                     subject: "${currentBuild.currentResult} ${params.PROJECTS} run for ${params.ENVIRONMENT}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
                     body: "${currentBuild.currentResult} ${params.PROJECTS} run for ${params.ENVIRONMENT}: Please visit  ${env.BUILD_URL} for further information.",
-                    to: read_config_file(CONFIG_FILE_ID).qaTeamEmail, 
+                    to: read_config_file(EMAILS_SLACK_CONTACTS).qaTeamEmail, 
                 );
+                
+                // Sends daily build results to Slack
+                def color = 'warning'
+                 if (currentBuild.currentResult == "FAILURE") {
+                    color = 'danger'
+                 } else if (currentBuild.currentResult == "SUCCESS") {
+                    color = 'good'
+                 }
+                slackSend 
+                  channel: read_config_file(EMAILS_SLACK_CONTACTS).agency-ebiz-autobuild, 
+                  message: "${currentBuild.currentResult}: ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", 
+                  color: color
+                  
                 sh "cd ${CURRENT_PROJECT_PATH} && node ./cucumber-html-report.js";
             }
             publishHTML (target : [allowMissing: true,

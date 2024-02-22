@@ -3,6 +3,7 @@ import groovy.json.*
 
     def CURRENT_PROJECT_PATH = 'E2E/Strata-eBiz';
     def CONFIG_FILE_ID = '16d93a3a-a4a4-4764-9cb5-231f80e7261f';
+    def EMAILS_SLACK_CONTACTS = '72f4f5fc-2d3c-415d-891d-943c990e74a1';
     def CONFIG_FILE_DESTINATION = 'E2E/Strata-eBiz/cypress/fixtures/environment/environments.json';
     def TEST_RAIL_CONFIG_FILE_PATH = 'E2E/Strata-eBiz/cypress.env.json';
     def FAILED_SCENARIOS_FILE_PATH = 'E2E/Strata-eBiz/cypress/reports/run-info/failed-scenarios-title.txt';
@@ -95,7 +96,10 @@ import groovy.json.*
                  } else if (currentBuild.currentResult == "SUCCESS") {
                     color = 'good'
                  }
-                slackSend channel: '#agency-ebiz-autobuild', message: "${currentBuild.currentResult}: ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", color: color
+                slackSend 
+                  channel: read_config_file(EMAILS_SLACK_CONTACTS).agency-ebiz-autobuild, 
+                  message: "${currentBuild.currentResult}: ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", 
+                  color: color
                 
                 sh "cd ${CURRENT_PROJECT_PATH} && node ./cucumber-html-report.js";
             }
@@ -122,8 +126,8 @@ import groovy.json.*
                 mail(
                     subject: "${currentBuild.currentResult}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
                     body: "${currentBuild.currentResult}: Please visit  ${env.BUILD_URL} for further information. ${formattedContent}",
-                    to: read_config_file(CONFIG_FILE_ID).strataEBizTeamEmail,
-                    cc: read_config_file(CONFIG_FILE_ID).qaTeamEmail,
+                    to: read_config_file(EMAILS_SLACK_CONTACTS).strataEBizTeamEmail,
+                    cc: read_config_file(EMAILS_SLACK_CONTACTS).qaTeamEmail,
                     mimeType: 'text/html'
                 );
             }
