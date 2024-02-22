@@ -6,7 +6,7 @@ class CreateRfpPage {
         return cy.get("input[placeholder='Required; select an Agency']");
     }
     agencySearchOptions() {
-        return cy.get('#ui-select-choices-0 .ui-select-choices-row');
+        return cy.get("[repeat='item in agencies | filter: {name: $select.search}'] .ui-select-choices-row");
     }
     clientSearchBox() {
         return cy.contains('Required; select a Client');
