@@ -90,14 +90,13 @@ import groovy.json.*
                 writeFile(file: CONFIG_FILE_DESTINATION, text: json);
 
                 // Sends daily build results to Slack
-                // "${read_config_file(EMAILS_SLACK_CONTACTS).agency-ebiz-autobuild}"
                 def color = 'warning'
                  if (currentBuild.currentResult == "FAILURE") {
                     color = 'danger'
                  } else if (currentBuild.currentResult == "SUCCESS") {
                     color = 'good'
                  }
-                slackSend channel: "${read_config_file(EMAILS_SLACK_CONTACTS).agency-ebiz-autobuild}", message: "${currentBuild.currentResult}: ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", color: color
+                slackSend channel: "${read_config_file(EMAILS_SLACK_CONTACTS).agencyEbizAutobuild}", message: "${currentBuild.currentResult}: ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", color: color
                 
                 sh "cd ${CURRENT_PROJECT_PATH} && node ./cucumber-html-report.js";
             }

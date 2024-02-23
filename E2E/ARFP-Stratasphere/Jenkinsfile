@@ -39,15 +39,6 @@ pipeline {
         stage('Config file setup'){
             steps {
                 script {
-                    def a = read_config_file(EMAILS_SLACK_CONTACTS).agencyEbizAutobuild;
-                                     echo 'Hello Start ------------------------------------------------>>>>>>'
-                 echo a
-                  echo 'Hello 1 between ------------------------------------------------>>>>>>'
-                 echo a
-                 echo 'Hello 2 between ------------------------------------------------>>>>>>'
-                 echo '${read_config_file(EMAILS_SLACK_CONTACTS).agencyEbizAutobuild}'
-                 echo 'Hello finish  ------------------------------------------------>>>>>>'
-
                         // Copy paste environments.json file from Jenkins to current project
                         inject_config_file(QA_CONFIG_FILE_ID, QA_CONFIG_FILE_DESTINATION);
                         inject_config_file(UAT_CONFIG_FILE_ID, UAT_CONFIG_FILE_DESTINATION);
@@ -124,13 +115,7 @@ pipeline {
                  } else if (currentBuild.currentResult == "SUCCESS") {
                     color = 'good'
                  }
-                 echo 'Hello Start ------------------------------------------------>>>>>>'
-                 echo read_config_file(EMAILS_SLACK_CONTACTS)
-                  echo 'Hello 1 between ------------------------------------------------>>>>>>'
-                 echo read_config_file(EMAILS_SLACK_CONTACTS).agencyEbizAutobuild
-                 echo 'Hello 2 between ------------------------------------------------>>>>>>'
-                 echo '${read_config_file(EMAILS_SLACK_CONTACTS).agencyEbizAutobuild}'
-                 echo 'Hello finish  ------------------------------------------------>>>>>>'
+                def a = read_config_file(EMAILS_SLACK_CONTACTS).agencyEbizAutobuild;
                 slackSend channel: "#agency-ebiz-autobuild", message: "${currentBuild.currentResult}: ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", color: color
                 
                 sh "cd ${CURRENT_PROJECT_PATH} && node ./cucumber-html-report.js";
