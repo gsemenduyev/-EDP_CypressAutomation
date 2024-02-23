@@ -115,8 +115,8 @@ pipeline {
                  } else if (currentBuild.currentResult == "SUCCESS") {
                     color = 'good'
                  }
-                def a = read_config_file(EMAILS_SLACK_CONTACTS).agencyEbizAutobuild;
-                slackSend channel: "#agency-ebiz-autobuild", message: "${currentBuild.currentResult}: ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", color: color
+                def slackChannel = read_config_file(EMAILS_SLACK_CONTACTS).agencyEbizAutobuild;
+                slackSend channel: slackChannel, message: "${currentBuild.currentResult}: ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", color: color
                 
                 sh "cd ${CURRENT_PROJECT_PATH} && node ./cucumber-html-report.js";
             }
