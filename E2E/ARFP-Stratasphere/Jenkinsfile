@@ -39,6 +39,13 @@ pipeline {
         stage('Config file setup'){
             steps {
                 script {
+                                     echo 'Hello Start ------------------------------------------------>>>>>>'
+                 echo read_config_file(EMAILS_SLACK_CONTACTS)
+                  echo 'Hello 1 between ------------------------------------------------>>>>>>'
+                 echo read_config_file(EMAILS_SLACK_CONTACTS).agencyEbizAutobuild
+                 echo 'Hello 2 between ------------------------------------------------>>>>>>'
+                 echo '${read_config_file(EMAILS_SLACK_CONTACTS).agencyEbizAutobuild}'
+                 echo 'Hello finish  ------------------------------------------------>>>>>>'
 
                         // Copy paste environments.json file from Jenkins to current project
                         inject_config_file(QA_CONFIG_FILE_ID, QA_CONFIG_FILE_DESTINATION);
