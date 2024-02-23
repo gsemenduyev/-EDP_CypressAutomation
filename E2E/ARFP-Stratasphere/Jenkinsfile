@@ -11,7 +11,6 @@ def QA_CONFIG_FILE_DESTINATION = 'E2E/ARFP-Stratasphere/cypress/fixtures/environ
 def UAT_CONFIG_FILE_DESTINATION = 'E2E/ARFP-Stratasphere/cypress/fixtures/environment/uat-param.json';
 def TEST_RAIL_CONFIG_FILE_PATH = 'E2E/ARFP-Stratasphere/cypress.env.json';
 def REPORT_DIR = 'E2E/ARFP-Stratasphere/cypress/reports';
-def a = read_config_file(EMAILS_SLACK_CONTACTS).agencyEbizAutobuild;
 
 pipeline {
     agent {
@@ -40,6 +39,7 @@ pipeline {
         stage('Config file setup'){
             steps {
                 script {
+                    def a = read_config_file(EMAILS_SLACK_CONTACTS).agencyEbizAutobuild;
                                      echo 'Hello Start ------------------------------------------------>>>>>>'
                  echo a
                   echo 'Hello 1 between ------------------------------------------------>>>>>>'
