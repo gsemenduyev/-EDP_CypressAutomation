@@ -117,9 +117,11 @@ pipeline {
                     color = 'good'
                  }
                  echo 'Hello Start ------------------------------------------------>>>>>>'
-                 echo read_config_file(EMAILS_SLACK_CONTACTS).agency-ebiz-autobuild
-                 echo 'Hello between ------------------------------------------------>>>>>>'
-                 echo '${read_config_file(EMAILS_SLACK_CONTACTS).agency-ebiz-autobuild}'
+                 echo read_config_file(EMAILS_SLACK_CONTACTS)
+                  echo 'Hello 1 between ------------------------------------------------>>>>>>'
+                 echo read_config_file(EMAILS_SLACK_CONTACTS).agencyEbizAutobuild
+                 echo 'Hello 2 between ------------------------------------------------>>>>>>'
+                 echo '${read_config_file(EMAILS_SLACK_CONTACTS).agencyEbizAutobuild}'
                  echo 'Hello finish  ------------------------------------------------>>>>>>'
                 slackSend channel: "#agency-ebiz-autobuild", message: "${currentBuild.currentResult}: ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", color: color
                 
