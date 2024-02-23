@@ -116,8 +116,11 @@ pipeline {
                  } else if (currentBuild.currentResult == "SUCCESS") {
                     color = 'good'
                  }
-                 //${read_config_file(EMAILS_SLACK_CONTACTS).agency-ebiz-autobuild}
-
+                 echo 'Hello Start ------------------------------------------------>>>>>>'
+                 echo ${read_config_file(EMAILS_SLACK_CONTACTS).agency-ebiz-autobuild}
+                 echo 'Hello between ------------------------------------------------>>>>>>'
+                 echo '${read_config_file(EMAILS_SLACK_CONTACTS).agency-ebiz-autobuild}'
+                 echo 'Hello finish  ------------------------------------------------>>>>>>'
                 slackSend channel: "#agency-ebiz-autobuild", message: "${currentBuild.currentResult}: ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", color: color
                 
                 sh "cd ${CURRENT_PROJECT_PATH} && node ./cucumber-html-report.js";
