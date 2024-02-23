@@ -117,7 +117,7 @@ pipeline {
                     color = 'good'
                  }
                  echo 'Hello Start ------------------------------------------------>>>>>>'
-                 echo ${read_config_file(EMAILS_SLACK_CONTACTS).agency-ebiz-autobuild}
+                 echo read_config_file(EMAILS_SLACK_CONTACTS).agency-ebiz-autobuild
                  echo 'Hello between ------------------------------------------------>>>>>>'
                  echo '${read_config_file(EMAILS_SLACK_CONTACTS).agency-ebiz-autobuild}'
                  echo 'Hello finish  ------------------------------------------------>>>>>>'
