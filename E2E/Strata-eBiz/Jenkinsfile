@@ -96,7 +96,8 @@ import groovy.json.*
                  } else if (currentBuild.currentResult == "SUCCESS") {
                     color = 'good'
                  }
-                slackSend channel: "${read_config_file(EMAILS_SLACK_CONTACTS).agencyEbizAutobuild}", message: "${currentBuild.currentResult}: ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", color: color
+                def slackChannel = read_config_file(EMAILS_SLACK_CONTACTS).agencyEbizAutobuild;
+                slackSend channel: slackChannel, message: "${currentBuild.currentResult}: ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", color: color
                 
                 sh "cd ${CURRENT_PROJECT_PATH} && node ./cucumber-html-report.js";
             }
