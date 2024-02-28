@@ -290,6 +290,7 @@ Given('Validate {string} Page in Stratasphere', string => {
 
 // Upload XML Response
 Given('Upload XML Response', () => {
+    const RESPONSE_SUCCESS_MESSAGE = 'Your response has been sent. Thanks for using';
     sSphereProposalsPage.uploadResponseButton().click();
     sSphereProposalsPage.uploadResponseText().should('have.text', 'Upload Response');
     cy.upload_file(FILE_NAME, sSphereProposalsPage.fileInput());
@@ -318,7 +319,8 @@ Given('Upload XML Response', () => {
     sSphereProposalsPage.commentsRfpNextButton().click({ force: true });
     sSphereProposalsPage.uploadedFileText().should('include.text', FILE_NAME);
     sSphereProposalsPage.sendToAgencyButton().click();
-    sSphereProposalsPage.sentResponseText(60000).should('include.text', 'Your response has been sent.');
+    sSphereProposalsPage.sentResponseText(60000).should('have.text', RESPONSE_SUCCESS_MESSAGE);
+    cy.contains(RESPONSE_SUCCESS_MESSAGE).should('be.visible').screenshot();
 });
 
 // Logout from Stratasphere
