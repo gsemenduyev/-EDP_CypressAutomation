@@ -29,7 +29,18 @@ async function setupNodeEvents(cypressOn, config) {
       })
     }
   });
+  on('before:run', () => {
+    const currentFolderPath = process.cwd();
+    const filePath = 'path.txt';
 
+    fs.writeFile(filePath, currentFolderPath, (err) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      console.log(`Current folder path has been written to ${filePath}`);
+    });
+  })
 
   on('after:run', async (results) => {
     try {
