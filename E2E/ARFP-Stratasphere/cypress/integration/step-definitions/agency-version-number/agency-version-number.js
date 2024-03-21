@@ -37,3 +37,34 @@ Given('Test', () => {
         }
     });
 });
+
+// Given('Test 2', () => {
+//     cy.exec('commands.bat', { timeout: 1000000 }).then((result) => {
+//         if (result.stderr) {
+//             // Handle the error
+//             cy.log(`Error: ${result.stderr}`);
+//         } else {
+//             // Use the output
+//             cy.log(`Commands output:\n${result.stdout}`);
+//         }
+//     });
+// });
+
+Given('Test 2', () => {
+    const commands = [
+        'cd C:\\Program Files (x86)\\SmartBear\\TestComplete 15\\Bin',
+        'TestComplete.exe "C:\\Trunk\\EDP_Automation\\EDP_Automation\\EDP_Automation.pjs" /r /p:AE-Inbox /t:' +
+        '"KeywordTests|Test1"' +
+        ' /e'
+    ];
+
+    cy.exec(commands.join(' && '), { timeout: 1000000 }).then((result) => {
+        if (result.stderr) {
+            // Handle the error
+            cy.log(`Error: ${result.stderr}`);
+        } else {
+            // Use the output
+            cy.log(`Commands output:\n${result.stdout}`);
+        }
+    });
+});
