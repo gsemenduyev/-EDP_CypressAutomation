@@ -48,6 +48,9 @@ class MailinatorHomePage {
     forgotPasswordEmail(milliseconds) {
         return cy.contains('Forgot Password for RFP', { timeout: milliseconds }).first();
     }
+    resetPasswordEmail(milliseconds) {
+        return cy.contains('Reset your password', { timeout: milliseconds }).first();
+    }
     emailTiming() {
         return cy.get('.ng-binding').eq(8);
     }
@@ -61,7 +64,13 @@ class MailinatorHomePage {
             .find('a')
             .eq(0);
     };
-
+    resetPasswordLink() {
+        return cy.get('#html_msg_body')
+            .its('0.contentDocument')
+            .then(cy.wrap)
+            .find('a')
+            .eq(0);
+    };
     sellerEmailBody() {
         return cy.get('#html_msg_body')
             .its('0.contentDocument')

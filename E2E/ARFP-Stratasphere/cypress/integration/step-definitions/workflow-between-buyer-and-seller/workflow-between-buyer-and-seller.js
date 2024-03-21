@@ -18,6 +18,7 @@ import LinearProposalRfpPage from "../../../support/page-objects/agency-pages/Li
 import MailinatorHomePage from "../../../support/page-objects/mailinator-pages/MailinatorHomePage";
 import SSphereProposalResponsePage from "../../../support/page-objects/ssphere-pages/SSphereProposalResponsePage";
 import EnvUtils from "../../../support/utils/EnvUtils";
+import CentralLoginPage from "../../../support/page-objects/central-login-pages/CentralLoginPage";
 
 const agencyLoginPage = new AgencyLoginPage;
 const agencyBasePage = new AgencyBasePage;
@@ -32,6 +33,7 @@ const sSphereProposalResponsePage = new SSphereProposalResponsePage;
 const searchRfpPage = new SearchRfpPage;
 const rfpDetailsPage = new RfpDetailsPage;
 const envUtils = new EnvUtils;
+const centralLoginPage = new CentralLoginPage;
 
 const FILE_NAME = 'stores/TEST Dallas RTG_IMP.xml';
 const SELLER_REVISION_RATE = '8';
@@ -62,19 +64,29 @@ Given('Login to Agency RFP with {string} password', string => {
     }
     cy.visit(envUtils.getAgencyUrl());
 
+    // Saves starting point URL. Handles Central Login feature.
+    cy.url().then(($url) => {
+        cy.dataSession({
+            name: 'startingRfpUrl',
+            setup: () => $url.substring(0, $url.indexOf('com')) + 'com',
+            validate: false,
+            shareAcrossSpecs: true,
+        });
+    });
+
     cy.url().then(($url) => {
         if (!$url.includes(envUtils.getAgencyUrl())) {
             cy.title().should('eq', 'FREEWHEEL - A COMCAST COMPANY')
-            agencyLoginPage.centralLoginEmail().type(envUtils.getAgencyUsername());
-            agencyLoginPage.centralLoginNextButton().click();
-            agencyLoginPage.centralLoginPassword().type(agencyPassword, { log: false });
-            agencyLoginPage.centralLoginButton().click();
+            centralLoginPage.loginEmail().type(envUtils.getAgencyUsername());
+            centralLoginPage.loginNextButton().click();
+            centralLoginPage.loginPassword().type(agencyPassword, { log: false });
+            centralLoginPage.loginButton().click();
         } else {
             agencyBasePage.pageTitle().should('have.text', 'Sign In');
             agencyLoginPage.usernameBox().type(envUtils.getAgencyUsername());
             agencyLoginPage.passwordBox().type(agencyPassword, { log: false });
             agencyLoginPage.loginButton().click();
-        }
+        };
     });
 
     cy.title().should('eq', 'Home - RFP');
@@ -88,12 +100,12 @@ Given('Login to Agency RFP with {string} password', string => {
                 checkXmlValidated();
             } else if (index < 5 || pastDueRfpModal === false) {
                 index = 5;
-            }
-        })
-    }
+            };
+        });
+    };
     checkXmlValidated()
     cy.screenshot();
-})
+});
 
 // Create New RFP
 Given('Create New RFP', () => {
@@ -140,13 +152,13 @@ Given('Create New RFP', () => {
     createRfpPage.vendorContactOptions().each((element, index, list) => {
         if (element.text().includes(envUtils.getSsphereUsername())) {
             createRfpPage.selectVendorContact().eq(index).click();
-        }
-    })
+        };
+    });
     cy.is_element_exists(createRfpPage.marketRequiredSelectorSyntax()).then(isElementExists => {
         if (isElementExists) {
             cy.get('select').select(newRfpParam.market);
-        }
-    })
+        };
+    });
 
     createRfpPage.saveButton().click();
     createRfpPage.newRfpPageTitle().should('include.text', 'AutomationRFP');
@@ -157,8 +169,8 @@ Given('Create New RFP', () => {
             setup: () => newRfpName.text(),
             validate: false,
             shareAcrossSpecs: true,
-        })
-    })
+        });
+    });
     createRfpPage.vendorCheckBox().check().should('be.checked');
     createRfpPage.saveAndSendRfpButton().click();
     cy.dataSession('newRfpName').then(newRfpName => {
@@ -175,18 +187,18 @@ Given('Validate RFP Creation', () => {
     rfpDetailsPage.rfpStatus(1200000).contains('Sent', { timeout: 1200000 });
     rfpDetailsPage.rfpStatus().should('have.text', 'Sent');
     cy.screenshot();
-})
+});
 
 // Logout Agency RFP
 Given('Logout Agency RFP', () => {
     agencyBasePage.signOutButton().click({ force: true });
     cy.url().then(($url) => {
         if (!$url.includes(envUtils.getAgencyUrl())) {
-            agencyLoginPage.centralLoginNextButton().should('be.visible')
+            centralLoginPage.loginNextButton().should('be.visible')
             cy.title().should('eq', 'FREEWHEEL - A COMCAST COMPANY');
         } else {
             agencyBasePage.pageTitle().should('have.text', 'Sign In');
-        }
+        };
     });
     cy.screenshot({ timeout: 10000 });
 });
@@ -205,9 +217,9 @@ Given('Login to Stratasphere', () => {
             sSphereHomePage.proposalsField().click();
         } else {
             sSphereBasePage.pageTitle().should('include.text', ' Proposals');
-        }
-    })
-})
+        };
+    });
+});
 
 // Search for RFP in Stratasphere
 Given('Search for RFP in Stratasphere', () => {
@@ -215,14 +227,14 @@ Given('Search for RFP in Stratasphere', () => {
     cy.is_element_exists(sSphereProposalsPage.showPastRfpNoButtonSyntax()).then(($isElementExists) => {
         if ($isElementExists) {
             cy.get(sSphereProposalsPage.showPastRfpNoButtonSyntax()).click();
-        }
-    })
+        };
+    });
 
     sSphereProposalsPage.rfpModalHeaders(1).then(($element) => {
         if (!$element.is(':visible')) {
             sSphereProposalsPage.rfpChevronButton().click();
-        }
-    })
+        };
+    });
 
     sSphereProposalsPage.rfpModalHeaders(1).should('be.visible');
     var tries = 20;
@@ -242,16 +254,16 @@ Given('Search for RFP in Stratasphere', () => {
                         } else if (innerIndex < tries && $uncheckedFilter === false) {
                             innerIndex = tries;
                             index = tries;
-                        }
-                    })
-                }
+                        };
+                    });
+                };
                 clickOnFilterItem();
             } else if (index < tries && !$element.is(':visible')) {
                 index++;
                 clickOnHamburgerButton();
-            }
+            };
         });
-    }
+    };
     clickOnHamburgerButton();
 
     sSphereProposalsPage.hamburgerButton(0).click();
@@ -259,9 +271,9 @@ Given('Search for RFP in Stratasphere', () => {
     cy.dataSession('newRfpName').then(newRfpName => {
         sSphereProposalsPage.campaignSearchBox().type(newRfpName);
         cy.contains(newRfpName).click();
-    })
+    });
     cy.screenshot();
-})
+});
 
 // Validate {string} in Stratasphere'
 Given('Validate {string} Page in Stratasphere', string => {
@@ -274,10 +286,11 @@ Given('Validate {string} Page in Stratasphere', string => {
     sSphereProposalsPage.agency().should('have.text', newRfpParam.client);
     sSphereProposalsPage.product().should('have.text', newRfpParam.product);
     cy.screenshot();
-})
+});
 
 // Upload XML Response
 Given('Upload XML Response', () => {
+    const RESPONSE_SUCCESS_MESSAGE = 'Your response has been sent. Thanks for using';
     sSphereProposalsPage.uploadResponseButton().click();
     sSphereProposalsPage.uploadResponseText().should('have.text', 'Upload Response');
     cy.upload_file(FILE_NAME, sSphereProposalsPage.fileInput());
@@ -292,10 +305,10 @@ Given('Upload XML Response', () => {
                     cy.wait(1000);
                     index++;
                     checkXmlValidated();
-                }
+                };
             });
         });
-    }
+    };
     checkXmlValidated();
     cy.screenshot();
     sSphereProposalsPage.validatedXmlText().should('have.text', 'Validated');
@@ -306,8 +319,9 @@ Given('Upload XML Response', () => {
     sSphereProposalsPage.commentsRfpNextButton().click({ force: true });
     sSphereProposalsPage.uploadedFileText().should('include.text', FILE_NAME);
     sSphereProposalsPage.sendToAgencyButton().click();
-    sSphereProposalsPage.sentResponseText(60000).should('include.text', 'Your response has been sent.');
-})
+    sSphereProposalsPage.sentResponseText(60000).should('have.text', RESPONSE_SUCCESS_MESSAGE);
+    cy.contains(RESPONSE_SUCCESS_MESSAGE).should('be.visible').screenshot();
+});
 
 // Logout from Stratasphere
 Given('Logout from Stratasphere', () => {
@@ -315,7 +329,7 @@ Given('Logout from Stratasphere', () => {
     sSphereBasePage.logOutButton().click({ force: true });
     sSphereBasePage.pageTitle().should('include.text', ' Login');
     cy.screenshot();
-})
+});
 
 // Search for existing RFP
 Given('Search for existing RFP', () => {

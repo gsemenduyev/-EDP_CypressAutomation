@@ -63,7 +63,7 @@ class SSphereProposalsPage {
         return cy.contains('Send to Agency').parent();
     }
     sentResponseText(milliseconds) {
-        return cy.get('.h4.page-title-content', { timeout: milliseconds }).eq(0);
+        return cy.get(':nth-child(1) > .h4', { timeout: milliseconds });
     }
     fileInput() {
         return cy.get("input[type='file']");

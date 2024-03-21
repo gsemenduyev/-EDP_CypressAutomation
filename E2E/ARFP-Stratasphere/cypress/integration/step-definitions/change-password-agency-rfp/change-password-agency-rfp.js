@@ -32,20 +32,35 @@ before(function () {
 Given('Request new password on Agency RFP Forgot Password page', () => {
     cy.visit(`${envUtils.getMailinatorUrl()}?to=${envUtils.getAgencyUsername().substr(0, envUtils.getAgencyUsername().indexOf('@'))}`);
     cy.title().should('eq', 'Mailinator');
-
-    const sentArgs = {
-        agencyUsername: envProperties.agencyUsername
-    };
     cy.visit(envUtils.getAgencyUrl());
-    cy.origin(envUtils.getAgencyUrl(), { args: sentArgs }, ({ agencyUsername }) => {
-        const tempPage = Cypress.require('../../../support/page-objects/agency-pages/AgencyLoginPage');
-        const agencyLoginPage = new tempPage;
-        agencyLoginPage.pageTitle(5000).should('have.text', 'Sign In');
-        agencyLoginPage.forgotPasswordButton().click();
-        agencyLoginPage.pageTitle(5000).should('have.text', 'Forgot Password');
-        agencyLoginPage.usernameBox().type(agencyUsername);
-        agencyLoginPage.submitButton().click();
-        agencyLoginPage.forgotPasswordConformation().should('include.text', 'Email has been sent').screenshot();
+    cy.dataSession('startingRfpUrl').then(($startingRfpUrl) => {
+        const sentArgs = {
+            agencyUsername: envProperties.agencyUsername,
+            agencyUrl: envUtils.getAgencyUrl(),
+            startingRfpUrl: $startingRfpUrl
+        };
+        cy.origin($startingRfpUrl, { args: sentArgs }, ({ agencyUsername, agencyUrl, startingRfpUrl }) => {
+            const tempPage = Cypress.require('../../../support/page-objects/agency-pages/AgencyLoginPage');
+            const tempCentralLoginPage = Cypress.require('../../../support/page-objects/central-login-pages/CentralLoginPage');
+            const agencyLoginPage = new tempPage;
+            const centralLoginPage = new tempCentralLoginPage;
+
+            if (agencyUrl.includes(startingRfpUrl)) {
+                agencyLoginPage.pageTitle(5000).should('have.text', 'Sign In');
+                agencyLoginPage.forgotPasswordButton().click();
+                agencyLoginPage.pageTitle(5000).should('have.text', 'Forgot Password');
+                agencyLoginPage.usernameBox().type(agencyUsername);
+                agencyLoginPage.submitButton().click();
+                agencyLoginPage.forgotPasswordConformation().should('include.text', 'Email has been sent').screenshot();
+            } else {
+                // Central Login feature is onn
+                centralLoginPage.forgotPassword().click()
+                centralLoginPage.resetPasswordText().should('have.text', 'To reset your password,  enter your e-mail address below.');
+                centralLoginPage.loginEmail().type(agencyUsername);
+                centralLoginPage.submitButton().click();
+                centralLoginPage.emailSendText().should('include.text', 'E-mail successfully sent')
+            }
+        });
     })
 })
 
@@ -54,56 +69,105 @@ Given('Open Forgot Password email and click on restore password link', () => {
     var index = 0;
     cy.visit(`${envUtils.getMailinatorUrl()}?to=${envUtils.getAgencyUsername().substr(0, envUtils.getAgencyUsername().indexOf('@'))}`)
     cy.title().should('eq', 'Mailinator');
-    mailinatorHomePage.forgotPasswordEmail(300000).should('exist');
-    const checkEmailExists = () => {
-        mailinatorHomePage.emailTiming().then(el => {
-            if (el.text().trim() !== 'just now' && index < 20) {
-                cy.reload();
-                cy.wait(5000);
-                index++;
-                checkEmailExists();
-            } else if (el.text().trim() === 'just now') {
-                mailinatorHomePage.forgotPasswordEmail().click();
+    cy.dataSession('startingRfpUrl').then(($startingRfpUrl) => {
+        if (envUtils.getAgencyUrl().includes($startingRfpUrl)) {
+            mailinatorHomePage.forgotPasswordEmail(300000).should('exist');
+            const checkEmailExists = () => {
+                mailinatorHomePage.emailTiming().then(el => {
+                    if (el.text().trim() !== 'just now' && index < 20) {
+                        cy.reload();
+                        cy.wait(5000);
+                        index++;
+                        checkEmailExists();
+                    } else if (el.text().trim() === 'just now') {
+                        mailinatorHomePage.forgotPasswordEmail().click();
+                    }
+                })
             }
-        })
-    }
-    checkEmailExists();
-    mailinatorHomePage.forgotPasswordLink()
-        .invoke('attr', 'target', '_parent')
-        .click({ force: true });
-})
+            checkEmailExists();
+            mailinatorHomePage.forgotPasswordLink()
+                .invoke('attr', 'target', '_parent')
+                .click({ force: true });
+        } else {
+            mailinatorHomePage.resetPasswordEmail(300000).should('exist');
+            const checkEmailExists = () => {
+                mailinatorHomePage.emailTiming().then(el => {
+                    if (el.text().trim() !== 'just now' && index < 20) {
+                        cy.reload();
+                        cy.wait(5000);
+                        index++;
+                        checkEmailExists();
+                    } else if (el.text().trim() === 'just now') {
+                        mailinatorHomePage.resetPasswordEmail().click();
+                    };
+                });
+            };
+            checkEmailExists();
+            mailinatorHomePage.resetPasswordLink()
+                .invoke('attr', 'target', '_parent')
+                .click({ force: true });
+        };
+    });
+});
 
 // Set 'Temporary, Permanent' password
 Given('Set {string} password', string => {
     var agencyPassword;
-    const sentArgs = {
-        password: string,
-        agencyPermPassword: envProperties.agencyPassword,
-        agencyTempPassword: envProperties.tempAgencyPassword,
-        passwordResetMsg: PASSWORD_RESET_MSG,
-    };
 
-    cy.origin(envUtils.getAgencyUrl(), { args: sentArgs }, ({ password, agencyPermPassword, agencyTempPassword, passwordResetMsg }) => {
-        Cypress.require('../../../support/commands')
-        const tempPage = Cypress.require('../../../support/page-objects/agency-pages/AgencyLoginPage')
-        const agencyLoginPage = new tempPage;
-        if (password === 'Temporary') {
-            agencyPassword = agencyTempPassword;
-        } else if (password === 'Permanent') {
-            agencyPassword = agencyPermPassword;
-        }
-        agencyLoginPage.newPasswordInput(60000).type(agencyPassword, { log: false });
-        agencyLoginPage.conformNewPasswordInput().type(agencyPassword, { log: false });
-        cy.screenshot();
-        agencyLoginPage.submitButton().click();
+    cy.dataSession('startingRfpUrl').then(($startingRfpUrl) => {
+        const sentArgs = {
+            password: string,
+            agencyPermPassword: envProperties.agencyPassword,
+            agencyTempPassword: envProperties.tempAgencyPassword,
+            passwordResetMsg: PASSWORD_RESET_MSG,
+            startingRfpUrl: $startingRfpUrl,
+            agencyUrl: envUtils.getAgencyUrl(),
+        };
 
-        // Verify Password has been reset 
-        cy.get(agencyLoginPage.resetPasswordConformationMsgSyntax(), { timeout: 60000 }).then((message) => {
-            expect(message.text().trim()).includes(passwordResetMsg);
-            cy.screenshot();
+        cy.origin($startingRfpUrl, { args: sentArgs }, ({ password, agencyPermPassword, agencyTempPassword, passwordResetMsg, startingRfpUrl, agencyUrl }) => {
+            Cypress.require('../../../support/commands')
+            const tempPage = Cypress.require('../../../support/page-objects/agency-pages/AgencyLoginPage')
+            const tempCentralLoginPage = Cypress.require('../../../support/page-objects/central-login-pages/CentralLoginPage');
+            const agencyLoginPage = new tempPage;
+            const centralLoginPage = new tempCentralLoginPage;
+
             if (password === 'Temporary') {
-                cy.wait(60000);
-            }
-        })
-    })
-})
+                agencyPassword = agencyTempPassword;
+            } else if (password === 'Permanent') {
+                agencyPassword = agencyPermPassword;
+            };
+
+            if (agencyUrl.includes(startingRfpUrl)) {
+                agencyLoginPage.newPasswordInput(60000).type(agencyPassword, { log: false });
+                agencyLoginPage.conformNewPasswordInput().type(agencyPassword, { log: false });
+                cy.screenshot();
+                agencyLoginPage.submitButton().click();
+
+                // Verify Password has been reset 
+                cy.get(agencyLoginPage.resetPasswordConformationMsgSyntax(), { timeout: 60000 }).then((message) => {
+                    expect(message.text().trim()).includes(passwordResetMsg);
+                    cy.screenshot();
+                    if (password === 'Temporary') {
+                        cy.wait(60000);
+                    }
+                })
+            } else {
+                centralLoginPage.loginPassword().click({ force: true })
+                centralLoginPage.loginPassword().type(agencyPassword, { log: false })
+                centralLoginPage.confirmPassword().click({ force: true })
+                centralLoginPage.confirmPassword().type(agencyPassword, { log: false });
+                cy.screenshot();
+                centralLoginPage.submitButton().click();
+
+                // Verify Password has been reset 
+                cy.get(centralLoginPage.resetPasswordMessageSyntax(), { timeout: 60000 }).then((message) => {
+                    expect(message.text().trim()).includes(passwordResetMsg);
+                    cy.screenshot();
+                    if (password === 'Temporary') {
+                        cy.wait(60000);
+                    };
+                });
+            };
+        });
+    });
+});
