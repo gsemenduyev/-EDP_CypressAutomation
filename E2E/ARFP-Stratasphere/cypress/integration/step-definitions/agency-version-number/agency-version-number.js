@@ -68,3 +68,9 @@ Given('Test 2', () => {
         }
     });
 });
+
+Given('Test 3', () => {
+    cy.visit("https://www.youtube.com/")
+
+});
+

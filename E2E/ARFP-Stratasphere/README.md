@@ -52,7 +52,7 @@ Cypress Tests
 `npx cypress run --browser chrome --headed --env tags="@ARFP",ENV="Production",VERSION="v 8.3.6.60524"`
 
 * Run specific feature file
-`npx cypress run --spec "cypress/integration/step-definitions/agency-version-number/agency-version-number.feature"`
+`npx cypress run --browser chrome --headed --spec "cypress/integration/step-definitions/agency-version-number/agency-version-number.feature"`
 
 ## Generate Cucumber report
 `node ./cucumber-html-report.js`

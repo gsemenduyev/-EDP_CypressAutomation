@@ -10,3 +10,9 @@ Feature: Validate Agency RFP version number
         # * Logout Agency RFP
         # * Test
         * Test 2
+
+    Scenario: Test visit youtube
+        # * Login to Agency RFP with 'Permanent' password
+        # * Validate Agency RFP version number
+        # * Logout Agency RFP
+        * Test 3
