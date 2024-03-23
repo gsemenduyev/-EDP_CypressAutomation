@@ -63,9 +63,9 @@ stages {
         }
            
             echo "Hello ------------------------ 3"
-            sh 'ls -d */'
+            bat 'dir /AD /B "C:\\*"'
           //  sh 'cd C:\\Program Files (x86)\\SmartBear'
-            sh 'ls -d */'
+            bat 'dir /AD /B "C:\\*"'
             echo "Hello ------------------------ 4"
             sh "cd E2E/ARFP-Stratasphere && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome --spec \"cypress/integration/step-definitions/agency-version-number/agency-version-number.feature\"";
             }
