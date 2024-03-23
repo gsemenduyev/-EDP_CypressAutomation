@@ -23,14 +23,16 @@ pipeline {
     // }
 
        agent {
-
-        docker {
-            label 'testexecute'
-            // image 'cypress/browsers:node18.12.0-chrome107'
-            // args '--ipc=host'
+             label 'testexecute'
+    //     docker {
+    //         label 'al2'
+    //         image 'cypress/browsers:node18.12.0-chrome107'
+    //         args '--ipc=host'
+    // }
     }
-    }
-
+  agent {
+    label 'linux'testexecute
+  }
     
 
     options{
