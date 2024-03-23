@@ -1,6 +1,7 @@
 #!/usr/bin/env groovy
 import groovy.json.*
 
+def CURRENT_PROJECT_PATH = 'E2E/ARFP-Stratasphere';
 def PROD_CONFIG_FILE_ID = '1ad0b80a-404d-45ac-81b1-71cd259794d1';
 def QA_CONFIG_FILE_ID = '2a6e4dde-90fd-4b33-870c-94e1ac74261e';
 def UAT_CONFIG_FILE_ID = '10596465-25c2-4869-93fe-1b8c63a3dec6';
