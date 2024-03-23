@@ -18,8 +18,9 @@ pipeline {
 stages {
         stage('Test') {
             steps {
-            echo "dir /AD /B"
-            echo "dir /B"
+            echo "Hello ------------------------ 1"
+            sh 'ls -d */'
+            echo "Hello ------------------------ 2"
             sh "cd E2E/ARFP-Stratasphere && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome --spec \"cypress/integration/step-definitions/agency-version-number/agency-version-number.feature\"";
             }
         }
