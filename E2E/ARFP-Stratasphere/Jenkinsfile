@@ -13,14 +13,25 @@ def REPORT_DIR = 'E2E/ARFP-Stratasphere/cypress/reports';
 
 
 pipeline {
-    agent {
+    // agent {
+
+    //     docker {
+    //         label 'al2'
+    //         image 'cypress/browsers:node18.12.0-chrome107'
+    //         args '--ipc=host'
+    // }
+    // }
+
+       agent {
+
         docker {
-            
-            label 'al2'
+            label 'testexecute'
             image 'cypress/browsers:node18.12.0-chrome107'
             args '--ipc=host'
     }
     }
+
+    
 
     options{
         ansiColor('xterm')
