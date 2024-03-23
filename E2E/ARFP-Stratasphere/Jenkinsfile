@@ -13,23 +13,15 @@ def REPORT_DIR = 'E2E/ARFP-Stratasphere/cypress/reports';
 
 
 pipeline {
-    // agent {
+    agent {
 
-    //     docker {
-    //         label 'al2'
-    //         image 'cypress/browsers:node18.12.0-chrome107'
-    //         args '--ipc=host'
-    // }
-    // }
-
-       agent {
-             label 'testexecute'
-    //     docker {
-    //         label 'al2'
-    //         image 'cypress/browsers:node18.12.0-chrome107'
-    //         args '--ipc=host'
-    // }
+        docker {
+            label 'al2'
+            image 'cypress/browsers:node18.12.0-chrome107'
+            args '--ipc=host'
     }
+    }
+    
     options{
         ansiColor('xterm')
     }
@@ -46,24 +38,9 @@ stages {
                 }
             }
 
-               stage('List Folders') {
+          stage('Test') {
             steps {
-                echo "Hello ------------------------ 1"
-                  bat 'dir /AD /B "C:\\Program Files (x86)\\SmartBear\\TestExecute 15\\*"'
-                   bat 'dir /AD /B "C:\\SBMS\\*"'
-                 echo "Hello ------------------------ 2"
-                 bat "node --version"
-            }
-               }
-
-        stage('Test') {
-            steps {
-            echo "Hello ------------------------ 3"
-            bat 'dir /AD /B "C:\\Program Files\\*"'
-          //  sh 'cd C:\\Program Files (x86)\\SmartBear'
-            bat 'dir /AD /B "C:\\*"'
-            echo "Hello ------------------------ 4"
-            bat "cd E2E/ARFP-Stratasphere && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome --spec \"cypress/integration/step-definitions/agency-version-number/agency-version-number.feature\"";
+            sh "cd ${CURRENT_PROJECT_PATH} && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome --env tags=\"@${PROJECTS}\",ENV=\"${ENVIRONMENT}\",VERSION=\"${VERSION}\"";
             }
         }
 }
