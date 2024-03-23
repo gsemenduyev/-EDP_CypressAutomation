@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Root signature="{9576DAFD-0ADD-41A8-9897-C72F150AF6BB}" version="15.0">
-	<children />
+	<children>
+		<child name="OpenSBMS" key="{197AACB0-60E5-417A-8C24-927B42B4C0D5}" path="OpenSBMS.tcKDTest" />
+	</children>
 </Root>
