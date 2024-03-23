@@ -41,8 +41,7 @@ stages {
             steps {
            
             echo "Hello ------------------------ 1"
-            sh 'dir /AD /B'
-            sh 'dir /B'
+            sh 'ls -d */'
             sh 'cd C:\\Program Files (x86)\\SmartBear'
             sh 'ls -d */'
             echo "Hello ------------------------ 2"
