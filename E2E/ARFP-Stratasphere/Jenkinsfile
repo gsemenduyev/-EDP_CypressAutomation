@@ -49,7 +49,7 @@ stages {
                stage('List Folders') {
             steps {
                 echo "Hello ------------------------ 1"
-                  sh 'ls -d /*/'
+                  bat 'dir /AD /B "C:\\*"'
                  echo "Hello ------------------------ 2"
             }
                }
