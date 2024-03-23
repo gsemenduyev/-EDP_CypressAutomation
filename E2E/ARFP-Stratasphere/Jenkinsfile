@@ -49,7 +49,7 @@ stages {
                stage('List Folders') {
             steps {
                 echo "Hello ------------------------ 1"
-                 sh 'ls -d "C:/Program Files (x86)"/*/'
+                  sh 'ls -d /*/'
                  echo "Hello ------------------------ 2"
             }
                }
