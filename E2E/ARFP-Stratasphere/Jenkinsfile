@@ -49,24 +49,13 @@ stages {
                stage('List Folders') {
             steps {
                 echo "Hello ------------------------ 1"
-                  bat 'dir /AD /B "C:\\Program Files (x86)\\SmartBear\\*"'
+                  bat 'dir /AD /B "C:\\Program Files (x86)\\SmartBear\\TestExecute 15\\*"'
+                   bat 'dir /AD /B "C:\\SBMS\\*"'
                  echo "Hello ------------------------ 2"
+                 bat "node --version"
             }
                }
 
-                stage('Check Node.js') {
-      steps {
-        bat 'where node'
-        script {
-          def exitCode = bat returnStatus: true, script: 'where node'
-          if (exitCode == 0) {
-            echo "Node.js is installed"
-          } else {
-            echo "Node.js is not installed"
-          }
-        }
-      }
-                }
         stage('Test') {
             steps {
             echo "Hello ------------------------ 3"

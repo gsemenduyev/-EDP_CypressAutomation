@@ -22,7 +22,7 @@ Given('Validate Agency RFP version number', () => {
 
 Given('Test', () => {
     const commands = [
-        'cd C:\\Program Files (x86)\\SmartBear\\TestComplete 15\\Bin',
+        'cd C:\\Program Files (x86)\\SmartBear\\TestExecute 15\\Bin',
         'TestComplete.exe "C:\\CypressAutomation\\EDP_CypressAutomation\\E2E\\SBMS\\SBMS.pjs" /r /p:SBMS /t:' +
         '"KeywordTests|OpenSBMS"' +
         ' /e'
