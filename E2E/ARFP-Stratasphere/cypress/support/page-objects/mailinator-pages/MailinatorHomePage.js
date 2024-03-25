@@ -144,8 +144,11 @@ class MailinatorHomePage {
         const checkEmailExists = () => {
             cy.is_element_exists(mailinatorHomePage.emailTitleSyntax(emailTitle + newRfpName)).then(function (el) {
                 if (index < 60 && !el) {
-                    mailinatorHomePage.goButton().click();
+                    if (index === 6) {
+                        mailinatorHomePage.goButton().click();
+                    };
                     cy.wait(5000);
+                    cy.log(`Waiting for email ${emailTitle} ${newRfpName} ${index * 5} seconds`)
                     index++;
                     checkEmailExists();
                 } else {
