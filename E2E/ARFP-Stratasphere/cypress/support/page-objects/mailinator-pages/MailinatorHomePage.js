@@ -148,7 +148,7 @@ class MailinatorHomePage {
                         mailinatorHomePage.goButton().click();
                     };
                     cy.wait(5000);
-                    cy.log(`Waiting ${index * 5} seconds for email "${emailTitle} ${newRfpName}"`)
+                    cy.log(`Waiting ${(index + 1) * 5} seconds for email "${emailTitle} ${newRfpName}"`)
                     index++;
                     checkEmailExists();
                 } else {
