@@ -79,7 +79,7 @@ Given('Open Forgot Password email and click on restore password link', () => {
                             cy.reload();
                         };
                         cy.wait(5000);
-                        cy.log(`Waiting ${(index + 1) * 5} seconds for email "Forgot Password email"`)
+                        cy.log(`Waiting ${(index + 1) * 5} seconds for "Forgot Password RFP" email`)
                         index++;
                         checkEmailExists();
                     } else if (el.text().trim() === 'just now') {
@@ -100,7 +100,7 @@ Given('Open Forgot Password email and click on restore password link', () => {
                             cy.reload();
                         };
                         cy.wait(5000);
-                        cy.log(`Waiting ${(index + 1) * 5} seconds for email "Forgot Password email"`)
+                        cy.log(`Waiting ${(index + 1) * 5} seconds for "Forgot Password RFP" email`)
                         index++;
                         checkEmailExists();
                     } else if (el.text().trim() === 'just now') {
