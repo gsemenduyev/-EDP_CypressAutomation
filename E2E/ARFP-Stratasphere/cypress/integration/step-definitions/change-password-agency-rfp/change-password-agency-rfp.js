@@ -74,11 +74,12 @@ Given('Open Forgot Password email and click on restore password link', () => {
             mailinatorHomePage.forgotPasswordEmail(300000).should('exist');
             const checkEmailExists = () => {
                 mailinatorHomePage.emailTiming().then(el => {
-                    if (el.text().trim() !== 'just now' && index < 20) {
+                    if (el.text().trim() !== 'just now' && index < 30) {
                         if (index === 6) {
                             cy.reload();
                         };
                         cy.wait(5000);
+                        cy.log(`Waiting ${index * 5} seconds for email "Forgot Password email"`)
                         index++;
                         checkEmailExists();
                     } else if (el.text().trim() === 'just now') {
@@ -94,11 +95,12 @@ Given('Open Forgot Password email and click on restore password link', () => {
             mailinatorHomePage.resetPasswordEmail(300000).should('exist');
             const checkEmailExists = () => {
                 mailinatorHomePage.emailTiming().then(el => {
-                    if (el.text().trim() !== 'just now' && index < 20) {
+                    if (el.text().trim() !== 'just now' && index < 30) {
                         if (index === 6) {
                             cy.reload();
                         };
                         cy.wait(5000);
+                        cy.log(`Waiting ${index * 5} seconds for email "Forgot Password email"`)
                         index++;
                         checkEmailExists();
                     } else if (el.text().trim() === 'just now') {
