@@ -75,7 +75,7 @@ Given('Open Forgot Password email and click on restore password link', () => {
             const checkEmailExists = () => {
                 mailinatorHomePage.emailTiming().then(el => {
                     if (el.text().trim() !== 'just now' && index < 30) {
-                        if (index === 6) {
+                        if (index === 15) {
                             cy.reload();
                         };
                         cy.wait(5000);
@@ -96,7 +96,7 @@ Given('Open Forgot Password email and click on restore password link', () => {
             const checkEmailExists = () => {
                 mailinatorHomePage.emailTiming().then(el => {
                     if (el.text().trim() !== 'just now' && index < 30) {
-                        if (index === 6) {
+                        if (index === 15) {
                             cy.reload();
                         };
                         cy.wait(5000);
