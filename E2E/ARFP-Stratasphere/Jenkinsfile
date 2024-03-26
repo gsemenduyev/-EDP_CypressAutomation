@@ -15,12 +15,12 @@ def REPORT_DIR = 'E2E/ARFP-Stratasphere/cypress/reports';
 
 pipeline {
     agent {
-
-        docker {
-            label 'al2'
-            image 'cypress/browsers:node18.12.0-chrome107'
-            args '--ipc=host'
-    }
+    label 'testexecute'
+    //     docker {
+    //         label 'al2'
+    //         image 'cypress/browsers:node18.12.0-chrome107'
+    //         args '--ipc=host'
+    // }
     }
     
     options{
@@ -41,7 +41,9 @@ stages {
 
           stage('Test') {
             steps {
-            sh "cd ${CURRENT_PROJECT_PATH} && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome --spec \"cypress/integration/step-definitions/agency-version-number/agency-version-number.feature\"";
+                    sh "cd C:\\Program Files (x86)\\SmartBear\\TestExecute 15\\Bin"
+                    sh "TestComplete.exe \"C:\\CypressAutomation\\EDP_CypressAutomation\\E2E\\SBMS\\SBMS.pjs\" /r /p:SBMS /t:\"KeywordTests|OpenSBMS\" /e"
+         //   sh "cd ${CURRENT_PROJECT_PATH} && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome --spec \"cypress/integration/step-definitions/agency-version-number/agency-version-number.feature\"";
             }
         }
 }
