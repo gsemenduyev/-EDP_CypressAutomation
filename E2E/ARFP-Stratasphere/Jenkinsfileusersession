@@ -1,0 +1,55 @@
+import groovy.json.*
+pipeline {
+    agent {
+        label 'testexecute'
+    }
+
+    stages {
+                stage('Git'){
+		    steps {
+		    	git branch: 'TC_Integration',
+		    	credentialsId: '22',
+			    url: 'https://github.freewheel.tv/HS/EDP_CypressAutomation.git'
+			}
+        }
+        
+         stage('Retrieve Credentials') {
+            steps {
+                script {
+                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'MasTEUser', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME']]){
+                        def username = "${USERNAME}";
+                        def password = "${PASSWORD}";
+                        def reporterConfig = readJSON file: 'E2E/ARFP-Stratasphere/cypress.env.json';
+                        def testrail = [
+                       'username': (username),
+                       'password': (password),
+                        ];
+                        reporterConfig.put("testrail", testrail);
+                        def json = JsonOutput.toJson(reporterConfig);
+                        json = JsonOutput.prettyPrint(json);
+                        writeFile(file: 'E2E/ARFP-Stratasphere/cypress.env.json', text: json);
+                        
+                        def user = 'Administrator'
+                        def pass = '^?C9ZY^&xM^?^?Gr(a;keeChodUdds=h-%%^$t'
+                        def projectPath = 'C:\\CypressAutomation\\EDP_CypressAutomation\\E2E\\SBMS\\SBMS.pjs'
+                        bat """
+                        cd \"C:\\Program Files (x86)\\SmartBear\\TestExecute 15\\Bin\" & SessionCreator.exe RunTest /UserName:${user} /Password:${pass} /ProjectPath:\"C:\\CypressAutomation\\EDP_CypressAutomation\\E2E\\SBMS\\SBMS.pjs" /project:\"SBMS\" /test:\"OpenSBMS\""
+                        """  }
+                }
+            }
+         }
+        
+        // stage('Test 1') {
+        //     steps {
+        //         testcompletetest actionOnWarnings: 'MAKE_UNSTABLE', 
+        //         credentialsId: 'MasTEUser', 
+        //         executorType: 'TE', executorVersion: '15.0', 
+        //         generateMHT: true, launchType: 'lcKdt', 
+        //         project: 'SBMS', publishJUnitReports: false, 
+        //         suite: 'E2E\\SBMS\\SBMS.pjs', 
+        //         test: 'OpenSBMS', 
+        //         useTCService: true
+        //     }
+        // }
+    }
+}
