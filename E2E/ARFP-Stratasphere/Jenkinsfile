@@ -39,9 +39,10 @@ stages {
                 }
             }
 
-         stage('TestComplete Test 1') {
+        
+        stage('TestComplete Test') {
             steps {
-                 script {
+                script {
                     def testCompleteOptions = [
                         actionOnErrors: 'MAKE_FAILED',
                         actionOnWarnings: 'MAKE_UNSTABLE',
@@ -60,11 +61,12 @@ stages {
                     ]
                     
                     // Call the TestComplete test step
-                    testCompleteBuilder(testCompleteOptions)
+                    runTestComplete(testCompleteOptions)
                 }
             }
-         }
-}
+        }
+    }
+
 }
 
 def testCompleteBuilder(Map testCompleteOptions) {
