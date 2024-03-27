@@ -41,7 +41,7 @@ stages {
 
          stage('TestComplete Test 1') {
             steps {
-                script {
+                 script {
                     def testCompleteOptions = [
                         actionOnErrors: 'MAKE_FAILED',
                         actionOnWarnings: 'MAKE_UNSTABLE',
@@ -60,75 +60,15 @@ stages {
                     ]
                     
                     // Call the TestComplete test step
-                    step([$class: 'TestCompleteBuilder', testCompleteOptions])
+                    testCompleteBuilder(testCompleteOptions)
                 }
             }
-        }
-
-         stage('TestComplete Test 2') {
-            steps {
-                script {
-                    def testCompleteOptions1 = [
-                        actionOnErrors: 'MAKE_FAILED',
-                        actionOnWarnings: 'MAKE_UNSTABLE',
-                        credentialsId: 'MasTEUser',
-                        executorType: 'TE',
-                        executorVersion: '15.0',
-                        generateMHT: true,
-                        launchType: 'lcKdt',
-                        project: 'SBMS',
-                        publishJUnitReports: false,
-                        suite: 'E2E\\SBMS\\SBMS.pjs',
-                        test: 'OpenSBMS',
-                        timeout: '10',
-                        useTCService: true,
-                        useTimeout: true
-                    ]
-                    
-                    // Call the TestComplete test step
-                    step([$class: 'TestCompleteBuilder', testCompleteOptions1])
-                }
-            }
-        }    
-
-
-
-
-
-
-
-
-
-        //   stage('Test') {
-        //     steps {
-        //             sh "cd C:\\Program Files (x86)\\SmartBear\\TestExecute 15\\Bin"
-        //             sh "TestComplete.exe \"C:\\CypressAutomation\\EDP_CypressAutomation\\E2E\\SBMS\\SBMS.pjs\" /r /p:SBMS /t:\"KeywordTests|OpenSBMS\" /e"
-        //  //   sh "cd ${CURRENT_PROJECT_PATH} && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome --spec \"cypress/integration/step-definitions/agency-version-number/agency-version-number.feature\"";
-        //     }
-        // }
+         }
 }
-    // post{
-    //     always{
-    //         script {
-    //             // Config files clean up.
-    //             sh "cd ${CURRENT_PROJECT_PATH} && node ./cucumber-html-report.js";
-    //         }
-    //         publishHTML (target : [allowMissing: true,
-    //         alwaysLinkToLastBuild: true,
-    //         keepAll: true,
-    //         reportDir: REPORT_DIR,
-    //         reportFiles: 'cucumber-reports/cucumber-html-report/index.html',
-    //         reportName: 'Cucumber Report',
-    //         reportTitles: 'Cucumber Report']);
-    //         publishHTML (target : [allowMissing: true,
-    //         alwaysLinkToLastBuild: true,
-    //         keepAll: true,
-    //         reportDir: REPORT_DIR,
-    //         reportFiles: 'multi-html-report/index.html',
-    //         reportName: 'Multi HTML Report',
-    //         reportTitles: 'Multi HTML Report']);
-    //     }
-    // }
+}
+
+def testCompleteBuilder(Map testCompleteOptions) {
+    step([$class: 'TestCompleteBuilder'] + testCompleteOptions)
 }
 
    /*
