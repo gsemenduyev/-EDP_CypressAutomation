@@ -10,7 +10,192 @@
 	<testItems key="{17849BC4-A59C-4D8F-B3DE-C2759BA8B4E6}" version="14">
 		<children />
 	</testItems>
-	<variables key="{4D44BC4D-2483-4CA1-95A3-6DA89F0A30DF}" />
+	<variables key="{4D44BC4D-2483-4CA1-95A3-6DA89F0A30DF}">
+		<data Version="4">
+			<Items>
+				<Variable Name="AccessCode" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="CurrentDate" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="ePortUserName" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="EstimateCell" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="EstimateNumber" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="FlightDueDate" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="SBMSStartDate" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="Sspherepwd" Type="String" Local="True" Descr="abc123!">
+					<DefValue />
+				</Variable>
+				<Variable Name="SsphereURL" Type="String" Local="True" Descr="https://ssphereqa.gotostrata.com/ui_new#/">
+					<DefValue />
+				</Variable>
+				<Variable Name="ActualEstimate" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="ActualOrg" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="ActualStation" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="AgencyPassword" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="AgencyURL" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="AgencyUsername" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="BuyerFirstName" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="BuyerLastName" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="CallLetter_Traffic" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="CentralLogin" Type="Boolean" Local="True">
+					<DefValue BoolValue="False" />
+				</Variable>
+				<Variable Name="EmailBody" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="Environment" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="ePortPassword" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="ePortRegistryPassword" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="ePortRegistryUserName" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="ePortURL" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="ePortUserEmail" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="FlightEndDate" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="RFPName" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="SBMSMarket" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="SBMSMedia" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="SBMSPrimaryDemo" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="SBMSProduct" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="FlightStartDate" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="InstructionComment" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="LoginName" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="MailURL" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="MakeGoodCheckbox" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="MakeGoodEstimateCell" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="Organization" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="Password" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="Password11" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="RadioStation" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="RowNumber" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="SalesContact" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="SBMSAgencyName" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="SBMSAgencyOfficeName" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="SBMSClientName" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="SBMSDaypartGroup" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="SBMSEndDate" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="SBMSEstimateDesc" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="SBMSEstimateGroup" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="SBMSEstimateType" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="Ssphereusername" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="Station" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="Subscription" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="SubscriptionStation" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="URL11" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="UserLastName" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="Var7" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+				<Variable Name="UserName11" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+			</Items>
+		</data>
+	</variables>
 	<settings key="{62B6E2AB-FFB6-4077-94EE-F75A76965361}">
 		<settingsVersion value="15.54" />
 		<setting name="AgOpenApp_ExtendedSilverlightObjectTree" type="1" value="False" />
