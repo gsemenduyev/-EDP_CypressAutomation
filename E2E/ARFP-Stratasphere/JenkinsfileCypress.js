@@ -81,6 +81,14 @@ pipeline {
         stage('Test') {
             steps {
             sh "cd ${CURRENT_PROJECT_PATH} && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome --env tags=\"@${PROJECTS}\",ENV=\"${ENVIRONMENT}\",VERSION=\"${VERSION}\"";
+def user = 'Administrator'
+def pass = '?C9ZY&xM??Gr(a;keeChodUdds=h-%$t'
+
+bat "cd \"C:\\Program Files (x86)\\SmartBear\\TestExecute 15\\Bin\""
+bat "SessionCreator.exe RunTest /UserName:${user} /Password:${pass} /ProjectPath:\"C:\\CypressAutomation\\EDP_CypressAutomation\\E2E\\SBMS\" /project:\"SBMS\" /test:\"OpenSBMS\" /Help"
+  
+            
+            
             }
         }
     }

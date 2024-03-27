@@ -24,9 +24,7 @@ pipeline {
     }
     
     options{
-        ansiColor('xterm'){
-            stage "\u001B[31mI'm Red\u001B[0m Now not"
-        }
+        ansiColor('xterm')
     }
 stages {
 
@@ -44,9 +42,8 @@ stages {
         
         stage('TestComplete Test') {
             steps {
-                script {
-                    def testCompleteOptions = [
-                        actionOnErrors: 'MAKE_FAILED',
+            
+                        testcompletetest  actionOnErrors: 'MAKE_FAILED',
                         actionOnWarnings: 'MAKE_UNSTABLE',
                         credentialsId: 'MasTEUser',
                         executorType: 'TE',
@@ -60,16 +57,15 @@ stages {
                         timeout: '10',
                         useTCService: true,
                         useTimeout: true
-                    ]
                     
                     // Call the TestComplete test step
-                    runTestComplete(testCompleteOptions)
+                   
                 }
             }
         }
     }
 
-}
+
 
 
    /*
