@@ -14,7 +14,13 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
+import "cypress-cucumber-attach-screenshots-to-failed-steps";
 import './commands'
+import '@shelex/cypress-allure-plugin';
+// import failOnConsoleError from 'cypress-fail-on-console-error'
+// failOnConsoleError();
 
-// Alternatively you can use CommonJS syntax:
-// require('./commands')
+module.exports = (on, config) => {
+    on('file:preprocessor', cucumber())
+
+}
