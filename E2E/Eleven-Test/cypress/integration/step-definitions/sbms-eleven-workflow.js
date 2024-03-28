@@ -5,30 +5,19 @@ import 'cypress-data-session';
 import 'cypress-iframe';
 import { Given } from "@badeball/cypress-cucumber-preprocessor";
 
-Given('Test', () => {
-    cy.sbms('createRadioEstimate')
-})
-// Given('Test 4', () => {
-//     const commands = [
-//         'cd C:\\Program Files (x86)\\SmartBear\\TestComplete 15\\Bin',
-//         'TestComplete.exe "C:\\CypressAutomation\\EDP_CypressAutomation\\E2E\\SBMS\\SBMS.pjs"' +
-//         ' /r /p:SBMS /t:"KeywordTests|createRadioEstimate" /e ' +
-//         '/ExportLog:"C:\\CypressAutomation\\EDP_CypressAutomation\\E2E\\SBMS\\Log-eleven-integration" ' +
-//         '/SilentMode /ForceConversion'
-//     ];
-//     //   'TestComplete.exe "C:\\CypressAutomation\\EDP_CypressAutomation\\E2E\\SBMS\\SBMS.pjs" /r /p:SBMS /t:"KeywordTests|createRadioEstimate" /e'
-//     // TestComplete.exe "C:\\CypressAutomation\\EDP_CypressAutomation\\E2E\\SBMS\\SBMS.pjs" /r /p:SBMS /t:"KeywordTests|createRadioEstimate" /e /SilentMode /ForceConversion
-//     cy.exec(commands.join(' && '), { timeout: 1000000 }).then((result) => {
-//         if (result.stderr) {
-//             // Handle the error
-//             cy.log(`Error: ${result.stderr}`);
-//         } else {
-//             // Use the output
-//             cy.log(`Commands output:\n${result.stdout}`);
-//         }
-//     });
-// });
 
-// Given('Test 2', () => {
-//     cy.visit('https://www.homedepot.com/').screenshot()
-// })
+
+Given('Create Radio estimate and Send to Eleven', () => {
+    cy.sbms('createRadioEstimate')
+    cy.copyAndDeleteFiles('C:\\CypressAutomation\\EDP_CypressAutomation\\E2E\\SBMS\\SBMS\\NameMapping\\Images\\',
+        'C:\\CypressAutomation\\EDP_CypressAutomation\\E2E\\Eleven-Test\\cypress\\screenshots\\');
+});
+
+Given('Verify Radio estimate is created', () => {
+
+});
+
+
+Given('Login to Eleven', () => {
+
+});

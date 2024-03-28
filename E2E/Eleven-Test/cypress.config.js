@@ -26,8 +26,29 @@ async function setupNodeEvents(cypressOn, config) {
         } catch (e) {
           reject(e)
         }
-      })
-    }
+      });
+    },
+    copyScreenShotTC: ({ sourceFile, destinationFile }) => {
+      fs.copyFileSync(sourceFile, destinationFile);
+      return null;
+    },
+    createFolder: ({ folderPath }) => {
+      fs.mkdirSync(folderPath, { recursive: true });
+      return null;
+    },
+
+    getFiles: ({ folderPath }) => {
+      return getAllFiles(folderPath);
+    },
+    copyFile: ({ sourcePath, destinationPath }) => {
+      fs.copyFileSync(sourcePath, destinationPath);
+      return null;
+    },
+    deleteFile: ({ filePath }) => {
+      fs.unlinkSync(filePath);
+      return null;
+    },
+
   });
 
 
@@ -99,3 +120,19 @@ module.exports = defineConfig({
     specPattern: "**/*.feature",
   },
 });
+
+
+function getAllFiles(folderPath) {
+  const files = [];
+
+  fs.readdirSync(folderPath).forEach((file) => {
+    const filePath = `${folderPath}/${file}`;
+    const stat = fs.statSync(filePath);
+
+    if (stat.isFile()) {
+      files.push(filePath);
+    }
+  });
+
+  return files;
+}

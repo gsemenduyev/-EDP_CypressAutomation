@@ -41,3 +41,38 @@ Cypress.Commands.add("sbms", (keywordTest) => {
         }
     });
 });
+
+Cypress.Commands.add('copyScreenShotTC', (fileNme) => {
+    const featureFileName = Cypress.spec.relative;
+    const segments = featureFileName.split("\\");
+    const lastSegment = segments.pop();
+    const sourceFile = 'C:\\CypressAutomation\\EDP_CypressAutomation\\E2E\\SBMS\\SBMS\\NameMapping\\Images\\3723187.png'
+    const destinationFile = 'C:\\CypressAutomation\\EDP_CypressAutomation\\E2E\\Eleven-Test\\cypress\\screenshots\\' +
+        lastSegment + '\\' + fileNme + '.png'
+
+    // cy.createFolder('C:\\CypressAutomation\\EDP_CypressAutomation\\E2E\\Eleven-Test\\cypress\\screenshots')
+    cy.createFolder('C:\\CypressAutomation\\EDP_CypressAutomation\\E2E\\Eleven-Test\\cypress\\screenshots\\' +
+        lastSegment)
+    return cy.task('copyScreenShotTC', { sourceFile, destinationFile });
+});
+
+Cypress.Commands.add('createFolder', (folderPath) => {
+    return cy.task('createFolder', { folderPath });
+});
+
+
+Cypress.Commands.add('copyAndDeleteFiles', (sourceFolderPath, destinationFolderPath) => {
+    cy.task('getFiles', { folderPath: sourceFolderPath }).then((filePaths) => {
+        filePaths.forEach((filePath) => {
+            const fileName = Cypress._.last(filePath.split('/'));
+
+            if (fileName.endsWith('.png')) {
+                const destinationPath = `${destinationFolderPath}/${fileName}`;
+
+                cy.task('copyFile', { sourcePath: filePath, destinationPath }).then(() => {
+                    cy.task('deleteFile', { filePath });
+                });
+            }
+        });
+    });
+});
