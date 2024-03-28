@@ -76,3 +76,18 @@ Cypress.Commands.add('copyAndDeleteFiles', (sourceFolderPath, destinationFolderP
         });
     });
 });
+
+
+Cypress.Commands.add("is_element_exists", (selectorSyntax) => {
+    cy.get("body").then($body => {
+        let elementExist;
+        if ($body.find(selectorSyntax).length > 0) {
+            cy.log('Element Exists')
+            elementExist = true;
+        } else {
+            cy.log("Element doesn't Exists")
+            elementExist = false;
+        }
+        return cy.wrap(elementExist);
+    });
+});
