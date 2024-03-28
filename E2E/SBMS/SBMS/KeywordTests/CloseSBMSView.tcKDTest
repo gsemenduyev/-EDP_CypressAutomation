@@ -123,6 +123,14 @@
 					</Operation>
 				</Children>
 			</Operation>
+			<Operation Type="{206B0810-0B42-45AB-90F5-9F8DF0D669D2}">
+				<Data Description="Runs a script routine." TestName="WriteToFile" Unit="WriteToFile">
+					<Parameters LangId="{90F89436-9452-4F95-9882-6B5210079F13}">
+						<Parameter Name="filePath" DefVarType="12" DefValueType="0" DefValueValue="0" VarType="8" ValueType="6" ValueValue="C:\CypressAutomation\EDP_CypressAutomation\E2E\Eleven-Test\cypress\fixtures\estimete-number.txt" />
+						<Parameter Name="content" DefVarType="12" DefValueType="0" DefValueValue="0" ParamType="{83D6F80C-4323-4034-92E3-FD2A65D2E6FC}" VariableType="2" VariableName="EstimateNumber" />
+					</Parameters>
+				</Data>
+			</Operation>
 		</Children>
 	</TestData>
 	<Parameters Key="{320FD9AE-70C1-46BB-9274-689A57D5EDD9}">

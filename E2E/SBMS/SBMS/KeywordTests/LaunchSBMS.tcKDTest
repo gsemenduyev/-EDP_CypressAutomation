@@ -29,16 +29,17 @@
 				</Data>
 				<Children>
 					<Operation Type="{66F32D5F-A5DB-420E-9CB4-3DB7CADE2692}">
-						<Data Description="Runs the &quot;SBMSNET&quot; tested application." TestedApp="SBMSNET_QA">
+						<Data Description="Runs the &quot;SBMSNET_QA&quot; tested application." TestedApp="SBMSNET_QA">
 							<Parameters LangId="{90F89436-9452-4F95-9882-6B5210079F13}">
-								<Parameter Name="Count" DefVarType="3" DefValueType="1" DefValueValue="-1" VarType="3" ValueType="1" ValueValue="1" />
-								<Parameter Name="IgnoreRunning" DefVarType="11" DefValueType="7" DefValueValue="False" VarType="11" ValueType="7" ValueValue="True" />
-								<Parameter Name="Timeout" DefVarType="3" DefValueType="1" DefValueValue="-1" VarType="3" ValueType="1" ValueValue="-1" />
+								<Parameter Name="Count" DefVarType="3" DefValueType="1" DefValueValue="-1" VarType="3" ValueType="1" ValueValue="-1" />
+								<Parameter Name="IgnoreRunning" DefVarType="11" DefValueType="7" DefValueValue="False" VarType="11" ValueType="7" ValueValue="False" />
+								<Parameter Name="Timeout" DefVarType="3" DefValueType="1" DefValueValue="-1" VarType="3" ValueType="1" ValueValue="60000" />
 							</Parameters>
 						</Data>
 					</Operation>
 					<Operation Type="{6A1B4CEE-4FB8-46E2-BFBD-403C84342301}">
 						<Data Description="Delays the test execution for the specified time period.">
+							<CommonData Disabled="True" />
 							<Parameters LangId="{90F89436-9452-4F95-9882-6B5210079F13}">
 								<Parameter Name="ms" DefVarType="3" VarType="3" ValueType="1" ValueValue="20000" />
 								<Parameter Name="Str" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="" />
@@ -58,8 +59,29 @@
 							<ObjectSyntax LangId="{90F89436-9452-4F95-9882-6B5210079F13}" Code="Sys.Process(&quot;SBMSNET&quot;).find(&quot;WinFormsControlName&quot;, &quot;Form_Login&quot;).find(&quot;WinFormsControlName&quot;, &quot;btnOK&quot;, 20);" />
 						</Data>
 					</Operation>
+					<Operation Type="{206B0810-0B42-45AB-90F5-9F8DF0D669D2}">
+						<Data Description="Runs a script routine." TestName="WaitForElement" Unit="WaitForElement">
+							<Parameters LangId="{90F89436-9452-4F95-9882-6B5210079F13}">
+								<Parameter Name="objectIdentifier" DefVarType="12" DefValueType="0" DefValueValue="0" VarType="8" ValueType="6" ValueValue="WndCaption" />
+								<Parameter Name="elementName" DefVarType="12" DefValueType="0" DefValueValue="0" VarType="8" ValueType="6" ValueValue="Spot" />
+								<Parameter Name="timeout" DefVarType="12" DefValueType="0" DefValueValue="0" VarType="3" ValueType="1" ValueValue="60000" />
+							</Parameters>
+						</Data>
+					</Operation>
+					<Operation Type="{2F0A05A2-4ECD-47CE-A12B-9843A308F2DC}">
+						<Data Description="Checks whether the %p2 property of the %p1 object %p3 %p4.">
+							<Parameters LangId="{90F89436-9452-4F95-9882-6B5210079F13}">
+								<Parameter Name="Object" DefVarType="12" ParamType="{FC0DF733-E97F-46DD-8307-EA4DFF891298}" Expression="Aliases.SBMSNET.wndWindowsForms10Window8app039490e2r9ad1.MdiClient.Form_Main_ThemeEnabled.pnlMain.pnlOptions.btnBuying" />
+								<Parameter Name="Property" DefVarType="8" VarType="8" ValueType="6" ValueValue="WndCaption" />
+								<Parameter Name="Condition" DefVarType="3" VarType="3" ValueType="1" ValueValue="0" />
+								<Parameter Name="Value" DefVarType="12" VarType="8" ValueType="6" ValueValue="Hello" />
+								<Parameter Name="CaseSensitive" DefVarType="11" DefValueType="7" DefValueValue="True" VarType="11" ValueType="7" ValueValue="True" />
+							</Parameters>
+						</Data>
+					</Operation>
 					<Operation Type="{6A1B4CEE-4FB8-46E2-BFBD-403C84342301}">
 						<Data Description="Delays the test execution for the specified time period.">
+							<CommonData Disabled="True" />
 							<Parameters LangId="{90F89436-9452-4F95-9882-6B5210079F13}">
 								<Parameter Name="ms" DefVarType="3" VarType="3" ValueType="1" ValueValue="60000" />
 								<Parameter Name="Str" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="" />
@@ -69,14 +91,6 @@
 					<Operation Type="{575D0372-CCEB-4D0F-AFE8-D2004F108913}">
 						<Data Description="Performs a single click on the specified button." Action="ClickButton">
 							<ObjectSyntax LangId="{90F89436-9452-4F95-9882-6B5210079F13}" Code="Sys.Process(&quot;SBMSNET&quot;).WinFormsObject(&quot;Form_MDI&quot;).WinFormsObject(&quot;MdiClient&quot;, &quot;&quot;).WinFormsObject(&quot;Form_Main_ThemeEnabled&quot;).WinFormsObject(&quot;pnlMain&quot;).WinFormsObject(&quot;pnlActiveModule&quot;).WinFormsObject(&quot;rbtActiveModule_Spot&quot;);" />
-						</Data>
-					</Operation>
-					<Operation Type="{6A1B4CEE-4FB8-46E2-BFBD-403C84342301}">
-						<Data Description="Delays the test execution for the specified time period.">
-							<Parameters LangId="{90F89436-9452-4F95-9882-6B5210079F13}">
-								<Parameter Name="ms" DefVarType="3" VarType="3" ValueType="1" ValueValue="30000" />
-								<Parameter Name="Str" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="" />
-							</Parameters>
 						</Data>
 					</Operation>
 				</Children>

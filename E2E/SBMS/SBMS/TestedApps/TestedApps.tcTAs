@@ -10,7 +10,7 @@
 					<param name="RunAs" parameters="" workFolder="" userName="" password="" domain="" />
 					<param name="Profile" parameters="" workFolder="" useProject="False" projectFileName="" overrideProfiler="False" profilerName="" profileRunMode="Silent" AQtimeVersion="0" forceRunMode="False" />
 					<param name="Debug" parameters="" workFolder="" />
-					<param name="Simple" fileName="SBMSNET.EXE" filePath="C:\SBMS\SBMSNET_Eleven_QA\" parameters="" workFolder="" />
+					<param name="Simple" fileName="SBMSNET.EXE" filePath="C:\SBMS\SBMSNET_Eleven_Prod\" parameters="" workFolder="" />
 				</runModeParams>
 			</config>
 			<testData />
