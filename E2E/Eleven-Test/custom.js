@@ -11,7 +11,6 @@ results[0].elements.forEach((element) => {
 
         if (fs.existsSync(pngFilePath)) {
             const base64Data = fs.readFileSync(pngFilePath, 'base64');
-            console.log(base64Data)
             const embedding = {
                 name: 'Screenshot',
                 mime_type: 'image/png',
