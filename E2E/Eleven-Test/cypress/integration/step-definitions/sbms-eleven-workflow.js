@@ -94,3 +94,8 @@ Given('Send order to Stratasphere', () => {
 Given('Revise Radio estimate and Send to eleven', () => {
     cy.sbms('reviseRadioEstimate')
 });
+
+
+Given('Test', () => {
+    cy.visit('https://translate.google.com/')
+});

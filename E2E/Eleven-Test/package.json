@@ -50,14 +50,15 @@
     "cypress-testrail": "^2.7.1",
     "dotenv": "^16.2.0",
     "esbuild": "^0.17.18",
-    "multiple-cucumber-html-reporter": "^3.4.0",
+    "multiple-cucumber-html-reporter": "^3.6.2",
     "neat-csv": "5.1.0",
     "node-xlsx": "^0.23.0",
     "xlsx": "^0.18.5"
   },
   "dependencies": {
     "@badeball/cypress-cucumber-preprocessor": "latest",
-    "@cypress/browserify-preprocessor": "latest"
+    "@cypress/browserify-preprocessor": "latest",
+    "json-beautify": "^1.1.1"
   },
   "chromeWebSecurity": false
 }

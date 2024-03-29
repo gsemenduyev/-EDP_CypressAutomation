@@ -2,4 +2,7 @@ npx cypress run --browser chrome --headed --spec cypress/integration/step-defini
 node ./cucumber-html-report.js
 npx cypress open
 
-
+node custom.js
+npx cypress run --spec cypress/integration/step-definitions/sbms-eleven-workflow.feature
+node custom.js
+node ./cucumber-html-report.js

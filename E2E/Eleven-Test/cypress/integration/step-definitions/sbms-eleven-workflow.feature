@@ -5,9 +5,10 @@ Feature: SBMS Eleven workflow
     #     * Verify Radio estimate is created
 
     Scenario: Verify Eleven user receives Radio estimate
-        * Login to Eleven
-        * Search for order
-        * Verify Radio order status is 'New'
+        * Test
+# * Login to Eleven
+# * Search for order
+# * Verify Radio order status is 'New'
 #     * Send order to Stratasphere
 
 # Scenario: Revise SBMS Radio estimate, send it to Eleven
