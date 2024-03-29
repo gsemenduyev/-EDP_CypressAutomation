@@ -19,14 +19,13 @@ before(function () {
 
 Given('Create Radio estimate and Send to Eleven', () => {
     cy.sbms('createRadioEstimate')
-    cy.copyAndDeleteFiles('C:\\CypressAutomation\\EDP_CypressAutomation\\E2E\\SBMS\\SBMS\\NameMapping\\Images\\',
-        'C:\\CypressAutomation\\EDP_CypressAutomation\\E2E\\Eleven-Test\\cypress\\screenshots\\');
+    // cy.copyAndDeleteFiles('C:\\CypressAutomation\\EDP_CypressAutomation\\E2E\\SBMS\\SBMS\\NameMapping\\Images\\',
+    //     'C:\\CypressAutomation\\EDP_CypressAutomation\\E2E\\Eleven-Test\\cypress\\screenshots\\');
 });
 
 Given('Verify Radio estimate is created', () => {
 
 });
-
 
 Given('Login to Eleven', () => {
     cy.visit(environmentsParam.elevenUrl)
@@ -39,38 +38,59 @@ Given('Login to Eleven', () => {
     cy.screenshot();
 });
 
-Given('Search for estimate', () => {
-    var index = 1;
-    cy.readFile('cypress/fixtures/estimete-number.txt').then(($estimateNumber) => {
+Given('Search for order', () => {
+    var outerIndex = 1;
+    cy.readFile('cypress/fixtures/estimate-number.txt').then(($estimateNumber) => {
+
         const waitForEstimate = () => {
+            var innerIdex = 1;
             homePage.orderSearchBox().type($estimateNumber);
-            homePage.goButton().click()
+            homePage.goButton().click();
+            const waitForOrder = () => {
+                cy.wait(500)
+                cy.is_element_exists(homePage.headerEstimateTextSyntax()).then($elementExists => {
+                    if ($elementExists === true) {
+                        innerIdex = 10;
+                    } else if (innerIdex < 10 && $elementExists === false) {
+                        innerIdex++;
+                        waitForOrder();
+                    }
+                })
+            }
+            waitForOrder();
+
             cy.is_element_exists(homePage.headerEstimateTextSyntax()).then($elementExists => {
                 if ($elementExists === true) {
-                    index = 15;
-                } else if (index < 15 && $elementExists === false) {
-                    index++;
-                    cy.reload()
+                    outerIndex = 10;
+                } else if (outerIndex < 10 && $elementExists === false) {
+                    outerIndex++;
                     cy.wait(5000)
+                    cy.reload()
                     waitForEstimate();
                 }
             })
         }
         waitForEstimate();
         homePage.headerEstimateText().should('contain.text', $estimateNumber)
+        cy.screenshot();
     })
 });
 
 
-Given('Verify Radio order status is {string}', $string => {
+Given('Verify Radio order status is {string}', $orderStatus => {
     homePage.toggleAll().click()
-    homePage.statusSendFailed().should('include.text', $string)
+    homePage.orderStatus().should('include.text', $orderStatus)
+    cy.screenshot();
+});
+
+Given('Send order to Stratasphere', () => {
+    homePage.lstActionName().select('Send Selected Unsent Order(s)');
+    homePage.selectAllCheckbox().check()
+    homePage.submitButton().click();
+    homePage.okButton().click();
+
 });
 
 Given('Revise Radio estimate and Send to eleven', () => {
     cy.sbms('reviseRadioEstimate')
-});
-
-Given('Verify revised Radio estimate', () => {
-
 });

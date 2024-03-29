@@ -8,6 +8,7 @@ const fs = require('fs');
 const xlsx = require('node-xlsx').default;
 const path = require('path')
 const RUN_ENV_FILE_PATH = 'cypress/reports/run-info/run-env.json';
+const ENVIRONMENT_FILE_PATH = 'cypress/fixtures/environment/qa-param.json';
 const delay = async (ms) => new Promise((res) => setTimeout(res, ms));
 async function setupNodeEvents(cypressOn, config) {
   const on = require('cypress-on-fix')(cypressOn)
@@ -16,6 +17,14 @@ async function setupNodeEvents(cypressOn, config) {
   allureWriter(on, config);
   registerDataSession(on, config);
   new TestRailReporter(on, config).register();
+
+  on('before:spec', () => {
+    fs.mkdir('cypress/reports/run-info/', { recursive: true }, (err) => {
+      if (err) {
+        console.log(err);
+      };
+    });
+  });
 
   on('task', {
     parseXlsx({ filePath }) {
@@ -53,18 +62,7 @@ async function setupNodeEvents(cypressOn, config) {
 
 
   on('after:run', async (results) => {
-    try {
-      fs.readFileSync(RUN_ENV_FILE_PATH, { encoding: 'utf8', flag: 'r' });
-    } catch (error) {
-      fs.writeFileSync(RUN_ENV_FILE_PATH,
-        JSON.stringify({
-          agencyUrl: "-",
-          ssphereUrl: "-",
-          mailinatorUrl: "-",
-          env: "-"
-        }))
-    }
-    const data = fs.readFileSync(RUN_ENV_FILE_PATH, { encoding: 'utf8', flag: 'r' });
+    const data = fs.readFileSync(ENVIRONMENT_FILE_PATH, { encoding: 'utf8', flag: 'r' });
     const runInfo = JSON.parse(data);
     if (results) {
       await afterRunHandler(config);
@@ -80,16 +78,13 @@ async function setupNodeEvents(cypressOn, config) {
             cypressVersion: results.cypressVersion,
             startedTestsAt: results.startedTestsAt,
             endedTestsAt: results.endedTestsAt,
-            env: runInfo['env'],
-            agencyUrl: runInfo['agencyUrl'],
-            ssphereUrl: runInfo['ssphereUrl'],
-            mailinatorUrl: runInfo['mailinatorUrl'],
+            elevenUrl: runInfo['elevenUrl']
           },
           null,
           '\t',
         ),
       );
-    }
+    };
   });
   return config;
 }

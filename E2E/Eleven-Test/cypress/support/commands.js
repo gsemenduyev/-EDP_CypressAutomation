@@ -24,14 +24,10 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 Cypress.Commands.add("sbms", (keywordTest) => {
-    const commands = [
-        'cd C:\\Program Files (x86)\\SmartBear\\TestComplete 15\\Bin',
-        `TestComplete.exe C:\\CypressAutomation\\EDP_CypressAutomation\\E2E\\SBMS\\SBMS.pjs ` +
-        `/r /p:SBMS /t:"KeywordTests|${keywordTest}" /e ` +
-        `/ExportLog:"C:\\CypressAutomation\\EDP_CypressAutomation\\E2E\\SBMS\\Log-eleven-integration" ` +
-        `/SilentMode`
-    ];
-    cy.exec(commands.join(' && '), { timeout: 1000000 }).then((result) => {
+    const commands = 'cd C:\\Program Files (x86)\\SmartBear\\TestComplete 15\\Bin && ' +
+        'TestComplete.exe C:\\CypressAutomation\\EDP_CypressAutomation\\E2E\\SBMS\\SBMS.pjs ' +
+        '/r /p:SBMS /t:"KeywordTests|' + keywordTest + '" /e /SilentMode';
+    cy.exec(commands, { timeout: 1000000 }).then((result) => {
         if (result.stderr) {
             // Handle the error
             cy.log(`Error: ${result.stderr}`);
