@@ -101,7 +101,6 @@ public class NewEstimateSteps {
 
                 estimateName = wait.until(ExpectedConditions.visibilityOf(estimateGoalsPage.getEstimateNameTextBox()))
                                 .getText();
-
                 FileWriter fw = new FileWriter("src\\test\\resources\\test_parameters\\new_estimate.txt");
                 fw.write(estimateName);
                 fw.close();
