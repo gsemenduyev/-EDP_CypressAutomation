@@ -1,0 +1,42 @@
+{
+  "name": "traffic-bvt",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "cypress-cucumber-preprocessor": {
+    "stepDefinitions": "cypress/integration/**/*.js",
+    "json": {
+      "enabled": true,
+      "output": "cypress/reports/cucumber-reports/results.json"
+    },
+    "messages": {
+      "enabled": true,
+      "output": "cypress/reports/messages/cucumber-messages.json"
+    },
+    "html": {
+      "enabled": true,
+      "output": "cypress/reports/cucumber-reports/cucumber-html-report/index.html"
+    }
+  },
+  "author": "Gennadiy Semenduyev",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress-cucumber-attach-screenshots-to-failed-steps": "^1.0.0",
+    "cypress-cucumber-preprocessor": "^4.3.1",
+    "cypress-on-fix": "^1.0.2",
+    "cypress-testrail": "^2.7.1",
+    "multiple-cucumber-html-reporter": "^3.4.0",
+    "node-xlsx": "^0.23.0",
+    "@babel/helper-compilation-targets": "^7.22.5",
+    "@cypress/browserify-preprocessor": "^3.0.2",
+    "cypress": "^13.5.0"
+  },
+  "dependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "latest",
+    "@cypress/browserify-preprocessor": "latest"
+  },
+  "chromeWebSecurity": false
+}
