@@ -23,8 +23,8 @@ Given('Create Radio estimate and Send to Eleven', () => {
     //     'C:\\CypressAutomation\\EDP_CypressAutomation\\E2E\\Eleven-Test\\cypress\\screenshots\\');
 });
 
-Given('Verify Radio estimate is created', () => {
-
+Given('Launch SBMS', () => {
+    cy.sbms('OpenSBMS')
 });
 
 Given('Login to Eleven', () => {
