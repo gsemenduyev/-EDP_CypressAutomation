@@ -29,7 +29,7 @@ class EnvUtils {
         return envProperties.trafficAdminUsername;
     }
     getTrafficAdminPassword() {
-        return envProperties.agencyPassword;
+        return envProperties.trafficAdminPassword;
     }
 }
 export default EnvUtils;

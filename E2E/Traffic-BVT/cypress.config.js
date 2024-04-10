@@ -1,6 +1,7 @@
 const { defineConfig } = require("cypress");
 const { addCucumberPreprocessorPlugin, afterRunHandler } = require("@badeball/cypress-cucumber-preprocessor");
 const browserify = require("@badeball/cypress-cucumber-preprocessor/browserify");
+const registerDataSession = require('cypress-data-session/src/plugin')
 const TestRailReporter = require('cypress-testrail');
 const fs = require('fs');
 const xlsx = require('node-xlsx').default;
@@ -10,6 +11,7 @@ async function setupNodeEvents(cypressOn, config) {
   const on = require('cypress-on-fix')(cypressOn);
   await addCucumberPreprocessorPlugin(on, config, { omitAfterRunHandler: true, });
   on("file:preprocessor", browserify.default(config));
+  registerDataSession(on, config);
   new TestRailReporter(on, config).register();
 
   on('before:spec', () => {
@@ -78,13 +80,13 @@ async function setupNodeEvents(cypressOn, config) {
 module.exports = defineConfig({
   viewportWidth: 1920,
   viewportHeight: 1080,
-  defaultCommandTimeout: 20000,
+  defaultCommandTimeout: 10000,
   pageLoadTimeout: 60000,
   screenshotOnRunFailure: true,
   video: true,
   retries: {
-    runMode: 2,
-    openMode: 2
+    runMode: 0,
+    openMode: 0
   },
   projectId: "",
   e2e: {
