@@ -4,3 +4,4 @@ videos
 reports
 cypress/fixtures/environment/prod-param.json
 cypress/fixtures/environment/qa-param.json
+cypress/fixtures/new-user/new-user-param.json

@@ -6,47 +6,52 @@ import { Given } from "@badeball/cypress-cucumber-preprocessor";
 import EnvUtils from "../../../support/utils/EnvUtils";
 import TrafficLoginPage from "../../../support/page-objects/traffic-pages/TrafficLoginPage";
 import TrafficHomePage from "../../../support/page-objects/traffic-pages/TrafficHomePage";
+import { should } from 'chai';
 
 const envUtils = new EnvUtils;
 const trafficLoginPage = new TrafficLoginPage;
 const trafficHomePage = new TrafficHomePage;
 
-// const FIRST_NAME = 'Test';
-// const LAST_NAME = `User${Math.floor(Math.random() * (1000000, 9999999)) + 1000000}`;
-// const EMAIL = `${FIRST_NAME}${LAST_NAME}@mailinator.com`;
-
-const FIRST_NAME = 'Test';
-const LAST_NAME = `User10464427`;
-const EMAIL = `TestUser10464427@mailinator.com`;
-const PHONE = '123-456-7890';
-const VENDOR = 'TEST-FM';
-
-let qaParam;
-
+const NEW_USER_FILE = 'cypress/fixtures/new-user/new-user-param.json';
+let newUserParam
 before(function () {
-    cy.fixture('/environment/qa-param.json').then(function (data) {
-        qaParam = data;
-    })
-})
-
-Given('Login to Traffic as {string} user', user => {
-    let username;
-    let password;
-    let title = 'Traffic Instruction - Inbox';
-    if (user === 'Admin') {
-        username = envUtils.getTrafficAdminUsername();
-        password = envUtils.getTrafficAdminPassword();
-        title = 'Traffic Instruction - Manage User';
-    };
-
-    cy.visit(envUtils.getTrafficUrl());
-    trafficLoginPage.usernameBox().type(username);
-    trafficLoginPage.passwordBox().type(password);
-    trafficLoginPage.signInBtn().click();
-    cy.title().should('eq', title);
+    save_new_user_param();
+    cy.fixture('new-user/new-user-param.json').then(function (data) {
+        newUserParam = data;
+    });
 });
 
-Given('Verify Traffic {string} home page', user => {
+Given('Login to Traffic as {string} user', user => {
+    cy.visit(envUtils.getTrafficUrl());
+    cy.title().should('eq', 'AEINBOX® for Traffic Instruction - Login')
+    if (user === 'Admin') {
+        trafficLoginPage.usernameBox().type(envUtils.getTrafficAdminUsername());
+        trafficLoginPage.passwordBox().type(envUtils.getTrafficAdminPassword());
+        trafficLoginPage.signInBtn().click();
+        cy.title().should('eq', 'Traffic Instruction - Manage User');
+    } else if (user === 'New') {
+        trafficLoginPage.usernameBox().type(newUserParam.email);
+        trafficLoginPage.passwordBox().type(envUtils.getTrafficAdminPassword());
+        trafficLoginPage.signInBtn().click();
+        trafficLoginPage.acceptBtn().should('exist');
+        trafficLoginPage.doNotAcceptBtn().should('exist');
+        trafficLoginPage.userAgreementTxt().invoke('text').then(($elementText) => {
+            cy.readFile('cypress/fixtures/stores/user-agreement.txt').then(($fileContent) => {
+                expect($elementText.trim()).to.equal($fileContent.trim());
+            });
+        });
+        trafficLoginPage.acceptBtn().click();
+        cy.title().should('eq', 'Traffic Instruction - Inbox');
+    };
+});
+
+
+Given('Logout from Traffic', () => {
+    trafficHomePage.logoutLink().click();
+    cy.title().should('eq', 'AEINBOX® for Traffic Instruction - Login')
+});
+
+Given('Verify Traffic {string} user home page', user => {
     if (user === 'Admin') {
         trafficHomePage.manageUserTab().click();
         trafficHomePage.searchBar().should('include.text', 'Search User:');
@@ -78,6 +83,11 @@ Given('Verify Traffic {string} home page', user => {
         trafficHomePage.importVendorButton().should('exist');
         trafficHomePage.gridCell(0).should('be.visible');
         cy.screenshot();
+    } else if (user === 'New') {
+        trafficHomePage.inboxTab().should('exist');
+        trafficHomePage.acceptedTab().should('exist');
+        trafficHomePage.acceptInstructionsBtn().should('exist');
+        cy.screenshot();
     };
 });
 
@@ -85,12 +95,12 @@ Given('Create new user', () => {
     trafficHomePage.manageUserTab().click();
     trafficHomePage.createButton().click();
     trafficHomePage.cr8UserForm().should('be.visible');
-    trafficHomePage.cr8UserLoginNameTxtBox().type(EMAIL);
-    trafficHomePage.cr8UserFirstNameTxtBox().type(FIRST_NAME);
-    trafficHomePage.cr8UserLastNameTxtBox().type(LAST_NAME);
-    trafficHomePage.cr8UserPrimaryEmailTxtBox().type(EMAIL);
-    trafficHomePage.cr8UserSecondaryEmailTxtBox().type(EMAIL);
-    trafficHomePage.cr8UserPhoneTxtBox().type(PHONE);
+    trafficHomePage.cr8UserLoginNameTxtBox().type(newUserParam.email);
+    trafficHomePage.cr8UserFirstNameTxtBox().type(newUserParam.firstName);
+    trafficHomePage.cr8UserLastNameTxtBox().type(newUserParam.lastName);
+    trafficHomePage.cr8UserPrimaryEmailTxtBox().type(newUserParam.email);
+    trafficHomePage.cr8UserSecondaryEmailTxtBox().type(newUserParam.email);
+    trafficHomePage.cr8UserPhoneTxtBox().type(newUserParam.phone);
     // Click on "Active" checkbox
     trafficHomePage.cr8UserCheckbox(0).check().should('be.checked');
     // Click on "Traffic Instruction" checkbox
@@ -102,12 +112,12 @@ Given('Create new user', () => {
     trafficHomePage.cr8UserCreateBtn().click();
     trafficHomePage.cr8UserForm().should('not.be.visible');
     trafficHomePage.gridCell(0).should('be.visible');
-    cy.dataSession({
-        name: 'newUserLoginName',
-        setup: () => EMAIL,
-        validate: false,
-        shareAcrossSpecs: true,
-    });
+    // cy.dataSession({
+    //     name: 'newUserLoginName',
+    //     setup: () => EMAIL,
+    //     validate: false,
+    //     shareAcrossSpecs: true,
+    // });
 });
 
 Given('Verify new user was created', () => {
@@ -116,42 +126,71 @@ Given('Verify new user was created', () => {
     //     trafficHomePage.searchTxtBox().type($newUserLoginName);
 
     // trafficHomePage.searchTxtBox().type('TestUser5659555@mailinator.com');EMAIL
-    trafficHomePage.searchTxtBox().type(EMAIL)
+    trafficHomePage.searchTxtBox().type(newUserParam.email);
     trafficHomePage.searchButton().click();
     trafficHomePage.gridCell(0).should('be.visible');
-    trafficHomePage.gridCell(0).should('have.text', FIRST_NAME);
-    trafficHomePage.gridCell(1).should('have.text', LAST_NAME);
-    trafficHomePage.gridCell(2).should('have.text', EMAIL);
-    trafficHomePage.gridCell(3).should('have.text', PHONE);
-    trafficHomePage.gridCell(4).should('have.text', EMAIL);
+    trafficHomePage.gridCell(0).should('have.text', newUserParam.firstName);
+    trafficHomePage.gridCell(1).should('have.text', newUserParam.lastName);
+    trafficHomePage.gridCell(2).should('have.text', newUserParam.email);
+    trafficHomePage.gridCell(3).should('have.text', newUserParam.phone);
+    trafficHomePage.gridCell(4).should('have.text', newUserParam.email);
     trafficHomePage.gridCell(5).should('have.text', 'Traffic');
     trafficHomePage.gridCell(5).should('have.text', 'Traffic');
     trafficHomePage.gridCell(7).children().children().should('be.checked');
-    // });
-
-
 });
 
-Given('Assign Vendor to newly created user', () => {
+Given('Assign Vendor to {string} user', user => {
     trafficHomePage.assignVendorTab().click();
     // trafficHomePage.searchTxtBox().type('TestUser5659555@mailinator.com');
-    trafficHomePage.searchTxtBox().type(EMAIL);
+    if (user === 'New') {
+        trafficHomePage.searchTxtBox().type(newUserParam.email);
+    }
     trafficHomePage.searchButton().click();
     trafficHomePage.gridCell(0).should('be.visible');
-    trafficHomePage.gridCell(0).should('have.text', FIRST_NAME);
-    trafficHomePage.gridCell(1).should('have.text', LAST_NAME);
-    trafficHomePage.gridCell(2).should('have.text', EMAIL);
-    trafficHomePage.gridCell(3).should('have.text', PHONE);
-    trafficHomePage.gridCell(4).should('have.text', EMAIL);
+    trafficHomePage.gridCell(0).should('have.text', newUserParam.firstName);
+    trafficHomePage.gridCell(1).should('have.text', newUserParam.lastName);
+    trafficHomePage.gridCell(2).should('have.text', newUserParam.email);
+    trafficHomePage.gridCell(3).should('have.text', newUserParam.phone);
+    trafficHomePage.gridCell(4).should('have.text', newUserParam.email);
     trafficHomePage.gridCell(6).children().click();
-    trafficHomePage.assignedVendorsForm().should('be.visible');
-    trafficHomePage.assignedVendorsFormTitle().should('include.text', `View Assigned Vendors of '${FIRST_NAME} ${LAST_NAME}`);
+    trafficHomePage.assignedVenForm().should('be.visible');
+    trafficHomePage.assignedVenFormTitle().should('include.text', `View Assigned Vendors of '${newUserParam.firstName} ${newUserParam.lastName}`);
     trafficHomePage.goToAssignBtn().click();
-    trafficHomePage.assignedVendorsForm().should('be.visible');
-    trafficHomePage.assignedVendorsFormTitle().should('include.text', `Assign Vendors to '${FIRST_NAME} ${LAST_NAME}`);
-    trafficHomePage.assignVendorsTextBox().type(VENDOR);
-    trafficHomePage.assignVendorsSearchBtn().click();
-    trafficHomePage.assignVendorsGridCell(1).should('have.text', VENDOR.split('-')[0])
-    trafficHomePage.assignVendorsGridCell(2).should('have.text', VENDOR.split('-')[1])
-
+    trafficHomePage.assignedVenForm().should('be.visible');
+    trafficHomePage.assignedVenFormTitle().should('include.text', `Assign Vendors to '${newUserParam.firstName} ${newUserParam.lastName}`);
+    trafficHomePage.assignVenTextBox().type(newUserParam.vendor);
+    trafficHomePage.assignVenSearchBtn().click();
+    trafficHomePage.assignVenGridCell(1).should('have.text', newUserParam.vendor.split('-')[0])
+    trafficHomePage.assignVenGridCell(2).should('have.text', newUserParam.vendor.split('-')[1])
+    trafficHomePage.assignVenGridCell(0).children().children().check().should('be.checked');
+    trafficHomePage.assignVenBtn().click();
+    trafficHomePage.assignVenGoToViewBtn().click({ timeout: 60000 });
+    trafficHomePage.assignVenGridCell(1).should('have.text', newUserParam.vendor.split('-')[0])
+    trafficHomePage.assignVenGridCell(2).should('have.text', newUserParam.vendor.split('-')[1])
+    trafficHomePage.assignVenCancelBtn().click();
 });
+
+
+Given('test', () => {
+
+    cy.log(newUserParam.email);
+})
+
+// Saves new user parameters into Json file
+function save_new_user_param() {
+    const firstName = 'Test';
+    const lastName = `User${Math.floor(Math.random() * (1000000, 9999999)) + 1000000}`;
+    const email = `${firstName}${lastName}@mailinator.com`;
+    const phone = '123-456-7890';
+    const vendor = 'TEST TRAFFIC-AM';
+
+    const data = {
+        email: email,
+        firstName: firstName,
+        lastName: lastName,
+        phone: phone,
+        vendor: vendor
+    };
+    const jsonContent = JSON.stringify(data);
+    cy.writeFile(NEW_USER_FILE, jsonContent);
+};
