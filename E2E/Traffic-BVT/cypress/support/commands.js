@@ -23,3 +23,25 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+/* 
+Verifies if element exists in DOM.
+[@param] selectorSyntax - Syntax of CSS, class, id...
+[@return] - boolean
+*/
+import "cypress-real-events";
+import "cypress-data-session";
+
+Cypress.Commands.add("is_element_exists", (selectorSyntax) => {
+    cy.get("body").then($body => {
+        let elementExist;
+        if ($body.find(selectorSyntax).length > 0) {
+            cy.log('Element Exists')
+            elementExist = true;
+        } else {
+            cy.log("Element doesn't Exist")
+            elementExist = false;
+        }
+        return cy.wrap(elementExist);
+    });
+})

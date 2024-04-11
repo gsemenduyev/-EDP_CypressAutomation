@@ -1,6 +1,5 @@
 const ENV = Cypress.env('ENV');
 let envProperties;
-
 before(function () {
     if (ENV === 'Production') {
         cy.log(`Environment - ${ENV}`);
@@ -30,6 +29,18 @@ class EnvUtils {
     }
     getTrafficAdminPassword() {
         return envProperties.trafficAdminPassword;
+    }
+    getsTrafficUrl() {
+        return envProperties.sTrafficUrl;
+    }
+    getsTrafficUsername() {
+        return envProperties.sTrafficUsername;
+    }
+    getsTrafficPassword() {
+        return envProperties.sTrafficPassword;
+    }
+    getEstimate() {
+        return envProperties.estimate;
     }
 }
 export default EnvUtils;

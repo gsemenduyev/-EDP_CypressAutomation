@@ -14,6 +14,29 @@ async function setupNodeEvents(cypressOn, config) {
   registerDataSession(on, config);
   new TestRailReporter(on, config).register();
 
+  // Creates new user json file.
+  on('before:browser:launch', () => {
+    if (!fs.existsSync('cypress/fixtures/new-user/new-user-param.json')) {
+      console.log("Doesn't exists new-user-param.json ")
+      fs.mkdir('cypress/fixtures/new-user/', { recursive: true }, (err) => {
+        if (err) {
+          console.log(err);
+        };
+      });
+      const data = {
+        email: "email",
+        firstName: "firstName",
+        lastName: "lastName",
+        phone: "phone",
+        vendor: "vendor"
+      };
+
+      const jsonContent = JSON.stringify(data);
+      fs.writeFileSync('cypress/fixtures/new-user/new-user-param.json', jsonContent);
+    }
+
+  });
+
   on('before:spec', () => {
     fs.mkdir('cypress/reports/run-info/', { recursive: true }, (err) => {
       if (err) {
@@ -80,7 +103,7 @@ async function setupNodeEvents(cypressOn, config) {
 module.exports = defineConfig({
   viewportWidth: 1920,
   viewportHeight: 1080,
-  defaultCommandTimeout: 60000,
+  defaultCommandTimeout: 10000,
   pageLoadTimeout: 60000,
   screenshotOnRunFailure: true,
   video: true,

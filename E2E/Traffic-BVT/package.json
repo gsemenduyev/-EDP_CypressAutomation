@@ -24,19 +24,21 @@
   "author": "Gennadiy Semenduyev",
   "license": "ISC",
   "devDependencies": {
+    "@babel/helper-compilation-targets": "^7.22.5",
+    "@cypress/browserify-preprocessor": "^3.0.2",
+    "cypress": "^13.5.0",
     "cypress-cucumber-attach-screenshots-to-failed-steps": "^1.0.0",
     "cypress-cucumber-preprocessor": "^4.3.1",
     "cypress-on-fix": "^1.0.2",
     "cypress-testrail": "^2.7.1",
     "multiple-cucumber-html-reporter": "^3.4.0",
-    "node-xlsx": "^0.23.0",
-    "@babel/helper-compilation-targets": "^7.22.5",
-    "@cypress/browserify-preprocessor": "^3.0.2",
-    "cypress": "^13.5.0"
+    "node-xlsx": "^0.23.0"
   },
   "dependencies": {
     "@badeball/cypress-cucumber-preprocessor": "latest",
-    "@cypress/browserify-preprocessor": "latest"
+    "@cypress/browserify-preprocessor": "latest",
+    "cypress-data-session": "^2.8.2",
+    "cypress-real-events": "^1.12.0"
   },
   "chromeWebSecurity": false
 }
