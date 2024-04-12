@@ -1,6 +1,7 @@
 const { defineConfig } = require("cypress");
 const { addCucumberPreprocessorPlugin, afterRunHandler } = require("@badeball/cypress-cucumber-preprocessor");
 const browserify = require("@badeball/cypress-cucumber-preprocessor/browserify");
+const registerDataSession = require('cypress-data-session/src/plugin')
 const TestRailReporter = require('cypress-testrail');
 const fs = require('fs');
 const xlsx = require('node-xlsx').default;
@@ -10,7 +11,30 @@ async function setupNodeEvents(cypressOn, config) {
   const on = require('cypress-on-fix')(cypressOn);
   await addCucumberPreprocessorPlugin(on, config, { omitAfterRunHandler: true, });
   on("file:preprocessor", browserify.default(config));
+  registerDataSession(on, config);
   new TestRailReporter(on, config).register();
+
+  // Creates new user json file.
+  on('before:browser:launch', () => {
+    if (!fs.existsSync('cypress/fixtures/new-user/new-user-param.json')) {
+      console.log("Doesn't exists new-user-param.json ")
+      fs.mkdir('cypress/fixtures/new-user/', { recursive: true }, (err) => {
+        if (err) {
+          console.log(err);
+        };
+      });
+      const data = {
+        email: "email",
+        firstName: "firstName",
+        lastName: "lastName",
+        phone: "phone",
+        vendor: "vendor"
+      };
+      const jsonContent = JSON.stringify(data);
+      fs.writeFileSync('cypress/fixtures/new-user/new-user-param.json', jsonContent);
+    }
+
+  });
 
   on('before:spec', () => {
     fs.mkdir('cypress/reports/run-info/', { recursive: true }, (err) => {
@@ -78,13 +102,13 @@ async function setupNodeEvents(cypressOn, config) {
 module.exports = defineConfig({
   viewportWidth: 1920,
   viewportHeight: 1080,
-  defaultCommandTimeout: 20000,
+  defaultCommandTimeout: 60000,
   pageLoadTimeout: 60000,
   screenshotOnRunFailure: true,
   video: true,
   retries: {
-    runMode: 2,
-    openMode: 2
+    runMode: 0,
+    openMode: 0
   },
   projectId: "",
   e2e: {
