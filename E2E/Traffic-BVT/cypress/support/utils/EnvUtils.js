@@ -16,7 +16,8 @@ before(function () {
 before(function () {
     cy.writeFile('cypress/reports/run-info/run-env.json', {
         trafficUrl: envProperties.trafficUrl,
-        env: envProperties.env,
+        sTrafficUrl: sTrafficUrlsTrafficUrl,
+        env: envProperties.env
     })
 })
 

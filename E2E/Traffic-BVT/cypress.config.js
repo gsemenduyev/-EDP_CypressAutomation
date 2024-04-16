@@ -54,7 +54,34 @@ async function setupNodeEvents(cypressOn, config) {
           reject(e);
         };
       });
-    }
+    },
+
+    retrieveTabs() {
+      return new Promise((resolve, reject) => {
+        const tabs = [];
+        cy.visit('/', {
+          onBeforeLoad(win) {
+            const openTabs = win.document.querySelectorAll('iframe');
+
+            openTabs.forEach((tab) => {
+              tabs.push({
+                id: tab.id,
+                url: tab.src
+              });
+            });
+
+            resolve(tabs);
+          }
+        });
+      });
+    },
+
+    log(message) {
+      console.log(message)
+
+      return null
+    },
+
   });
 
   on('after:run', async (results) => {
@@ -74,21 +101,8 @@ async function setupNodeEvents(cypressOn, config) {
             cypressVersion: results.cypressVersion,
             startedTestsAt: results.startedTestsAt,
             endedTestsAt: results.endedTestsAt,
-            arfpUrlQa: runInfo['arfpUrlQa'],
-            arfpUrlUat: runInfo['arfpUrlUat'],
-            ssphereUrlQa: runInfo['ssphereUrlQa'],
-            ssphereUrlUat: runInfo['ssphereUrlUat'],
-            sTrafficUrlQa: runInfo['sTrafficUrlQa'],
-            sTrafficUrlUat: runInfo['sTrafficUrlUat'],
-            trafficUrlQa: runInfo['trafficUrlQa'],
-            trafficUrlUat: runInfo['arfpUrlUat'],
-            aeInboxUrlQa: runInfo['aeInboxUrlQa'],
-            aeInboxUrlUat: runInfo['aeInboxUrlUat'],
-            ePortUrlQa: runInfo['ePortUrlQa'],
-            ePortUrlUat: runInfo['ePortUrlUat'],
-            elevenUrlQa: runInfo['elevenUrlQa'],
-            elevenUrlUat: runInfo['elevenUrlQa'],
-
+            arfpUrlQa: trafficUrl['trafficUrl'],
+            arfpUrlUat: env['env'],
           },
           null,
           '\t',
@@ -102,7 +116,7 @@ async function setupNodeEvents(cypressOn, config) {
 module.exports = defineConfig({
   viewportWidth: 1920,
   viewportHeight: 1080,
-  defaultCommandTimeout: 60000,
+  defaultCommandTimeout: 30000,
   pageLoadTimeout: 60000,
   screenshotOnRunFailure: true,
   video: true,

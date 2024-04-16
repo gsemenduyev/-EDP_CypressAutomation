@@ -40,16 +40,29 @@ Given('Login to Traffic as {string} user', user => {
         })
         trafficLoginPage.passwordBox().type(envUtils.getTrafficAdminPassword());
         trafficLoginPage.signInBtn().click();
-        trafficLoginPage.acceptBtn().should('exist');
-        trafficLoginPage.doNotAcceptBtn().should('exist');
-        trafficLoginPage.userAgreementTxt().invoke('text').then(($elementText) => {
-            cy.readFile('cypress/fixtures/stores/user-agreement.txt').then(($fileContent) => {
-                expect($elementText.trim()).to.equal($fileContent.trim());
-            });
-        });
-        trafficLoginPage.acceptBtn().click();
         cy.title().should('eq', 'Traffic Instruction - Inbox');
     };
+});
+
+Given('Login to Traffic as New user and validate user agreement', () => {
+    cy.visit(envUtils.getTrafficUrl());
+    cy.readFile(NEW_USER_FILE).then(($newUserParam) => {
+        trafficLoginPage.usernameBox().type($newUserParam.email);
+    })
+    trafficLoginPage.passwordBox().type(envUtils.getTrafficAdminPassword());
+    trafficLoginPage.signInBtn().click();
+    trafficLoginPage.acceptBtn().should('exist');
+    trafficLoginPage.doNotAcceptBtn().should('exist');
+    // trafficLoginPage.userAgreementTxt().invoke('text').then(($elementText) => {
+    //     cy.writeFile('cypress/fixtures/stores/user-agreement.txt', $elementText)
+    // });
+    trafficLoginPage.userAgreementTxt().invoke('text').then(($elementText) => {
+        cy.readFile('cypress/fixtures/stores/user-agreement.txt').then(($fileContent) => {
+            expect($elementText.trim()).to.contain($fileContent.trim());
+        });
+    });
+    trafficLoginPage.acceptBtn().click();
+    cy.title().should('eq', 'Traffic Instruction - Inbox');
 });
 
 
@@ -145,18 +158,8 @@ Given('Assign Vendor to {string} user', user => {
     trafficHomePage.assignVendorTab().click();
     cy.readFile(NEW_USER_FILE).then(($newUserParam) => {
         if (user === 'New') {
-            trafficHomePage.searchTxtBox().type($newUserParam.email);
-        }
-        trafficHomePage.searchButton().click();
-        trafficHomePage.gridCell(0).should('be.visible');
-        trafficHomePage.gridCell(0).should('have.text', $newUserParam.firstName);
-        trafficHomePage.gridCell(1).should('have.text', $newUserParam.lastName);
-        trafficHomePage.gridCell(2).should('have.text', $newUserParam.email);
-        trafficHomePage.gridCell(3).should('have.text', $newUserParam.phone);
-        trafficHomePage.gridCell(4).should('have.text', $newUserParam.email);
-        trafficHomePage.gridCell(6).children().click();
-        trafficHomePage.assignedVenForm().should('be.visible');
-        trafficHomePage.assignedVenFormTitle().should('include.text', `View Assigned Vendors of '${$newUserParam.firstName} ${$newUserParam.lastName}`);
+            search_new_user(false, true)
+        };
         trafficHomePage.goToAssignBtn().click();
         trafficHomePage.assignedVenForm().should('be.visible');
         trafficHomePage.assignedVenFormTitle().should('include.text', `Assign Vendors to '${$newUserParam.firstName} ${$newUserParam.lastName}`);
@@ -182,63 +185,72 @@ Given('Login to sTraffic', () => {
     cy.title().should('eq', 'STRATA sTraffic Traffic Status')
 });
 
-Given('Search for Estimate in sTraffic', () => {
-    strafficHomePage.trafficStatusBtn().click();
-    strafficHomePage.searchBtn().should('be.disabled');
-    strafficHomePage.agencyTxtBox().type(estimateParam.agency);
-    cy.contains(estimateParam.agency).click();
-    strafficHomePage.loadingSign().should('be.hidden');
-    var index = 0;
-    const waitForDropdown = () => {
-        strafficHomePage.estimateTxtBox().click();
-        strafficHomePage.estimateTxtBox().should('not.have.attr', 'disabled')
-        strafficHomePage.estimateTxtBox().type(`{selectall}{backspace}${envUtils.getEstimate()}`);
-        cy.is_element_exists(strafficHomePage.estimateSelectSyntax()).then(($dropdown) => {
-            if ($dropdown === false && index < 10) {
-                index++;
-                cy.wait(500);
-                waitForDropdown();
-            } else if ($dropdown === true || index < 10) {
-                cy.contains(`${envUtils.getEstimate()} - `).click();
-                index = 10;
-            };
-        });
-    };
-    waitForDropdown();
-    cy.contains(envUtils.getEstimate()).should('be.visible');
-    strafficHomePage.searchBtn().click();
-    strafficHomePage.estimateCell().should('have.text', envUtils.getEstimate());
+Given('Verify new Traffic user is synced in sTraffic', () => {
+    let index = 0;
+    const endIndex = 10;
+    const wait = 3000;
+    cy.readFile(NEW_USER_FILE).then(($newUserParam) => {
+        const waitForTrafficUser = () => {
+            search_straffic_estimate();
+            navigate_eSend_contact_editor();
+            traffic_user_listed_eSend_contacts().then(($trafficContact) => {
+                if ($trafficContact === false && index < endIndex) {
+                    index++;
+                    cy.log('index ------------->>>>> ' + index)
+                    cy.reload();
+                    cy.wait(wait);
+                    waitForTrafficUser();
+                } else if ($trafficContact === true && index < endIndex) {
+                    cy.reload();
+                    index = endIndex;
+                } else if (index === endIndex) {
+                    throw new Error(`Traffic user ${$newUserParam.email} wasn't sync with sTraffic after ${wait * endIndex / 60000} minutes`);
+                };
+            });
+        };
+        waitForTrafficUser()
+    });
+
 });
 
-Given('Navigate to eSend Contact Editor', () => {
+Given('Search for Estimate in sTraffic', () => {
+    search_straffic_estimate();
+});
+
+Given('Create Traffic Revision', () => {
     strafficHomePage.estimateCell().should('have.text', envUtils.getEstimate());
-    strafficHomePage.sendEstimateCell().click();
-    strafficHomePage.sendSelectedStnRadioBtn().check().should('be.checked');
+    strafficHomePage.editInstructionBtn().click();
+    strafficHomePage.instructionHeader().should('include.text', estimateParam.startDate);
+    strafficHomePage.instructionHeader().should('include.text', estimateParam.agency);
+    strafficHomePage.instructionHeader().should('include.text', estimateParam.client);
+    strafficHomePage.instructionHeader().should('include.text', estimateParam.product);
+    strafficHomePage.createTrafficRevisionBtn().click();
+    cy.is_element_exists(strafficHomePage.extendInstrDateDialogSyntax()).then(($extendInstrDateDialog) => {
+        if ($extendInstrDateDialog) {
+            strafficHomePage.extendInstrDateDialogYesBtn().click();
+        }
+    });
+    cy.get(strafficHomePage.extendInstrDateDialogSyntax()).should('not.exist');
+    strafficHomePage.createRevisionModal().should('exist');
+    strafficHomePage.createRevisionSelAllCheckbox().check();
+    strafficHomePage.createRevisionSelAllCheckbox().should('be.checked')
+    cy.screenshot();
+    strafficHomePage.createRevisionSubmitBtn().click();
+    strafficHomePage.createRevisionModal().should('not.exist');
+});
 
-    var index = 0;
-    const waitForDeselectAllCheckBox = () => {
-        strafficHomePage.selectDeselectAllCheckBox().should('be.visible');
-        strafficHomePage.selectDeselectAllCheckBox().click()
-        cy.is_element_exists(strafficHomePage.selDslAllCheckBoxSyntax()).then(($dropdown) => {
-            if ($dropdown === false && index < 10) {
-                index++;
-                cy.wait(500);
-                waitForDeselectAllCheckBox();
-            } else if ($dropdown === true || index < 10) {
+Given('Validate Traffic Revision', () => {
+    strafficHomePage.validateInstructionGrid().should('be.visible')
+    strafficHomePage.validateInstructionBtn().click();
+    strafficHomePage.instructionSendMessage().should('include.text', 'Instructions are valid.');
+    cy.screenshot();
+    strafficHomePage.instructionSendMessageOkBtn().click();
+    strafficHomePage.cancelBtn().click();
+    strafficHomePage.instructionHeader().should('not.exist')
+})
 
-                index = 10;
-            };
-        });
-    };
-    waitForDeselectAllCheckBox();
-    strafficHomePage.selectDeselectAllCheckBox().should('be.checked');
-    strafficHomePage.selectSendOption().parent().click();
-    strafficHomePage.selectSendOption().select('Electronic');
-    strafficHomePage.inviteMoreLink().click()
-    strafficHomePage.inviteMoreCancelBtn().click()
-    strafficHomePage.selectSendOption().should('have.text', 'Electronic');
-    strafficHomePage.eSendContactEditor().click();
-    strafficHomePage.eSendContactEditorModalBody().should('be.visible');
+Given('Navigate to eSend Contact Editor', () => {
+    navigate_eSend_contact_editor()
 });
 
 Given('Verify {string} user is listed in eSend Contact Editor', user => {
@@ -248,7 +260,7 @@ Given('Verify {string} user is listed in eSend Contact Editor', user => {
             eSendContacts += $element.text();
         }).then(() => {
             if (!eSendContacts.includes($newUserParam.email)) {
-                cy.wait(30000);
+                cy.wait(60000);
             };
         }).then(() => {
             expect(eSendContacts).to.contain($newUserParam.email);
@@ -258,27 +270,27 @@ Given('Verify {string} user is listed in eSend Contact Editor', user => {
 
 Given('Send Estimate from sTraffic to {string} Traffic user', user => {
     cy.readFile(NEW_USER_FILE).then(($newUserParam) => {
-        strafficHomePage.eSendContactRows().each(($element) => {
-            if (!$element.text().includes($newUserParam.email)
-                && $element.find('img').attr('src').includes('accept')) {
-                cy.wrap($element).find('img').click();
-            } else if ($element.text().includes($newUserParam.email)
-                && $element.find('img').attr('src').includes('cancel')) {
-                cy.wrap($element).find('img').click();
+        strafficHomePage.eSendContactRows().each(($cell) => {
+            if (!$cell.text().includes($newUserParam.email)
+                && $cell.find('img').attr('src').includes('accept')) {
+                cy.wrap($cell).find('img').click();
+            } else if ($cell.text().includes($newUserParam.email)
+                && $cell.find('img').attr('src').includes('cancel')) {
+                cy.wrap($cell).find('img').click();
             };
-        })
+        });
     });
     strafficHomePage.eSendContactDoneBtn().click();
     cy.is_element_exists(strafficHomePage.toastMsgSyntax()).then(($message) => {
         if ($message === true) {
             strafficHomePage.eSendContactCancelBtn().click();
-        }
+        };
     });
     strafficHomePage.trafficInstructionSendBtn().click();
     strafficHomePage.modalProgressMsg().should('not.be.visible');
     strafficHomePage.instructionSendMessage().should('include.text', 'Instructions have been sent');
     strafficHomePage.instructionSendMessageOkBtn().click();
-    strafficHomePage.trafficSendCancelBtn().click();
+    strafficHomePage.trafficSendCancelBtn().click({ force: true });
 });
 
 Given('Logout from sTraffic', () => {
@@ -287,10 +299,125 @@ Given('Logout from sTraffic', () => {
 });
 
 
-Given('test', () => {
+Given('Validate new instruction', () => {
+    var index = 0;
+    var endIndex = 10;
+    trafficHomePage.inboxTab().click();
+    const waitInboxInstruction = () => {
+        cy.is_element_exists(trafficHomePage.gridRowsSyntax()).then(($instruction) => {
+            if ($instruction === false && index < endIndex) {
+                index++;
+                cy.wait(1000);
+                cy.reload()
+                waitInboxInstruction();
+            } else if ($instruction === true || index < endIndex) {
+                index = endIndex;
+                trafficHomePage.gridRows().each(($row) => {
+                    if ($row.text().includes(envUtils.getEstimate())) {
+                        assert_traffic_estimate($row, 'View')
+                        cy.wrap($row).find('a.pdfDownload').click();
+                    };
+                });
+            } else if (index === endIndex) {
+                throw new Error(`Instruction - ${envUtils.getEstimate()} wasn't send from sTraffic`);
+            };;
+        });
+    };
+    waitInboxInstruction();
+    trafficHomePage.gridRows().each(($row) => {
+        if ($row.text().includes(envUtils.getEstimate())) {
+            assert_traffic_estimate($row, 'View')
+            cy.wrap($row).find('a.pdfDownload').click();
+        };
+    });
+});
 
+
+
+Given('Accept new instruction', () => {
+    var index = 0;
+    var endIndex = 10;
+    trafficHomePage.inboxTab().click()
+        .then(() => {
+            const waitInboxInstruction = () => {
+                cy.is_element_exists(trafficHomePage.gridRowsSyntax()).then(($instruction) => {
+                    if ($instruction === false && index < endIndex) {
+                        index++;
+                        cy.wait(1000);
+                        cy.reload()
+                        waitInboxInstruction();
+                    } else if ($instruction === true || index < endIndex) {
+                        index = endIndex;
+                        trafficHomePage.gridRows().each(($row) => {
+                            if ($row.text().includes(envUtils.getEstimate())) {
+                                assert_traffic_estimate($row, 'Viewed')
+                                cy.wrap($row).find('input').check().should('be.checked');
+                                trafficHomePage.acceptInstructionsBtn().click();
+                                trafficHomePage.acceptInstructionComment().type(`Accepting ${envUtils.getEstimate()} Instruction`);
+                                trafficHomePage.commentAcceptBtn().click();
+                                trafficHomePage.acceptedTab().click();
+                                trafficHomePage.acceptInstructionsBtn().should('not.exist');
+                            };
+                        });
+                    } else if (index === endIndex) {
+                        throw new Error(`Instruction - ${envUtils.getEstimate()} wasn't send from sTraffic`);
+                    };;
+                });
+            };
+            waitInboxInstruction();
+        }).then(() => {
+            index = 0;
+            trafficHomePage.acceptedTab().click();
+            trafficHomePage.acceptInstructionsBtn().should('not.exist');
+            const waitAcceptedInstruction = () => {
+                cy.is_element_exists(trafficHomePage.gridRowsSyntax()).then(($row) => {
+                    if ($row === false && index < endIndex) {
+                        index++;
+                        cy.wait(1000);
+                        cy.reload()
+                        trafficHomePage.acceptedTab().should('be.visible')
+                        waitAcceptedInstruction();
+                    } else if ($row || index < endIndex) {
+                        index = endIndex;
+                        trafficHomePage.gridRows().should('be.visible')
+                        trafficHomePage.gridRows().each(($row) => {
+                            if ($row.text().includes(envUtils.getEstimate())) {
+                                assert_traffic_estimate($row, 'View')
+                            };
+                        });
+                    } else if (index === endIndex) {
+                        throw new Error(`Instruction - ${envUtils.getEstimate()} wasn't accepted`);
+                    };
+                });
+            };
+            waitAcceptedInstruction();
+        });
+
+
+
+});
+
+Given('Disable New Traffic user', () => {
+    trafficHomePage.manageUserTab().click();
+    search_new_user(true, false);
+});
+
+Given('Unassign vendor from New user', () => {
+    trafficHomePage.assignVendorTab().click();
+    search_new_user(false, true);
+    trafficHomePage.assignVendorsRows().each(($row) => {
+        expect($row.text()).to.contain(estimateParam.media.toUpperCase());
+        expect($row.text()).to.contain(estimateParam.vendor.split('-')[0]);
+        expect($row.text()).to.contain(estimateParam.vendor.split('-')[1]);
+        cy.wrap($row).find('input').check().should('be.checked');
+    });
+    trafficHomePage.removeVendorsBtn().click();
+    trafficHomePage.assignVendorsRows().should('not.exist');
+    trafficHomePage.assignVenCancelBtn().click()
+    trafficHomePage.assignedVenForm().should('not.be.visible');
 
 })
+
 
 // Saves new user parameters into Json file
 function save_new_user_param() {
@@ -311,3 +438,112 @@ function save_new_user_param() {
     cy.writeFile(NEW_USER_FILE, jsonContent);
     cy.readFile(NEW_USER_FILE).its('email').should('eq', email)
 };
+
+function assert_traffic_estimate(row, pdfDownload) {
+    expect(row.text()).to.contain(estimateParam.instructionName);
+    expect(row.text()).to.contain(estimateParam.startDate);
+    expect(row.text()).to.contain(estimateParam.endDate);
+    expect(row.text()).to.contain(estimateParam.agency);
+    expect(row.text()).to.contain(estimateParam.client);
+    expect(row.text()).to.contain(estimateParam.vendor);
+    expect(row.text()).to.contain(pdfDownload);
+}
+
+function search_new_user(disableUser, assignVendor) {
+    cy.readFile(NEW_USER_FILE).then(($newUserParam) => {
+        trafficHomePage.searchTxtBox().type($newUserParam.email);
+        trafficHomePage.searchButton().click();
+        trafficHomePage.gridRows().should('have.length', 1)
+        trafficHomePage.gridRows().each(($row) => {
+            expect($row.text()).to.contain($newUserParam.email);
+            expect($row.text()).to.contain($newUserParam.firstName);
+            expect($row.text()).to.contain($newUserParam.lastName);
+            expect($row.text()).to.contain($newUserParam.phone);
+            if (disableUser === true) {
+                cy.wrap($row).find('input').uncheck().should('not.be.checked')
+            }
+            if (assignVendor === true) {
+                cy.wrap($row).find('a').click();
+                trafficHomePage.assignedVenForm().should('be.visible');
+                trafficHomePage.assignedVenFormTitle().should('include.text', `View Assigned Vendors of '${$newUserParam.firstName} ${$newUserParam.lastName}`);
+            }
+        });
+    });
+}
+
+function search_straffic_estimate() {
+    var index = 0;
+    var endIndex = 10;
+    strafficHomePage.trafficStatusBtn().click();
+    strafficHomePage.searchBtn().should('be.disabled');
+    strafficHomePage.agencyTxtBox().type(estimateParam.agency);
+    cy.contains(estimateParam.agency).click();
+    strafficHomePage.loadingSign().should('be.hidden');
+
+    const waitForDropdown = () => {
+        strafficHomePage.estimateTxtBox().click();
+        strafficHomePage.estimateTxtBox().should('not.have.attr', 'disabled')
+        strafficHomePage.estimateTxtBox().should('not.be.disabled');
+        strafficHomePage.estimateTxtBox().type(`{selectall}{backspace}${envUtils.getEstimate()}`);
+        cy.is_element_exists(strafficHomePage.estimateSelectSyntax()).then(($dropdown) => {
+            if ($dropdown === false && index < endIndex) {
+                index++;
+                cy.wait(500);
+                waitForDropdown();
+            } else if ($dropdown === true || index < endIndex) {
+                cy.contains(`${envUtils.getEstimate()} - `).click();
+                index = endIndex;
+            };
+        });
+    };
+    waitForDropdown();
+    cy.contains(envUtils.getEstimate()).should('be.visible');
+    strafficHomePage.searchBtn().click();
+    strafficHomePage.estimateCell().should('have.text', envUtils.getEstimate());
+}
+
+function navigate_eSend_contact_editor() {
+    var index = 0;
+    var endIndex = 10;
+    strafficHomePage.estimateCell().should('have.text', envUtils.getEstimate());
+    strafficHomePage.sendEstimateCell().click();
+    strafficHomePage.sendSelectedStnRadioBtn().check().should('be.checked');
+    const waitForDeselectAllCheckBox = () => {
+        strafficHomePage.selectDeselectAllCheckBox().should('be.visible');
+        strafficHomePage.selectDeselectAllCheckBox().click()
+        cy.is_element_exists(strafficHomePage.selDslAllCheckBoxSyntax()).then(($dropdown) => {
+            if ($dropdown === false && index < endIndex) {
+                index++;
+                cy.wait(500);
+                waitForDeselectAllCheckBox();
+            } else if ($dropdown === true || index < endIndex) {
+                index = endIndex;
+            };
+        });
+    };
+    waitForDeselectAllCheckBox();
+    strafficHomePage.selectDeselectAllCheckBox().should('be.checked');
+    strafficHomePage.selectSendOption().parent().click();
+    strafficHomePage.selectSendOption().select('Electronic');
+    strafficHomePage.inviteMoreLink().click()
+    strafficHomePage.inviteMoreCancelBtn({ multiple: true }).click()
+    strafficHomePage.selectSendOption().should('have.text', 'Electronic');
+    strafficHomePage.eSendContactEditor().click();
+    strafficHomePage.eSendContactEditorModalBody().should('be.visible');
+}
+
+
+function traffic_user_listed_eSend_contacts() {
+    return cy.readFile(NEW_USER_FILE).then(($newUserParam) => {
+        let found = false;
+        return strafficHomePage.eSendContactRows().each(($element) => {
+            const rowText = $element.text();
+            if (rowText.includes($newUserParam.email)) {
+                found = true;
+                return false;
+            }
+        }).then(() => {
+            return found;
+        });
+    });
+}

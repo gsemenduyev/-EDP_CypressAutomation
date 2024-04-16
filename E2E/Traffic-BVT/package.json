@@ -27,6 +27,7 @@
     "@babel/helper-compilation-targets": "^7.22.5",
     "@cypress/browserify-preprocessor": "^3.0.2",
     "cypress": "^13.5.0",
+    "cypress-commands": "^3.0.0",
     "cypress-cucumber-attach-screenshots-to-failed-steps": "^1.0.0",
     "cypress-cucumber-preprocessor": "^4.3.1",
     "cypress-on-fix": "^1.0.2",
@@ -37,6 +38,8 @@
   "dependencies": {
     "@badeball/cypress-cucumber-preprocessor": "latest",
     "@cypress/browserify-preprocessor": "latest",
+    "chrome-aws-lambda": "^10.1.0",
+    "chrome-remote-interface": "^0.33.0",
     "cypress-data-session": "^2.8.2",
     "cypress-real-events": "^1.12.0"
   },
