@@ -474,18 +474,43 @@ function search_straffic_estimate() {
     cy.contains(estimateParam.agency).click();
     strafficHomePage.loadingSign().should('be.hidden');
 
+    // Retries and waits on Estimate dropdown to exist 
     const waitForDropdown = () => {
-        strafficHomePage.estimateTxtBox().click();
-        strafficHomePage.estimateTxtBox().should('not.have.attr', 'disabled')
-        strafficHomePage.estimateTxtBox().should('not.be.disabled');
-        strafficHomePage.estimateTxtBox().should('not.be.disabled').type(`{selectall}{backspace}${envUtils.getEstimate()}`);
+        // Retries and waits on Estimate text box to become Enabled 
+        const watForTxtBoxEnabled = () => {
+            let innerIndex = 0;
+            const innerEndIndex = 10;
+            strafficHomePage.estimateTxtBox().click();
+            strafficHomePage.estimateTxtBox().should('not.be.disabled');
+            cy.is_element_exists(strafficHomePage.estimateTxtBoxEnabledSyntax()).then(($txtBoxEnabled) => {
+                if ($txtBoxEnabled && innerIndex < innerEndIndex) {
+                    cy.get(strafficHomePage.estimateTxtBoxEnabledSyntax()).should('exist').type(`{selectall}{backspace}${envUtils.getEstimate()}`);
+                    innerIndex = innerEndIndex;
+                } else if ($txtBoxEnabled === false && innerIndex < innerEndIndex) {
+                    cy.wait(1000);
+                    innerIndex++;
+                    watForTxtBoxEnabled();
+                }
+            })
+        }
+        watForTxtBoxEnabled();
+
         cy.is_element_exists(strafficHomePage.estimateSelectSyntax()).then(($dropdown) => {
             if ($dropdown === false && index < endIndex) {
                 index++;
                 cy.wait(500);
                 waitForDropdown();
             } else if ($dropdown === true || index < endIndex) {
+                cy.is_element_exists('.estimate').then(($estimateExists) => {
+                    // Verifies specific Estimate to become visible in the Estimate dropdown
+                    if ($estimateExists === false && index < endIndex) {
+                        index++;
+                        waitForDropdown();
+                    }
+                })
+                cy.wait(500)
                 cy.contains(`${envUtils.getEstimate()} - `).click();
+                cy.wait(500)
                 index = endIndex;
             };
         });

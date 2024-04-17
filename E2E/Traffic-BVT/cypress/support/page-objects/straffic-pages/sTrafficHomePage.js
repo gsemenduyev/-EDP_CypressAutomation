@@ -11,6 +11,9 @@ class sTrafficHomePage {
     estimateTxtBox() {
         return cy.get('#s2id_estimateFilter input');
     };
+    estimateTxtBoxEnabledSyntax() {
+        return '.select2-input.select2-focused';
+    };
     searchBtn() {
         return cy.get('#btnSearch');
     };
