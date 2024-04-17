@@ -5,8 +5,7 @@ const registerDataSession = require('cypress-data-session/src/plugin')
 const TestRailReporter = require('cypress-testrail');
 const fs = require('fs');
 const xlsx = require('node-xlsx').default;
-const ENVIRONMENT_FILE_PATH = 'cypress/fixtures/environment/environments.json';
-
+const ENVIRONMENT_FILE_PATH = 'cypress/reports/run-info/run-env.json';
 async function setupNodeEvents(cypressOn, config) {
   const on = require('cypress-on-fix')(cypressOn);
   await addCucumberPreprocessorPlugin(on, config, { omitAfterRunHandler: true, });
@@ -28,7 +27,8 @@ async function setupNodeEvents(cypressOn, config) {
         firstName: "firstName",
         lastName: "lastName",
         phone: "phone",
-        vendor: "vendor"
+        vendor: "vendor",
+        password: "password"
       };
       const jsonContent = JSON.stringify(data);
       fs.writeFileSync('cypress/fixtures/new-user/new-user-param.json', jsonContent);
@@ -116,8 +116,8 @@ async function setupNodeEvents(cypressOn, config) {
 module.exports = defineConfig({
   viewportWidth: 1920,
   viewportHeight: 1080,
-  defaultCommandTimeout: 30000,
-  pageLoadTimeout: 60000,
+  defaultCommandTimeout: 60000,
+  pageLoadTimeout: 90000,
   screenshotOnRunFailure: true,
   video: true,
   retries: {

@@ -20,6 +20,8 @@ class TrafficLoginPage {
     doNotAcceptBtn() {
         return cy.get('#body_btnDisagree');
     };
-
+    userAgreementParagraphs() {
+        return cy.get('.auto-style1');
+    };
 };
 export default TrafficLoginPage;

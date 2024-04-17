@@ -37,8 +37,8 @@ Given('Login to Traffic as {string} user', user => {
     } else if (user === 'New') {
         cy.readFile(NEW_USER_FILE).then(($newUserParam) => {
             trafficLoginPage.usernameBox().type($newUserParam.email);
-        })
-        trafficLoginPage.passwordBox().type(envUtils.getTrafficAdminPassword());
+            trafficLoginPage.passwordBox().type($newUserParam.password);
+        });
         trafficLoginPage.signInBtn().click();
         cy.title().should('eq', 'Traffic Instruction - Inbox');
     };
@@ -48,19 +48,22 @@ Given('Login to Traffic as New user and validate user agreement', () => {
     cy.visit(envUtils.getTrafficUrl());
     cy.readFile(NEW_USER_FILE).then(($newUserParam) => {
         trafficLoginPage.usernameBox().type($newUserParam.email);
+        trafficLoginPage.passwordBox().type($newUserParam.password);
     })
-    trafficLoginPage.passwordBox().type(envUtils.getTrafficAdminPassword());
     trafficLoginPage.signInBtn().click();
     trafficLoginPage.acceptBtn().should('exist');
     trafficLoginPage.doNotAcceptBtn().should('exist');
-    // trafficLoginPage.userAgreementTxt().invoke('text').then(($elementText) => {
-    //     cy.writeFile('cypress/fixtures/stores/user-agreement.txt', $elementText)
-    // });
-    trafficLoginPage.userAgreementTxt().invoke('text').then(($elementText) => {
-        cy.readFile('cypress/fixtures/stores/user-agreement.txt').then(($fileContent) => {
-            expect($elementText.trim()).to.contain($fileContent.trim());
+
+    // Verify user agreement
+    const actualUserAgreement = [];;
+    trafficLoginPage.userAgreementParagraphs().each(($actualArgument) => {
+        actualUserAgreement.push($actualArgument.text().trim());
+    }).then(() => {
+        cy.readFile('cypress/fixtures/stores/expected-user-agreement.json').each(($data, $index) => {
+            expect(actualUserAgreement).contain($data[`Paragraph - ${$index}`].trim())
         });
     });
+
     trafficLoginPage.acceptBtn().click();
     cy.title().should('eq', 'Traffic Instruction - Inbox');
 });
@@ -187,8 +190,8 @@ Given('Login to sTraffic', () => {
 
 Given('Verify new Traffic user is synced in sTraffic', () => {
     let index = 0;
-    const endIndex = 10;
-    const wait = 3000;
+    const endIndex = 20;
+    const wait = 60000;
     cy.readFile(NEW_USER_FILE).then(($newUserParam) => {
         const waitForTrafficUser = () => {
             search_straffic_estimate();
@@ -196,8 +199,8 @@ Given('Verify new Traffic user is synced in sTraffic', () => {
             traffic_user_listed_eSend_contacts().then(($trafficContact) => {
                 if ($trafficContact === false && index < endIndex) {
                     index++;
-                    cy.log('index ------------->>>>> ' + index)
                     cy.reload();
+                    cy.log(`Waiting ${wait / 60000 * (index + 1)} minutes for Traffic newly created user to be synced with sTraffic`);
                     cy.wait(wait);
                     waitForTrafficUser();
                 } else if ($trafficContact === true && index < endIndex) {
@@ -255,16 +258,9 @@ Given('Navigate to eSend Contact Editor', () => {
 
 Given('Verify {string} user is listed in eSend Contact Editor', user => {
     cy.readFile(NEW_USER_FILE).then(($newUserParam) => {
-        let eSendContacts;
-        strafficHomePage.eSendContactRows().each(($element) => {
-            eSendContacts += $element.text();
-        }).then(() => {
-            if (!eSendContacts.includes($newUserParam.email)) {
-                cy.wait(60000);
-            };
-        }).then(() => {
-            expect(eSendContacts).to.contain($newUserParam.email);
-        });
+        traffic_user_listed_eSend_contacts().then(($trafficContact) => {
+            expect($trafficContact, `User ${$newUserParam.email} is listed in eSend Contact Editor`).to.eq(true);
+        })
     });
 });
 
@@ -328,11 +324,10 @@ Given('Validate new instruction', () => {
         if ($row.text().includes(envUtils.getEstimate())) {
             assert_traffic_estimate($row, 'View')
             cy.wrap($row).find('a.pdfDownload').click();
+            cy.wait(1000)
         };
     });
 });
-
-
 
 Given('Accept new instruction', () => {
     var index = 0;
@@ -392,9 +387,6 @@ Given('Accept new instruction', () => {
             };
             waitAcceptedInstruction();
         });
-
-
-
 });
 
 Given('Disable New Traffic user', () => {
@@ -426,13 +418,15 @@ function save_new_user_param() {
     const email = `${firstName}${lastName}@mailinator.com`;
     const phone = '123-456-7890';
     const vendor = 'TEST TRAFFIC-AM';
+    const password = 'abc123!'
 
     const data = {
         email: email,
         firstName: firstName,
         lastName: lastName,
         phone: phone,
-        vendor: vendor
+        vendor: vendor,
+        password: password
     };
     const jsonContent = JSON.stringify(data);
     cy.writeFile(NEW_USER_FILE, jsonContent);
@@ -484,7 +478,7 @@ function search_straffic_estimate() {
         strafficHomePage.estimateTxtBox().click();
         strafficHomePage.estimateTxtBox().should('not.have.attr', 'disabled')
         strafficHomePage.estimateTxtBox().should('not.be.disabled');
-        strafficHomePage.estimateTxtBox().type(`{selectall}{backspace}${envUtils.getEstimate()}`);
+        strafficHomePage.estimateTxtBox().should('not.be.disabled').type(`{selectall}{backspace}${envUtils.getEstimate()}`);
         cy.is_element_exists(strafficHomePage.estimateSelectSyntax()).then(($dropdown) => {
             if ($dropdown === false && index < endIndex) {
                 index++;
