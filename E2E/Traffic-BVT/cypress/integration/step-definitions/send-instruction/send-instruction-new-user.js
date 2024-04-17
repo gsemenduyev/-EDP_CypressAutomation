@@ -130,8 +130,8 @@ Given('Create new user', () => {
         trafficHomePage.cr8UserCheckbox(0).check().should('be.checked');
         // Click on "Traffic Instruction" checkbox
         trafficHomePage.cr8UserCheckbox(1).check().should('be.checked');
-        trafficHomePage.cr8UserPasswordTxtBox().type(envUtils.getTrafficAdminPassword());
-        trafficHomePage.cr8UserConfirmPasswordTxtBox().type(envUtils.getTrafficAdminPassword());
+        trafficHomePage.cr8UserPasswordTxtBox().type($newUserParam.password);
+        trafficHomePage.cr8UserConfirmPasswordTxtBox().type($newUserParam.password);
         trafficHomePage.cr8UserSecurityQuestionTxtBox().type('Job Title');
         trafficHomePage.cr8UserSecurityAnswerTxtBox().type('QA Tester');
         trafficHomePage.cr8UserCreateBtn().click();
@@ -200,7 +200,7 @@ Given('Verify new Traffic user is synced in sTraffic', () => {
                 if ($trafficContact === false && index < endIndex) {
                     index++;
                     cy.reload();
-                    cy.log(`Waiting ${wait / 60000 * (index + 1)} minutes for Traffic newly created user to be synced with sTraffic`);
+                    cy.log(`Waiting ${wait / 60000 * index} minutes for Traffic newly created user to be synced with sTraffic`);
                     cy.wait(wait);
                     waitForTrafficUser();
                 } else if ($trafficContact === true && index < endIndex) {
