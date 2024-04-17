@@ -1,0 +1,6 @@
+
+	You are about to import traffic users from an uploaded text file in CSV format. This text file must contain data for each traffic user
+	in the following order, separated by commas:
+	Login Name (required), First Name (required), Last Name (required), Email (required), Phone Number, Vendor (one and more).
+	The file should not contain more than 500 users.
+	

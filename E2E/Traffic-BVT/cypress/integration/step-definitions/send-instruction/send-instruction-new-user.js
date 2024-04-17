@@ -6,13 +6,11 @@ import TrafficHomePage from "../../../support/page-objects/traffic-pages/Traffic
 import sTrafficLoginPage from "../../../support/page-objects/straffic-pages/sTrafficLoginPage";
 import sTrafficHomePage from "../../../support/page-objects/straffic-pages/sTrafficHomePage";
 
-
 const envUtils = new EnvUtils;
 const trafficLoginPage = new TrafficLoginPage;
 const trafficHomePage = new TrafficHomePage;
 const strafficLoginPage = new sTrafficLoginPage;
 const strafficHomePage = new sTrafficHomePage;
-
 
 const NEW_USER_FILE = 'cypress/fixtures/new-user/new-user-param.json';
 let estimateParam;
