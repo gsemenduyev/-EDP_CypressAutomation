@@ -1,5 +1,4 @@
 /// <reference types="Cypress" />
-import 'cypress-data-session';
 import { Given } from "@badeball/cypress-cucumber-preprocessor";
 import EnvUtils from "../../../support/utils/EnvUtils";
 import TrafficLoginPage from "../../../support/page-objects/traffic-pages/TrafficLoginPage";
@@ -26,7 +25,10 @@ before(function () {
 
 Given('Login to Traffic as {string} user', user => {
     cy.visit(envUtils.getTrafficUrl());
-    cy.title().should('eq', 'AEINBOX® for Traffic Instruction - Login')
+    cy.title().should('eq', 'AEINBOX® for Traffic Instruction - Login');
+    trafficLoginPage.usernameBox().should('be.visible');
+    cy.screenshot();
+    trafficLoginPage.signInBtn().should('be.visible')
     if (user === 'Admin') {
         trafficLoginPage.usernameBox().type(envUtils.getTrafficAdminUsername());
         trafficLoginPage.passwordBox().type(envUtils.getTrafficAdminPassword());
@@ -40,6 +42,8 @@ Given('Login to Traffic as {string} user', user => {
         trafficLoginPage.signInBtn().click();
         cy.title().should('eq', 'Traffic Instruction - Inbox');
     };
+    trafficHomePage.theGrid().should('not.be.disabled');
+    cy.screenshot();
 });
 
 Given('Login to Traffic as New user and validate user agreement', () => {
@@ -61,15 +65,17 @@ Given('Login to Traffic as New user and validate user agreement', () => {
             expect(actualUserAgreement).contain($data[`Paragraph - ${$index}`].trim())
         });
     });
-
+    cy.screenshot();
     trafficLoginPage.acceptBtn().click();
     cy.title().should('eq', 'Traffic Instruction - Inbox');
+    cy.screenshot();
 });
 
 
 Given('Logout from Traffic', () => {
     trafficHomePage.logoutLink().click();
-    cy.title().should('eq', 'AEINBOX® for Traffic Instruction - Login')
+    cy.title().should('eq', 'AEINBOX® for Traffic Instruction - Login');
+    cy.screenshot();
 });
 
 Given('Verify Traffic {string} user home page', user => {
@@ -132,13 +138,17 @@ Given('Create new user', () => {
         trafficHomePage.cr8UserConfirmPasswordTxtBox().type($newUserParam.password);
         trafficHomePage.cr8UserSecurityQuestionTxtBox().type('Job Title');
         trafficHomePage.cr8UserSecurityAnswerTxtBox().type('QA Tester');
+        cy.screenshot();
+        trafficHomePage.cr8UserCreateBtn().should('not.be.hidden');
         trafficHomePage.cr8UserCreateBtn().click();
         trafficHomePage.cr8UserForm().should('not.be.visible');
         trafficHomePage.gridCell(0).should('be.visible');
+        cy.screenshot();
     });
 });
 
 Given('Verify new user was created', () => {
+    trafficHomePage.manageUserTab().should('not.be.hidden');
     trafficHomePage.manageUserTab().click();
     cy.readFile(NEW_USER_FILE).then(($newUserParam) => {
         trafficHomePage.searchTxtBox().type($newUserParam.email);
@@ -152,6 +162,7 @@ Given('Verify new user was created', () => {
         trafficHomePage.gridCell(5).should('have.text', 'Traffic');
         trafficHomePage.gridCell(5).should('have.text', 'Traffic');
         trafficHomePage.gridCell(7).children().children().should('be.checked');
+        cy.screenshot();
     });
 });
 
@@ -166,11 +177,13 @@ Given('Assign Vendor to {string} user', user => {
         trafficHomePage.assignedVenFormTitle().should('include.text', `Assign Vendors to '${$newUserParam.firstName} ${$newUserParam.lastName}`);
         trafficHomePage.assignVenTextBox().type($newUserParam.vendor);
         trafficHomePage.assignVenSearchBtn().click();
+        cy.screenshot();
         trafficHomePage.assignVenGridCell(1).should('have.text', $newUserParam.vendor.split('-')[0])
         trafficHomePage.assignVenGridCell(2).should('have.text', $newUserParam.vendor.split('-')[1])
         trafficHomePage.assignVenGridCell(0).children().children().check().should('be.checked');
         trafficHomePage.assignVenBtn().click();
         trafficHomePage.assignVenGoToViewBtn().click({ timeout: 60000 });
+        cy.screenshot();
         trafficHomePage.assignVenGridCell(1).should('have.text', $newUserParam.vendor.split('-')[0])
         trafficHomePage.assignVenGridCell(2).should('have.text', $newUserParam.vendor.split('-')[1])
         trafficHomePage.assignVenCancelBtn().click();
@@ -184,6 +197,8 @@ Given('Login to sTraffic', () => {
     strafficLoginPage.passwordTxtBox().type(envUtils.getsTrafficPassword());
     strafficLoginPage.loginBtn().click();
     cy.title().should('eq', 'STRATA sTraffic Traffic Status')
+    cy.screenshot();
+    strafficHomePage.trafficStatusBtn().should('be.visible');
 });
 
 Given('Verify new Traffic user is synced in sTraffic', () => {
@@ -211,11 +226,13 @@ Given('Verify new Traffic user is synced in sTraffic', () => {
         };
         waitForTrafficUser()
     });
+    cy.screenshot();
 
 });
 
 Given('Search for Estimate in sTraffic', () => {
     search_straffic_estimate();
+    cy.screenshot();
 });
 
 Given('Create Traffic Revision', () => {
@@ -238,6 +255,7 @@ Given('Create Traffic Revision', () => {
     cy.screenshot();
     strafficHomePage.createRevisionSubmitBtn().click();
     strafficHomePage.createRevisionModal().should('not.exist');
+    cy.screenshot();
 });
 
 Given('Validate Traffic Revision', () => {
@@ -251,7 +269,8 @@ Given('Validate Traffic Revision', () => {
 })
 
 Given('Navigate to eSend Contact Editor', () => {
-    navigate_eSend_contact_editor()
+    navigate_eSend_contact_editor();
+    cy.screenshot();
 });
 
 Given('Verify {string} user is listed in eSend Contact Editor', user => {
@@ -260,6 +279,7 @@ Given('Verify {string} user is listed in eSend Contact Editor', user => {
             expect($trafficContact, `User ${$newUserParam.email} is listed in eSend Contact Editor`).to.eq(true);
         })
     });
+    cy.screenshot();
 });
 
 Given('Send Estimate from sTraffic to {string} Traffic user', user => {
@@ -274,6 +294,8 @@ Given('Send Estimate from sTraffic to {string} Traffic user', user => {
             };
         });
     });
+    cy.screenshot();
+    strafficHomePage.eSendContactDoneBtn().should('be.visible');
     strafficHomePage.eSendContactDoneBtn().click();
     cy.is_element_exists(strafficHomePage.toastMsgSyntax()).then(($message) => {
         if ($message === true) {
@@ -282,6 +304,7 @@ Given('Send Estimate from sTraffic to {string} Traffic user', user => {
     });
     strafficHomePage.trafficInstructionSendBtn().click();
     strafficHomePage.modalProgressMsg().should('not.be.visible');
+    cy.screenshot();
     strafficHomePage.instructionSendMessage().should('include.text', 'Instructions have been sent');
     strafficHomePage.instructionSendMessageOkBtn().click();
     strafficHomePage.trafficSendCancelBtn().click({ force: true });
@@ -290,6 +313,7 @@ Given('Send Estimate from sTraffic to {string} Traffic user', user => {
 Given('Logout from sTraffic', () => {
     strafficHomePage.signOutBtn().click({ force: true });
     cy.title().should('eq', 'Sign In');
+    cy.screenshot();
 });
 
 
@@ -318,6 +342,7 @@ Given('Validate new instruction', () => {
         });
     };
     waitInboxInstruction();
+    cy.screenshot();
     trafficHomePage.gridRows().each(($row) => {
         if ($row.text().includes(envUtils.getEstimate())) {
             assert_traffic_estimate($row, 'View')
@@ -358,6 +383,7 @@ Given('Accept new instruction', () => {
                 });
             };
             waitInboxInstruction();
+            cy.screenshot();
         }).then(() => {
             index = 0;
             trafficHomePage.acceptedTab().click();
@@ -384,12 +410,14 @@ Given('Accept new instruction', () => {
                 });
             };
             waitAcceptedInstruction();
+            cy.screenshot();
         });
 });
 
 Given('Disable New Traffic user', () => {
     trafficHomePage.manageUserTab().click();
     search_new_user(true, false);
+    cy.screenshot();
 });
 
 Given('Unassign vendor from New user', () => {
@@ -401,8 +429,10 @@ Given('Unassign vendor from New user', () => {
         expect($row.text()).to.contain(estimateParam.vendor.split('-')[1]);
         cy.wrap($row).find('input').check().should('be.checked');
     });
+    cy.screenshot();
     trafficHomePage.removeVendorsBtn().click();
     trafficHomePage.assignVendorsRows().should('not.exist');
+    cy.screenshot();
     trafficHomePage.assignVenCancelBtn().click()
     trafficHomePage.assignedVenForm().should('not.be.visible');
 

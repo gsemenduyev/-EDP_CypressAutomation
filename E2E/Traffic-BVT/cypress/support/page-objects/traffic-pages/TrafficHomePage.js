@@ -141,5 +141,8 @@ class TrafficHomePage {
     viewAssignVendorsCancelBtn() {
         return cy.contains('Cancel');
     };
+    theGrid() {
+        return cy.get('#theGrid');
+    };
 };
 export default TrafficHomePage;

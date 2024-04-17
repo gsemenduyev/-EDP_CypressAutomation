@@ -1,7 +1,6 @@
 const { defineConfig } = require("cypress");
 const { addCucumberPreprocessorPlugin, afterRunHandler } = require("@badeball/cypress-cucumber-preprocessor");
 const browserify = require("@badeball/cypress-cucumber-preprocessor/browserify");
-const registerDataSession = require('cypress-data-session/src/plugin')
 const TestRailReporter = require('cypress-testrail');
 const fs = require('fs');
 const ENVIRONMENT_FILE_PATH = 'cypress/reports/run-info/run-env.json';
@@ -9,7 +8,6 @@ async function setupNodeEvents(cypressOn, config) {
   const on = require('cypress-on-fix')(cypressOn);
   await addCucumberPreprocessorPlugin(on, config, { omitAfterRunHandler: true, });
   on("file:preprocessor", browserify.default(config));
-  registerDataSession(on, config);
   new TestRailReporter(on, config).register();
 
   // Creates new user json file.
