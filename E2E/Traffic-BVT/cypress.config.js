@@ -4,7 +4,6 @@ const browserify = require("@badeball/cypress-cucumber-preprocessor/browserify")
 const registerDataSession = require('cypress-data-session/src/plugin')
 const TestRailReporter = require('cypress-testrail');
 const fs = require('fs');
-const xlsx = require('node-xlsx').default;
 const ENVIRONMENT_FILE_PATH = 'cypress/reports/run-info/run-env.json';
 async function setupNodeEvents(cypressOn, config) {
   const on = require('cypress-on-fix')(cypressOn);
@@ -42,46 +41,6 @@ async function setupNodeEvents(cypressOn, config) {
         console.log(err);
       };
     });
-  });
-
-  on('task', {
-    parseXlsx({ filePath }) {
-      return new Promise((resolve, reject) => {
-        try {
-          const jsonData = xlsx.parse(fs.readFileSync(filePath));
-          resolve(jsonData);
-        } catch (e) {
-          reject(e);
-        };
-      });
-    },
-
-    retrieveTabs() {
-      return new Promise((resolve, reject) => {
-        const tabs = [];
-        cy.visit('/', {
-          onBeforeLoad(win) {
-            const openTabs = win.document.querySelectorAll('iframe');
-
-            openTabs.forEach((tab) => {
-              tabs.push({
-                id: tab.id,
-                url: tab.src
-              });
-            });
-
-            resolve(tabs);
-          }
-        });
-      });
-    },
-
-    log(message) {
-      console.log(message)
-
-      return null
-    },
-
   });
 
   on('after:run', async (results) => {

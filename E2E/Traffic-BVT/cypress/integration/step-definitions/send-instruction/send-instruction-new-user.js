@@ -1,6 +1,4 @@
 /// <reference types="Cypress" />
-/// <reference types="cypress-data-session" />
-/// <reference types="cypress-real-events"/>
 import 'cypress-data-session';
 import { Given } from "@badeball/cypress-cucumber-preprocessor";
 import EnvUtils from "../../../support/utils/EnvUtils";
