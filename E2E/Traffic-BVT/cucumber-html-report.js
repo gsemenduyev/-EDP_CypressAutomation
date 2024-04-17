@@ -47,6 +47,10 @@ report.generate({
         label: 'Execution End Time',
         value: dayjs(runInfo['endedTestsAt']).format('YYYY-MM-DD HH:mm:ss.SSS'),
       },
+      {
+        label: 'Duration Time',
+        value: dayjs(runInfo['endedTestsAt']).diff(dayjs(runInfo['startedTestsAt']), 'second').toString() + ' seconds',
+      },
     ],
   },
   disableLog: true,
