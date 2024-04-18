@@ -29,7 +29,6 @@ Verifies if element exists in DOM.
 [@param] selectorSyntax - Syntax of CSS, class, id...
 [@return] - boolean
 */
-
 Cypress.Commands.add("is_element_exists", (selectorSyntax) => {
     cy.get("body").then($body => {
         let elementExist;
@@ -42,6 +41,19 @@ Cypress.Commands.add("is_element_exists", (selectorSyntax) => {
         }
         return cy.wrap(elementExist);
     });
+});
+
+/*
+Upload File into Webpage.
+[@param] fileName - name of the file.
+[@param] element - input location
+*/
+Cypress.Commands.add("upload_file", (fileName, element) => {
+    cy.fixture(fileName, 'binary')
+        .then(Cypress.Blob.binaryStringToBlob)
+        .then(fileContent => {
+            element.attachFile({ fileContent, fileName, mimeType: 'text/xml', encoding: 'utf8' })
+        })
 })
 
 Cypress.on('uncaught:exception', (err, runnable) => {

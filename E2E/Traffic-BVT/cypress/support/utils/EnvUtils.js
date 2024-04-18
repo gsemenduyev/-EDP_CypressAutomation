@@ -24,24 +24,30 @@ before(function () {
 class EnvUtils {
     getTrafficUrl() {
         return envProperties.trafficUrl;
-    }
+    };
     getTrafficAdminUsername() {
         return envProperties.trafficAdminUsername;
-    }
+    };
     getTrafficAdminPassword() {
         return envProperties.trafficAdminPassword;
-    }
+    };
+    getTrafficUsername() {
+        return envProperties.trafficUsername;
+    };
+    getTrafficPassword() {
+        return envProperties.trafficPassword;
+    };
     getsTrafficUrl() {
         return envProperties.sTrafficUrl;
-    }
+    };
     getsTrafficUsername() {
         return envProperties.sTrafficUsername;
-    }
+    };
     getsTrafficPassword() {
         return envProperties.sTrafficPassword;
-    }
+    };
     getEstimate() {
         return envProperties.estimate;
-    }
-}
+    };
+};
 export default EnvUtils;
