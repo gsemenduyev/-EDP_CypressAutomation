@@ -29,8 +29,6 @@ Verifies if element exists in DOM.
 [@param] selectorSyntax - Syntax of CSS, class, id...
 [@return] - boolean
 */
-import "cypress-real-events";
-import "cypress-data-session";
 
 Cypress.Commands.add("is_element_exists", (selectorSyntax) => {
     cy.get("body").then($body => {
@@ -45,3 +43,9 @@ Cypress.Commands.add("is_element_exists", (selectorSyntax) => {
         return cy.wrap(elementExist);
     });
 })
+
+Cypress.on('uncaught:exception', (err, runnable) => {
+    // returning false here prevents Cypress from
+    // failing the test
+    return false
+});

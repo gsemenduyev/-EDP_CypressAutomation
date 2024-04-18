@@ -113,5 +113,36 @@ class TrafficHomePage {
     logoutLink() {
         return cy.contains('Logout');
     };
+    gridRows() {
+        return cy.get('.ui-widget-content.slick-row');
+    };
+    gridRowsSyntax() {
+        return '.ui-widget-content.slick-row';
+    };
+
+    acceptInstructionComment() {
+        return cy.get('#comment')
+    };
+    commentAcceptBtn() {
+        return cy.get(':nth-child(1) > .ui-button-text')
+    };
+    editUser() {
+        return cy.get('.ui-widget-content.slick-row a')
+    };
+    editUser() {
+        return cy.get('.ui-widget-content.slick-row a')
+    };
+    assignVendorsRows() {
+        return cy.get('#dlgVndr .ui-widget-content')
+    };
+    removeVendorsBtn() {
+        return cy.contains('Remove Vendors');
+    };
+    viewAssignVendorsCancelBtn() {
+        return cy.contains('Cancel');
+    };
+    theGrid() {
+        return cy.get('#theGrid');
+    };
 };
 export default TrafficHomePage;

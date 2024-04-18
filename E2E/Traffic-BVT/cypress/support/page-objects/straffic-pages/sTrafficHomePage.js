@@ -11,6 +11,9 @@ class sTrafficHomePage {
     estimateTxtBox() {
         return cy.get('#s2id_estimateFilter input');
     };
+    estimateTxtBoxEnabledSyntax() {
+        return '.select2-input.select2-focused';
+    };
     searchBtn() {
         return cy.get('#btnSearch');
     };
@@ -45,7 +48,7 @@ class sTrafficHomePage {
         return cy.get('.text-underline');
     };
     inviteMoreCancelBtn() {
-        return cy.get('.center > #btnCancel');
+        return cy.get('#divESendInvitationModal #btnCancel');
     };
     eSendContactEditorModalBody() {
         return cy.get('#ESendContactEditorModalBody');
@@ -80,6 +83,41 @@ class sTrafficHomePage {
     signOutBtn() {
         return cy.contains('Sign Out');
     };
-
+    editInstructionBtn() {
+        return cy.get('.trafficAlert-edit');
+    };
+    instructionHeader() {
+        return cy.get('#Header');
+    };
+    createTrafficRevisionBtn() {
+        return cy.get('#btnCreateTrafficRevision');
+    };
+    extendInstrDateDialogSyntax() {
+        return '#divExtendInstructionDateDialog';
+    };
+    extendInstrDateDialogYesBtn() {
+        return cy.get('#divExtendInstructionDateDialog #btnSubmit');
+    };
+    extendInstrDateDialogYesBtn() {
+        return cy.get('#divExtendInstructionDateDialog #btnSubmit');
+    };
+    createRevisionModal() {
+        return cy.get('#divCreateRevisionModal');
+    };
+    createRevisionSelAllCheckbox() {
+        return cy.get(".slick-column-name > input");
+    };
+    createRevisionSubmitBtn() {
+        return cy.get('#divCreateRevisionModal .center > #btnSubmit');
+    };
+    validateInstructionBtn() {
+        return cy.get('#btnValidate')
+    };
+    cancelBtn() {
+        return cy.get('#Cancel')
+    };
+    validateInstructionGrid() {
+        return cy.get('.instructionDiv .grid-canvas')
+    };
 };
 export default sTrafficHomePage;
