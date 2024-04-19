@@ -56,6 +56,12 @@ Cypress.Commands.add("upload_file", (fileName, element) => {
         })
 })
 
+Cypress.Commands.add("save_new_user_data", (newUserFile, newUserData) => {
+    const jsonContent = JSON.stringify(newUserData);
+    cy.writeFile(newUserFile, jsonContent);
+    cy.readFile(newUserFile).its('firstName').should('eq', 'Test')
+})
+
 Cypress.on('uncaught:exception', (err, runnable) => {
     // returning false here prevents Cypress from
     // failing the test

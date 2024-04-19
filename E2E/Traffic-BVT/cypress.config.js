@@ -23,9 +23,10 @@ async function setupNodeEvents(cypressOn, config) {
         email: "email",
         firstName: "firstName",
         lastName: "lastName",
-        phone: "phone",
+        phoneNumber: "phone",
         vendor: "vendor",
-        password: "password"
+        password: "password",
+        jobTitle: "title"
       };
       const jsonContent = JSON.stringify(data);
       fs.writeFileSync('cypress/fixtures/new-user/new-user-param.json', jsonContent);

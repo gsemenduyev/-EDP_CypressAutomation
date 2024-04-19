@@ -1,4 +1,3 @@
-
 Feature: Send sTraffic instruction to newly created Traffic user
 
     Feature Description:
