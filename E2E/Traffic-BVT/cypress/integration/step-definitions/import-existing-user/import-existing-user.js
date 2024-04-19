@@ -1,9 +1,9 @@
 /// <reference types="Cypress" />
+import 'cypress-file-upload';
 import { Given } from "@badeball/cypress-cucumber-preprocessor";
 import EnvUtils from "../../../support/utils/EnvUtils";
 import TrafficHomePage from "../../../support/page-objects/traffic-pages/TrafficHomePage";
 import TrafficImportUserPage from "../../../support/page-objects/traffic-pages/TrafficImportUserPage";
-import 'cypress-file-upload';
 
 const envUtils = new EnvUtils;
 const trafficHomePage = new TrafficHomePage;

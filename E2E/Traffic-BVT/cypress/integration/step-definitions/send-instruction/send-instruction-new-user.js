@@ -13,6 +13,17 @@ const strafficLoginPage = new sTrafficLoginPage;
 const strafficHomePage = new sTrafficHomePage;
 
 const NEW_USER_FILE = 'cypress/fixtures/new-user/new-user-param.json';
+const RANDOM = Math.floor(Math.random() * (1000000, 9999999)) + 1000000;
+const NEW_USER_DATA = {
+    email: `TestUser${RANDOM}@mailinator.com`,
+    firstName: 'Test',
+    lastName: `User${RANDOM}`,
+    phoneNumber: '123-456-7890',
+    vendor: 'TEST TRAFFIC-AM',
+    password: 'abc123!',
+    jobTitle: 'QA Tester'
+};
+
 let estimateParam;
 
 before(function () {
@@ -55,7 +66,7 @@ Given('Login to Traffic as New user and validate user agreement', () => {
     trafficLoginPage.doNotAcceptBtn().should('exist');
 
     // Verify user agreement
-    const actualUserAgreement = [];;
+    const actualUserAgreement = [];
     trafficLoginPage.userAgreementParagraphs().each(($actualArgument) => {
         actualUserAgreement.push($actualArgument.text().trim());
     }).then(() => {
@@ -117,7 +128,7 @@ Given('Verify Traffic {string} user home page', user => {
 });
 
 Given('Create new user', () => {
-    save_new_user_param();
+    cy.save_new_user_data(NEW_USER_FILE, NEW_USER_DATA)
     cy.readFile(NEW_USER_FILE).then(($newUserParam) => {
         trafficHomePage.manageUserTab().click();
         trafficHomePage.createButton().click();
@@ -127,7 +138,7 @@ Given('Create new user', () => {
         trafficHomePage.cr8UserLastNameTxtBox().type($newUserParam.lastName);
         trafficHomePage.cr8UserPrimaryEmailTxtBox().type($newUserParam.email);
         trafficHomePage.cr8UserSecondaryEmailTxtBox().type($newUserParam.email);
-        trafficHomePage.cr8UserPhoneTxtBox().type($newUserParam.phone);
+        trafficHomePage.cr8UserPhoneTxtBox().type($newUserParam.phoneNumber);
         // Click on "Active" checkbox
         trafficHomePage.cr8UserCheckbox(0).check().should('be.checked');
         // Click on "Traffic Instruction" checkbox
@@ -135,7 +146,7 @@ Given('Create new user', () => {
         trafficHomePage.cr8UserPasswordTxtBox().type($newUserParam.password);
         trafficHomePage.cr8UserConfirmPasswordTxtBox().type($newUserParam.password);
         trafficHomePage.cr8UserSecurityQuestionTxtBox().type('Job Title');
-        trafficHomePage.cr8UserSecurityAnswerTxtBox().type('QA Tester');
+        trafficHomePage.cr8UserSecurityAnswerTxtBox().type($newUserParam.jobTitle);
         cy.screenshot();
         trafficHomePage.cr8UserCreateBtn().should('not.be.hidden');
         trafficHomePage.cr8UserCreateBtn().click();
@@ -155,7 +166,7 @@ Given('Verify new user was created', () => {
         trafficHomePage.gridCell(0).should('have.text', $newUserParam.firstName);
         trafficHomePage.gridCell(1).should('have.text', $newUserParam.lastName);
         trafficHomePage.gridCell(2).should('have.text', $newUserParam.email);
-        trafficHomePage.gridCell(3).should('have.text', $newUserParam.phone);
+        trafficHomePage.gridCell(3).should('have.text', $newUserParam.phoneNumber);
         trafficHomePage.gridCell(4).should('have.text', $newUserParam.email);
         trafficHomePage.gridCell(5).should('have.text', 'Traffic');
         trafficHomePage.gridCell(5).should('have.text', 'Traffic');
@@ -225,7 +236,6 @@ Given('Verify new Traffic user is synced in sTraffic', () => {
         waitForTrafficUser()
     });
     cy.screenshot();
-
 });
 
 Given('Search for Estimate in sTraffic', () => {
@@ -244,12 +254,12 @@ Given('Create Traffic Revision', () => {
     cy.is_element_exists(strafficHomePage.extendInstrDateDialogSyntax()).then(($extendInstrDateDialog) => {
         if ($extendInstrDateDialog) {
             strafficHomePage.extendInstrDateDialogYesBtn().click();
-        }
+        };
     });
     cy.get(strafficHomePage.extendInstrDateDialogSyntax()).should('not.exist');
     strafficHomePage.createRevisionModal().should('exist');
     strafficHomePage.createRevisionSelAllCheckbox().check();
-    strafficHomePage.createRevisionSelAllCheckbox().should('be.checked')
+    strafficHomePage.createRevisionSelAllCheckbox().should('be.checked');
     cy.screenshot();
     strafficHomePage.createRevisionSubmitBtn().click();
     strafficHomePage.createRevisionModal().should('not.exist');
@@ -257,14 +267,14 @@ Given('Create Traffic Revision', () => {
 });
 
 Given('Validate Traffic Revision', () => {
-    strafficHomePage.validateInstructionGrid().should('be.visible')
+    strafficHomePage.validateInstructionGrid().should('be.visible');
     strafficHomePage.validateInstructionBtn().click();
     strafficHomePage.instructionSendMessage().should('include.text', 'Instructions are valid.');
     cy.screenshot();
     strafficHomePage.instructionSendMessageOkBtn().click();
     strafficHomePage.cancelBtn().click();
-    strafficHomePage.instructionHeader().should('not.exist')
-})
+    strafficHomePage.instructionHeader().should('not.exist');
+});
 
 Given('Navigate to eSend Contact Editor', () => {
     navigate_eSend_contact_editor();
@@ -275,7 +285,7 @@ Given('Verify {string} user is listed in eSend Contact Editor', user => {
     cy.readFile(NEW_USER_FILE).then(($newUserParam) => {
         traffic_user_listed_eSend_contacts().then(($trafficContact) => {
             expect($trafficContact, `User ${$newUserParam.email} is listed in eSend Contact Editor`).to.eq(true);
-        })
+        });
     });
     cy.screenshot();
 });
@@ -434,30 +444,7 @@ Given('Unassign vendor from New user', () => {
     trafficHomePage.assignVenCancelBtn().click()
     trafficHomePage.assignedVenForm().should('not.be.visible');
 
-})
-
-
-// Saves new user parameters into Json file
-function save_new_user_param() {
-    const firstName = 'Test';
-    const lastName = `User${Math.floor(Math.random() * (1000000, 9999999)) + 1000000}`;
-    const email = `${firstName}${lastName}@mailinator.com`;
-    const phone = '123-456-7890';
-    const vendor = 'TEST TRAFFIC-AM';
-    const password = 'abc123!'
-
-    const data = {
-        email: email,
-        firstName: firstName,
-        lastName: lastName,
-        phone: phone,
-        vendor: vendor,
-        password: password
-    };
-    const jsonContent = JSON.stringify(data);
-    cy.writeFile(NEW_USER_FILE, jsonContent);
-    cy.readFile(NEW_USER_FILE).its('email').should('eq', email)
-};
+});
 
 function assert_traffic_estimate(row, pdfDownload) {
     expect(row.text()).to.contain(estimateParam.instructionName);
@@ -467,7 +454,7 @@ function assert_traffic_estimate(row, pdfDownload) {
     expect(row.text()).to.contain(estimateParam.client);
     expect(row.text()).to.contain(estimateParam.vendor);
     expect(row.text()).to.contain(pdfDownload);
-}
+};
 
 function search_new_user(disableUser, assignVendor) {
     cy.readFile(NEW_USER_FILE).then(($newUserParam) => {
@@ -478,18 +465,18 @@ function search_new_user(disableUser, assignVendor) {
             expect($row.text()).to.contain($newUserParam.email);
             expect($row.text()).to.contain($newUserParam.firstName);
             expect($row.text()).to.contain($newUserParam.lastName);
-            expect($row.text()).to.contain($newUserParam.phone);
+            expect($row.text()).to.contain($newUserParam.phoneNumber);
             if (disableUser === true) {
                 cy.wrap($row).find('input').uncheck().should('not.be.checked')
-            }
+            };
             if (assignVendor === true) {
                 cy.wrap($row).find('a').click();
                 trafficHomePage.assignedVenForm().should('be.visible');
                 trafficHomePage.assignedVenFormTitle().should('include.text', `View Assigned Vendors of '${$newUserParam.firstName} ${$newUserParam.lastName}`);
-            }
+            };
         });
     });
-}
+};
 
 function search_straffic_estimate() {
     var index = 0;
@@ -516,9 +503,9 @@ function search_straffic_estimate() {
                     cy.wait(1000);
                     innerIndex++;
                     watForTxtBoxEnabled();
-                }
-            })
-        }
+                };
+            });
+        };
         watForTxtBoxEnabled();
 
         cy.is_element_exists(strafficHomePage.estimateSelectSyntax()).then(($dropdown) => {
@@ -534,9 +521,9 @@ function search_straffic_estimate() {
                         waitForDropdown();
                     }
                 })
-                cy.wait(500)
+                cy.wait(500);
                 cy.contains(`${envUtils.getEstimate()} - `).click();
-                cy.wait(500)
+                cy.wait(500);
                 index = endIndex;
             };
         });
@@ -575,8 +562,7 @@ function navigate_eSend_contact_editor() {
     strafficHomePage.selectSendOption().should('have.text', 'Electronic');
     strafficHomePage.eSendContactEditor().click();
     strafficHomePage.eSendContactEditorModalBody().should('be.visible');
-}
-
+};
 
 function traffic_user_listed_eSend_contacts() {
     return cy.readFile(NEW_USER_FILE).then(($newUserParam) => {
@@ -591,4 +577,4 @@ function traffic_user_listed_eSend_contacts() {
             return found;
         });
     });
-}
+};
