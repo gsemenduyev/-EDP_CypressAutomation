@@ -86,9 +86,9 @@ Given('Visit Privacy Policy page', () => {
 });
 
 Given('Visit Request Help page', () => {
-    trafficLoginPage.footerLinks(2).invoke('attr', 'href').then(($href) => {
-        cy.visit($href);
-        cy.origin($href, () => {
+    trafficLoginPage.footerLinks(2).invoke('attr', 'href').then(($url) => {
+        cy.visit($url);
+        cy.origin($url, () => {
             cy.title().should('eq', 'Home');
             cy.screenshot();
         });

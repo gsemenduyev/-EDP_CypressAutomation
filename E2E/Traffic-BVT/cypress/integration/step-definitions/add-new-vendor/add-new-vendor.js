@@ -1,15 +1,11 @@
 /// <reference types="Cypress" />
 import { Given } from "@badeball/cypress-cucumber-preprocessor";
-import EnvUtils from "../../../support/utils/EnvUtils";
 import TrafficHomePage from "../../../support/page-objects/traffic-pages/TrafficHomePage";
-import TrafficImportUserPage from "../../../support/page-objects/traffic-pages/TrafficImportUserPage";
 
-const envUtils = new EnvUtils;
 const trafficHomePage = new TrafficHomePage;
 
 const RANDOM = Math.floor(Math.random() * (1000000, 9999999)) + 1000000;
-//const CALL_LETTERS = `TEST_VENDOR${RANDOM}`;
-const CALL_LETTERS = `TEST_VENDOR7844548`
+const CALL_LETTERS = `TEST_VENDOR${RANDOM}`;
 const MEDIA = 'Radio';
 const BAND_CODE = 'FM';
 

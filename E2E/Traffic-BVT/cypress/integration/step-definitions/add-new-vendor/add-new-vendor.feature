@@ -1,4 +1,3 @@
-@WIP
 Feature: Admin adds new Vendor in Traffic
 
     Feature Description:
