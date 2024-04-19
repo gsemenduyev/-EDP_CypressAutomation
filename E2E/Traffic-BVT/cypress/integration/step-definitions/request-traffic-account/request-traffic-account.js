@@ -96,13 +96,12 @@ Given('Navigate to Registration Request Form page', () => {
             'or contact 1-800-9STRATA for assistance. If you are a traffic user, ' +
             'click OK to register for an account.'
         );
-    })
+    });
     cy.title().should('eq', 'AEINBOX® for Traffic Instruction - Registration')
     cy.screenshot();
     trafficRegRequestPage.step1Ctr().should('exist').and('have.class', 'current-step');
     trafficRegRequestPage.step2Ctr().should('exist');
     trafficRegRequestPage.step3Ctr().should('exist');
-
 });
 
 Given('Add user information to the Registration Request Form', () => {
@@ -171,13 +170,4 @@ function verify_link(element) {
             .its('status')
             .should('eq', 200);
     });
-}
-
-
-
-
-
-
-
-
-
+};

@@ -236,7 +236,6 @@ Given('Verify new Traffic user is synced in sTraffic', () => {
         waitForTrafficUser()
     });
     cy.screenshot();
-
 });
 
 Given('Search for Estimate in sTraffic', () => {
@@ -255,12 +254,12 @@ Given('Create Traffic Revision', () => {
     cy.is_element_exists(strafficHomePage.extendInstrDateDialogSyntax()).then(($extendInstrDateDialog) => {
         if ($extendInstrDateDialog) {
             strafficHomePage.extendInstrDateDialogYesBtn().click();
-        }
+        };
     });
     cy.get(strafficHomePage.extendInstrDateDialogSyntax()).should('not.exist');
     strafficHomePage.createRevisionModal().should('exist');
     strafficHomePage.createRevisionSelAllCheckbox().check();
-    strafficHomePage.createRevisionSelAllCheckbox().should('be.checked')
+    strafficHomePage.createRevisionSelAllCheckbox().should('be.checked');
     cy.screenshot();
     strafficHomePage.createRevisionSubmitBtn().click();
     strafficHomePage.createRevisionModal().should('not.exist');
@@ -268,14 +267,14 @@ Given('Create Traffic Revision', () => {
 });
 
 Given('Validate Traffic Revision', () => {
-    strafficHomePage.validateInstructionGrid().should('be.visible')
+    strafficHomePage.validateInstructionGrid().should('be.visible');
     strafficHomePage.validateInstructionBtn().click();
     strafficHomePage.instructionSendMessage().should('include.text', 'Instructions are valid.');
     cy.screenshot();
     strafficHomePage.instructionSendMessageOkBtn().click();
     strafficHomePage.cancelBtn().click();
-    strafficHomePage.instructionHeader().should('not.exist')
-})
+    strafficHomePage.instructionHeader().should('not.exist');
+});
 
 Given('Navigate to eSend Contact Editor', () => {
     navigate_eSend_contact_editor();
@@ -286,7 +285,7 @@ Given('Verify {string} user is listed in eSend Contact Editor', user => {
     cy.readFile(NEW_USER_FILE).then(($newUserParam) => {
         traffic_user_listed_eSend_contacts().then(($trafficContact) => {
             expect($trafficContact, `User ${$newUserParam.email} is listed in eSend Contact Editor`).to.eq(true);
-        })
+        });
     });
     cy.screenshot();
 });
@@ -504,9 +503,9 @@ function search_straffic_estimate() {
                     cy.wait(1000);
                     innerIndex++;
                     watForTxtBoxEnabled();
-                }
-            })
-        }
+                };
+            });
+        };
         watForTxtBoxEnabled();
 
         cy.is_element_exists(strafficHomePage.estimateSelectSyntax()).then(($dropdown) => {
@@ -522,9 +521,9 @@ function search_straffic_estimate() {
                         waitForDropdown();
                     }
                 })
-                cy.wait(500)
+                cy.wait(500);
                 cy.contains(`${envUtils.getEstimate()} - `).click();
-                cy.wait(500)
+                cy.wait(500);
                 index = endIndex;
             };
         });
@@ -563,8 +562,7 @@ function navigate_eSend_contact_editor() {
     strafficHomePage.selectSendOption().should('have.text', 'Electronic');
     strafficHomePage.eSendContactEditor().click();
     strafficHomePage.eSendContactEditorModalBody().should('be.visible');
-}
-
+};
 
 function traffic_user_listed_eSend_contacts() {
     return cy.readFile(NEW_USER_FILE).then(($newUserParam) => {
@@ -579,4 +577,4 @@ function traffic_user_listed_eSend_contacts() {
             return found;
         });
     });
-}
+};
