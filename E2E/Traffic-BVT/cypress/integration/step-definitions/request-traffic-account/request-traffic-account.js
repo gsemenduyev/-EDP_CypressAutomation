@@ -159,8 +159,8 @@ Given('Confirm the information in to the Registration Request Form', () => {
         'Thank you for registering for an account. ' +
         'Your account details will be emailed to you within 1 business day');
     cy.screenshot();
-    trafficRegRequestPage.conformationMsgOkBtn().click()
-    cy.title().should('eq', 'AEINBOX® for Traffic Instruction - Login')
+    trafficRegRequestPage.conformationMsgOkBtn().click();
+    cy.title().should('eq', 'AEINBOX® for Traffic Instruction - Login');
 });
 
 // Checks the functionality of the links
