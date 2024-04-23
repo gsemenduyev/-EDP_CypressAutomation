@@ -601,7 +601,6 @@ function traffic_user_listed_eSend_contacts(user) {
         };
         return strafficHomePage.eSendContactRows().each(($element) => {
             const rowText = $element.text();
-            cy.log(rowText + ' ------ ' + userEmail)
             if (rowText.includes(userEmail)) {
                 found = true;
                 return false;
