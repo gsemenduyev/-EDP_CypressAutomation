@@ -85,6 +85,16 @@ Given('Visit Privacy Policy page', () => {
     cy.go('back');
 });
 
+Given('Visit Request Help page', () => {
+    trafficLoginPage.footerLinks(2).invoke('attr', 'href').then(($url) => {
+        cy.visit($url);
+        cy.origin($url, () => {
+            cy.title().should('eq', 'Home');
+            cy.screenshot();
+        });
+    });
+});
+
 Given('Navigate to Registration Request Form page', () => {
     trafficLoginPage.requestBtn().click();
     // Verifies text in Google alert window pop-up

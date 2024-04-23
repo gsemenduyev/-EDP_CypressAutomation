@@ -144,5 +144,38 @@ class TrafficHomePage {
     theGrid() {
         return cy.get('#theGrid');
     };
+    addVendorWnd() {
+        return cy.get('.ui-dialog');
+    };
+    callLettersTxtBox() {
+        return cy.get(".ui-dialog [name='e_name']");
+    };
+    selectMedia() {
+        return cy.get(".ui-dialog [name='e_media']");
+    };
+    bandCodeTxtBox() {
+        return cy.get(".ui-dialog [name='e_code']");
+    };
+    selectMarket() {
+        return cy.get(".ui-dialog [name='e_market']");
+    };
+    selectCompany() {
+        return cy.get(".ui-dialog [name='e_company']");
+    };
+    selectForwarding() {
+        return cy.get(".ui-dialog [name='e_forwarding']");
+    };
+    disableEmailCheckBox() {
+        return cy.get(".ui-dialog [name='e_disableEmail']");
+    };
+    disabledCheckBox() {
+        return cy.get(".ui-dialog [name='e_disabled']");
+    };
+    addVendorCancelBtn() {
+        return cy.contains('Cancel');
+    };
+    addVendorCreateBtn() {
+        return cy.contains('Create');
+    };
 };
 export default TrafficHomePage;

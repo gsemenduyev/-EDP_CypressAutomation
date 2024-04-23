@@ -8,6 +8,7 @@ Feature: Request Traffic account
         * Visit Forgot your password page
         * Visit User Agreement page
         * Visit Privacy Policy page
+        * Visit Request Help page
 
     Scenario: Request new Traffic account.
         * Visit Traffic login page
