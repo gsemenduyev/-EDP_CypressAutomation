@@ -23,13 +23,13 @@ Given('Navigate to Import User page', () => {
     trafficHomePage.manageUserTab().click();
     trafficHomePage.importButton().click();
     trafficImportUserPage.userImportMsg(0).invoke('text').then(($text) => {
-        cy.readFile('cypress/fixtures/stores/user-import-inform-msg.txt').then(($fileText) => {
-            expect($text).to.equal($fileText)
-        })
-    })
+        cy.readFile('cypress/fixtures/stores/user-import-inform-msg.json').each(($data) => {
+            expect($text).to.contain($data['importInstructionTxt'])
+        });
+    });
     trafficImportUserPage.chooseFileBtn().should('exist');;
     trafficImportUserPage.uploadBtn().should('exist');
-    cy.screenshot()
+    cy.screenshot();
     trafficImportUserPage.cancelBtn().should('exist');
 });
 

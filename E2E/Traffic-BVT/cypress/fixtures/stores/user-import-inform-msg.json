@@ -1,0 +1,5 @@
+[
+    {
+        "importInstructionTxt": "\n\tYou are about to import traffic users from an uploaded text file in CSV format. This text file must contain data for each traffic user\n\tin the following order, separated by commas:\n\tLogin Name (required), First Name (required), Last Name (required), Email (required), Phone Number, Vendor (one and more).\n\tThe file should not contain more than 500 users.\n\t"
+    }
+]

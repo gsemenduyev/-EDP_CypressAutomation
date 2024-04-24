@@ -1,3 +1,4 @@
+@Regression @Smoke @WIP
 Feature: Admin is not able to import existing user from CSV file
 
     Feature Description:

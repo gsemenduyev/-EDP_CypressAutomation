@@ -1,3 +1,4 @@
+@Regression
 Feature: Send sTraffic instruction to newly created Traffic user
 
     Feature Description:
@@ -20,7 +21,7 @@ Feature: Send sTraffic instruction to newly created Traffic user
     @retries(runMode=5,openMode=5)
     Scenario: Send sTraffic instruction to new Traffic user.
         * Login to sTraffic
-        * Verify new Traffic user is synced in sTraffic
+        * Verify 'New' Traffic user is synced in sTraffic
         * Search for Estimate in sTraffic
         * Create Traffic Revision
         * Validate Traffic Revision

@@ -50,6 +50,11 @@ Given('Login to Traffic as {string} user', user => {
         });
         trafficLoginPage.signInBtn().click();
         cy.title().should('eq', 'Traffic Instruction - Inbox');
+    } else if (user === 'Existing') {
+        trafficLoginPage.usernameBox().type(envUtils.getTrafficUsername());
+        trafficLoginPage.passwordBox().type(envUtils.getTrafficPassword());
+        trafficLoginPage.signInBtn().click();
+        cy.title().should('eq', 'Traffic Instruction - Inbox');
     };
     trafficHomePage.theGrid().should('not.be.disabled');
     cy.screenshot();
@@ -85,6 +90,7 @@ Given('Logout from Traffic', () => {
     trafficHomePage.logoutLink().click();
     cy.title().should('eq', 'AEINBOX® for Traffic Instruction - Login');
     cy.screenshot();
+    trafficLoginPage.signInBtn().should('be.visible');
 });
 
 Given('Verify Traffic {string} user home page', user => {
@@ -119,7 +125,7 @@ Given('Verify Traffic {string} user home page', user => {
         trafficHomePage.importVendorButton().should('exist');
         trafficHomePage.gridCell(0).should('be.visible');
         cy.screenshot();
-    } else if (user === 'New') {
+    } else if (user === 'New' || user === 'Existing') {
         trafficHomePage.inboxTab().should('exist');
         trafficHomePage.acceptedTab().should('exist');
         trafficHomePage.acceptInstructionsBtn().should('exist');
@@ -210,15 +216,21 @@ Given('Login to sTraffic', () => {
     strafficHomePage.trafficStatusBtn().should('be.visible');
 });
 
-Given('Verify new Traffic user is synced in sTraffic', () => {
+Given('Verify {string} Traffic user is synced in sTraffic', user => {
     let index = 0;
     const endIndex = 20;
     const wait = 60000;
+    let userEmail;
     cy.readFile(NEW_USER_FILE).then(($newUserParam) => {
+        if (user === 'New') {
+            userEmail = $newUserParam.email;
+        } else if (user === 'Existing') {
+            userEmail = envUtils.getTrafficUsername();
+        };
         const waitForTrafficUser = () => {
             search_straffic_estimate();
             navigate_eSend_contact_editor();
-            traffic_user_listed_eSend_contacts().then(($trafficContact) => {
+            traffic_user_listed_eSend_contacts(user).then(($trafficContact) => {
                 if ($trafficContact === false && index < endIndex) {
                     index++;
                     cy.reload();
@@ -229,7 +241,7 @@ Given('Verify new Traffic user is synced in sTraffic', () => {
                     cy.reload();
                     index = endIndex;
                 } else if (index === endIndex) {
-                    throw new Error(`Traffic user ${$newUserParam.email} wasn't sync with sTraffic after ${wait * endIndex / 60000} minutes`);
+                    throw new Error(`Traffic user ${userEmail} wasn't sync with sTraffic after ${wait * endIndex / 60000} minutes`);
                 };
             });
         };
@@ -282,8 +294,14 @@ Given('Navigate to eSend Contact Editor', () => {
 });
 
 Given('Verify {string} user is listed in eSend Contact Editor', user => {
+    let userEmail;
     cy.readFile(NEW_USER_FILE).then(($newUserParam) => {
-        traffic_user_listed_eSend_contacts().then(($trafficContact) => {
+        if (user === 'New') {
+            userEmail = $newUserParam.email
+        } else if (user === 'Existing') {
+            userEmail = envUtils.getTrafficUsername();
+        }
+        traffic_user_listed_eSend_contacts(user).then(($trafficContact) => {
             expect($trafficContact, `User ${$newUserParam.email} is listed in eSend Contact Editor`).to.eq(true);
         });
     });
@@ -291,12 +309,19 @@ Given('Verify {string} user is listed in eSend Contact Editor', user => {
 });
 
 Given('Send Estimate from sTraffic to {string} Traffic user', user => {
+    let userEmail;
     cy.readFile(NEW_USER_FILE).then(($newUserParam) => {
+        if (user === 'New') {
+            userEmail = $newUserParam.email
+        } else if (user === 'Existing') {
+            userEmail = envUtils.getTrafficUsername();
+        }
+        // Selects the contact to send the instruction to
         strafficHomePage.eSendContactRows().each(($cell) => {
-            if (!$cell.text().includes($newUserParam.email)
+            if (!$cell.text().includes(userEmail)
                 && $cell.find('img').attr('src').includes('accept')) {
                 cy.wrap($cell).find('img').click();
-            } else if ($cell.text().includes($newUserParam.email)
+            } else if ($cell.text().includes(userEmail)
                 && $cell.find('img').attr('src').includes('cancel')) {
                 cy.wrap($cell).find('img').click();
             };
@@ -409,7 +434,7 @@ Given('Accept new instruction', () => {
                         trafficHomePage.gridRows().should('be.visible')
                         trafficHomePage.gridRows().each(($row) => {
                             if ($row.text().includes(envUtils.getEstimate())) {
-                                assert_traffic_estimate($row, 'View')
+                                assert_traffic_estimate($row, 'View');
                             };
                         });
                     } else if (index === endIndex) {
@@ -418,7 +443,7 @@ Given('Accept new instruction', () => {
                 });
             };
             waitAcceptedInstruction();
-            cy.screenshot();
+            cy.screenshot({ timeout: 20000 });
         });
 });
 
@@ -564,15 +589,22 @@ function navigate_eSend_contact_editor() {
     strafficHomePage.eSendContactEditorModalBody().should('be.visible');
 };
 
-function traffic_user_listed_eSend_contacts() {
+function traffic_user_listed_eSend_contacts(user) {
+
     return cy.readFile(NEW_USER_FILE).then(($newUserParam) => {
+        let userEmail;
         let found = false;
+        if (user === 'New') {
+            userEmail = $newUserParam.email
+        } else if (user === 'Existing') {
+            userEmail = envUtils.getTrafficUsername();
+        };
         return strafficHomePage.eSendContactRows().each(($element) => {
             const rowText = $element.text();
-            if (rowText.includes($newUserParam.email)) {
+            if (rowText.includes(userEmail)) {
                 found = true;
                 return false;
-            }
+            };
         }).then(() => {
             return found;
         });

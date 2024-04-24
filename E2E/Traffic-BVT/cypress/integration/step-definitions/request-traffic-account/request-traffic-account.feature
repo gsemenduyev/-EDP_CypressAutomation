@@ -1,3 +1,4 @@
+@Regression @Smoke
 Feature: Request Traffic account
 
     Feature Description:

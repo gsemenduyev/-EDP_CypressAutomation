@@ -49,5 +49,8 @@ class EnvUtils {
     getEstimate() {
         return envProperties.estimate;
     };
+    getVendor() {
+        return envProperties.vendor;
+    };
 };
 export default EnvUtils;
