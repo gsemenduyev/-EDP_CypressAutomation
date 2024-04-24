@@ -102,7 +102,7 @@ pipeline {
                     to: read_config_file(EMAILS_SLACK_CONTACTS).qaTeamEmail, 
                 );
                 
-                Sends daily build results to Slack
+               // Sends daily build results to Slack
                 def color = 'warning'
                  if (currentBuild.currentResult == "FAILURE") {
                     color = 'danger'
