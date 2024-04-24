@@ -98,7 +98,7 @@ pipeline {
                     writeFile(file: PROD_CONFIG_FILE_DESTINATION, text: json);
                 mail(
                     subject: "${currentBuild.currentResult} ${params.TEST} test run for ${params.ENVIRONMENT}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
-                    body: "${currentBuild.currentResult} ${params.PROJECTS} run for ${params.ENVIRONMENT}: Please visit  ${env.BUILD_URL} for further information.",
+                    body: "${currentBuild.currentResult} ${params.TEST} test run for ${params.ENVIRONMENT}: Please visit  ${env.BUILD_URL} for further information.",
                     to: read_config_file(EMAILS_SLACK_CONTACTS).qaTeamEmail, 
                 );
                 
