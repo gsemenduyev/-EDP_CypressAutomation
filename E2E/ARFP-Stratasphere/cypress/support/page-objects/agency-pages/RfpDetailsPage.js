@@ -2,14 +2,14 @@ class RfpDetailsPage {
     rfpStatus(milliseconds) {
         return cy.get("a[href='#']").eq(5, { timeout: milliseconds });
     }
-    pageTitle(milliseconds) {
-        return cy.get('#page-title', { timeout: milliseconds });
+    pageTitle() {
+        return cy.get('#page-title');
     }
-    responseButton(milliseconds) {
-        return cy.get("[ng-show='!request.$hideResponses'] a", { timeout: milliseconds });
+    responseButton() {
+        return cy.get("[ng-show='!request.$hideResponses'] a");
     }
-    manageResponsesButton(milliseconds) {
-        return cy.get("[ng-click='openPrebuy(proposal.id)']", { timeout: milliseconds });
+    manageResponsesButton() {
+        return cy.get("[ng-click='openPrebuy(proposal.id)']");
     }
 }
 export default RfpDetailsPage;

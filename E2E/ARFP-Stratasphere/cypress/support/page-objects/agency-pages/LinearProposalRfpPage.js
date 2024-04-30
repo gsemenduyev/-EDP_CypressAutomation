@@ -104,8 +104,8 @@ class LinearProposalRfpPage {
     manageBuyerDataButton() {
         return cy.get(".item.manager-buyer-data-item");
     }
-    campaignHeaderTextProd(milliseconds) {
-        return cy.get(".campaign-header span", { timeout: milliseconds });
+    campaignHeaderTextProd() {
+        return cy.get(".campaign-header span");
     }
 }
 export default LinearProposalRfpPage;

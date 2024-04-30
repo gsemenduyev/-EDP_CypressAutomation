@@ -1,6 +1,6 @@
 class AgencyBasePage {
-    pageTitle(milliseconds) {
-        return cy.get('#page-title', { timeout: milliseconds })
+    pageTitle() {
+        return cy.get('#page-title')
     }
     startNewRfp() {
         return cy.get('.dropdown-menu.right [href*="proposals"]');
