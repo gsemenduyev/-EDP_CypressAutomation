@@ -546,7 +546,7 @@ function search_straffic_estimate() {
                         waitForDropdown();
                     }
                 })
-                cy.wait(500);
+                cy.wait(2000);
                 cy.contains(`${envUtils.getEstimate()} - `).click();
                 cy.wait(500);
                 index = endIndex;
