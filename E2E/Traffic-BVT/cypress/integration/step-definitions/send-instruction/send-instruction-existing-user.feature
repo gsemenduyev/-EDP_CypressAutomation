@@ -1,4 +1,4 @@
-@Smoke
+@Smoke @WIP
 Feature: Send sTraffic instruction to existing Traffic user
 
     Feature Description:
