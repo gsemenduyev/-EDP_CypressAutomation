@@ -265,10 +265,16 @@ Given('Create Traffic Revision', () => {
     strafficHomePage.createTrafficRevisionBtn().click();
     cy.is_element_exists(strafficHomePage.extendInstrDateDialogSyntax()).then(($extendInstrDateDialog) => {
         if ($extendInstrDateDialog) {
-            strafficHomePage.extendInstrDateDialogYesBtn().click();
+            cy.get(strafficHomePage.extendInstrDateDialogSyntax())
+                .invoke('is', ':visible')
+                .then(($isVisible) => {
+                    if ($isVisible) {
+                        strafficHomePage.extendInstrDateDialogYesBtn().click();
+                        cy.get(strafficHomePage.extendInstrDateDialogSyntax()).should('not.be.visible');
+                    }
+                });
         };
     });
-    cy.get(strafficHomePage.extendInstrDateDialogSyntax()).should('not.exist');
     strafficHomePage.createRevisionModal().should('exist');
     strafficHomePage.createRevisionSelAllCheckbox().check();
     strafficHomePage.createRevisionSelAllCheckbox().should('be.checked');
@@ -550,7 +556,7 @@ function search_straffic_estimate() {
                 cy.is_element_exists(`[title="${estimateParam.agency} - Don't touch using for Traffic Automation"]`).then(($estimate) => {
                     if ($estimate && index < endIndex) {
                         cy.contains(`${envUtils.getEstimate()} - `).click();
-                        cy.wait(500);
+                        cy.wait(1000);
                         index = endIndex;
                     } else if (!$estimate && index < endIndex) {
                         index++;
@@ -558,7 +564,7 @@ function search_straffic_estimate() {
                     };
                 });
                 cy.contains(`${envUtils.getEstimate()} - `).click();
-                cy.wait(500);
+                cy.wait(1000);
                 index = endIndex;
             };
         });
