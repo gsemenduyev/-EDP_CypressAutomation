@@ -375,11 +375,11 @@ Given('Validate new instruction', () => {
         });
     };
     waitInboxInstruction();
-    cy.screenshot();
     trafficHomePage.gridRows().each(($row) => {
         if ($row.text().includes(envUtils.getEstimate())) {
             assert_traffic_estimate($row, 'View')
             cy.wrap($row).find('a.pdfDownload').click();
+            cy.screenshot();
             cy.wait(1000)
         };
     });
