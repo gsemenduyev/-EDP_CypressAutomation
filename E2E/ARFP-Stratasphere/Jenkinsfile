@@ -80,7 +80,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-            sh "cd ${CURRENT_PROJECT_PATH} && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome --env tags=\"@${PROJECTS}\",ENV=\"${ENVIRONMENT}\",VERSION=\"${VERSION}\"";
+            sh "cd ${CURRENT_PROJECT_PATH} && npm cache clean --force && npm install && npx cypress run --browser chrome --env tags=\"@${PROJECTS}\",ENV=\"${ENVIRONMENT}\",VERSION=\"${VERSION}\"";
             }
         }
     }
