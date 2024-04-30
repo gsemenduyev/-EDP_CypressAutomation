@@ -546,7 +546,17 @@ function search_straffic_estimate() {
                         waitForDropdown();
                     }
                 })
-                cy.wait(2000);
+                cy.wait(1000);
+                cy.is_element_exists(`[title="${estimateParam.agency} - Don't touch using for Traffic Automation"]`).then(($estimate) => {
+                    if ($estimate && index < endIndex) {
+                        cy.contains(`${envUtils.getEstimate()} - `).click();
+                        cy.wait(500);
+                        index = endIndex;
+                    } else if (!$estimate && index < endIndex) {
+                        index++;
+                        waitForDropdown();
+                    };
+                });
                 cy.contains(`${envUtils.getEstimate()} - `).click();
                 cy.wait(500);
                 index = endIndex;
