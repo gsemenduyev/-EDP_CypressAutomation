@@ -553,9 +553,10 @@ function search_straffic_estimate() {
                         waitForDropdown();
                     }
                 })
-                cy.wait(1000);
-                cy.is_element_exists(`[title="${estimateParam.agency} - Don't touch using for Traffic Automation"]`).then(($estimate) => {
+                cy.log(`Waiting for ${envUtils.getEstimate()} estimate to appear in dropdown`)
+                cy.is_element_exists(`[title="${envUtils.getEstimate()} - Don't touch using for Traffic Automation"]`).then(($estimate) => {
                     if ($estimate && index < endIndex) {
+                        cy.log(`${envUtils.getEstimate()} estimate appeared in dropdown`)
                         cy.contains(`${envUtils.getEstimate()} - `).click();
                         cy.wait(1000);
                         index = endIndex;
