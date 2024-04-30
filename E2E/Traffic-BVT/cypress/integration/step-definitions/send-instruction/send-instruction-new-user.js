@@ -529,6 +529,7 @@ function search_straffic_estimate() {
             cy.is_element_exists(strafficHomePage.estimateTxtBoxEnabledSyntax()).then(($txtBoxEnabled) => {
                 if ($txtBoxEnabled && innerIndex < innerEndIndex) {
                     cy.get(strafficHomePage.estimateTxtBoxEnabledSyntax()).should('exist').type(`{selectall}{backspace}${envUtils.getEstimate()}`);
+                    cy.wait(1000)
                     innerIndex = innerEndIndex;
                 } else if ($txtBoxEnabled === false && innerIndex < innerEndIndex) {
                     cy.wait(1000);
@@ -563,9 +564,6 @@ function search_straffic_estimate() {
                         waitForDropdown();
                     };
                 });
-                cy.contains(`${envUtils.getEstimate()} - `).click();
-                cy.wait(1000);
-                index = endIndex;
             };
         });
     };
