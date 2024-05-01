@@ -4,11 +4,14 @@ const browserify = require("@badeball/cypress-cucumber-preprocessor/browserify")
 const registerDataSession = require('cypress-data-session/src/plugin')
 const allureWriter = require('@shelex/cypress-allure-plugin/writer');
 const TestRailReporter = require('cypress-testrail');
+const gmailTester = require("gmail-tester");
+const path = require("path");
 const fs = require('fs');
 const xlsx = require('node-xlsx').default;
-const path = require('path')
 const RUN_ENV_FILE_PATH = 'cypress/reports/run-info/run-env.json';
 const delay = async (ms) => new Promise((res) => setTimeout(res, ms));
+const gmail = require("gmail-tester-extended");
+require('dotenv').config()
 async function setupNodeEvents(cypressOn, config) {
   const on = require('cypress-on-fix')(cypressOn)
   await addCucumberPreprocessorPlugin(on, config, { omitAfterRunHandler: true, });
@@ -16,6 +19,13 @@ async function setupNodeEvents(cypressOn, config) {
   allureWriter(on, config);
   registerDataSession(on, config);
   new TestRailReporter(on, config).register();
+
+  on('before:browser:launch', () => {
+    gmailTester.refresh_access_token(
+      'cypress/fixtures/gmail-data/client-secrets/qa-environment/credentials-ssphere.sellerqa.json',
+      'cypress/fixtures/gmail-data/client-secrets/qa-environment/token-cypress-exampel.json'
+    )
+  });
 
   on('task', {
     parseXlsx({ filePath }) {
@@ -27,8 +37,36 @@ async function setupNodeEvents(cypressOn, config) {
           reject(e)
         }
       })
-    }
+    },
+
   });
+
+
+  on("task", {
+    "gmail:get-messages": async (args) => {
+      const credentialsPath = args.credentials;
+      const tokenPath = args.token;
+      const messages = await gmail.get_messages(credentialsPath, tokenPath, args.options);
+      return messages;
+    },
+  });
+
+  // on("task", {
+  //   "gmail:get-messages": async (args) => {
+
+  //     const messages = await gmail.get_messages(
+  //       path.resolve(__dirname, "cypress/plugins/credentials-ssphere.sellerqa.json"),
+  //       path.resolve(__dirname, "cypress/plugins/token-cypress-exampel.json"),
+  //       args.options
+  //     );
+  //     // const messages = await gmailTester.get_messages(
+  //     //   path.resolve(__dirname, "cypress/plugins/credentials-ssphere.sellerqa.json"),
+  //     //   path.resolve(__dirname, "cypress/plugins/token-cypress-exampel.json"),
+  //     //   args.options
+  //     // );
+  //     return messages;
+  //   },
+  // });
 
 
   on('after:run', async (results) => {

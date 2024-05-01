@@ -7,6 +7,6 @@ cypress/fixtures/agencyRFP/ui-table-from-response-screen.json
 cypress/downloads/Chicago - TV.prx
 cypress/downloads/downloads.htm
 cypress/downloads/Linear response detail.xlsx
-cypress/fixtures/environment/prod-param.json
-cypress/fixtures/environment/qa-param.json
-cypress/fixtures/environment/uat-param.json
+cypress/fixtures/environment/*.json
+cypress/fixtures/gmail-data/client-secrets/qa-environment/*.json
+cypress/fixtures/gmail-data/gmail-body/*

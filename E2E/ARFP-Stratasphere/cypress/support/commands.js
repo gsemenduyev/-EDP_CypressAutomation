@@ -69,4 +69,72 @@ Cypress.on('uncaught:exception', (err, runnable) => {
     // returning false here prevents Cypress from
     // failing the test
     return false
-})
+});
+
+Cypress.Commands.add('check_gmail_inbox', (credentialsFilePath, tokenFilePath) => {
+    const dateFilePath = 'cypress/fixtures/gmail-data/gmail-body/emails-dates.json';
+    cy.writeFile(dateFilePath, {})
+    cy.readFile(dateFilePath).then((data) => {
+        const dateList = data.myList || [];
+        cy.task("gmail:get-messages", {
+            credentials: credentialsFilePath,
+            token: tokenFilePath,
+        }).then(($emails) => {
+            if ($emails.length < 1) {
+                return $emails
+            } else {
+                console.log($emails)
+                $emails.forEach(($email) => {
+                    dateList.push($email.date);
+                })
+                cy.writeFile(dateFilePath, JSON.stringify({ dateList }));
+            };
+        });
+    });
+});
+
+Cypress.Commands.add('wait_for_gmail', (
+    credentialsFilePath,
+    tokenFilePath,
+    from,
+    subject,
+    attempts,
+    msecInterval) => {
+    let index = 0;
+    let endIndex = attempts;
+    const checkEmailExists = () => {
+        cy.task("gmail:get-messages", {
+            credentials: credentialsFilePath,
+            token: tokenFilePath,
+            options: {
+                from: from,
+                subject: subject,
+                include_body: true,
+            },
+        }).then(($emails) => {
+            cy.fixture('gmail-data/gmail-body/emails-dates.json').then((jsonData) => {
+                if ($emails.length < 1 && index < endIndex) {
+                    index++;
+                    cy.log(`Waiting ${(msecInterval / 10000 * index).toFixed(1)} minutes for ${subject} gmail`);
+                    cy.wait(msecInterval)
+                    checkEmailExists()
+                } else if ($emails.length > 0) {
+                    if (!jsonData.dateList.includes($emails[0].date)) {
+                        console.log($emails[0]);
+                        index == endIndex;
+                        cy.writeFile('cypress/fixtures/gmail-data/gmail-body/gmail-body.html', $emails[0].body.html);
+                        cy.writeFile('cypress/fixtures/gmail-data/gmail-body/gmail-body.txt', $emails[0].body.text);
+                        cy.check_gmail_inbox(credentialsFilePath, tokenFilePath);
+                    } else if (index < endIndex) {
+                        index++;
+                        cy.log(`Waiting ${(msecInterval / 10000 * index).toFixed(1)} minutes for ${subject} gmail`);
+                        cy.wait(msecInterval)
+                        checkEmailExists();
+                    }
+                }
+            });
+        });
+    }
+    checkEmailExists();
+});
+
