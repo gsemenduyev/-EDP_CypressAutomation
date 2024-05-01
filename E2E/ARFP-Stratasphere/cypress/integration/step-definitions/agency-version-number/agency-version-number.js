@@ -37,7 +37,7 @@ Given('Check all gmail', () => {
 
 Given('Visit', () => {
     //  cy.visit('webpage.html');
-    cy.readFile('cypress/fixtures/gmail-data/gmail-body/gmail-body.txt').then((text) => {
+    cy.readFile('cypress/fixtures/gmail-data/gmail-info/gmail-body.txt').then((text) => {
         const urlPattern = /(https?:\/\/\S+)/g;
         const urls = text.match(urlPattern)[0];
         cy.visit(urls)

@@ -9,4 +9,4 @@ cypress/downloads/downloads.htm
 cypress/downloads/Linear response detail.xlsx
 cypress/fixtures/environment/*.json
 cypress/fixtures/gmail-data/client-secrets/qa-environment/*.json
-cypress/fixtures/gmail-data/gmail-body/*
+cypress/fixtures/gmail-data/gmail-info/*

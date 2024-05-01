@@ -72,7 +72,7 @@ Cypress.on('uncaught:exception', (err, runnable) => {
 });
 
 Cypress.Commands.add('check_gmail_inbox', (credentialsFilePath, tokenFilePath) => {
-    const dateFilePath = 'cypress/fixtures/gmail-data/gmail-body/emails-dates.json';
+    const dateFilePath = 'cypress/fixtures/gmail-data/gmail-info/emails-dates.json';
     cy.writeFile(dateFilePath, {})
     cy.readFile(dateFilePath).then((data) => {
         const dateList = data.myList || [];
@@ -112,7 +112,7 @@ Cypress.Commands.add('wait_for_gmail', (
                 include_body: true,
             },
         }).then(($emails) => {
-            cy.fixture('gmail-data/gmail-body/emails-dates.json').then((jsonData) => {
+            cy.fixture('gmail-data/gmail-info/emails-dates.json').then((jsonData) => {
                 if ($emails.length < 1 && index < endIndex) {
                     index++;
                     cy.log(`Waiting ${(msecInterval / 10000 * index).toFixed(1)} minutes for ${subject} gmail`);
@@ -122,8 +122,8 @@ Cypress.Commands.add('wait_for_gmail', (
                     if (!jsonData.dateList.includes($emails[0].date)) {
                         console.log($emails[0]);
                         index == endIndex;
-                        cy.writeFile('cypress/fixtures/gmail-data/gmail-body/gmail-body.html', $emails[0].body.html);
-                        cy.writeFile('cypress/fixtures/gmail-data/gmail-body/gmail-body.txt', $emails[0].body.text);
+                        cy.writeFile('cypress/fixtures/gmail-data/gmail-info/gmail-body.html', $emails[0].body.html);
+                        cy.writeFile('cypress/fixtures/gmail-data/gmail-info/gmail-body.txt', $emails[0].body.text);
                         cy.check_gmail_inbox(credentialsFilePath, tokenFilePath);
                     } else if (index < endIndex) {
                         index++;
