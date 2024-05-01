@@ -20,25 +20,29 @@ Given('Validate Agency RFP version number', () => {
     })
 })
 
+Given('Check all gmail', () => {
+    cy.task("gmail:check-inbox", {
+        credentials: 'cypress/fixtures/gmail-data/client-secrets/qa-environment/credentials-ssphere.sellerqa.json',
+        token: 'cypress/fixtures/gmail-data/client-secrets/qa-environment/token-cypress-exampel.json',
+        subject: 'Welcome to Stratasphere!',
+        from: 'no-reply@gotostrata.com',
+        to: 'ssphere.sellerqa@gmail.com',
+        wait_time_sec: 1000,
+        max_wait_time_sec: 30000,
+    }).then(($emails) => {
+        console.log($emails)
+        cy.log($emails)
+    });
+});
 
 Given('Visit', () => {
     //  cy.visit('webpage.html');
     cy.readFile('cypress/fixtures/gmail-data/gmail-body/gmail-body.txt').then((text) => {
         const urlPattern = /(https?:\/\/\S+)/g;
         const urls = text.match(urlPattern)[0];
-        cy.log(urls);
         cy.visit(urls)
 
     });
-    // cy.get('span > a > b').click()
-    // cy.origin('https://www.stratasphere.media/ui_new#/', () => {
-    //     cy.get('#password').type('abc123!')
-    //     cy.get("[name='password2']").type('abc123!')
-    //     cy.get('#password').click()
-    //     cy.get('.btn.btn-primary').click()
-    //     cy.get('.btn.btn-ss').click()
-    //     cy.title().should('eq', 'Hello')
-    // })
 })
 
 
@@ -47,14 +51,6 @@ Given('Check gmail inbox', () => {
         'cypress/fixtures/gmail-data/client-secrets/qa-environment/credentials-ssphere.sellerqa.json',
         'cypress/fixtures/gmail-data/client-secrets/qa-environment/token-cypress-exampel.json'
     );
-
-    // cy.fixture('gmail-thread-Id.json').then((jsonData) => {
-    //     if (!jsonData.threadIdList.includes("18f18bb08ceaa9dd")) {
-    //         cy.log('hello')
-    //     } else {
-    //         cy.log('threadIdList is not found in the JSON data');
-    //     }
-    // });
 });
 
 Given('Test', () => {
@@ -63,7 +59,8 @@ Given('Test', () => {
         'cypress/fixtures/gmail-data/client-secrets/qa-environment/token-cypress-exampel.json',
         'no-reply@bounce.gotostrata.com',
         'Forgot Password for RFP',
-        120000, 1000
+        120000,
+        1000
     )
 
 

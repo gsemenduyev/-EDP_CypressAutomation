@@ -43,6 +43,15 @@ async function setupNodeEvents(cypressOn, config) {
 
 
   on("task", {
+    "gmail:get-all-emails": async (args) => {
+      const credentialsPath = args.credentials;
+      const tokenPath = args.token;
+      const messages = await gmail.get_all_emails(credentialsPath, tokenPath, args.options);
+      return messages;
+    },
+  });
+
+  on("task", {
     "gmail:get-messages": async (args) => {
       const credentialsPath = args.credentials;
       const tokenPath = args.token;
@@ -50,6 +59,30 @@ async function setupNodeEvents(cypressOn, config) {
       return messages;
     },
   });
+
+  on("task", {
+    "gmail:check-inbox": async (args) => {
+      const credentialsPath = args.credentials;
+      const tokenPath = args.token;
+      const subject = args.subject;
+      const from = args.from;
+      const to = args.to;
+      const wait_time_sec = args.wait_time_sec;
+      const max_wait_time_sec = args.max_wait_time_sec;
+      const messages = await gmail.check_inbox(
+        credentialsPath,
+        tokenPath,
+        subject,
+        from,
+        to,
+        wait_time_sec,
+        max_wait_time_sec,
+        args.options
+      );
+      return messages;
+    },
+  });
+
 
   // on("task", {
   //   "gmail:get-messages": async (args) => {
