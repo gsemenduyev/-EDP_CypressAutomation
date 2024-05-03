@@ -2,7 +2,7 @@
 import groovy.json.*
 
 def CURRENT_PROJECT_PATH = 'E2E/Traffic-BVT';
-def PROD_CONFIG_FILE_ID = '3983071e-2eb1-424b-aa52-71dec9a33d8a';
+def PROD_CONFIG_FILE_ID = '2bf30fa4-2bec-4c94-8f05-6cbc80663a9c';
 def QA_CONFIG_FILE_ID = '3983071e-2eb1-424b-aa52-71dec9a33d8a';
 def EMAILS_SLACK_CONTACTS = '72f4f5fc-2d3c-415d-891d-943c990e74a1';
 def PROD_CONFIG_FILE_DESTINATION = 'E2E/Traffic-BVT/cypress/fixtures/environment/prod-param.json';
@@ -28,7 +28,7 @@ pipeline {
     triggers {
         parameterizedCron('''
             H 21 * * 0 %ENVIRONMENT=QA;TEST=Smoke;
-            H 22 * * 0 %ENVIRONMENT=Production';TEST=Smoke;
+            H 22 * * 0 %ENVIRONMENT=Production;TEST=Smoke;
         ''')
     }
     stages {

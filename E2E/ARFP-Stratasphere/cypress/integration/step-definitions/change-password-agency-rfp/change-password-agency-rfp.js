@@ -67,23 +67,52 @@ Given('Request new password on Agency RFP Forgot Password page', () => {
 // Open Forgot Password email and click on restore password link
 Given('Open Forgot Password email and click on restore password link', () => {
     var index = 0;
+    var endIndex = 30;
+    const waitInterval = 5000;
     cy.visit(`${envUtils.getMailinatorUrl()}?to=${envUtils.getAgencyUsername().substr(0, envUtils.getAgencyUsername().indexOf('@'))}`)
     cy.title().should('eq', 'Mailinator');
     cy.dataSession('startingRfpUrl').then(($startingRfpUrl) => {
         if (envUtils.getAgencyUrl().includes($startingRfpUrl)) {
-            mailinatorHomePage.forgotPasswordEmail(300000).should('exist');
+            const waitForgotPasswordEmail = () => {
+                cy.is_element_exists(mailinatorHomePage.newRfpEmailSyntax()).then(($element) => {
+                    if (!$element && index < endIndex) {
+                        if (index % 4 === 0) {
+                            mailinatorHomePage.goButton().click()
+                        }
+                        cy.log(`Waiting ${(index + 1) * waitInterval / 1000} seconds for "Forgot Password RFP" email`)
+                        cy.wait(waitInterval);
+                        index++;
+                        waitForgotPasswordEmail();
+                    } else if ($element) {
+                        cy.get(mailinatorHomePage.newRfpEmailSyntax()).first().invoke('text').then(($text) => {
+                            if (!$text.includes('Forgot Password for RFP') && index < endIndex) {
+                                if (index % 4 === 0) {
+                                    mailinatorHomePage.goButton().click()
+                                }
+                                cy.log(`Waiting ${(index + 1) * waitInterval / 1000} seconds for "Forgot Password RFP" email`)
+                                cy.wait(waitInterval);
+                                index++;
+                                waitForgotPasswordEmail();
+                            }
+                        })
+                    } else if (!$element && index === endIndex) {
+                        throw new Error(`Email inbox is empty after ${index * waitInterval / 1000} seconds`);
+                    }
+                })
+            }
+            waitForgotPasswordEmail();
             const checkEmailExists = () => {
                 mailinatorHomePage.emailTiming().then(el => {
-                    if (el.text().trim() !== 'just now' && index < 30) {
-                        if (index === 15) {
-                            cy.reload();
-                        };
-                        cy.wait(5000);
-                        cy.log(`Waiting ${(index + 1) * 5} seconds for "Forgot Password RFP" email`)
+                    if (el.text().trim() !== 'just now' && index < endIndex) {
+                        if (index % 4 === 0) {
+                            mailinatorHomePage.goButton().click()
+                        }
+                        cy.log(`Waiting ${(index + 1) * waitInterval / 1000} seconds for "Forgot Password RFP" email`)
+                        cy.wait(waitInterval);
                         index++;
                         checkEmailExists();
                     } else if (el.text().trim() === 'just now') {
-                        mailinatorHomePage.forgotPasswordEmail().click();
+                        mailinatorHomePage.forgotPasswordEmail(300000).click();
                     }
                 })
             }
@@ -95,12 +124,12 @@ Given('Open Forgot Password email and click on restore password link', () => {
             mailinatorHomePage.resetPasswordEmail(300000).should('exist');
             const checkEmailExists = () => {
                 mailinatorHomePage.emailTiming().then(el => {
-                    if (el.text().trim() !== 'just now' && index < 30) {
-                        if (index === 15) {
-                            cy.reload();
-                        };
-                        cy.wait(5000);
-                        cy.log(`Waiting ${(index + 1) * 5} seconds for "Forgot Password RFP" email`)
+                    if (el.text().trim() !== 'just now' && index < endIndex) {
+                        if (index % 4 === 0) {
+                            mailinatorHomePage.goButton().click()
+                        }
+                        cy.log(`Waiting ${(index + 1) * waitInterval / 1000} seconds for "Forgot Password RFP" email`)
+                        cy.wait(waitInterval);
                         index++;
                         checkEmailExists();
                     } else if (el.text().trim() === 'just now') {

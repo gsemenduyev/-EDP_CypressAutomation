@@ -49,7 +49,7 @@ Cypress Tests
 
 `npx cypress run --browser chrome --headed --env tags="@ARFP",ENV="UAT",VERSION="v 8.4.0"`
 
-`npx cypress run --browser chrome --headed --env tags="@ARFP",ENV="Production",VERSION="v 8.3.6.60524"`
+`npx cypress run --browser chrome --headed --env tags="@ARFP",ENV="Production",VERSION="v 8.4.0"`
 
 ## Generate Cucumber report
 `node ./cucumber-html-report.js`

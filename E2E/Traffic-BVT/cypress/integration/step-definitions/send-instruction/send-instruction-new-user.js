@@ -265,10 +265,16 @@ Given('Create Traffic Revision', () => {
     strafficHomePage.createTrafficRevisionBtn().click();
     cy.is_element_exists(strafficHomePage.extendInstrDateDialogSyntax()).then(($extendInstrDateDialog) => {
         if ($extendInstrDateDialog) {
-            strafficHomePage.extendInstrDateDialogYesBtn().click();
+            cy.get(strafficHomePage.extendInstrDateDialogSyntax())
+                .invoke('is', ':visible')
+                .then(($isVisible) => {
+                    if ($isVisible) {
+                        strafficHomePage.extendInstrDateDialogYesBtn().click();
+                        cy.get(strafficHomePage.extendInstrDateDialogSyntax()).should('not.be.visible');
+                    }
+                });
         };
     });
-    cy.get(strafficHomePage.extendInstrDateDialogSyntax()).should('not.exist');
     strafficHomePage.createRevisionModal().should('exist');
     strafficHomePage.createRevisionSelAllCheckbox().check();
     strafficHomePage.createRevisionSelAllCheckbox().should('be.checked');
@@ -375,11 +381,11 @@ Given('Validate new instruction', () => {
         });
     };
     waitInboxInstruction();
-    cy.screenshot();
     trafficHomePage.gridRows().each(($row) => {
         if ($row.text().includes(envUtils.getEstimate())) {
             assert_traffic_estimate($row, 'View')
             cy.wrap($row).find('a.pdfDownload').click();
+            cy.screenshot();
             cy.wait(1000)
         };
     });
@@ -523,6 +529,7 @@ function search_straffic_estimate() {
             cy.is_element_exists(strafficHomePage.estimateTxtBoxEnabledSyntax()).then(($txtBoxEnabled) => {
                 if ($txtBoxEnabled && innerIndex < innerEndIndex) {
                     cy.get(strafficHomePage.estimateTxtBoxEnabledSyntax()).should('exist').type(`{selectall}{backspace}${envUtils.getEstimate()}`);
+                    cy.wait(1000)
                     innerIndex = innerEndIndex;
                 } else if ($txtBoxEnabled === false && innerIndex < innerEndIndex) {
                     cy.wait(1000);
@@ -546,10 +553,18 @@ function search_straffic_estimate() {
                         waitForDropdown();
                     }
                 })
-                cy.wait(500);
-                cy.contains(`${envUtils.getEstimate()} - `).click();
-                cy.wait(500);
-                index = endIndex;
+                cy.log(`Waiting for ${envUtils.getEstimate()} estimate to appear in dropdown`)
+                cy.is_element_exists(`[title="${envUtils.getEstimate()} - Don't touch using for Traffic Automation"]`).then(($estimate) => {
+                    if ($estimate && index < endIndex) {
+                        cy.log(`${envUtils.getEstimate()} estimate appeared in dropdown`)
+                        cy.contains(`${envUtils.getEstimate()} - `).click();
+                        cy.wait(1000);
+                        index = endIndex;
+                    } else if (!$estimate && index < endIndex) {
+                        index++;
+                        waitForDropdown();
+                    };
+                });
             };
         });
     };

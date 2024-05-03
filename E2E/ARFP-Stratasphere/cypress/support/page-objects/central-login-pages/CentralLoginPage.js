@@ -1,30 +1,30 @@
 class CentralLoginPage {
-    loginEmail(milliseconds) {
-        return cy.get('#email', { timeout: milliseconds });
+    loginEmail() {
+        return cy.get('#email');
     }
-    loginNextButton(milliseconds) {
-        return cy.get('#btnNext', { timeout: milliseconds });
+    loginNextButton() {
+        return cy.get('#btnNext');
     }
-    loginPassword(milliseconds) {
-        return cy.get('#password', { timeout: milliseconds });
+    loginPassword() {
+        return cy.get('#password');
     }
-    confirmPassword(milliseconds) {
-        return cy.get('#confirmPassword', { timeout: milliseconds });
+    confirmPassword() {
+        return cy.get('#confirmPassword');
     }
-    loginButton(milliseconds) {
-        return cy.get('#btnLogin', { timeout: milliseconds });
+    loginButton() {
+        return cy.get('#btnLogin');
     }
-    forgotPassword(milliseconds) {
-        return cy.get('.issueLink', { timeout: milliseconds });
+    forgotPassword() {
+        return cy.get('.issueLink');
     }
-    resetPasswordText(milliseconds) {
-        return cy.get('.reset-pwd-reminder-text', { timeout: milliseconds });
+    resetPasswordText() {
+        return cy.get('.reset-pwd-reminder-text');
     }
-    submitButton(milliseconds) {
-        return cy.get('#btnSubmit', { timeout: milliseconds });
+    submitButton() {
+        return cy.get('#btnSubmit');
     }
-    emailSendText(milliseconds) {
-        return cy.get('[style="width:500px"] > div', { timeout: milliseconds });
+    emailSendText() {
+        return cy.get('[style="width:500px"] > div');
     }
     resetPasswordMessageSyntax() {
         return '.message-success';

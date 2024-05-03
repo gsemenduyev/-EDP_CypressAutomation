@@ -20,8 +20,8 @@ class AgencyLoginPage {
     forgotPasswordConformation() {
         return cy.get('p');
     }
-    newPasswordInput(milliseconds) {
-        return cy.get('.form-control.login-input', { timeout: milliseconds }).eq(0);
+    newPasswordInput() {
+        return cy.get('.form-control.login-input').eq(0);
     }
     conformNewPasswordInput() {
         return cy.get('.form-control.login-input').eq(1);
@@ -29,8 +29,8 @@ class AgencyLoginPage {
     resetPasswordConformationMsgSyntax() {
         return '.col-md-offset-2.col-sm-offset-2 p';
     }
-    pageTitle(milliseconds) {
-        return cy.get('#page-title', { timeout: milliseconds });
+    pageTitle() {
+        return cy.get('#page-title');
     }
 }
 export default AgencyLoginPage;

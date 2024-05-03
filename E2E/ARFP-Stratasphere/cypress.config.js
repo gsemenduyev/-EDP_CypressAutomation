@@ -96,6 +96,7 @@ module.exports = defineConfig({
   e2e: {
     setupNodeEvents,
     experimentalOriginDependencies: true,
+    chromeWebSecurity: false,
     specPattern: "**/*.feature",
   },
 });
