@@ -23,6 +23,8 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+
 Cypress.Commands.add("sbms", (keywordTest) => {
     const commands = 'cd C:\\Program Files (x86)\\SmartBear\\TestComplete 15\\Bin && ' +
         'TestComplete.exe C:\\CypressAutomation\\EDP_CypressAutomation\\E2E\\SBMS\\SBMS.pjs ' +

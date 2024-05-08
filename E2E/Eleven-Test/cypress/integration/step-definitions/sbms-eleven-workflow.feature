@@ -1,13 +1,10 @@
 Feature: SBMS Eleven workflow
 
-    Scenario: Create SBMS Radio estimate, send it to Eleven
-        * Launch SBMS
-
-    Scenario: Verify Eleven user receives Radio estimate
+    Scenario: Login to Eleven
         * Login to Eleven
 
-    Scenario: Revise SBMS Radio estimate, send it to Eleven
+    Scenario: Launch SBMS
         * Launch SBMS
 
-    Scenario: Verify Eleven user receives Radio estimate
+    Scenario: Login to Eleven
         * Login to Eleven
