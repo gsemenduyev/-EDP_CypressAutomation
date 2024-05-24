@@ -74,8 +74,8 @@ Cypress.on('uncaught:exception', (err, runnable) => {
 Cypress.Commands.add('check_gmail_inbox', (credentialsFilePath, tokenFilePath) => {
     const dateFilePath = 'cypress/fixtures/gmail-data/gmail-info/emails-dates.json';
     cy.writeFile(dateFilePath, {})
-    cy.readFile(dateFilePath).then((data) => {
-        const dateList = data.myList || [];
+    cy.readFile(dateFilePath).then(($data) => {
+        const dateList = $data.uniqDatesList || [];
         cy.task("gmail:get-messages", {
             credentials: credentialsFilePath,
             token: tokenFilePath,
@@ -137,4 +137,3 @@ Cypress.Commands.add('wait_for_gmail', (
     }
     checkEmailExists();
 });
-

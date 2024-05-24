@@ -1,4 +1,5 @@
 const ENV = Cypress.env('ENV');
+const DOMAIN = Cypress.env('DOMAIN')
 let envProperties;
 
 before(function () {
@@ -33,7 +34,11 @@ class EnvUtils {
         return envProperties.agencyUrl;
     }
     getAgencyUsername() {
-        return envProperties.agencyUsername;
+        if (DOMAIN === 'Mailinator') {
+            return envProperties.agencyUsername.mailinator;
+        } else {
+            return envProperties.agencyUsername.gmail;
+        }
     }
     getAgencyPassword() {
         return envProperties.agencyPassword;
@@ -45,7 +50,11 @@ class EnvUtils {
         return envProperties.ssphereUrl;
     }
     getSsphereUsername() {
-        return envProperties.ssphereUsername;
+        if (DOMAIN === 'Mailinator') {
+            return envProperties.ssphereUsername.mailinator;
+        } else {
+            return envProperties.ssphereUsername.gmail;
+        }
     }
     getSspherePassword() {
         return envProperties.sspherePassword;

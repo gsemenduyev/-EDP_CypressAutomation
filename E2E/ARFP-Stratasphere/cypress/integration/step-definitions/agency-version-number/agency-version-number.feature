@@ -5,9 +5,10 @@ Feature: Validate Agency RFP version number
     Agent login to Agency RFP and validate version number
 
     Scenario: User logins to Agency RFP and verifies app version number
-        * Check gmail inbox
-        * Test
-        * Visit
+        # * Check gmail inbox
+        # * Test
+        # * Visit
+        * User 1
 # * Check all gmail
 # * Login to Agency RFP with 'Permanent' password
 # * Validate Agency RFP version number

@@ -5,7 +5,9 @@ import 'cypress-data-session';
 import 'cypress-iframe';
 import { Given } from "@badeball/cypress-cucumber-preprocessor";
 import AgencyBasePage from '../../../support/page-objects/agency-pages/AgencyBasePage';
+import EnvUtils from "../../../support/utils/EnvUtils";
 
+const envUtils = new EnvUtils;
 const agencyBasePage = new AgencyBasePage;
 const VERSION = Cypress.env('VERSION')
 
@@ -22,11 +24,11 @@ Given('Validate Agency RFP version number', () => {
 
 Given('Check all gmail', () => {
     cy.task("gmail:check-inbox", {
-        credentials: 'cypress/fixtures/gmail-data/client-secrets/qa-environment/credentials-ssphere.sellerqa.json',
-        token: 'cypress/fixtures/gmail-data/client-secrets/qa-environment/token-cypress-exampel.json',
-        subject: 'Welcome to Stratasphere!',
+        credentials: 'cypress/fixtures/gmail-data/client-secrets/qa-environment/credentials-ssphere.testqa.json',
+        token: 'cypress/fixtures/gmail-data/client-secrets/qa-environment/token-ssphere.testqa.json',
+        subject: 'New RFP Request for Test Gmail 572024 at TEST-TV from FWAAuto Testing at Test Agency',
         from: 'no-reply@gotostrata.com',
-        to: 'ssphere.sellerqa@gmail.com',
+        to: 'ssphere.testqa@gmail.com',
         wait_time_sec: 1000,
         max_wait_time_sec: 30000,
     }).then(($emails) => {
@@ -36,58 +38,64 @@ Given('Check all gmail', () => {
 });
 
 Given('Visit', () => {
-    //  cy.visit('webpage.html');
-    cy.readFile('cypress/fixtures/gmail-data/gmail-info/gmail-body.txt').then((text) => {
-        const urlPattern = /(https?:\/\/\S+)/g;
-        const urls = text.match(urlPattern)[0];
-        cy.visit(urls)
+    cy.visit('cypress/fixtures/gmail-data/gmail-info/gmail-body.html');
+    // cy.readFile('cypress/fixtures/gmail-data/gmail-info/gmail-body.txt').then((text) => {
+    //     const urlPattern = /(https?:\/\/\S+)/g;
+    //     const urls = text.match(urlPattern)[0];
+    //     cy.visit(urls)
 
-    });
+    // });
+    cy.get('[href="https://ssphereqa.pregotostrata.com/ui_new/#/proposal-response-line-specific-accept?id=f1b9ecc6-5fe9-4a67-957d-697e0db9837e"]').click()
 })
 
 
 Given('Check gmail inbox', () => {
+    cy.visit('https://2wayrfp.gotostrata.com/RFP/')
     cy.check_gmail_inbox(
-        'cypress/fixtures/gmail-data/client-secrets/qa-environment/credentials-ssphere.sellerqa.json',
-        'cypress/fixtures/gmail-data/client-secrets/qa-environment/token-cypress-exampel.json'
+        'cypress/fixtures/gmail-data/client-secrets/qa-environment/credentials-ssphere.testqa.json',
+        'cypress/fixtures/gmail-data/client-secrets/qa-environment/token-ssphere.testqa.json'
     );
 });
 
 Given('Test', () => {
     cy.wait_for_gmail(
-        'cypress/fixtures/gmail-data/client-secrets/qa-environment/credentials-ssphere.sellerqa.json',
-        'cypress/fixtures/gmail-data/client-secrets/qa-environment/token-cypress-exampel.json',
-        'no-reply@bounce.gotostrata.com',
-        'Forgot Password for RFP',
+        'cypress/fixtures/gmail-data/client-secrets/qa-environment/credentials-ssphere.testqa.json',
+        'cypress/fixtures/gmail-data/client-secrets/qa-environment/token-ssphere.testqa.json',
+        'no-reply@gotostrata.com',
+        'New Change Request for Test Gmail 572024 at TEST-TV from FWAAuto Testing at Test Agency',
         120000,
         1000
     )
-
-
-
-
-
-    // const checkEmailExists = () => {
-    //     cy.task("gmail:get-messages", {
-    //         credentials: 'cypress/plugins/credentials-ssphere.sellerqa.json',
-    //         token: 'cypress/plugins/token-cypress-exampel.json',
-    //         options: {
-    //             from: 'no-reply@gotostrata.com',
-    //             subject: 'Welcome to Stratasphere!',
-    //             include_body: true,
-    //         },
-
-    //     }).then((emails) => {
-    //         console.log(emails.length)
-    //         if (emails.length < 1) {
-    //             cy.wait(6000)
-    //             checkEmailExists()
-    //         } else {
-    //             const body = emails[0].body.html;
-    //             console.log(body)
-    //             cy.writeFile('webpage.html', body);
-    //         }
-    //     });
-    // }
-    // checkEmailExists();
 });
+Given('User 1', () => {
+    cy.log("Hello - " + envUtils.getAgencyUsername())
+    cy.log("Hello - " + envUtils.getSsphereUsername())
+})
+
+
+
+
+
+// const checkEmailExists = () => {
+//     cy.task("gmail:get-messages", {
+//         credentials: 'cypress/plugins/credentials-ssphere.sellerqa.json',
+//         token: 'cypress/plugins/token-cypress-exampel.json',
+//         options: {
+//             from: 'no-reply@gotostrata.com',
+//             subject: 'Welcome to Stratasphere!',
+//             include_body: true,
+//         },
+
+//     }).then((emails) => {
+//         console.log(emails.length)
+//         if (emails.length < 1) {
+//             cy.wait(6000)
+//             checkEmailExists()
+//         } else {
+//             const body = emails[0].body.html;
+//             console.log(body)
+//             cy.writeFile('webpage.html', body);
+//         }
+//     });
+// }
+// checkEmailExists();

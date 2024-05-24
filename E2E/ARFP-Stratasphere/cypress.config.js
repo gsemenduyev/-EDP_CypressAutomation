@@ -12,6 +12,50 @@ const RUN_ENV_FILE_PATH = 'cypress/reports/run-info/run-env.json';
 const delay = async (ms) => new Promise((res) => setTimeout(res, ms));
 const gmail = require("gmail-tester-extended");
 require('dotenv').config()
+
+async function saveGmailUniqDates(credentialsPath, tokenPath, dateFilePath) {
+  // if (!fs.existsSync(dateFilePath)) {
+  fs.writeFileSync(dateFilePath, '{}');
+  //  }
+  let data;
+  try {
+    data = JSON.parse(fs.readFileSync(dateFilePath, 'utf8'));
+  } catch (err) {
+    console.error('Error reading file:', err);
+    data = { uniqDatesList: [] };
+  }
+
+  const dateList = data.uniqDatesList || [];
+  try {
+    const $emails = await gmail.get_messages(credentialsPath, tokenPath);
+    if ($emails && $emails.length > 0) {
+      $emails.forEach(($email) => {
+        dateList.push($email.date);
+      });
+      fs.writeFileSync(dateFilePath, JSON.stringify({ uniqDatesList: dateList }, null, 2));
+    }
+    return dateList;
+  } catch (err_1) {
+    console.error('Error getting messages or saving unique dates:', err_1);
+    throw err_1;
+  }
+}
+
+async function refreshGmailTokenSaveUniqDates(
+  arfpCredentialsFile,
+  arfpTokenFile,
+  ssphereCredentialsFile,
+  ssphereTokenFile,
+  arfpDateFile,
+  ssphereDateFile) {
+  const arfpTokenPromise = gmailTester.refresh_access_token(arfpCredentialsFile, arfpTokenFile);
+  const ssphereTokenPromise = gmailTester.refresh_access_token(ssphereCredentialsFile, ssphereTokenFile);
+  const arfpDatePromise = saveGmailUniqDates(arfpCredentialsFile, arfpTokenFile, arfpDateFile)
+  const ssphereDatePromise = saveGmailUniqDates(ssphereCredentialsFile, ssphereTokenFile, ssphereDateFile)
+  Promise.all([arfpTokenPromise, ssphereTokenPromise, arfpDatePromise, ssphereDatePromise])
+}
+
+
 async function setupNodeEvents(cypressOn, config) {
   const on = require('cypress-on-fix')(cypressOn)
   await addCucumberPreprocessorPlugin(on, config, { omitAfterRunHandler: true, });
@@ -20,11 +64,40 @@ async function setupNodeEvents(cypressOn, config) {
   registerDataSession(on, config);
   new TestRailReporter(on, config).register();
 
+  // Refreshes gmail access token for Production, UAT, QA environments
+  let refreshAccessToken = true;
   on('before:browser:launch', () => {
-    gmailTester.refresh_access_token(
-      'cypress/fixtures/gmail-data/client-secrets/qa-environment/credentials-ssphere.sellerqa.json',
-      'cypress/fixtures/gmail-data/client-secrets/qa-environment/token-cypress-exampel.json'
-    )
+    if (config.env.ENV === 'Production' && refreshAccessToken) {
+      refreshGmailTokenSaveUniqDates(
+        config.env.ARFP_PROD.CREDENTIALS_FILE,
+        config.env.ARFP_PROD.TOKEN_FILE,
+        config.env.SSPHERE_PROD.CREDENTIALS_FILE,
+        config.env.SSPHERE_PROD.TOKEN_FILE,
+        config.env.DATE_FILE.ARFP,
+        config.env.DATE_FILE.SSPHERE
+      );
+      Promise.all([arfpTokenPromise, ssphereTokenPromise, arfpDatePromise, ssphereDatePromise])
+    } else if (config.env.ENV === 'UAT' && refreshAccessToken) {
+      refreshGmailTokenSaveUniqDates(
+        config.env.ARFP_UAT.CREDENTIALS_FILE,
+        config.env.ARFP_UAT.TOKEN_FILE,
+        config.env.SSPHERE_UAT.CREDENTIALS_FILE,
+        config.env.SSPHERE_UAT.TOKEN_FILE,
+        config.env.DATE_FILE.ARFP,
+        config.env.DATE_FILE.SSPHERE
+
+      );
+    } else if (refreshAccessToken) {
+      refreshGmailTokenSaveUniqDates(
+        config.env.ARFP_QA.CREDENTIALS_FILE,
+        config.env.ARFP_QA.TOKEN_FILE,
+        config.env.SSPHERE_QA.CREDENTIALS_FILE,
+        config.env.SSPHERE_QA.TOKEN_FILE,
+        config.env.DATE_FILE.ARFP,
+        config.env.DATE_FILE.SSPHERE
+      );
+    }
+    refreshAccessToken = false;
   });
 
   on('task', {
@@ -82,25 +155,6 @@ async function setupNodeEvents(cypressOn, config) {
       return messages;
     },
   });
-
-
-  // on("task", {
-  //   "gmail:get-messages": async (args) => {
-
-  //     const messages = await gmail.get_messages(
-  //       path.resolve(__dirname, "cypress/plugins/credentials-ssphere.sellerqa.json"),
-  //       path.resolve(__dirname, "cypress/plugins/token-cypress-exampel.json"),
-  //       args.options
-  //     );
-  //     // const messages = await gmailTester.get_messages(
-  //     //   path.resolve(__dirname, "cypress/plugins/credentials-ssphere.sellerqa.json"),
-  //     //   path.resolve(__dirname, "cypress/plugins/token-cypress-exampel.json"),
-  //     //   args.options
-  //     // );
-  //     return messages;
-  //   },
-  // });
-
 
   on('after:run', async (results) => {
     try {
@@ -162,6 +216,34 @@ module.exports = defineConfig({
     allureAddVideoOnPass: true,
     allureResultsPath: "cypress/videos/allure-results",
     //allureResultsPath: "cypress/reports/allure-results",
+    DATE_FILE: {
+      ARFP: "cypress/fixtures/gmail-data/gmail-info/arfp-emails-dates.json",
+      SSPHERE: "cypress/fixtures/gmail-data/gmail-info/ssphere-emails-dates.json"
+    },
+    ARFP_PROD: {
+      CREDENTIALS_FILE: "cypress/fixtures/gmail-data/client-secrets/uat-environment/credentials-arfp.testprod.json",
+      TOKEN_FILE: "cypress/fixtures/gmail-data/client-secrets/uat-environment/token-arfp.testprod.json",
+    },
+    SSPHERE_PROD: {
+      CREDENTIALS_FILE: "cypress/fixtures/gmail-data/client-secrets/prod-environment/credentials-ssphere.testprod.json",
+      TOKEN_FILE: "cypress/fixtures/gmail-data/client-secrets/prod-environment/token-ssphere.testprod.json"
+    },
+    ARFP_UAT: {
+      CREDENTIALS_FILE: "cypress/fixtures/gmail-data/client-secrets/uat-environment/credentials-arfp.testuat.json",
+      TOKEN_FILE: "cypress/fixtures/gmail-data/client-secrets/uat-environment/token-arfp.testuat.json"
+    },
+    SSPHERE_UAT: {
+      CREDENTIALS_FILE: "cypress/fixtures/gmail-data/client-secrets/uat-environment/credentials-ssphere.testuat.json",
+      TOKEN_FILE: "cypress/fixtures/gmail-data/client-secrets/uat-environment/token-ssphere.testuat.json"
+    },
+    ARFP_QA: {
+      CREDENTIALS_FILE: "cypress/fixtures/gmail-data/client-secrets/qa-environment/credentials-arfp.testqa.json",
+      TOKEN_FILE: "cypress/fixtures/gmail-data/client-secrets/qa-environment/token-arfp.testqa.json"
+    },
+    SSPHERE_QA: {
+      CREDENTIALS_FILE: "cypress/fixtures/gmail-data/client-secrets/qa-environment/credentials-ssphere.testqa.json",
+      TOKEN_FILE: "cypress/fixtures/gmail-data/client-secrets/qa-environment/token-ssphere.testqa.json"
+    }
   },
   projectId: "p6oru5",
   e2e: {
