@@ -14,16 +14,19 @@ const gmail = require("gmail-tester-extended");
 require('dotenv').config()
 
 async function saveGmailUniqDates(credentialsPath, tokenPath, dateFilePath) {
-  // if (!fs.existsSync(dateFilePath)) {
+  //const gmailInfoFilePath = 'cypress/fixtures/gmail-data/gmail-info/arfp-emails-dates.json';
+  const gmailInfoFilePath = path.dirname(dateFilePath);
+  if (!fs.existsSync(gmailInfoFilePath)) {
+    fs.mkdirSync(gmailInfoFilePath);
+  };
   fs.writeFileSync(dateFilePath, '{}');
-  //  }
   let data;
   try {
     data = JSON.parse(fs.readFileSync(dateFilePath, 'utf8'));
   } catch (err) {
     console.error('Error reading file:', err);
     data = { uniqDatesList: [] };
-  }
+  };
 
   const dateList = data.uniqDatesList || [];
   try {
