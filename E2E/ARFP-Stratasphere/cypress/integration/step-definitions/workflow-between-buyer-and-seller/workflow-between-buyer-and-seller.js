@@ -38,6 +38,8 @@ const centralLoginPage = new CentralLoginPage;
 const FILE_NAME = 'stores/TEST Dallas RTG_IMP.xml';
 const SELLER_REVISION_RATE = '8';
 const BUYER_REVISION_RATE = '$ 5.00';
+const SSPHERE_EMAIL_DATES = 'gmail-data/gmail-info/ssphere-emails-dates.json';
+const ARFP_EMAIL_DATES = 'gmail-data/gmail-info/arfp-emails-dates.json';
 
 let newRfpParam;
 let sellerXml;
@@ -448,17 +450,59 @@ Given('Create Type1 Rate Request', () => {
 });
 
 // Search for Stratasphere, AgencyRFP user in Mailinator
-Given('Search for {string} user in Mailinator', string => {
-    cy.visit(envUtils.getMailinatorUrl());
-    cy.title().should('eq', 'Mailinator');
-    mailinatorHomePage.userSearchBox().clear();
-    if (string === 'Stratasphere') {
-        mailinatorHomePage.userSearchBox().type(envUtils.getSsphereUsername());
-    } else if (string === 'AgencyRFP') {
-        mailinatorHomePage.userSearchBox().type(envUtils.getAgencyUsername());
-    }
-    mailinatorHomePage.goButton().click({ force: true });
-})
+Given('Search for {string} user email', string => {
+    if (envUtils.getSsphereUsername().endsWith('mailinator.com')) {
+        cy.visit(envUtils.getMailinatorUrl());
+        cy.title().should('eq', 'Mailinator');
+        mailinatorHomePage.userSearchBox().clear();
+        if (string === 'Stratasphere') {
+            mailinatorHomePage.userSearchBox().type(envUtils.getSsphereUsername());
+        } else if (string === 'AgencyRFP') {
+            mailinatorHomePage.userSearchBox().type(envUtils.getAgencyUsername());
+        }
+        mailinatorHomePage.goButton().click({ force: true });
+    } else if (envUtils.getSsphereUsername().endsWith('gmail.com')) {
+        cy.visit(envUtils.getAgencyUrl());
+        let emailDates;
+        let credentialsFile;
+        let tokenFile;
+        let emailSubject;
+        let noReplStrataEmail;
+        cy.dataSession('newRfpName').then(newRfpName => {
+            if (string === 'Stratasphere') {
+                emailDates = SSPHERE_EMAIL_DATES;
+                credentialsFile = Cypress.env('SSPHERE_CREDENTIALS_FILE');
+                tokenFile = Cypress.env('SSPHERE_TOKEN_FILE');
+                emailSubject =
+                    `New RFP Request for ${newRfpName} at 
+                ${newRfpParam.vendor} from 
+                ${envUtils.getAgencyUsername().split(".")[0]} 
+                ${envUtils.getAgencyUsername().split(".")[1].split("@")[0]} at 
+                ${newRfpParam.agency}`;
+                noReplStrataEmail = envUtils.getNoReplStrataSsEmail();
+            } else if (string === 'AgencyRFP') {
+                emailDates = ARFP_EMAIL_DATES;
+                credentialsFile = Cypress.env('ARFP_CREDENTIALS_FILE');
+                tokenFile = Cypress.env('ARFP_TOKEN_FILE');
+                emailSubject =
+                    `RFP Response Received for ${newRfpName} from 
+                ${envUtils.getSsphereUsername().split(".")[0]} 
+                ${envUtils.getSsphereUsername().split(".")[1].split("@")[0]} at 
+                ${newRfpParam.vendor}`;
+                noReplStrataEmail = envUtils.getNoReplStrataArfpEmail();
+            }
+            cy.get_gmail(
+                emailDates,
+                credentialsFile,
+                tokenFile,
+                noReplStrataEmail,
+                emailSubject,
+                120000,
+                1000
+            );
+        });
+    };
+});
 
 // Validate email for New Rate Request
 Given('Validate email for New Rate Request', () => {
@@ -586,7 +630,7 @@ function xml_proposal_map(param) {
 }
 
 function new_rfp_name() {
-    const filePath = 'cypress/fixtures/agencyRFP/new-frp-name.json';
+    const filePath = Cypress.env('NEW_RFP_NAME_PATH');
     const RFPAutomation = "AutomationRFP"
     let newRfpNameTemp;
     const createNewRfpName = () => {

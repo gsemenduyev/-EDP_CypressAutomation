@@ -14,7 +14,6 @@ const gmail = require("gmail-tester-extended");
 require('dotenv').config()
 
 async function saveGmailUniqDates(credentialsPath, tokenPath, dateFilePath) {
-  //const gmailInfoFilePath = 'cypress/fixtures/gmail-data/gmail-info/arfp-emails-dates.json';
   const gmailInfoFilePath = path.dirname(dateFilePath);
   if (!fs.existsSync(gmailInfoFilePath)) {
     fs.mkdirSync(gmailInfoFilePath);
@@ -35,6 +34,9 @@ async function saveGmailUniqDates(credentialsPath, tokenPath, dateFilePath) {
       $emails.forEach(($email) => {
         dateList.push($email.date);
       });
+      fs.writeFileSync(dateFilePath, JSON.stringify({ uniqDatesList: dateList }, null, 2));
+    } else if ($emails.length < 1) {
+      dateList.push("Gmail inbox is empty");
       fs.writeFileSync(dateFilePath, JSON.stringify({ uniqDatesList: dateList }, null, 2));
     }
     return dateList;
@@ -70,6 +72,11 @@ async function setupNodeEvents(cypressOn, config) {
   // Refreshes gmail access token for Production, UAT, QA environments
   let refreshAccessToken = true;
   on('before:browser:launch', () => {
+
+    if (!fs.existsSync(config.env.NEW_RFP_NAME_PATH)) {
+      fs.writeFileSync(config.env.NEW_RFP_NAME_PATH, '[]');
+    };
+
     if (config.env.ENV === 'Production' && refreshAccessToken) {
       refreshGmailTokenSaveUniqDates(
         config.env.ARFP_PROD.CREDENTIALS_FILE,
@@ -79,7 +86,6 @@ async function setupNodeEvents(cypressOn, config) {
         config.env.DATE_FILE.ARFP,
         config.env.DATE_FILE.SSPHERE
       );
-      Promise.all([arfpTokenPromise, ssphereTokenPromise, arfpDatePromise, ssphereDatePromise])
     } else if (config.env.ENV === 'UAT' && refreshAccessToken) {
       refreshGmailTokenSaveUniqDates(
         config.env.ARFP_UAT.CREDENTIALS_FILE,
@@ -223,6 +229,10 @@ module.exports = defineConfig({
       ARFP: "cypress/fixtures/gmail-data/gmail-info/arfp-emails-dates.json",
       SSPHERE: "cypress/fixtures/gmail-data/gmail-info/ssphere-emails-dates.json"
     },
+    GMAIL_HTML_PATH: "cypress/fixtures/gmail-data/gmail-info/gmail-body.html",
+    GMAIL_TXT_PATH: "cypress/fixtures/gmail-data/gmail-info/gmail-body.txt",
+    GMAIL_HTML_UPDATED_PATH: "cypress/fixtures/gmail-data/gmail-info/gmail-body-updated.html",
+    NEW_RFP_NAME_PATH: "cypress/fixtures/agencyRFP/new-frp-name.json",
     ARFP_PROD: {
       CREDENTIALS_FILE: "cypress/fixtures/gmail-data/client-secrets/uat-environment/credentials-arfp.testprod.json",
       TOKEN_FILE: "cypress/fixtures/gmail-data/client-secrets/uat-environment/token-arfp.testprod.json",

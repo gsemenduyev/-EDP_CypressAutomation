@@ -1,4 +1,4 @@
-@ARFP @WIP
+@ARFP
 Feature: Validate Agency RFP version number
 
     Feature Description:

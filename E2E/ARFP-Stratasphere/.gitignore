@@ -10,3 +10,5 @@ cypress/downloads/Linear response detail.xlsx
 cypress/fixtures/environment/*.json
 cypress/fixtures/gmail-data/client-secrets/qa-environment/*.json
 cypress/fixtures/gmail-data/gmail-info/*
+cypress/fixtures/agencyRFP/new-frp-name.json
+/cypress/fixtures/agencyRFP/new-frp-name.json

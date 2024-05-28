@@ -71,11 +71,25 @@ Cypress.on('uncaught:exception', (err, runnable) => {
     return false
 });
 
-Cypress.Commands.add('check_gmail_inbox', (credentialsFilePath, tokenFilePath) => {
-    const dateFilePath = 'cypress/fixtures/gmail-data/gmail-info/emails-dates.json';
-    cy.writeFile(dateFilePath, {})
-    cy.readFile(dateFilePath).then(($data) => {
-        const dateList = $data.uniqDatesList || [];
+Cypress.Commands.add('txt_file_to_html', (txtFile, htmlFile) => {
+    cy.readFile(txtFile)
+        .then((content) => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(content, 'text/html');
+            const newDiv = Cypress.$('<div id="file-content"></div>');
+            const lines = content.split('\n');
+            lines.forEach((line) => {
+                newDiv.append(line);
+                newDiv.append('<br>');
+            });
+            cy.writeFile(htmlFile, newDiv.prop('outerHTML'));
+        });
+})
+
+Cypress.Commands.add('check_gmail_inbox', (datesFilePath, credentialsFilePath, tokenFilePath) => {
+    cy.writeFile(datesFilePath, {})
+    cy.readFile(datesFilePath).then(($data) => {
+        const uniqDatesList = $data.uniqDatesList || [];
         cy.task("gmail:get-messages", {
             credentials: credentialsFilePath,
             token: tokenFilePath,
@@ -85,21 +99,23 @@ Cypress.Commands.add('check_gmail_inbox', (credentialsFilePath, tokenFilePath) =
             } else {
                 console.log($emails)
                 $emails.forEach(($email) => {
-                    dateList.push($email.date);
+                    uniqDatesList.push($email.date);
                 })
-                cy.writeFile(dateFilePath, JSON.stringify({ dateList }));
+                cy.writeFile(datesFilePath, JSON.stringify({ uniqDatesList }));
             };
         });
     });
 });
 
-Cypress.Commands.add('wait_for_gmail', (
+Cypress.Commands.add('get_gmail', (
+    datesFilePath,
     credentialsFilePath,
     tokenFilePath,
     from,
     subject,
     attempts,
-    msecInterval) => {
+    msecInterval
+) => {
     let index = 0;
     let endIndex = attempts;
     const checkEmailExists = () => {
@@ -112,22 +128,22 @@ Cypress.Commands.add('wait_for_gmail', (
                 include_body: true,
             },
         }).then(($emails) => {
-            cy.fixture('gmail-data/gmail-info/emails-dates.json').then((jsonData) => {
+            cy.fixture(datesFilePath).then((jsonData) => {
                 if ($emails.length < 1 && index < endIndex) {
                     index++;
-                    cy.log(`Waiting ${(msecInterval / 10000 * index).toFixed(1)} minutes for ${subject} gmail`);
+                    cy.log(`Waiting ${(msecInterval * index / 60000).toFixed(2)} minutes for ${subject} gmail`);
                     cy.wait(msecInterval)
                     checkEmailExists()
                 } else if ($emails.length > 0) {
-                    if (!jsonData.dateList.includes($emails[0].date)) {
+                    if (!jsonData.uniqDatesList.includes($emails[0].date)) {
                         console.log($emails[0]);
                         index == endIndex;
-                        cy.writeFile('cypress/fixtures/gmail-data/gmail-info/gmail-body.html', $emails[0].body.html);
-                        cy.writeFile('cypress/fixtures/gmail-data/gmail-info/gmail-body.txt', $emails[0].body.text);
-                        cy.check_gmail_inbox(credentialsFilePath, tokenFilePath);
+                        cy.writeFile(Cypress.env('GMAIL_HTML_PATH'), $emails[0].body.html);
+                        cy.writeFile(Cypress.env('GMAIL_TXT_PATH'), $emails[0].body.text);
+                        cy.check_gmail_inbox('cypress/fixtures/' + datesFilePath, credentialsFilePath, tokenFilePath);
                     } else if (index < endIndex) {
                         index++;
-                        cy.log(`Waiting ${(msecInterval / 10000 * index).toFixed(1)} minutes for ${subject} gmail`);
+                        cy.log(`Waiting ${(msecInterval * index / 60000).toFixed(2)} minutes for ${subject} gmail`)
                         cy.wait(msecInterval)
                         checkEmailExists();
                     }

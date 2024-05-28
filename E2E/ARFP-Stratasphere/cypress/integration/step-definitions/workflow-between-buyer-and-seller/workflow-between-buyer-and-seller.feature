@@ -30,7 +30,7 @@ Feature: Workflow between buyer and seller
     * Logout Agency RFP
 
   Scenario: Seller validates the email from buyer (WBBS)
-    * Search for 'Stratasphere' user in Mailinator
+    * Search for 'Stratasphere' user email
     * Validate email for New Rate Request
 
   Scenario: Seller Redirects from Mailinator to Stratasphere and Revise the Buy Rate (WBBS)
