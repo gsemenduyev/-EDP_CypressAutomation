@@ -495,7 +495,7 @@ Given('Search for {string} user email', string => {
                 tokenFile,
                 noReplStrataEmail,
                 emailSubject,
-                120000,
+                180,
                 1000
             );
         });

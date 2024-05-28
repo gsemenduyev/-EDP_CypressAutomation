@@ -115,6 +115,7 @@ function request_password_gmail_user() {
             centralLoginPage.emailSendText().should('include.text', 'E-mail successfully sent');
         };
     });
+    cy.screenshot()
 };
 
 function forgot_password_email_mailinator_user() {
@@ -204,7 +205,7 @@ function forgot_password_email_gmail_user() {
         Cypress.env('ARFP_TOKEN_FILE'),
         envUtils.getNoReplStrataEmail(),
         'Reset your password',
-        120000,
+        180,
         1000
     );
 };
@@ -271,6 +272,7 @@ function set_password_mailinator_user(password) {
 
 function set_password_gmail_user(password) {
     cy.visit(Cypress.env('GMAIL_HTML_PATH'));
+    cy.screenshot();
     gmailBodyPage.arfpResetPswButton().invoke('attr', 'target', '_parent').click({ force: true });
     let agencyPassword;
     cy.dataSession('startingRfpUrl').then(($startingRfpUrl) => {
