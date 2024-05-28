@@ -91,11 +91,11 @@ class EnvUtils {
     getMailinatorUrl() {
         return envProperties.mailinatorUrl;
     };
-    getNoReplStrataSsEmail() {
-        return envProperties.noReplStrataSsEmail;
+    getNoReplStrataEmail() {
+        return envProperties.noReplStrataEmail;
     };
-    getNoReplStrataArfpEmail() {
-        return envProperties.noReplStrataArfpEmail;
+    getNoReplBounceStrataEmail() {
+        return envProperties.noReplBounceStrataEmail;
     };
 }
 export default EnvUtils;

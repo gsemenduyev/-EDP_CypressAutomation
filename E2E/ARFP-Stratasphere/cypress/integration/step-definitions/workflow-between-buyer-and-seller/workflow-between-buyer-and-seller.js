@@ -38,8 +38,6 @@ const centralLoginPage = new CentralLoginPage;
 const FILE_NAME = 'stores/TEST Dallas RTG_IMP.xml';
 const SELLER_REVISION_RATE = '8';
 const BUYER_REVISION_RATE = '$ 5.00';
-const SSPHERE_EMAIL_DATES = 'gmail-data/gmail-info/ssphere-emails-dates.json';
-const ARFP_EMAIL_DATES = 'gmail-data/gmail-info/arfp-emails-dates.json';
 
 let newRfpParam;
 let sellerXml;
@@ -470,7 +468,7 @@ Given('Search for {string} user email', string => {
         let noReplStrataEmail;
         cy.dataSession('newRfpName').then(newRfpName => {
             if (string === 'Stratasphere') {
-                emailDates = SSPHERE_EMAIL_DATES;
+                emailDates = Cypress.env('SSPHERE_GMAIL_DATES');
                 credentialsFile = Cypress.env('SSPHERE_CREDENTIALS_FILE');
                 tokenFile = Cypress.env('SSPHERE_TOKEN_FILE');
                 emailSubject =
@@ -479,9 +477,9 @@ Given('Search for {string} user email', string => {
                 ${envUtils.getAgencyUsername().split(".")[0]} 
                 ${envUtils.getAgencyUsername().split(".")[1].split("@")[0]} at 
                 ${newRfpParam.agency}`;
-                noReplStrataEmail = envUtils.getNoReplStrataSsEmail();
+                noReplStrataEmail = envUtils.getNoReplStrataEmail();
             } else if (string === 'AgencyRFP') {
-                emailDates = ARFP_EMAIL_DATES;
+                emailDates = Cypress.env('ARFP_GMAIL_DATES');
                 credentialsFile = Cypress.env('ARFP_CREDENTIALS_FILE');
                 tokenFile = Cypress.env('ARFP_TOKEN_FILE');
                 emailSubject =
@@ -489,7 +487,7 @@ Given('Search for {string} user email', string => {
                 ${envUtils.getSsphereUsername().split(".")[0]} 
                 ${envUtils.getSsphereUsername().split(".")[1].split("@")[0]} at 
                 ${newRfpParam.vendor}`;
-                noReplStrataEmail = envUtils.getNoReplStrataArfpEmail();
+                noReplStrataEmail = envUtils.getNoReplBounceStrataEmail();
             }
             cy.get_gmail(
                 emailDates,

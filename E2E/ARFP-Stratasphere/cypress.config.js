@@ -55,8 +55,8 @@ async function refreshGmailTokenSaveUniqDates(
   ssphereDateFile) {
   const arfpTokenPromise = gmailTester.refresh_access_token(arfpCredentialsFile, arfpTokenFile);
   const ssphereTokenPromise = gmailTester.refresh_access_token(ssphereCredentialsFile, ssphereTokenFile);
-  const arfpDatePromise = saveGmailUniqDates(arfpCredentialsFile, arfpTokenFile, arfpDateFile)
-  const ssphereDatePromise = saveGmailUniqDates(ssphereCredentialsFile, ssphereTokenFile, ssphereDateFile)
+  const arfpDatePromise = saveGmailUniqDates(arfpCredentialsFile, arfpTokenFile, "cypress/fixtures/" + arfpDateFile)
+  const ssphereDatePromise = saveGmailUniqDates(ssphereCredentialsFile, ssphereTokenFile, "cypress/fixtures/" + ssphereDateFile)
   Promise.all([arfpTokenPromise, ssphereTokenPromise, arfpDatePromise, ssphereDatePromise])
 }
 
@@ -83,8 +83,8 @@ async function setupNodeEvents(cypressOn, config) {
         config.env.ARFP_PROD.TOKEN_FILE,
         config.env.SSPHERE_PROD.CREDENTIALS_FILE,
         config.env.SSPHERE_PROD.TOKEN_FILE,
-        config.env.DATE_FILE.ARFP,
-        config.env.DATE_FILE.SSPHERE
+        config.env.ARFP_GMAIL_DATES,
+        config.env.SSPHERE_GMAIL_DATES
       );
     } else if (config.env.ENV === 'UAT' && refreshAccessToken) {
       refreshGmailTokenSaveUniqDates(
@@ -92,8 +92,8 @@ async function setupNodeEvents(cypressOn, config) {
         config.env.ARFP_UAT.TOKEN_FILE,
         config.env.SSPHERE_UAT.CREDENTIALS_FILE,
         config.env.SSPHERE_UAT.TOKEN_FILE,
-        config.env.DATE_FILE.ARFP,
-        config.env.DATE_FILE.SSPHERE
+        config.env.ARFP_GMAIL_DATES,
+        config.env.SSPHERE_GMAIL_DATES
 
       );
     } else if (refreshAccessToken) {
@@ -102,8 +102,8 @@ async function setupNodeEvents(cypressOn, config) {
         config.env.ARFP_QA.TOKEN_FILE,
         config.env.SSPHERE_QA.CREDENTIALS_FILE,
         config.env.SSPHERE_QA.TOKEN_FILE,
-        config.env.DATE_FILE.ARFP,
-        config.env.DATE_FILE.SSPHERE
+        config.env.ARFP_GMAIL_DATES,
+        config.env.SSPHERE_GMAIL_DATES
       );
     }
     refreshAccessToken = false;
@@ -225,13 +225,11 @@ module.exports = defineConfig({
     allureAddVideoOnPass: true,
     allureResultsPath: "cypress/videos/allure-results",
     //allureResultsPath: "cypress/reports/allure-results",
-    DATE_FILE: {
-      ARFP: "cypress/fixtures/gmail-data/gmail-info/arfp-emails-dates.json",
-      SSPHERE: "cypress/fixtures/gmail-data/gmail-info/ssphere-emails-dates.json"
-    },
     GMAIL_HTML_PATH: "cypress/fixtures/gmail-data/gmail-info/gmail-body.html",
     GMAIL_TXT_PATH: "cypress/fixtures/gmail-data/gmail-info/gmail-body.txt",
     GMAIL_HTML_UPDATED_PATH: "cypress/fixtures/gmail-data/gmail-info/gmail-body-updated.html",
+    ARFP_GMAIL_DATES: "gmail-data/gmail-info/arfp-emails-dates.json",
+    SSPHERE_GMAIL_DATES: "gmail-data/gmail-info/ssphere-emails-dates.json",
     NEW_RFP_NAME_PATH: "cypress/fixtures/agencyRFP/new-frp-name.json",
     ARFP_PROD: {
       CREDENTIALS_FILE: "cypress/fixtures/gmail-data/client-secrets/uat-environment/credentials-arfp.testprod.json",

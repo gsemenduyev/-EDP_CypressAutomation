@@ -19,7 +19,10 @@ class GmailBodyPage {
     };
     gmailHeader() {
         return cy.get('section');
-    }
+    };
+    arfpResetPswButton() {
+        return cy.get('a');
+    };
 
 }
 export default GmailBodyPage;
