@@ -119,7 +119,11 @@ Cypress.Commands.add('check_gmail_inbox', (datesFilePath, credentialsFilePath, t
 });
 
 /* 
-Access is Gmail and returns New Gmail. 
+Accesses Gmail and returns New Gmail. 
+Saves new Gmail email body in text and html files
+cypress\fixtures\gmail-data\gmail-info\gmail-body.txt
+and
+cypress\fixtures\gmail-data\gmail-info\gmail-body.html
 Saves unique dates.
 Currently, we are not able to delete Gmail emails through the API, so
 we are using unique Gmail dates to identify new emails in the Gmail Inbox

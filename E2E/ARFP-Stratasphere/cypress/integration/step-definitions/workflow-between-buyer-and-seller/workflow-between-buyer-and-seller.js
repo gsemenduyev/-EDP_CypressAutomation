@@ -563,7 +563,7 @@ Given('Redirect from email to Stratasphere', () => {
 
 // Validate Proposal Response Page
 Given('Validate Proposal Response Page', () => {
-    cy.title().should('contain', "Proposal");
+    cy.title().should('eq', "Proposal Response");
     sSphereProposalResponsePage.vendorName().should('include.text', newRfpParam.vendor.slice(0, 4));
     sSphereProposalResponsePage.mediaTypeName().should('include.text', newRfpParam.vendor.slice(5));
     cy.dataSession('newRfpName').then(newRfpName => {
