@@ -23,6 +23,17 @@ class GmailBodyPage {
     arfpResetPswButton() {
         return cy.get('a');
     };
-
-}
+    negotiationGmailHeader() {
+        return cy.get('section > :nth-child(2)');
+    };
+    negotiationGmailAccept() {
+        return cy.get('a').eq(0);
+    };
+    negotiationGmailReject() {
+        return cy.get('a').eq(1);
+    };
+    negotiationGmailMakeChanges() {
+        return cy.get('a').eq(2);
+    };
+};
 export default GmailBodyPage;

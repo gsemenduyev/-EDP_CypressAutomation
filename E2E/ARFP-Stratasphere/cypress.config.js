@@ -124,14 +124,14 @@ async function setupNodeEvents(cypressOn, config) {
   });
 
 
-  on("task", {
-    "gmail:get-all-emails": async (args) => {
-      const credentialsPath = args.credentials;
-      const tokenPath = args.token;
-      const messages = await gmail.get_all_emails(credentialsPath, tokenPath, args.options);
-      return messages;
-    },
-  });
+  // on("task", {
+  //   "gmail:get-all-emails": async (args) => {
+  //     const credentialsPath = args.credentials;
+  //     const tokenPath = args.token;
+  //     const messages = await gmail.get_all_emails(credentialsPath, tokenPath, args.options);
+  //     return messages;
+  //   },
+  // });
 
   on("task", {
     "gmail:get-messages": async (args) => {
@@ -142,28 +142,28 @@ async function setupNodeEvents(cypressOn, config) {
     },
   });
 
-  on("task", {
-    "gmail:check-inbox": async (args) => {
-      const credentialsPath = args.credentials;
-      const tokenPath = args.token;
-      const subject = args.subject;
-      const from = args.from;
-      const to = args.to;
-      const wait_time_sec = args.wait_time_sec;
-      const max_wait_time_sec = args.max_wait_time_sec;
-      const messages = await gmail.check_inbox(
-        credentialsPath,
-        tokenPath,
-        subject,
-        from,
-        to,
-        wait_time_sec,
-        max_wait_time_sec,
-        args.options
-      );
-      return messages;
-    },
-  });
+  // on("task", {
+  //   "gmail:check-inbox": async (args) => {
+  //     const credentialsPath = args.credentials;
+  //     const tokenPath = args.token;
+  //     const subject = args.subject;
+  //     const from = args.from;
+  //     const to = args.to;
+  //     const wait_time_sec = args.wait_time_sec;
+  //     const max_wait_time_sec = args.max_wait_time_sec;
+  //     const messages = await gmail.check_inbox(
+  //       credentialsPath,
+  //       tokenPath,
+  //       subject,
+  //       from,
+  //       to,
+  //       wait_time_sec,
+  //       max_wait_time_sec,
+  //       args.options
+  //     );
+  //     return messages;
+  //   },
+  // });
 
   on('after:run', async (results) => {
     try {
@@ -232,8 +232,8 @@ module.exports = defineConfig({
     SSPHERE_GMAIL_DATES: "gmail-data/gmail-info/ssphere-emails-dates.json",
     NEW_RFP_NAME_PATH: "cypress/fixtures/agencyRFP/new-frp-name.json",
     ARFP_PROD: {
-      CREDENTIALS_FILE: "cypress/fixtures/gmail-data/client-secrets/uat-environment/credentials-arfp.testprod.json",
-      TOKEN_FILE: "cypress/fixtures/gmail-data/client-secrets/uat-environment/token-arfp.testprod.json",
+      CREDENTIALS_FILE: "cypress/fixtures/gmail-data/client-secrets/prod-environment/credentials-arfp.testprod.json",
+      TOKEN_FILE: "cypress/fixtures/gmail-data/client-secrets/prod-environment/token-arfp.testprod.json",
     },
     SSPHERE_PROD: {
       CREDENTIALS_FILE: "cypress/fixtures/gmail-data/client-secrets/prod-environment/credentials-ssphere.testprod.json",

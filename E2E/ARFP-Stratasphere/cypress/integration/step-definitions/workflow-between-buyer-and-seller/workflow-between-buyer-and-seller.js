@@ -17,8 +17,8 @@ import SearchRfpPage from "../../../support/page-objects/agency-pages/SearchRfpP
 import LinearProposalRfpPage from "../../../support/page-objects/agency-pages/LinearProposalRfpPage";
 import MailinatorHomePage from "../../../support/page-objects/mailinator-pages/MailinatorHomePage";
 import SSphereProposalResponsePage from "../../../support/page-objects/ssphere-pages/SSphereProposalResponsePage";
-import EnvUtils from "../../../support/utils/EnvUtils";
 import CentralLoginPage from "../../../support/page-objects/central-login-pages/CentralLoginPage";
+import EnvUtils from "../../../support/utils/EnvUtils";
 
 const agencyLoginPage = new AgencyLoginPage;
 const agencyBasePage = new AgencyBasePage;
@@ -32,8 +32,8 @@ const mailinatorHomePage = new MailinatorHomePage;
 const sSphereProposalResponsePage = new SSphereProposalResponsePage;
 const searchRfpPage = new SearchRfpPage;
 const rfpDetailsPage = new RfpDetailsPage;
-const envUtils = new EnvUtils;
 const centralLoginPage = new CentralLoginPage;
+const envUtils = new EnvUtils;
 
 const FILE_NAME = 'stores/TEST Dallas RTG_IMP.xml';
 const SELLER_REVISION_RATE = '8';
@@ -447,7 +447,7 @@ Given('Create Type1 Rate Request', () => {
     linearProposalRfpPage.myReteTexBoxValue().should('have.text', BUYER_REVISION_RATE);
 });
 
-// Search for Stratasphere, AgencyRFP user in Mailinator
+// Search for Stratasphere, AgencyRFP user email
 Given('Search for {string} user email', string => {
     if (envUtils.getSsphereUsername().endsWith('mailinator.com')) {
         cy.visit(envUtils.getMailinatorUrl());

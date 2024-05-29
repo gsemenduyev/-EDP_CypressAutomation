@@ -66,7 +66,7 @@ function request_password_mailinator_user() {
     cy.visit(envUtils.getAgencyUrl());
     cy.dataSession('startingRfpUrl').then(($startingRfpUrl) => {
         const sentArgs = {
-            agencyUsername: envProperties.agencyUsername,
+            agencyUsername: envProperties.agencyUsername.mailinator,
             agencyUrl: envUtils.getAgencyUrl(),
             startingRfpUrl: $startingRfpUrl
         };

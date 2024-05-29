@@ -68,18 +68,21 @@ Given('Test', () => {
     )
 });
 Given('User 1', () => {
-    cy.log("Hello - 2 " + Cypress.env('ARFP_CREDENTIALS_FILE'))
-    const emailAddress = "arfp.testqa@gmail.com";
 
-    // Split the email address into an array using the "." as the separator
-    const parts = emailAddress.split(".");
+    cy.readFile('cypress/fixtures/gmail-data/gmail-info/ssphere-emails-dates.json').its('uniqDatesList').should('contain', "2024-05-29T01:46:15.000Z");
 
-    // Extract the first part (arfp) and the second part (testqa)
-    const arfp = parts[0];
-    const testqa = parts[1];
+    // cy.log("Hello - 2 " + Cypress.env('ARFP_CREDENTIALS_FILE'))
+    // const emailAddress = "arfp.testqa@gmail.com";
 
-    // Output: "arfp"
-    cy.log("testqa:", envUtils.getSsphereUsername().split(".")[0]);
+    // // Split the email address into an array using the "." as the separator
+    // const parts = emailAddress.split(".");
+
+    // // Extract the first part (arfp) and the second part (testqa)
+    // const arfp = parts[0];
+    // const testqa = parts[1];
+
+    // // Output: "arfp"
+    // cy.log("testqa:", envUtils.getSsphereUsername().split(".")[0]);
 
 })
 

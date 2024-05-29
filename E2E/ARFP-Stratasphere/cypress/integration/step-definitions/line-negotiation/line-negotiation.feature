@@ -25,7 +25,6 @@ Feature: Line negotiation
     * Logout Agency RFP
 
   Scenario: Seller validates the email from buyer and Accepts the Buyer rate (LN)
-    * Search for 'Stratasphere' user email
     * "Accept" negotiation from email and verify user landed on Stratasphere page
 
   Scenario: Buyer received confirmation message for line negotiation Accepted and change the rate.
@@ -37,7 +36,6 @@ Feature: Line negotiation
     * Logout Agency RFP
 
   Scenario: Seller validates the email from buyer and Rejects the Buyer rate (LN)
-    * Search for 'Stratasphere' user email
     * "Reject" negotiation from email and verify user landed on Stratasphere page
 
   Scenario: Buyer received confirmation message for line negotiation Rejected and change the rate.
@@ -49,7 +47,6 @@ Feature: Line negotiation
     * Logout Agency RFP
 
   Scenario: Seller validates the email from buyer and Makes Changes to the Buyer rate (LN)
-    * Search for 'Stratasphere' user email
     * "Make Changes" negotiation from email and verify user landed on Stratasphere page
 
   Scenario: Buyer received confirmation message for line negotiation Make Changes.
