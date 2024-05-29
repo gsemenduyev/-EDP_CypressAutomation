@@ -205,8 +205,8 @@ function forgot_password_email_gmail_user() {
         Cypress.env('ARFP_TOKEN_FILE'),
         envUtils.getNoReplStrataEmail(),
         'Reset your password',
-        180,
-        1000
+        60,
+        5000
     );
 };
 

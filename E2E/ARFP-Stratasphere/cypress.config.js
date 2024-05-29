@@ -13,54 +13,7 @@ const delay = async (ms) => new Promise((res) => setTimeout(res, ms));
 const gmail = require("gmail-tester-extended");
 require('dotenv').config()
 
-async function saveGmailUniqDates(credentialsPath, tokenPath, dateFilePath) {
-  const gmailInfoFilePath = path.dirname(dateFilePath);
-  if (!fs.existsSync(gmailInfoFilePath)) {
-    fs.mkdirSync(gmailInfoFilePath);
-  };
-  fs.writeFileSync(dateFilePath, '{}');
-  let data;
-  try {
-    data = JSON.parse(fs.readFileSync(dateFilePath, 'utf8'));
-  } catch (err) {
-    console.error('Error reading file:', err);
-    data = { uniqDatesList: [] };
-  };
-
-  const dateList = data.uniqDatesList || [];
-  try {
-    const $emails = await gmail.get_messages(credentialsPath, tokenPath);
-    if ($emails && $emails.length > 0) {
-      $emails.forEach(($email) => {
-        dateList.push($email.date);
-      });
-      fs.writeFileSync(dateFilePath, JSON.stringify({ uniqDatesList: dateList }, null, 2));
-    } else if ($emails.length < 1) {
-      dateList.push("Gmail inbox is empty");
-      fs.writeFileSync(dateFilePath, JSON.stringify({ uniqDatesList: dateList }, null, 2));
-    }
-    return dateList;
-  } catch (err_1) {
-    console.error('Error getting messages or saving unique dates:', err_1);
-    throw err_1;
-  }
-}
-
-async function refreshGmailTokenSaveUniqDates(
-  arfpCredentialsFile,
-  arfpTokenFile,
-  ssphereCredentialsFile,
-  ssphereTokenFile,
-  arfpDateFile,
-  ssphereDateFile) {
-  const arfpTokenPromise = gmailTester.refresh_access_token(arfpCredentialsFile, arfpTokenFile);
-  const ssphereTokenPromise = gmailTester.refresh_access_token(ssphereCredentialsFile, ssphereTokenFile);
-  const arfpDatePromise = saveGmailUniqDates(arfpCredentialsFile, arfpTokenFile, "cypress/fixtures/" + arfpDateFile)
-  const ssphereDatePromise = saveGmailUniqDates(ssphereCredentialsFile, ssphereTokenFile, "cypress/fixtures/" + ssphereDateFile)
-  Promise.all([arfpTokenPromise, ssphereTokenPromise, arfpDatePromise, ssphereDatePromise])
-}
-
-
+// Setup Node Events
 async function setupNodeEvents(cypressOn, config) {
   const on = require('cypress-on-fix')(cypressOn)
   await addCucumberPreprocessorPlugin(on, config, { omitAfterRunHandler: true, });
@@ -69,14 +22,19 @@ async function setupNodeEvents(cypressOn, config) {
   registerDataSession(on, config);
   new TestRailReporter(on, config).register();
 
-  // Refreshes gmail access token for Production, UAT, QA environments
   let refreshAccessToken = true;
   on('before:browser:launch', () => {
 
+    // This If block creates cypress\fixtures\agencyRFP\new-frp-name.json file before:browser:launch 
     if (!fs.existsSync(config.env.NEW_RFP_NAME_PATH)) {
       fs.writeFileSync(config.env.NEW_RFP_NAME_PATH, '[]');
     };
 
+    /*
+       This if block calls functions to refresh the Gmail token and save unique dates.
+       Currently, we are not able to delete Gmail emails through the API, so
+       we are using unique Gmail dates to identify new emails in the Gmail Inbox.
+    */
     if (config.env.ENV === 'Production' && refreshAccessToken) {
       refreshGmailTokenSaveUniqDates(
         config.env.ARFP_PROD.CREDENTIALS_FILE,
@@ -94,7 +52,6 @@ async function setupNodeEvents(cypressOn, config) {
         config.env.SSPHERE_UAT.TOKEN_FILE,
         config.env.ARFP_GMAIL_DATES,
         config.env.SSPHERE_GMAIL_DATES
-
       );
     } else if (refreshAccessToken) {
       refreshGmailTokenSaveUniqDates(
@@ -123,16 +80,7 @@ async function setupNodeEvents(cypressOn, config) {
 
   });
 
-
-  // on("task", {
-  //   "gmail:get-all-emails": async (args) => {
-  //     const credentialsPath = args.credentials;
-  //     const tokenPath = args.token;
-  //     const messages = await gmail.get_all_emails(credentialsPath, tokenPath, args.options);
-  //     return messages;
-  //   },
-  // });
-
+  // Checks Gmail inbox and returns all emails
   on("task", {
     "gmail:get-messages": async (args) => {
       const credentialsPath = args.credentials;
@@ -142,29 +90,7 @@ async function setupNodeEvents(cypressOn, config) {
     },
   });
 
-  // on("task", {
-  //   "gmail:check-inbox": async (args) => {
-  //     const credentialsPath = args.credentials;
-  //     const tokenPath = args.token;
-  //     const subject = args.subject;
-  //     const from = args.from;
-  //     const to = args.to;
-  //     const wait_time_sec = args.wait_time_sec;
-  //     const max_wait_time_sec = args.max_wait_time_sec;
-  //     const messages = await gmail.check_inbox(
-  //       credentialsPath,
-  //       tokenPath,
-  //       subject,
-  //       from,
-  //       to,
-  //       wait_time_sec,
-  //       max_wait_time_sec,
-  //       args.options
-  //     );
-  //     return messages;
-  //   },
-  // });
-
+  // Saves run info into cypress/reports/run-info/run-env.json later it's used for HTML reports
   on('after:run', async (results) => {
     try {
       fs.readFileSync(RUN_ENV_FILE_PATH, { encoding: 'utf8', flag: 'r' });
@@ -205,7 +131,64 @@ async function setupNodeEvents(cypressOn, config) {
     }
   });
   return config;
+};
+
+/*
+Saves unique dates.
+Currently, we are not able to delete Gmail emails through the API, so
+we are using unique Gmail dates to identify new emails in the Gmail Inbox.
+*/
+async function saveGmailUniqDates(credentialsPath, tokenPath, dateFilePath) {
+  const gmailInfoFilePath = path.dirname(dateFilePath);
+  if (!fs.existsSync(gmailInfoFilePath)) {
+    fs.mkdirSync(gmailInfoFilePath);
+  };
+  fs.writeFileSync(dateFilePath, '{}');
+  let data;
+  try {
+    data = JSON.parse(fs.readFileSync(dateFilePath, 'utf8'));
+  } catch (err) {
+    console.error('Error reading file:', err);
+    data = { uniqDatesList: [] };
+  };
+
+  const dateList = data.uniqDatesList || [];
+  try {
+    const $emails = await gmail.get_messages(credentialsPath, tokenPath);
+    if ($emails && $emails.length > 0) {
+      $emails.forEach(($email) => {
+        dateList.push($email.date);
+      });
+      fs.writeFileSync(dateFilePath, JSON.stringify({ uniqDatesList: dateList }, null, 2));
+    } else if ($emails.length < 1) {
+      dateList.push("Gmail inbox is empty");
+      fs.writeFileSync(dateFilePath, JSON.stringify({ uniqDatesList: dateList }, null, 2));
+    }
+    return dateList;
+  } catch (err_1) {
+    console.error('Error getting messages or saving unique dates:', err_1);
+    throw err_1;
+  }
 }
+
+/*
+Refreshes the Gmail token and saves unique dates.
+Currently, we are not able to delete Gmail emails through the API, so
+we are using unique Gmail dates to identify new emails in the Gmail Inbox.
+*/
+async function refreshGmailTokenSaveUniqDates(
+  arfpCredentialsFile,
+  arfpTokenFile,
+  ssphereCredentialsFile,
+  ssphereTokenFile,
+  arfpDateFile,
+  ssphereDateFile) {
+  const arfpTokenPromise = gmailTester.refresh_access_token(arfpCredentialsFile, arfpTokenFile);
+  const ssphereTokenPromise = gmailTester.refresh_access_token(ssphereCredentialsFile, ssphereTokenFile);
+  const arfpDatePromise = saveGmailUniqDates(arfpCredentialsFile, arfpTokenFile, "cypress/fixtures/" + arfpDateFile)
+  const ssphereDatePromise = saveGmailUniqDates(ssphereCredentialsFile, ssphereTokenFile, "cypress/fixtures/" + ssphereDateFile)
+  Promise.all([arfpTokenPromise, ssphereTokenPromise, arfpDatePromise, ssphereDatePromise])
+};
 
 module.exports = defineConfig({
   viewportWidth: 1920,

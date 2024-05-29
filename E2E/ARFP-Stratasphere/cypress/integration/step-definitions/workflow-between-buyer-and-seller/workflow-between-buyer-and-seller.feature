@@ -33,8 +33,8 @@ Feature: Workflow between buyer and seller
     * Search for 'Stratasphere' user email
     * Validate email for New Rate Request
 
-  Scenario: Seller Redirects from Mailinator to Stratasphere and Revise the Buy Rate (WBBS)
-    * Redirect from Mailinator to Stratasphere
+  Scenario: Seller Redirects from Email to Stratasphere and Revise the Buy Rate (WBBS)
+    * Redirect from email to Stratasphere
     * Validate Proposal Response Page
     * Validate "Proposal Details" Page in Stratasphere
     * Revise the Buy Rate

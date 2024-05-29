@@ -71,6 +71,9 @@ Cypress.on('uncaught:exception', (err, runnable) => {
     return false
 });
 
+/*
+Converts text file to simple html file.
+*/
 Cypress.Commands.add('txt_file_to_html', (txtFile, htmlFile) => {
     cy.readFile(txtFile)
         .then((content) => {
@@ -84,8 +87,16 @@ Cypress.Commands.add('txt_file_to_html', (txtFile, htmlFile) => {
             });
             cy.writeFile(htmlFile, newDiv.prop('outerHTML'));
         });
-})
+});
 
+/* 
+Saves unique dates.
+Currently, we are not able to delete Gmail emails through the API, so
+we are using unique Gmail dates to identify new emails in the Gmail Inbox
+cypress\fixtures\gmail-data\gmail-info\arfp-emails-dates.json
+or
+cypress\fixtures\gmail-data\gmail-info\ssphere-emails-dates.json
+*/
 Cypress.Commands.add('check_gmail_inbox', (datesFilePath, credentialsFilePath, tokenFilePath) => {
     cy.writeFile(datesFilePath, {})
     cy.readFile(datesFilePath).then(($data) => {
@@ -107,24 +118,15 @@ Cypress.Commands.add('check_gmail_inbox', (datesFilePath, credentialsFilePath, t
     });
 });
 
-
-// Cypress.Commands.add('append_unique_date', (filePath, newDate) => {
-//     cy.readFile(filePath, 'utf8')
-//         .then((jsonData) => {
-//             // Get the existing unique dates list
-//             const existingUniqueDates = new Set(jsonData.uniqDatesList);
-
-//             // Add the new date to the unique dates list
-//             existingUniqueDates.add(newDate);
-
-//             // Update the JSON data with the new unique dates list
-//             jsonData.uniqDatesList = Array.from(existingUniqueDates);
-
-//             // Write the updated JSON data back to the file
-//             cy.writeFile(filePath, jsonData);
-//         });
-// });
-
+/* 
+Access is Gmail and returns New Gmail. 
+Saves unique dates.
+Currently, we are not able to delete Gmail emails through the API, so
+we are using unique Gmail dates to identify new emails in the Gmail Inbox
+cypress\fixtures\gmail-data\gmail-info\arfp-emails-dates.json
+or
+cypress\fixtures\gmail-data\gmail-info\ssphere-emails-dates.json
+*/
 Cypress.Commands.add('get_gmail', (
     datesFilePath,
     credentialsFilePath,
@@ -157,74 +159,20 @@ Cypress.Commands.add('get_gmail', (
                             cy.readFile('cypress/fixtures/' + datesFilePath).its('uniqDatesList').should('not.contain', emailDate);
                             cy.writeFile(Cypress.env('GMAIL_HTML_PATH'), $emails[0].body.html);
                             cy.writeFile(Cypress.env('GMAIL_TXT_PATH'), $emails[0].body.text);
-                            // cy.append_unique_date('cypress/fixtures/' + datesFilePath, emailDate);
                             cy.check_gmail_inbox('cypress/fixtures/' + datesFilePath, credentialsFilePath, tokenFilePath);
                             cy.readFile('cypress/fixtures/' + datesFilePath).its('uniqDatesList').should('contain', emailDate);
                         } else if (index < endIndex) {
                             index++;
                             cy.log(`Waiting ${(msecInterval * index / 60000).toFixed(2)} minutes for ${subject} gmail`);
                             cy.wait(msecInterval).then(checkEmailExists);
-                        }
+                        };
                     });
             } else if (index < endIndex) {
                 index++;
                 cy.log(`Waiting ${(msecInterval * index / 60000).toFixed(2)} minutes for ${subject} gmail`);
                 cy.wait(msecInterval).then(checkEmailExists);
-            }
+            };
         });
     };
-
     checkEmailExists();
 });
-
-// Cypress.Commands.add('get_gmail', (
-//     datesFilePath,
-//     credentialsFilePath,
-//     tokenFilePath,
-//     from,
-//     subject,
-//     attempts,
-//     msecInterval
-// ) => {
-//     let index = 0;
-//     let endIndex = attempts;
-//     const checkEmailExists = () => {
-//         cy.task("gmail:get-messages", {
-//             credentials: credentialsFilePath,
-//             token: tokenFilePath,
-//             options: {
-//                 from: from,
-//                 subject: subject,
-//                 include_body: true,
-//             },
-//         }).then(($emails) => {
-//             if ($emails.length > 0) {
-//                 cy.fixture(datesFilePath, 'utf8').then((jsonData) => {
-//                     const emailDate = ($emails[0].date || '').toString().trim();
-//                     const uniqDatesSet = new Set(jsonData.uniqDatesList);
-//                     const isNewDate = !uniqDatesSet.has(emailDate);
-//                     cy.log("Email Date - " + emailDate);
-//                     if (isNewDate) {
-//                         // cy.readFile('cypress/fixtures/' + datesFilePath).its('uniqDatesList').should('not.contain', emailDate);
-//                         cy.writeFile(Cypress.env('GMAIL_HTML_PATH'), $emails[0].body.html);
-//                         cy.writeFile(Cypress.env('GMAIL_TXT_PATH'), $emails[0].body.text);
-//                         cy.append_unique_date('cypress/fixtures/' + datesFilePath, emailDate)
-//                         cy.readFile('cypress/fixtures/' + datesFilePath).its('uniqDatesList').should('contain', emailDate);
-//                         // cy.check_gmail_inbox('cypress/fixtures/' + datesFilePath, credentialsFilePath, tokenFilePath);
-//                     } else if (index < endIndex) {
-//                         index++;
-//                         cy.log(`Waiting ${(msecInterval * index / 60000).toFixed(2)} minutes for ${subject} gmail`);
-//                         cy.wait(msecInterval);
-//                         checkEmailExists();
-//                     }
-//                 });
-//             } else if (index < endIndex) {
-//                 index++;
-//                 cy.log(`Waiting ${(msecInterval * index / 60000).toFixed(2)} minutes for ${subject} gmail`);
-//                 cy.wait(msecInterval);
-//                 checkEmailExists();
-//             };
-//         });
-//     }
-//     checkEmailExists();
-// });

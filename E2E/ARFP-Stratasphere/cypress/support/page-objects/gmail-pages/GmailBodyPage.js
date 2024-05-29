@@ -35,5 +35,8 @@ class GmailBodyPage {
     negotiationGmailMakeChanges() {
         return cy.get('a').eq(2);
     };
+    newRequestRedirectionLink() {
+        return cy.get('a').eq(0);
+    };
 };
 export default GmailBodyPage;
