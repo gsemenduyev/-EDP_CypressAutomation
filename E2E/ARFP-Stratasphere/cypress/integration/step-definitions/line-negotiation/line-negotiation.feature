@@ -1,4 +1,4 @@
-@ARFP
+@ARFP @WIP
 Feature: Line negotiation
 
   Feature Description: Negotiation workflow between Buyer and Seller
