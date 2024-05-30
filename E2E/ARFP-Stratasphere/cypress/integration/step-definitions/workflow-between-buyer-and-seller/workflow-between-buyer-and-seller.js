@@ -500,7 +500,7 @@ Given('Search for {string} user email', string => {
                 noReplStrataEmail,
                 emailSubject,
                 60,
-                5000
+                10000
             );
         });
     };
@@ -544,7 +544,7 @@ Given('Validate email for New Rate Request', () => {
                 ${envUtils.getAgencyUsername().split(".")[1].split("@")[0]} at 
                 ${newRfpParam.agency}`,
                 60,
-                5000
+                10000
             );
         }
     });

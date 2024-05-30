@@ -218,7 +218,7 @@ function forgot_password_email_gmail_user() {
         from,
         emailSubject,
         60,
-        5000
+        10000
     );
 };
 

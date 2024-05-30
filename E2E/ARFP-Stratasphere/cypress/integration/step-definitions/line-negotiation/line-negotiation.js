@@ -118,7 +118,7 @@ function negotiate_from_gmail(newRfpName, negotiate) {
         ${envUtils.getAgencyUsername().split(".")[1].split("@")[0]} at 
         ${newRfpParam.agency}`,
         60,
-        5000
+        10000
     );
     cy.visit(Cypress.env('GMAIL_HTML_PATH'));
     cy.screenshot();
