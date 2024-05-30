@@ -12,10 +12,21 @@ def QA_ARFP_GMAIL_TOKEN_ID = '35f198df-dd05-428b-aee4-791ae062328e';
 def QA_SSPHERE_GMAIL_CREDENTIALS_ID = '9bc10f95-6d44-4f34-80fe-e76bb167b9a8';
 def QA_SSPHERE_GMAIL_TOKEN_ID = 'bed5c51f-2bbd-404a-899e-3dc864d4442f';
 
+def PROD_ARFP_GMAIL_CREDENTIALS_ID = '8b27df77-7989-498b-9a59-9e3b417777e6';
+def PROD_ARFP_GMAIL_TOKEN_ID = '344cddea-4dd2-4626-8901-01172620eb96';
+def PROD_SSPHERE_GMAIL_CREDENTIALS_ID = 'f12eeccf-0cbc-4732-86b9-4b7699c45cbd';
+def PROD_SSPHERE_GMAIL_TOKEN_ID = '8ab00118-f24e-4d98-90cc-7d1b56524bea';
+
 def QA_ARFP_GMAIL_CREDENTIALS_DESTINATION = 'E2E/ARFP-Stratasphere/cypress/fixtures/gmail-data/client-secrets/qa-environment/credentials-arfp.testqa.json';
 def QA_ARFP_GMAIL_TOKEN_DESTINATION = 'E2E/ARFP-Stratasphere/cypress/fixtures/gmail-data/client-secrets/qa-environment/token-arfp.testqa.json';
 def QA_SSPHERE_GMAIL_CREDENTIALS_DESTINATION = 'E2E/ARFP-Stratasphere/cypress/fixtures/gmail-data/client-secrets/qa-environment/credentials-ssphere.testqa.json';
 def QA_SSPHERE_GMAIL_TOKEN_DESTINATION = 'E2E/ARFP-Stratasphere/cypress/fixtures/gmail-data/client-secrets/qa-environment/token-ssphere.testqa.json';
+
+def PROD_ARFP_GMAIL_CREDENTIALS_DESTINATION = 'E2E/ARFP-Stratasphere/cypress/fixtures/gmail-data/client-secrets/prod-environment/credentials-arfp.testprod.json';
+def PROD_ARFP_GMAIL_TOKEN_DESTINATION = 'E2E/ARFP-Stratasphere/cypress/fixtures/gmail-data/client-secrets/prod-environment/token-arfp.testprod.json';
+def PROD_SSPHERE_GMAIL_CREDENTIALS_DESTINATION = 'E2E/ARFP-Stratasphere/cypress/fixtures/gmail-data/client-secrets/prod-environment/credentials-ssphere.testprod.json';
+def PROD_SSPHERE_GMAIL_TOKEN_DESTINATION = 'E2E/ARFP-Stratasphere/cypress/fixtures/gmail-data/client-secrets/prod-environment/token-ssphere.testprod.json';
+
 
 def PROD_CONFIG_FILE_DESTINATION = 'E2E/ARFP-Stratasphere/cypress/fixtures/environment/prod-param.json';
 def QA_CONFIG_FILE_DESTINATION = 'E2E/ARFP-Stratasphere/cypress/fixtures/environment/qa-param.json';
@@ -50,16 +61,24 @@ pipeline {
         stage('Config file setup'){
             steps {
                 script {
-                        // Copy paste environments.json file from Jenkins to current project
-                        inject_config_file(QA_CONFIG_FILE_ID, QA_CONFIG_FILE_DESTINATION);
-                        inject_config_file(UAT_CONFIG_FILE_ID, UAT_CONFIG_FILE_DESTINATION);
-                        inject_config_file(PROD_CONFIG_FILE_ID, PROD_CONFIG_FILE_DESTINATION);
 
+                    // Copy paste environments.json file from Jenkins to current project
+                    if (ENVIRONMENT === 'Production'){
+                        inject_config_file(PROD_CONFIG_FILE_ID, PROD_CONFIG_FILE_DESTINATION);
+                        inject_config_file(PROD_ARFP_GMAIL_CREDENTIALS_ID, PROD_ARFP_GMAIL_CREDENTIALS_DESTINATION);
+                        inject_config_file(PROD_ARFP_GMAIL_TOKEN_ID, PROD_ARFP_GMAIL_TOKEN_DESTINATION);
+                        inject_config_file(PROD_SSPHERE_GMAIL_CREDENTIALS_ID, PROD_SSPHERE_GMAIL_CREDENTIALS_DESTINATION);
+                        inject_config_file(PROD_SSPHERE_GMAIL_TOKEN_ID , PROD_SSPHERE_GMAIL_TOKEN_DESTINATION);
+                    } else if(ENVIRONMENT === 'QA'){
+                        inject_config_file(QA_CONFIG_FILE_ID, QA_CONFIG_FILE_DESTINATION);
                         inject_config_file(QA_ARFP_GMAIL_CREDENTIALS_ID, QA_ARFP_GMAIL_CREDENTIALS_DESTINATION);
                         inject_config_file(QA_ARFP_GMAIL_TOKEN_ID, QA_ARFP_GMAIL_TOKEN_DESTINATION);
                         inject_config_file(QA_SSPHERE_GMAIL_CREDENTIALS_ID, QA_SSPHERE_GMAIL_CREDENTIALS_DESTINATION);
                         inject_config_file(QA_SSPHERE_GMAIL_TOKEN_ID , QA_SSPHERE_GMAIL_TOKEN_DESTINATION);
-       
+                    } else if (ENVIRONMENT === 'UAT'){
+                        inject_config_file(UAT_CONFIG_FILE_ID, UAT_CONFIG_FILE_DESTINATION);
+                    };
+    
                         // Copy paste Test Rail Credentials from Jenkins to current project
                         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'TestRail_GS', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME']])  {
                         def domain = "https://testrail-strata.freewheel.tv/testrail/";

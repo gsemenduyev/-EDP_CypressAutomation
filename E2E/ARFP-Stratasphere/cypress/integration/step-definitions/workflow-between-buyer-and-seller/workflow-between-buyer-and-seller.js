@@ -508,6 +508,11 @@ Given('Search for {string} user email', string => {
 Given('Validate email for New Rate Request', () => {
     cy.dataSession('newRfpName').then(newRfpName => {
         if (envUtils.getSsphereUsername().endsWith('mailinator.com')) {
+            cy.visit(envUtils.getMailinatorUrl());
+            cy.title().should('eq', 'Mailinator');
+            mailinatorHomePage.userSearchBox().clear();
+            mailinatorHomePage.userSearchBox().type(envUtils.getSsphereUsername());
+            mailinatorHomePage.goButton().click({ force: true });
             mailinatorHomePage.search_email('New Rate Request for ', newRfpName);
             mailinatorHomePage.version().should('have.text', '2');
             mailinatorHomePage.advertiser().should('have.text', newRfpParam.agency);
@@ -524,6 +529,7 @@ Given('Validate email for New Rate Request', () => {
                 });
             });
         } else if (envUtils.getSsphereUsername().endsWith('gmail.com')) {
+            cy.visit(envUtils.getSsphereUrl());
             cy.get_gmail(
                 Cypress.env('SSPHERE_GMAIL_DATES'),
                 Cypress.env('SSPHERE_CREDENTIALS_FILE'),
@@ -552,6 +558,7 @@ Given('Redirect from email to Stratasphere', () => {
         })
     } else if (envUtils.getSsphereUsername().endsWith('gmail.com')) {
         cy.visit(Cypress.env('GMAIL_HTML_PATH'));
+        cy.screenshot();
         gmailBodyPage.newRequestRedirectionLink().invoke('removeAttr', 'target').click();
     }
     sSphereBasePage.pageTitle().should('include.text', ' Login');
