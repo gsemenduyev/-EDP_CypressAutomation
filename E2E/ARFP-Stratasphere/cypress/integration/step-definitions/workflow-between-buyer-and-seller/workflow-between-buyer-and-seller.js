@@ -83,11 +83,13 @@ Given('Login to Agency RFP with {string} password', string => {
             centralLoginPage.loginNextButton().click();
             centralLoginPage.loginPassword().type(agencyPassword, { log: false });
             centralLoginPage.loginButton().click();
+            Cypress.env('CENTRAL_LOGIN_ONN', true);
         } else {
             agencyBasePage.pageTitle().should('have.text', 'Sign In');
             agencyLoginPage.usernameBox().type(envUtils.getAgencyUsername());
             agencyLoginPage.passwordBox().type(agencyPassword, { log: false });
             agencyLoginPage.loginButton().click();
+            Cypress.env('CENTRAL_LOGIN_ONN', false);
         };
     }).then(() => {
         cy.title().should('eq', 'Home - RFP');

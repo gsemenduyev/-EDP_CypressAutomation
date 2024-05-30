@@ -202,12 +202,18 @@ function forgot_password_email_mailinator_user() {
 };
 
 function forgot_password_email_gmail_user() {
+    let emailSubject;
+    if (Cypress.env('CENTRAL_LOGIN_ONN')) {
+        emailSubject = 'Reset your password';
+    } else if (!Cypress.env('CENTRAL_LOGIN_ONN')) {
+        emailSubject = 'Forgot Password for RFP';
+    };
     cy.get_gmail(
         Cypress.env('ARFP_GMAIL_DATES'),
         Cypress.env('ARFP_CREDENTIALS_FILE'),
         Cypress.env('ARFP_TOKEN_FILE'),
         envUtils.getNoReplStrataEmail(),
-        'Reset your password',
+        emailSubject,
         60,
         5000
     );
