@@ -3,13 +3,16 @@ import { Given } from "@badeball/cypress-cucumber-preprocessor";
 import MailinatorHomePage from "../../../support/page-objects/mailinator-pages/MailinatorHomePage";
 import CentralLoginPage from "../../../support/page-objects/central-login-pages/CentralLoginPage";
 import GmailBodyPage from "../../../support/page-objects/gmail-pages/GmailBodyPage";
+import AgencyLoginPage from '../../../support/page-objects/agency-pages/AgencyLoginPage';
 import EnvUtils from "../../../support/utils/EnvUtils";
 
 const mailinatorHomePage = new MailinatorHomePage;
 const centralLoginPage = new CentralLoginPage
 const gmailBodyPage = new GmailBodyPage;
+const agencyLoginPage = new AgencyLoginPage;
 
 const envUtils = new EnvUtils;
+
 const ENV = Cypress.env('ENV');
 const PASSWORD_RESET_MSG = 'Password has been reset';
 let envProperties;
