@@ -111,7 +111,7 @@ Cypress.Commands.add('check_gmail_inbox', (datesFilePath, credentialsFilePath, t
     cy.writeFile(datesFilePath, {})
     cy.readFile(datesFilePath).then(($data) => {
         const uniqDatesList = $data.uniqDatesList || [];
-        cy.task("gmail:get-messages", {
+        return cy.task("gmail:get-messages", {
             credentials: credentialsFilePath,
             token: tokenFilePath,
         }).then(($emails) => {
@@ -122,8 +122,8 @@ Cypress.Commands.add('check_gmail_inbox', (datesFilePath, credentialsFilePath, t
                 $emails.forEach(($email) => {
                     uniqDatesList.push($email.date);
                 })
-                cy.writeFile(datesFilePath, JSON.stringify({ uniqDatesList }));
-            };
+                return cy.writeFile(datesFilePath, JSON.stringify({ uniqDatesList }));
+            }
         });
     });
 });
