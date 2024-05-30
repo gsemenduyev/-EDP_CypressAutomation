@@ -63,19 +63,19 @@ pipeline {
                 script {
 
                     // Copy paste environments.json file from Jenkins to current project
-                    if (params.ENVIRONMENT === 'Production'){
+                    if (params.ENVIRONMENT == 'Production'){
                         inject_config_file(PROD_CONFIG_FILE_ID, PROD_CONFIG_FILE_DESTINATION);
                         inject_config_file(PROD_ARFP_GMAIL_CREDENTIALS_ID, PROD_ARFP_GMAIL_CREDENTIALS_DESTINATION);
                         inject_config_file(PROD_ARFP_GMAIL_TOKEN_ID, PROD_ARFP_GMAIL_TOKEN_DESTINATION);
                         inject_config_file(PROD_SSPHERE_GMAIL_CREDENTIALS_ID, PROD_SSPHERE_GMAIL_CREDENTIALS_DESTINATION);
                         inject_config_file(PROD_SSPHERE_GMAIL_TOKEN_ID , PROD_SSPHERE_GMAIL_TOKEN_DESTINATION);
-                    } else if(params.ENVIRONMENT === 'QA'){
+                    } else if(params.ENVIRONMENT == 'QA'){
                         inject_config_file(QA_CONFIG_FILE_ID, QA_CONFIG_FILE_DESTINATION);
                         inject_config_file(QA_ARFP_GMAIL_CREDENTIALS_ID, QA_ARFP_GMAIL_CREDENTIALS_DESTINATION);
                         inject_config_file(QA_ARFP_GMAIL_TOKEN_ID, QA_ARFP_GMAIL_TOKEN_DESTINATION);
                         inject_config_file(QA_SSPHERE_GMAIL_CREDENTIALS_ID, QA_SSPHERE_GMAIL_CREDENTIALS_DESTINATION);
                         inject_config_file(QA_SSPHERE_GMAIL_TOKEN_ID , QA_SSPHERE_GMAIL_TOKEN_DESTINATION);
-                    } else if (params.ENVIRONMENT === 'UAT'){
+                    } else if (params.ENVIRONMENT == 'UAT'){
                         inject_config_file(UAT_CONFIG_FILE_ID, UAT_CONFIG_FILE_DESTINATION);
                     };
     
