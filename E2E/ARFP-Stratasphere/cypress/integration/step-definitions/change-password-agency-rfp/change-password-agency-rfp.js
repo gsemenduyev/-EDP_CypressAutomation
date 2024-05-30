@@ -203,16 +203,19 @@ function forgot_password_email_mailinator_user() {
 
 function forgot_password_email_gmail_user() {
     let emailSubject;
+    let from;
     if (Cypress.env('CENTRAL_LOGIN_ONN')) {
         emailSubject = 'Reset your password';
+        from = envUtils.getNoReplStrataEmail();
     } else if (!Cypress.env('CENTRAL_LOGIN_ONN')) {
         emailSubject = 'Forgot Password for RFP';
+        from = envUtils.getNoReplBounceStrataEmail();
     };
     cy.get_gmail(
         Cypress.env('ARFP_GMAIL_DATES'),
         Cypress.env('ARFP_CREDENTIALS_FILE'),
         Cypress.env('ARFP_TOKEN_FILE'),
-        envUtils.getNoReplStrataEmail(),
+        from,
         emailSubject,
         60,
         5000
@@ -280,7 +283,12 @@ function set_password_mailinator_user(password) {
 };
 
 function set_password_gmail_user(password) {
-    cy.visit(Cypress.env('GMAIL_HTML_PATH'));
+    if (Cypress.env('CENTRAL_LOGIN_ONN')) {
+        cy.visit(Cypress.env('GMAIL_HTML_PATH'));
+    } else if (!Cypress.env('CENTRAL_LOGIN_ONN')) {
+        cy.txt_file_to_html(Cypress.env('GMAIL_TXT_PATH'), Cypress.env('GMAIL_HTML_UPDATED_PATH'));
+        cy.visit(Cypress.env('GMAIL_HTML_UPDATED_PATH'));
+    };
     cy.screenshot();
     gmailBodyPage.arfpResetPswButton().invoke('attr', 'target', '_parent').click({ force: true });
     let agencyPassword;
@@ -299,7 +307,7 @@ function set_password_gmail_user(password) {
 
             // Verify Password has been reset 
             cy.get(agencyLoginPage.resetPasswordConformationMsgSyntax(), { timeout: 60000 }).then((message) => {
-                expect(message.text().trim()).includes(passwordResetMsg);
+                expect(message.text().trim()).includes(PASSWORD_RESET_MSG);
                 cy.screenshot();
             })
         } else {
