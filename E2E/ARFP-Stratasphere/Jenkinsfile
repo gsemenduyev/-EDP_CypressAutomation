@@ -72,7 +72,7 @@ pipeline {
             steps {
                 script {
 
-                    // Copy paste environments.json file from Jenkins to current project
+                    // Copy paste Config files from Jenkins to current project
                     if (params.ENVIRONMENT == 'Production'){
                         inject_config_file(PROD_CONFIG_FILE_ID, PROD_CONFIG_FILE_DESTINATION);
                         inject_config_file(PROD_ARFP_GMAIL_CREDENTIALS_ID, PROD_ARFP_GMAIL_CREDENTIALS_DESTINATION);
