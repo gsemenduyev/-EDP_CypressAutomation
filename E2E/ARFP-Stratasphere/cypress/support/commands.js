@@ -77,25 +77,19 @@ Converts text file to simple html file.
 Cypress.Commands.add('txt_file_to_html', (txtFile, htmlFile) => {
     cy.readFile(txtFile)
         .then((content) => {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(content, 'text/html');
-            const newDiv = Cypress.$('<div id="file-content"></div>');
             const lines = content.split('\n');
+            let htmlContent = '';
             lines.forEach((line) => {
-                // Check if the line contains a URL
                 const urlRegex = /https?:\/\/\S+/;
                 const match = line.match(urlRegex);
                 if (match) {
-                    // Create an anchor tag with the URL
-                    const link = Cypress.$(`<a href="${match[0]}">${match[0]}</a>`);
-                    newDiv.append(link);
-                    newDiv.append('<br>');
+                    const parts = line.split(match[0]);
+                    htmlContent += `${parts[0]}<a href="${match[0]}">${match[0]}</a>${parts[1]}<br>`;
                 } else {
-                    newDiv.append(line);
-                    newDiv.append('<br>');
+                    htmlContent += `${line}<br>`;
                 }
             });
-            cy.writeFile(htmlFile, newDiv.prop('outerHTML'));
+            cy.writeFile(htmlFile, htmlContent);
         });
 });
 

@@ -300,7 +300,8 @@ function set_password_gmail_user(password) {
         };
 
         if (envUtils.getAgencyUrl().includes($startingRfpUrl)) {
-            agencyLoginPage.newPasswordInput(60000).type(agencyPassword, { log: false });
+            agencyLoginPage.errorMessage(1000).should('not.exist');
+            agencyLoginPage.newPasswordInput().type(agencyPassword, { log: false });
             agencyLoginPage.conformNewPasswordInput().type(agencyPassword, { log: false });
             cy.screenshot();
             agencyLoginPage.submitButton().click();

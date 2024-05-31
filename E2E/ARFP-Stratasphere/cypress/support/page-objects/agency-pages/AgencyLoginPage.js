@@ -32,5 +32,8 @@ class AgencyLoginPage {
     pageTitle() {
         return cy.get('#page-title');
     }
+    errorMessage(milliseconds) {
+        return cy.get('.text-danger.validation-summary-errors', { timeout: milliseconds });
+    }
 }
 export default AgencyLoginPage;
