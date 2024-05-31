@@ -21,7 +21,7 @@ import groovy.json.*
         ansiColor('xterm')
     }
     triggers {
-        cron("H 15 * * *")
+        cron("H 14 * * *")
     }
     stages {
         stage('Config file setup'){
