@@ -12,10 +12,10 @@ const VERSION = Cypress.env('VERSION')
 // Validate Agency RFP version number
 Given('Validate Agency RFP version number', () => {
     agencyBasePage.versionNumber().invoke('text').then(version => {
-        if(VERSION === undefined || VERSION === null){
+        if (VERSION === undefined || VERSION === null) {
             throw new Error(`Set Agency RFP version ${version.trim()} as Environment veritable.`)
         } else {
-            expect(version.trim()).to.equal(VERSION) 
-        }
-    })
-})
+            expect(version.trim()).to.equal(VERSION)
+        };
+    });
+});

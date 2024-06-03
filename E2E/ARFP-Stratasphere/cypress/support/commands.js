@@ -69,4 +69,118 @@ Cypress.on('uncaught:exception', (err, runnable) => {
     // returning false here prevents Cypress from
     // failing the test
     return false
-})
+});
+
+/*
+Converts text file to simple html file.
+*/
+Cypress.Commands.add('txt_file_to_html', (txtFile, htmlFile) => {
+    cy.readFile(txtFile)
+        .then((content) => {
+            const lines = content.split('\n');
+            let htmlContent = '';
+            lines.forEach((line) => {
+                const urlRegex = /https?:\/\/\S+/;
+                const match = line.match(urlRegex);
+                if (match) {
+                    const parts = line.split(match[0]);
+                    htmlContent += `${parts[0]}<a href="${match[0]}">${match[0]}</a>${parts[1]}<br>`;
+                } else {
+                    htmlContent += `${line}<br>`;
+                }
+            });
+            cy.writeFile(htmlFile, htmlContent);
+        });
+});
+
+/* 
+Saves unique dates.
+Currently, we are not able to delete Gmail emails through the API, so
+we are using unique Gmail dates to identify new emails in the Gmail Inbox
+cypress\fixtures\gmail-data\gmail-info\arfp-emails-dates.json
+or
+cypress\fixtures\gmail-data\gmail-info\ssphere-emails-dates.json
+*/
+Cypress.Commands.add('check_gmail_inbox', (datesFilePath, credentialsFilePath, tokenFilePath) => {
+    cy.writeFile(datesFilePath, {})
+    cy.readFile(datesFilePath).then(($data) => {
+        const uniqDatesList = $data.uniqDatesList || [];
+        return cy.task("gmail:get-messages", {
+            credentials: credentialsFilePath,
+            token: tokenFilePath,
+        }).then(($emails) => {
+            if ($emails.length < 1) {
+                return $emails
+            } else {
+                console.log($emails)
+                $emails.forEach(($email) => {
+                    uniqDatesList.push($email.date);
+                })
+                return cy.writeFile(datesFilePath, JSON.stringify({ uniqDatesList }));
+            }
+        });
+    });
+});
+
+/* 
+Accesses Gmail and returns New Gmail. 
+Saves new Gmail email body in text and html files
+cypress\fixtures\gmail-data\gmail-info\gmail-body.txt
+and
+cypress\fixtures\gmail-data\gmail-info\gmail-body.html
+Saves unique dates.
+Currently, we are not able to delete Gmail emails through the API, so
+we are using unique Gmail dates to identify new emails in the Gmail Inbox
+cypress\fixtures\gmail-data\gmail-info\arfp-emails-dates.json
+or
+cypress\fixtures\gmail-data\gmail-info\ssphere-emails-dates.json
+*/
+Cypress.Commands.add('get_gmail', (
+    datesFilePath,
+    credentialsFilePath,
+    tokenFilePath,
+    from,
+    subject,
+    attempts,
+    msecInterval
+) => {
+    let index = 0;
+    let endIndex = attempts;
+
+    const checkEmailExists = () => {
+        cy.task("gmail:get-messages", {
+            credentials: credentialsFilePath,
+            token: tokenFilePath,
+            options: {
+                from: from,
+                subject: subject,
+                include_body: true,
+            },
+        }).then(($emails) => {
+            if ($emails.length > 0) {
+                const emailDate = $emails[0].date;
+                cy.log("Email Date - " + emailDate);
+                cy.readFile('cypress/fixtures/' + datesFilePath)
+                    .its('uniqDatesList')
+                    .then(($uniqDatesList) => {
+                        if (!$uniqDatesList.includes(emailDate)) {
+                            cy.readFile('cypress/fixtures/' + datesFilePath).its('uniqDatesList').should('not.contain', emailDate);
+                            cy.writeFile(Cypress.env('GMAIL_HTML_PATH'), $emails[0].body.html);
+                            cy.writeFile(Cypress.env('GMAIL_TXT_PATH'), $emails[0].body.text);
+                            cy.check_gmail_inbox('cypress/fixtures/' + datesFilePath, credentialsFilePath, tokenFilePath);
+                            cy.readFile('cypress/fixtures/' + datesFilePath).its('uniqDatesList').should('contain', emailDate);
+                        } else if (index < endIndex) {
+                            index++;
+                            cy.log(`Waiting ${(msecInterval * index / 60000).toFixed(2)} minutes for ${subject} gmail`);
+                            cy.wait(msecInterval).then(checkEmailExists);
+                        };
+                    });
+            } else if (index < endIndex) {
+                index++;
+                cy.log(`Waiting ${(msecInterval * index / 60000).toFixed(2)} minutes for ${subject} gmail`);
+                cy.wait(msecInterval).then(checkEmailExists);
+            };
+        });
+    };
+    checkEmailExists();
+});

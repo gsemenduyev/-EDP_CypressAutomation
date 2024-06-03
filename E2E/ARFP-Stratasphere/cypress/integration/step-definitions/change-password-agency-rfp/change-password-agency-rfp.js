@@ -1,10 +1,18 @@
 /// <reference types="Cypress" />
 import { Given } from "@badeball/cypress-cucumber-preprocessor";
 import MailinatorHomePage from "../../../support/page-objects/mailinator-pages/MailinatorHomePage";
+import CentralLoginPage from "../../../support/page-objects/central-login-pages/CentralLoginPage";
+import GmailBodyPage from "../../../support/page-objects/gmail-pages/GmailBodyPage";
+import AgencyLoginPage from '../../../support/page-objects/agency-pages/AgencyLoginPage';
 import EnvUtils from "../../../support/utils/EnvUtils";
 
 const mailinatorHomePage = new MailinatorHomePage;
+const centralLoginPage = new CentralLoginPage
+const gmailBodyPage = new GmailBodyPage;
+const agencyLoginPage = new AgencyLoginPage;
+
 const envUtils = new EnvUtils;
+
 const ENV = Cypress.env('ENV');
 const PASSWORD_RESET_MSG = 'Password has been reset';
 let envProperties;
@@ -30,12 +38,38 @@ before(function () {
 
 // Request new password on Agency RFP Forgot Password page
 Given('Request new password on Agency RFP Forgot Password page', () => {
+    if (envUtils.getSsphereUsername().endsWith('mailinator.com')) {
+        request_password_mailinator_user();
+    } else if (envUtils.getSsphereUsername().endsWith('gmail.com')) {
+        request_password_gmail_user();
+    };
+});
+
+// Open Forgot Password email and click on restore password link
+Given('Open Forgot Password email and click on restore password link', () => {
+    if (envUtils.getSsphereUsername().endsWith('mailinator.com')) {
+        forgot_password_email_mailinator_user();
+    } else if (envUtils.getSsphereUsername().endsWith('gmail.com')) {
+        forgot_password_email_gmail_user();
+    };
+});
+
+// Set 'Temporary, Permanent' password
+Given('Set {string} password', password => {
+    if (envUtils.getSsphereUsername().endsWith('mailinator.com')) {
+        set_password_mailinator_user(password);
+    } else if (envUtils.getSsphereUsername().endsWith('gmail.com')) {
+        set_password_gmail_user(password);
+    };
+});
+
+function request_password_mailinator_user() {
     cy.visit(`${envUtils.getMailinatorUrl()}?to=${envUtils.getAgencyUsername().substr(0, envUtils.getAgencyUsername().indexOf('@'))}`);
     cy.title().should('eq', 'Mailinator');
     cy.visit(envUtils.getAgencyUrl());
     cy.dataSession('startingRfpUrl').then(($startingRfpUrl) => {
         const sentArgs = {
-            agencyUsername: envProperties.agencyUsername,
+            agencyUsername: envProperties.agencyUsername.mailinator,
             agencyUrl: envUtils.getAgencyUrl(),
             startingRfpUrl: $startingRfpUrl
         };
@@ -54,18 +88,40 @@ Given('Request new password on Agency RFP Forgot Password page', () => {
                 agencyLoginPage.forgotPasswordConformation().should('include.text', 'Email has been sent').screenshot();
             } else {
                 // Central Login feature is onn
-                centralLoginPage.forgotPassword().click()
+                centralLoginPage.forgotPassword().click();
                 centralLoginPage.resetPasswordText().should('have.text', 'To reset your password,  enter your e-mail address below.');
                 centralLoginPage.loginEmail().type(agencyUsername);
                 centralLoginPage.submitButton().click();
-                centralLoginPage.emailSendText().should('include.text', 'E-mail successfully sent')
-            }
+                centralLoginPage.emailSendText().should('include.text', 'E-mail successfully sent');
+            };
         });
-    })
-})
+    });
+};
 
-// Open Forgot Password email and click on restore password link
-Given('Open Forgot Password email and click on restore password link', () => {
+function request_password_gmail_user() {
+    cy.visit(envUtils.getAgencyUrl());
+    cy.dataSession('startingRfpUrl').then(($startingRfpUrl) => {
+
+        if (envUtils.getAgencyUrl().includes($startingRfpUrl)) {
+            agencyLoginPage.pageTitle(5000).should('have.text', 'Sign In');
+            agencyLoginPage.forgotPasswordButton().click();
+            agencyLoginPage.pageTitle(5000).should('have.text', 'Forgot Password');
+            agencyLoginPage.usernameBox().type(envUtils.getAgencyUsername());
+            agencyLoginPage.submitButton().click();
+            agencyLoginPage.forgotPasswordConformation().should('include.text', 'Email has been sent').screenshot();
+        } else {
+            // Central Login feature is onn
+            centralLoginPage.forgotPassword().click();
+            centralLoginPage.resetPasswordText().should('have.text', 'To reset your password,  enter your e-mail address below.');
+            centralLoginPage.loginEmail().type(envUtils.getAgencyUsername());
+            centralLoginPage.submitButton().click();
+            centralLoginPage.emailSendText().should('include.text', 'E-mail successfully sent');
+        };
+    });
+    cy.screenshot()
+};
+
+function forgot_password_email_mailinator_user() {
     var index = 0;
     var endIndex = 30;
     const waitInterval = 5000;
@@ -143,15 +199,34 @@ Given('Open Forgot Password email and click on restore password link', () => {
                 .click({ force: true });
         };
     });
-});
+};
 
-// Set 'Temporary, Permanent' password
-Given('Set {string} password', string => {
+function forgot_password_email_gmail_user() {
+    let emailSubject;
+    let from;
+    if (Cypress.env('CENTRAL_LOGIN_ONN')) {
+        emailSubject = 'Reset your password';
+        from = envUtils.getNoReplStrataEmail();
+    } else if (!Cypress.env('CENTRAL_LOGIN_ONN')) {
+        emailSubject = 'Forgot Password for RFP';
+        from = envUtils.getNoReplBounceStrataEmail();
+    };
+    cy.get_gmail(
+        Cypress.env('ARFP_GMAIL_DATES'),
+        Cypress.env('ARFP_CREDENTIALS_FILE'),
+        Cypress.env('ARFP_TOKEN_FILE'),
+        from,
+        emailSubject,
+        60,
+        10000
+    );
+};
+
+function set_password_mailinator_user(password) {
     var agencyPassword;
-
     cy.dataSession('startingRfpUrl').then(($startingRfpUrl) => {
         const sentArgs = {
-            password: string,
+            password: password,
             agencyPermPassword: envProperties.agencyPassword,
             agencyTempPassword: envProperties.tempAgencyPassword,
             passwordResetMsg: PASSWORD_RESET_MSG,
@@ -205,4 +280,50 @@ Given('Set {string} password', string => {
             };
         });
     });
-});
+};
+
+function set_password_gmail_user(password) {
+    if (Cypress.env('CENTRAL_LOGIN_ONN')) {
+        cy.visit(Cypress.env('GMAIL_HTML_PATH'));
+    } else if (!Cypress.env('CENTRAL_LOGIN_ONN')) {
+        cy.txt_file_to_html(Cypress.env('GMAIL_TXT_PATH'), Cypress.env('GMAIL_HTML_UPDATED_PATH'));
+        cy.visit(Cypress.env('GMAIL_HTML_UPDATED_PATH'));
+    };
+    cy.screenshot();
+    gmailBodyPage.arfpResetPswButton().invoke('attr', 'target', '_parent').click({ force: true });
+    let agencyPassword;
+    cy.dataSession('startingRfpUrl').then(($startingRfpUrl) => {
+        if (password === 'Temporary') {
+            agencyPassword = envProperties.tempAgencyPassword;
+        } else if (password === 'Permanent') {
+            agencyPassword = envProperties.agencyPassword;
+        };
+
+        if (envUtils.getAgencyUrl().includes($startingRfpUrl)) {
+            agencyLoginPage.errorMessage(1000).should('not.exist');
+            agencyLoginPage.newPasswordInput().type(agencyPassword, { log: false });
+            agencyLoginPage.conformNewPasswordInput().type(agencyPassword, { log: false });
+            cy.screenshot();
+            agencyLoginPage.submitButton().click();
+
+            // Verify Password has been reset 
+            cy.get(agencyLoginPage.resetPasswordConformationMsgSyntax(), { timeout: 60000 }).then((message) => {
+                expect(message.text().trim()).includes(PASSWORD_RESET_MSG);
+                cy.screenshot();
+            })
+        } else {
+            centralLoginPage.loginPassword().click({ force: true })
+            centralLoginPage.loginPassword().type(agencyPassword, { log: false })
+            centralLoginPage.confirmPassword().click({ force: true })
+            centralLoginPage.confirmPassword().type(agencyPassword, { log: false });
+            cy.screenshot();
+            centralLoginPage.submitButton().click();
+
+            // Verify Password has been reset 
+            cy.get(centralLoginPage.resetPasswordMessageSyntax(), { timeout: 60000 }).then((message) => {
+                expect(message.text().trim()).includes(PASSWORD_RESET_MSG);
+                cy.screenshot();
+            });
+        };
+    });
+}
