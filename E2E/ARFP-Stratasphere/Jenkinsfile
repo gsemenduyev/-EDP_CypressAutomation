@@ -68,6 +68,13 @@ pipeline {
         ''')
     }
     stages {
+        stage('Print Parameters & Environment Variables'){
+            steps {
+                echo "ENVIRONMENT = ${params.ENVIRONMENT}"
+                echo "PROJECTS = ${params.PROJECTS}"
+                echo "VERSION = ${params.VERSION}"
+            }
+        }
         stage('Config file setup'){
             steps {
                 script {
