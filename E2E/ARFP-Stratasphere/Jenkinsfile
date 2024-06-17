@@ -55,14 +55,14 @@ pipeline {
     parameters{
         choice(name: 'ENVIRONMENT', choices: ['Production', 'QA', 'UAT'], description: "Choose the Environment to run");
         choice(name: 'PROJECTS', choices: ['Stratasphere', 'ARFP', 'WIP'], description: "Choose the Project to run");
-        string(name: 'VERSION',defaultValue: 'v 8.4.0',  trim: true, description: "When ARFP project is selected, input Agency RFP version (Production and QA versions may vary)");
+        string(name: 'VERSION',defaultValue: 'v 9.1.0',  trim: true, description: "When ARFP project is selected, input Agency RFP version (Production and QA versions may vary)");
     }
     options{
         ansiColor('xterm')
     }
     triggers {
         parameterizedCron('''
-            H 21 * * 0 %ENVIRONMENT=QA;PROJECTS=ARFP;VERSION=v 8.4.0
+            H 21 * * 0 %ENVIRONMENT=QA;PROJECTS=ARFP;VERSION=v 9.1.0
             H 22 * * 0 %ENVIRONMENT=UAT;PROJECTS=ARFP;VERSION=v 8.4.0
             H 23 * * 0 %ENVIRONMENT=Production;PROJECTS=ARFP;VERSION=v 8.4.0
         ''')
@@ -158,22 +158,23 @@ pipeline {
                     writeFile(file: QA_CONFIG_FILE_DESTINATION, text: json);
                     writeFile(file: UAT_CONFIG_FILE_DESTINATION, text: json);
                     writeFile(file: PROD_CONFIG_FILE_DESTINATION, text: json);
-                mail(
-                    subject: "${currentBuild.currentResult} ${params.PROJECTS} run for ${params.ENVIRONMENT}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
-                    body: "${currentBuild.currentResult} ${params.PROJECTS} run for ${params.ENVIRONMENT}: Please visit  ${env.BUILD_URL} for further information.",
-                    to: read_config_file(EMAILS_SLACK_CONTACTS).qaTeamEmail, 
-                );
-                
-                // Sends daily build results to Slack
-                def color = 'warning'
-                 if (currentBuild.currentResult == "FAILURE") {
-                    color = 'danger'
-                 } else if (currentBuild.currentResult == "SUCCESS") {
-                    color = 'good'
-                 }
-                def slackChannel = read_config_file(EMAILS_SLACK_CONTACTS).agencyEbizAutobuild;
-                slackSend channel: slackChannel, message: "${currentBuild.currentResult} ${params.PROJECTS} run for ${params.ENVIRONMENT} environment: ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", color: color
-                
+                if (params.PROJECTS != 'WIP') {
+                    mail(
+                        subject: "${currentBuild.currentResult} ${params.PROJECTS} run for ${params.ENVIRONMENT}: '${env.JOB_NAME}' (${env.BUILD_NUMBER})",
+                        body: "${currentBuild.currentResult} ${params.PROJECTS} run for ${params.ENVIRONMENT}: Please visit  ${env.BUILD_URL} for further information.",
+                        to: read_config_file(EMAILS_SLACK_CONTACTS).qaTeamEmail,
+                    )
+
+                    // Sends daily build results to Slack
+                    def color = 'warning'
+                    if (currentBuild.currentResult == 'FAILURE') {
+                        color = 'danger'
+                    } else if (currentBuild.currentResult == 'SUCCESS') {
+                        color = 'good'
+                    }
+                    def slackChannel = read_config_file(EMAILS_SLACK_CONTACTS).agencyEbizAutobuild
+                    slackSend channel: slackChannel, message: "${currentBuild.currentResult} ${params.PROJECTS} run for ${params.ENVIRONMENT} environment: ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", color: color
+                }
                 sh "cd ${CURRENT_PROJECT_PATH} && node ./cucumber-html-report.js";
             }
             publishHTML (target : [allowMissing: true,
