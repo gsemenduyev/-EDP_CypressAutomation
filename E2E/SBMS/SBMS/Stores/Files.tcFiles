@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Root signature="{AA2F3067-5C9B-4CCF-89D4-1F93CE1C510F}" version="15.0">
+	<children>
+		<child name="CypressEnvironmentSwitcher_txt" key="{56ABF584-0DF5-4A57-8D1A-12BB7DD2F9A9}">
+			<data signature="{FC92F8D9-8A57-4D74-B8B4-479AA50BF647}" version="15.0" caption="CypressEnvironmentSwitcher_txt" ID="{56ABF584-0DF5-4A57-8D1A-12BB7DD2F9A9}" FileName="Files\CypressEnvironmentSwitcher.txt" Update="False" />
+		</child>
+	</children>
+</Root>
