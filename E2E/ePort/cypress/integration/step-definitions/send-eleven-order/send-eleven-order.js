@@ -21,7 +21,7 @@ Given('Validate Agency RFP version number', () => {
     // cy.writeFile(filePath, 'ki')
     const relativePath = ' ';
     cy.task('getRepositoryPath').then(($repositoryPath) => {
-        cy.log('Current path:', `${$repositoryPath} /SBMS/Stores/Files`);
-        cy.writeFile(`${$repositoryPath} /SBMS/Stores/Files`, 'hiiii')
+        cy.log('Current path:', `${$repositoryPath}\\SBMS\\Stores\\Files\\CypressEnvironmentSwitcher.txt`);
+        cy.writeFile(`${$repositoryPath}\\SBMS\\Stores\\Files\\CypressEnvironmentSwitcher.txt`, 'hiiii')
     });
 });
