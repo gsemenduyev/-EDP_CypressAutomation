@@ -1,27 +1,55 @@
 const report = require('multiple-cucumber-html-reporter');
+const dayjs = require('dayjs');
+const fs = require('fs');
+const data = fs.readFileSync('cypress/reports/run-info/report-metadata.json', { encoding: 'utf8', flag: 'r' });
+const runInfo = JSON.parse(data);
+
+const osName = () => {
+    switch (runInfo['osName']) {
+        case 'darwin':
+            return 'osx';
+        case 'win32':
+            return 'windows';
+        case 'ubuntu':
+            return 'ubuntu';
+        case 'linux':
+            return 'linux';
+        default:
+            console.log('Undefined browser');
+    }
+};
 
 report.generate({
-	jsonDir: './cypress/CucumberReports',
-	reportPath: 'cypress/CucumberReports/cucumber-htmlreport.html',
-	metadata:{
+    jsonDir: './cypress/reports/cucumber-reports/',
+    reportPath: 'cypress/reports/multi-html-report',
+    metadata: {
         browser: {
-            name: 'chrome',
-            version: '100'
+            name: runInfo['browserName'],
+            version: runInfo['browserVersion'],
         },
-        device: 'Local test machine',
+        device: 'Local Test Machine',
         platform: {
-            name: 'ubuntu',
-            version: '16.04'
-        }
+            name: osName(),
+            version: runInfo['osVersion'],
+        },
     },
     customData: {
-        title: 'Run info',
+        title: 'Run Info',
         data: [
-            {label: 'Project', value: 'eport'},
-            {label: 'Release', value: 'v 8.3.6.60524'},
-            {label: 'Cycle', value: 'B11221.34321'},
-            {label: 'Execution Start Time', value: '5/18/2023'},
-            {label: 'Execution End Time', value: '5/18/2023'}
-        ]
-    }
+            { label: 'Environment', value: runInfo['env'] },
+            { label: 'Cypress Version', value: runInfo['cypressVersion'] },
+            { label: 'Node Version', value: runInfo['nodeVersion'] },
+            {
+                label: 'Execution Start Time',
+                value: dayjs(runInfo['startedTestsAt']).format('YYYY-MM-DD HH:mm:ss.SSS'),
+            },
+            {
+                label: 'Execution End Time',
+                value: dayjs(runInfo['endedTestsAt']).format('YYYY-MM-DD HH:mm:ss.SSS'),
+            },
+        ],
+    },
+    disableLog: true,
+    pageTitle: 'Cypress Cucumber Html Report',
+    displayDuration: true,
 });
