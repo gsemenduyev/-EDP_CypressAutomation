@@ -1,7 +1,7 @@
 const { defineConfig } = require("cypress");
 const { addCucumberPreprocessorPlugin, afterRunHandler } = require("@badeball/cypress-cucumber-preprocessor");
 const browserify = require("@badeball/cypress-cucumber-preprocessor/browserify");
-const registerDataSession = require('cypress-data-session/src/plugin')
+const registerDataSession = require('cypress-data-session/src/plugin');
 const allureWriter = require('@shelex/cypress-allure-plugin/writer');
 const TestRailReporter = require('cypress-testrail');
 const gmailTester = require("gmail-tester");
@@ -11,59 +11,64 @@ const xlsx = require('node-xlsx').default;
 const RUN_ENV_FILE_PATH = 'cypress/reports/run-info/run-env.json';
 const delay = async (ms) => new Promise((res) => setTimeout(res, ms));
 const gmail = require("gmail-tester-extended");
-require('dotenv').config()
+require('dotenv').config();
 
-// Setup Node Events
 async function setupNodeEvents(cypressOn, config) {
-  const on = require('cypress-on-fix')(cypressOn)
-  await addCucumberPreprocessorPlugin(on, config, { omitAfterRunHandler: true, });
+  const on = require('cypress-on-fix')(cypressOn);
+  await addCucumberPreprocessorPlugin(on, config, { omitAfterRunHandler: true });
   on("file:preprocessor", browserify.default(config));
   allureWriter(on, config);
   registerDataSession(on, config);
   new TestRailReporter(on, config).register();
 
   let refreshAccessToken = true;
-  on('before:browser:launch', () => {
-
+  on('before:browser:launch', async () => {
     // This If block creates cypress\fixtures\agencyRFP\new-frp-name.json file before:browser:launch 
     if (!fs.existsSync(config.env.NEW_RFP_NAME_PATH)) {
       fs.writeFileSync(config.env.NEW_RFP_NAME_PATH, '[]');
-    };
+    }
 
     /*
        This if block calls functions to refresh the Gmail token and save unique dates.
        Currently, we are not able to delete Gmail emails through the API, so
        we are using unique Gmail dates to identify new emails in the Gmail Inbox.
     */
-    if (config.env.ENV === 'Production' && refreshAccessToken) {
-      refreshGmailTokenSaveUniqDates(
-        config.env.ARFP_PROD.CREDENTIALS_FILE,
-        config.env.ARFP_PROD.TOKEN_FILE,
-        config.env.SSPHERE_PROD.CREDENTIALS_FILE,
-        config.env.SSPHERE_PROD.TOKEN_FILE,
-        config.env.ARFP_GMAIL_DATES,
-        config.env.SSPHERE_GMAIL_DATES
-      );
-    } else if (config.env.ENV === 'UAT' && refreshAccessToken) {
-      refreshGmailTokenSaveUniqDates(
-        config.env.ARFP_UAT.CREDENTIALS_FILE,
-        config.env.ARFP_UAT.TOKEN_FILE,
-        config.env.SSPHERE_UAT.CREDENTIALS_FILE,
-        config.env.SSPHERE_UAT.TOKEN_FILE,
-        config.env.ARFP_GMAIL_DATES,
-        config.env.SSPHERE_GMAIL_DATES
-      );
-    } else if (refreshAccessToken) {
-      refreshGmailTokenSaveUniqDates(
-        config.env.ARFP_QA.CREDENTIALS_FILE,
-        config.env.ARFP_QA.TOKEN_FILE,
-        config.env.SSPHERE_QA.CREDENTIALS_FILE,
-        config.env.SSPHERE_QA.TOKEN_FILE,
-        config.env.ARFP_GMAIL_DATES,
-        config.env.SSPHERE_GMAIL_DATES
-      );
+    if (refreshAccessToken) {
+      try {
+        if (config.env.ENV === 'Production') {
+          await refreshGmailTokenSaveUniqDates(
+            config.env.ARFP_PROD.CREDENTIALS_FILE,
+            config.env.ARFP_PROD.TOKEN_FILE,
+            config.env.SSPHERE_PROD.CREDENTIALS_FILE,
+            config.env.SSPHERE_PROD.TOKEN_FILE,
+            config.env.ARFP_GMAIL_DATES,
+            config.env.SSPHERE_GMAIL_DATES
+          );
+        } else if (config.env.ENV === 'UAT') {
+          await refreshGmailTokenSaveUniqDates(
+            config.env.ARFP_UAT.CREDENTIALS_FILE,
+            config.env.ARFP_UAT.TOKEN_FILE,
+            config.env.SSPHERE_UAT.CREDENTIALS_FILE,
+            config.env.SSPHERE_UAT.TOKEN_FILE,
+            config.env.ARFP_GMAIL_DATES,
+            config.env.SSPHERE_GMAIL_DATES
+          );
+        } else {
+          await refreshGmailTokenSaveUniqDates(
+            config.env.ARFP_QA.CREDENTIALS_FILE,
+            config.env.ARFP_QA.TOKEN_FILE,
+            config.env.SSPHERE_QA.CREDENTIALS_FILE,
+            config.env.SSPHERE_QA.TOKEN_FILE,
+            config.env.ARFP_GMAIL_DATES,
+            config.env.SSPHERE_GMAIL_DATES
+          );
+        }
+      } catch (error) {
+        console.error('Error refreshing Gmail token and saving unique dates:', error);
+        throw error;
+      }
+      refreshAccessToken = false;
     }
-    refreshAccessToken = false;
   });
 
   on('task', {
@@ -73,15 +78,12 @@ async function setupNodeEvents(cypressOn, config) {
           const jsonData = xlsx.parse(fs.readFileSync(filePath));
           resolve(jsonData);
         } catch (e) {
-          reject(e)
+          reject(e);
         }
-      })
+      });
     },
 
-  });
-
-  // Checks Gmail inbox and returns all emails
-  on("task", {
+    // Checks Gmail inbox and returns all emails
     "gmail:get-messages": async (args) => {
       const credentialsPath = args.credentials;
       const tokenPath = args.token;
@@ -95,13 +97,12 @@ async function setupNodeEvents(cypressOn, config) {
     try {
       fs.readFileSync(RUN_ENV_FILE_PATH, { encoding: 'utf8', flag: 'r' });
     } catch (error) {
-      fs.writeFileSync(RUN_ENV_FILE_PATH,
-        JSON.stringify({
-          agencyUrl: "-",
-          ssphereUrl: "-",
-          mailinatorUrl: "-",
-          env: "-"
-        }))
+      fs.writeFileSync(RUN_ENV_FILE_PATH, JSON.stringify({
+        agencyUrl: "-",
+        ssphereUrl: "-",
+        mailinatorUrl: "-",
+        env: "-"
+      }));
     }
     const data = fs.readFileSync(RUN_ENV_FILE_PATH, { encoding: 'utf8', flag: 'r' });
     const runInfo = JSON.parse(data);
@@ -109,29 +110,25 @@ async function setupNodeEvents(cypressOn, config) {
       await afterRunHandler(config);
       fs.writeFileSync(
         'cypress/reports/run-info/report-metadata.json',
-        JSON.stringify(
-          {
-            browserName: results.browserName,
-            browserVersion: results.browserVersion,
-            osName: results.osName,
-            osVersion: results.osVersion,
-            nodeVersion: results.config.resolvedNodeVersion,
-            cypressVersion: results.cypressVersion,
-            startedTestsAt: results.startedTestsAt,
-            endedTestsAt: results.endedTestsAt,
-            env: runInfo['env'],
-            agencyUrl: runInfo['agencyUrl'],
-            ssphereUrl: runInfo['ssphereUrl'],
-            mailinatorUrl: runInfo['mailinatorUrl'],
-          },
-          null,
-          '\t',
-        ),
+        JSON.stringify({
+          browserName: results.browserName,
+          browserVersion: results.browserVersion,
+          osName: results.osName,
+          osVersion: results.osVersion,
+          nodeVersion: results.config.resolvedNodeVersion,
+          cypressVersion: results.cypressVersion,
+          startedTestsAt: results.startedTestsAt,
+          endedTestsAt: results.endedTestsAt,
+          env: runInfo['env'],
+          agencyUrl: runInfo['agencyUrl'],
+          ssphereUrl: runInfo['ssphereUrl'],
+          mailinatorUrl: runInfo['mailinatorUrl'],
+        }, null, '\t')
       );
     }
   });
   return config;
-};
+}
 
 /*
 Saves unique dates.
@@ -142,7 +139,7 @@ async function saveGmailUniqDates(credentialsPath, tokenPath, dateFilePath) {
   const gmailInfoFilePath = path.dirname(dateFilePath);
   if (!fs.existsSync(gmailInfoFilePath)) {
     fs.mkdirSync(gmailInfoFilePath);
-  };
+  }
   fs.writeFileSync(dateFilePath, '{}');
   let data;
   try {
@@ -150,7 +147,7 @@ async function saveGmailUniqDates(credentialsPath, tokenPath, dateFilePath) {
   } catch (err) {
     console.error('Error reading file:', err);
     data = { uniqDatesList: [] };
-  };
+  }
 
   const dateList = data.uniqDatesList || [];
   try {
@@ -176,19 +173,26 @@ Refreshes the Gmail token and saves unique dates.
 Currently, we are not able to delete Gmail emails through the API, so
 we are using unique Gmail dates to identify new emails in the Gmail Inbox.
 */
+
 async function refreshGmailTokenSaveUniqDates(
   arfpCredentialsFile,
   arfpTokenFile,
   ssphereCredentialsFile,
   ssphereTokenFile,
   arfpDateFile,
-  ssphereDateFile) {
-  const arfpTokenPromise = gmailTester.refresh_access_token(arfpCredentialsFile, arfpTokenFile);
-  const ssphereTokenPromise = gmailTester.refresh_access_token(ssphereCredentialsFile, ssphereTokenFile);
-  const arfpDatePromise = saveGmailUniqDates(arfpCredentialsFile, arfpTokenFile, "cypress/fixtures/" + arfpDateFile)
-  const ssphereDatePromise = saveGmailUniqDates(ssphereCredentialsFile, ssphereTokenFile, "cypress/fixtures/" + ssphereDateFile)
-  Promise.all([arfpTokenPromise, ssphereTokenPromise, arfpDatePromise, ssphereDatePromise])
-};
+  ssphereDateFile
+) {
+  try {
+    const arfpTokenPromise = gmailTester.refresh_access_token(arfpCredentialsFile, arfpTokenFile);
+    const ssphereTokenPromise = gmailTester.refresh_access_token(ssphereCredentialsFile, ssphereTokenFile);
+    const arfpDatePromise = saveGmailUniqDates(arfpCredentialsFile, arfpTokenFile, "cypress/fixtures/" + arfpDateFile);
+    const ssphereDatePromise = saveGmailUniqDates(ssphereCredentialsFile, ssphereTokenFile, "cypress/fixtures/" + ssphereDateFile);
+    await Promise.all([arfpTokenPromise, ssphereTokenPromise, arfpDatePromise, ssphereDatePromise]);
+  } catch (error) {
+    console.error('Error during Gmail token refresh and unique date save:', error);
+    throw error; // This will propagate the error to stop Cypress execution
+  }
+}
 
 module.exports = defineConfig({
   viewportWidth: 1920,
@@ -207,7 +211,6 @@ module.exports = defineConfig({
     allureReuseAfterSpec: true,
     allureAddVideoOnPass: true,
     allureResultsPath: "cypress/videos/allure-results",
-    //allureResultsPath: "cypress/reports/allure-results",
     GMAIL_HTML_PATH: "cypress/fixtures/gmail-data/gmail-info/gmail-body.html",
     GMAIL_TXT_PATH: "cypress/fixtures/gmail-data/gmail-info/gmail-body.txt",
     GMAIL_HTML_UPDATED_PATH: "cypress/fixtures/gmail-data/gmail-info/gmail-body-updated.html",
