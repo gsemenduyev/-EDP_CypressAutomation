@@ -1,5 +1,0 @@
-{
-  "testFiles": "**/*.feature",
-  "fixturesFolder": "eport/cypress/fixtures",
-  "integrationFolder": "eport/cypress/integration"
-}

@@ -1,51 +1,40 @@
 {
-  "name": "edp_automation",
+  "name": "eport",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "headlessChrome": "npx cypress run --browser chrome",
-    "headedChrome": "npx cypress run --browser chrome"
+    "test": "npx cypress run"
   },
   "cypress-cucumber-preprocessor": {
     "stepDefinitions": "cypress/integration/**/*.js",
     "json": {
       "enabled": true,
-      "output": "cypress/CucumberReports/results.json"
+      "output": "cypress/reports/cucumber-reports/results.json"
     },
     "messages": {
-      "enabled": true
+      "enabled": true,
+      "output": "cypress/reports/messages/cucumber-messages.json"
     },
     "html": {
       "enabled": true,
-      "output": "cypress/CucumberReports/cucumber-htmlreport.html/index.html"
+      "output": "cypress/reports/cucumber-reports/cucumber-html-report/index.html"
     }
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.0",
+    "@babel/helper-compilation-targets": "^7.23.6",
     "@cypress/browserify-preprocessor": "^3.0.2",
-    "@cypress/skip-test": "^2.6.1",
-    "cypress": "^12.12.0",
-    "cypress-aliases": "^2.0.0",
-    "cypress-cucumber-attach-screenshots-to-failed-steps": "^1.0.0",
-    "cypress-data-session": "^2.7.0",
-    "cypress-fail-on-console-error": "^4.0.2",
-    "cypress-file-upload": "^5.0.8",
+    "cypress": "^13.10.0",
+    "cypress-cucumber-preprocessor": "^4.3.1",
+    "cypress-data-session": "^2.8.2",
     "cypress-iframe": "^1.0.1",
-    "cypress-ntlm-auth": "^4.1.2",
-    "cypress-recurse": "^1.31.2",
-    "cypress-xpath": "^2.0.1",
-    "esbuild": "^0.17.18",
-    "multiple-cucumber-html-reporter": "^3.4.0",
-    "neat-csv": "5.1.0",
-    "reuse-cucumber-scenarios": "^1.1.7"
+    "multiple-cucumber-html-reporter": "^3.6.2"
   },
   "dependencies": {
-    "@badeball/cypress-cucumber-preprocessor": "^16.0.3",
-    "@cypress/browserify-preprocessor": "latest",
-    "convert-excel-to-json": "^1.7.0"
+    "@badeball/cypress-cucumber-preprocessor": "latest",
+    "@cypress/browserify-preprocessor": "latest"
   },
   "chromeWebSecurity": false
 }
