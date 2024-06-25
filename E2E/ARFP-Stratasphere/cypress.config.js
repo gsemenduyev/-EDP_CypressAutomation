@@ -190,7 +190,7 @@ async function refreshGmailTokenSaveUniqDates(
     await Promise.all([arfpTokenPromise, ssphereTokenPromise, arfpDatePromise, ssphereDatePromise]);
   } catch (error) {
     console.error('Error during Gmail token refresh and unique date save:', error);
-    throw error; // This will propagate the error to stop Cypress execution
+    throw error;
   }
 }
 
