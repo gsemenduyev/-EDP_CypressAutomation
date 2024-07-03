@@ -31,4 +31,7 @@ Given('Visit ePort Login Page', () => {
 });
 
 
-// Checks the functionality of the links
+Given('Visit youtube', () => {
+    cy.visit('https://www.youtube.com');
+});
+

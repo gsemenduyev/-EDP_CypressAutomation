@@ -1,7 +1,8 @@
-Feature: Validate Agency RFP version number
+Feature: SBMS Eleven workflow
 
-    Feature Description:
-    Agent login to Agency RFP and validate version number
+    Scenario: Login to Eleven
+        * Visit youtube
 
-    Scenario: User logins to Agency RFP and verifies app version number
-        * Validate Agency RFP version number
+    Scenario: Launch SBMS
+        * Launch SBMS
+

@@ -12,7 +12,7 @@ async function setupNodeEvents(on, config) {
 
   // Sets up environment variable
   const currentPath = process.cwd();
-  config.env.REPO_PATH = path.dirname(currentPath);
+  config.env.PROJECT_PATH = path.dirname(currentPath);
 
   // on('task', {
   //   getRepositoryPath() {

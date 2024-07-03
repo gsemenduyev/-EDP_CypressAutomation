@@ -12,7 +12,7 @@ Given('Validate Agency RFP version number', () => {
     cy.get('#tbPassword').type('password1')
     cy.get('#bSubmit').click()
     cy.title().should('eq', 'ePort')
-    cy.log('REPO_PATH - ' + Cypress.env('REPO_PATH'))
+    cy.log('REPO_PATH - ' + Cypress.env('PROJECT_PATH'))
     // cy.get("[src='Login_New.aspx']")
     //     .its('0.contentDocument')
     //     .then(cy.wrap)
@@ -40,4 +40,9 @@ Given('Validate Agency RFP version number', () => {
     //     cy.log('Current path:', `${$repositoryPath}\\SBMS\\Stores\\Files\\CypressEnvironmentSwitcher.txt`);
     //     cy.writeFile(`${$repositoryPath}\\SBMS\\Stores\\Files\\CypressEnvironmentSwitcher.txt`, 'hiiii')
     // });
+});
+
+
+Given('Launch SBMS', () => {
+    cy.sbms('OpenSBMS')
 });
