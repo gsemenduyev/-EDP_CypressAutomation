@@ -7,7 +7,9 @@
 // commands please read more here:
 // https://on.cypress.io/custom-commands
 // ***********************************************
+
 /// <reference types="cypress-data-session" />
+/// <reference types="Cypress" />
 
 /* 
 Verifies if element exists in DOM.
@@ -29,9 +31,21 @@ Cypress.Commands.add("isElementExists", (selectorSyntax) => {
 });
 
 Cypress.Commands.add("sbms", (keywordTest) => {
+    const now = new Date();
+    cy.clock(now);
+    const getUTCFullYear = now.toLocaleDateString().replace(/\//g, '-');
+    const hour = now.getHours();
+    const minute = now.getMinutes();
+    const second = now.getSeconds()
+    const featureFileName = Cypress.spec.relative.replace(/\\/g, '/').split('/').pop();
+    const testContext = cy.state('test');
+    const { title, parent: suite } = testContext;
+    const suiteTitleTransformed = suite.title.replace(/\s+/g, '-');
+    const testTitleTransformed = title.replace(/\s+/g, '-');
+    const testCompleteHTMLReportName = `${featureFileName}_${suiteTitleTransformed}_${testTitleTransformed}_${keywordTest}_${getUTCFullYear}_${hour}-${minute}-${second}`;
     const tc = Cypress.env('TC')
     const projectPath = Cypress.env('PROJECT_PATH')
-    cy.log('project Path - ' + projectPath)
+
     if (tc === 'SessionCreator') {
         cy.log('Launching SessionCreator')
         cy.readFile('credentials.json').then((credentials) => {
@@ -55,13 +69,14 @@ Cypress.Commands.add("sbms", (keywordTest) => {
                 cy.log(`Error: ${result.stderr}`);
             } else {
                 cy.log(`Commands output:\n${result.stdout}`);
-            }
+            };
         });
     } else {
         cy.log('Launching TestComplete');
         const commands = 'cd "C:\\Program Files (x86)\\SmartBear\\TestComplete 15\\Bin" && ' +
             'TestComplete.exe "' + projectPath + '\\SBMS\\SBMS.pjs" ' +
-            '/ExportLog:"' + projectPath + '\\ePort\\cypress\\reports\\test-complete-reports\\Test2\\test.html" ' +
+            '/ExportLog:"' + projectPath + '\\ePort\\cypress\\reports\\test-complete-reports\\' + testCompleteHTMLReportName + '\\ViewResults.html" ' +
+            '/ShareResults:"' + projectPath + '\\ePort\\cypress\\reports\\test-complete-reports\\' + testCompleteHTMLReportName + '\\ShareResults.txt" ' +
             '/run /project:SBMS /test:"KeywordTests|' + keywordTest +
             '" /exit /SilentMode';
         cy.exec(commands, { timeout: 120000 }).then((result) => {
@@ -71,10 +86,5 @@ Cypress.Commands.add("sbms", (keywordTest) => {
                 cy.log(`Commands output:\n${result.stdout}`);
             }
         });
-
     };
-
-
-
-
-})
+});

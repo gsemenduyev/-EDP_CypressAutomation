@@ -3,6 +3,6 @@ Feature: SBMS Eleven workflow
     Scenario: Login to Eleven
         * Visit youtube
 
-    Scenario: Launch SBMS
+    Scenario: Launch SBMS scenario
         * Launch SBMS
 
