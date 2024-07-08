@@ -4,4 +4,5 @@ Feature: Verify ePort Login and Home pages
     User visit ePort Login page verifies it then logins to ePort home page and page verifies it
 
     Scenario: User visit ePort Login page verifies it
-        * Visit ePort Login Page
+        * Verify ePort Login Page
+        * Verify ePort User Guides Page

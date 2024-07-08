@@ -4,7 +4,7 @@
         "strings": "on",
         "other": "on"
     },
-    "window.zoomLevel": 2,
+    "window.zoomLevel": 1.5,
     "cucumberautocomplete.steps": [
         "cypress/integration/step-definitions/**/*.js",
     ],

@@ -8,14 +8,27 @@ class EPortLoginPage {
             .then(cy.wrap)
             .find('#Table1');
     };
-    registerLink() {
-        return cy.get("[href='autoRegister.aspx']").last()
+    forgotPasswordLink() {
+        return cy.get("[src='Login_New.aspx']")
+            .its('0.contentDocument')
+            .then(cy.wrap)
+            .find('a');
+    };
+
+    trainingAndSupportIframe() {
+        return cy.get("[src='ClientHelpLink.aspx']")
+            .its('0.contentDocument')
+            .then(cy.wrap)
+            .find('table');
+    };
+    trainingAndSupportLinks() {
+        return cy.get("[src='ClientHelpLink.aspx']")
+            .its('0.contentDocument')
+            .then(cy.wrap)
+            .find('a');
     };
     allLinks() {
         return cy.get('a')
     };
 }
 export default EPortLoginPage;
-
-
-// 
