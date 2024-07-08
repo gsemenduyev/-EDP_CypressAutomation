@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Root signature="{B9D9273E-7266-43E0-BF02-97F168593604}" version="15.0">
+	<TestData Description="" Key="{56B50A3E-DA5F-4A3D-B058-6B4B6C4CCEA1}" Type="{79147B28-EE20-4294-B773-1D3787FBF37B}">
+		<Data>
+			<Extenders>
+				<NodeBitmaps />
+			</Extenders>
+		</Data>
+		<Children>
+			<Operation Type="{D993D251-65A9-4BED-A2EC-C2AC83739BAD}">
+				<Data GroupName="RADIO" />
+				<Children>
+					<Operation Type="{28D3E73B-A718-4E67-96A3-4C49D5D4B340}">
+						<Data Description="Creates a log folder and makes it the current folder to which messages will be posted. This folder can contain messages of different types as well as subfolders.">
+							<Parameters LangId="{90F89436-9452-4F95-9882-6B5210079F13}">
+								<Parameter Name="MessageText" DefVarType="12" VarType="8" ValueType="6" ValueValue="RADIO" />
+								<Parameter Name="AdditionalInformation" DefVarType="12" VarType="8" ValueType="6" ValueValue="" />
+								<Parameter Name="Priority" DefVarType="12" DefValueType="1" DefValueValue="300" VarType="3" ValueType="1" ValueValue="300">
+									<Values IsEnum="True">
+										<Value Type="1" Value="100" Text="pmLowest" />
+										<Value Type="1" Value="200" Text="pmLower" />
+										<Value Type="1" Value="300" Text="pmNormal" />
+										<Value Type="1" Value="400" Text="pmHigher" />
+										<Value Type="1" Value="500" Text="pmHighest" />
+									</Values>
+								</Parameter>
+								<Parameter Name="Attrib" DefVarType="12" VarType="12" ValueType="0" ValueValue="0" />
+								<Parameter Name="OwnerFolderId" DefVarType="3" DefValueType="1" DefValueValue="-1" VarType="3" ValueType="1" ValueValue="-1" />
+							</Parameters>
+						</Data>
+					</Operation>
+					<Operation Type="{D993D251-65A9-4BED-A2EC-C2AC83739BAD}">
+						<Data GroupName="Set Environment Variables_QA" />
+						<Children>
+							<Operation Type="{28D3E73B-A718-4E67-96A3-4C49D5D4B340}">
+								<Data Description="Creates a log folder and makes it the current folder to which messages will be posted. This folder can contain messages of different types as well as subfolders.">
+									<Parameters LangId="{90F89436-9452-4F95-9882-6B5210079F13}">
+										<Parameter Name="MessageText" DefVarType="12" VarType="8" ValueType="6" ValueValue="Set Environment Variables_QA" />
+										<Parameter Name="AdditionalInformation" DefVarType="12" VarType="8" ValueType="6" ValueValue="" />
+										<Parameter Name="Priority" DefVarType="12" DefValueType="1" DefValueValue="300" VarType="3" ValueType="1" ValueValue="300">
+											<Values IsEnum="True">
+												<Value Type="1" Value="100" Text="pmLowest" />
+												<Value Type="1" Value="200" Text="pmLower" />
+												<Value Type="1" Value="300" Text="pmNormal" />
+												<Value Type="1" Value="400" Text="pmHigher" />
+												<Value Type="1" Value="500" Text="pmHighest" />
+											</Values>
+										</Parameter>
+										<Parameter Name="Attrib" DefVarType="12" VarType="12" ValueType="0" ValueValue="0" />
+										<Parameter Name="OwnerFolderId" DefVarType="3" DefValueType="1" DefValueValue="-1" VarType="3" ValueType="1" ValueValue="-1" />
+									</Parameters>
+								</Data>
+							</Operation>
+							<Operation Type="{E8089E1C-53BC-4D9C-A69D-7CDDB49422CB}">
+								<Data Description="Runs a keyword test." TestName="setEnvironmentVariables_QA">
+									<Parameters LangId="{90F89436-9452-4F95-9882-6B5210079F13}">
+										<Parameter Name="SBMSEnvironment" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="SBMS-QA" />
+										<Parameter Name="Media" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="Radio" />
+										<Parameter Name="URL11" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="https://11qa.pregotostrata.com/11Orders/Default.aspx" />
+										<Parameter Name="UserName11" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="QATest" />
+										<Parameter Name="Password11" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="abc123#" />
+										<Parameter Name="SsphereUserName" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="ssphere.sellerqa@mailinator.com" />
+										<Parameter Name="SspherePwd" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="abc123!" />
+										<Parameter Name="SsphereURL" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="https://ssphereqa.pregotostrata.com/ui_new#/" />
+									</Parameters>
+								</Data>
+							</Operation>
+							<Operation Type="{E8089E1C-53BC-4D9C-A69D-7CDDB49422CB}">
+								<Data Description="Runs a keyword test." TestName="setBrowser">
+									<Parameters LangId="{90F89436-9452-4F95-9882-6B5210079F13}">
+										<Parameter Name="Browser" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="Chrome" />
+									</Parameters>
+								</Data>
+							</Operation>
+							<Operation Type="{E8089E1C-53BC-4D9C-A69D-7CDDB49422CB}">
+								<Data Description="Runs a keyword test." TestName="envSwitcher" />
+							</Operation>
+							<Operation Type="{56B7409E-809F-4569-B55F-35534DDD66FF}">
+								<Data Description="Pops the folder that is currently at the top of the folder stack out of the stack. This makes the folder that will become the top of the stack the default folder of the test log." />
+							</Operation>
+						</Children>
+					</Operation>
+					<Operation Type="{D993D251-65A9-4BED-A2EC-C2AC83739BAD}">
+						<Data GroupName="Launch SBMS, Create Radio Estimate, Send to Eleven" />
+						<Children>
+							<Operation Type="{28D3E73B-A718-4E67-96A3-4C49D5D4B340}">
+								<Data Description="Creates a log folder and makes it the current folder to which messages will be posted. This folder can contain messages of different types as well as subfolders.">
+									<Parameters LangId="{90F89436-9452-4F95-9882-6B5210079F13}">
+										<Parameter Name="MessageText" DefVarType="12" VarType="8" ValueType="6" ValueValue="Launch SBMS, Create Radio Estimate, Send to Eleven" />
+										<Parameter Name="AdditionalInformation" DefVarType="12" VarType="8" ValueType="6" ValueValue="" />
+										<Parameter Name="Priority" DefVarType="12" DefValueType="1" DefValueValue="300" VarType="3" ValueType="1" ValueValue="300">
+											<Values IsEnum="True">
+												<Value Type="1" Value="100" Text="pmLowest" />
+												<Value Type="1" Value="200" Text="pmLower" />
+												<Value Type="1" Value="300" Text="pmNormal" />
+												<Value Type="1" Value="400" Text="pmHigher" />
+												<Value Type="1" Value="500" Text="pmHighest" />
+											</Values>
+										</Parameter>
+										<Parameter Name="Attrib" DefVarType="12" VarType="12" ValueType="0" ValueValue="0" />
+										<Parameter Name="OwnerFolderId" DefVarType="3" DefValueType="1" DefValueValue="-1" VarType="3" ValueType="1" ValueValue="-1" />
+									</Parameters>
+								</Data>
+							</Operation>
+							<Operation Type="{E8089E1C-53BC-4D9C-A69D-7CDDB49422CB}">
+								<Data Description="Runs a keyword test." TestName="launchSBMS" />
+							</Operation>
+							<Operation Type="{E8089E1C-53BC-4D9C-A69D-7CDDB49422CB}">
+								<Data Description="Runs a keyword test." TestName="createEstimateHeader" />
+							</Operation>
+							<Operation Type="{E8089E1C-53BC-4D9C-A69D-7CDDB49422CB}">
+								<Data Description="Runs a keyword test." TestName="scheduleEstimateRadio">
+									<Parameters LangId="{90F89436-9452-4F95-9882-6B5210079F13}">
+										<Parameter Name="Days" DefVarType="8" DefValueType="6" DefValueValue="MTuWThF" VarType="8" ValueType="6" ValueValue="MTuWThF" />
+										<Parameter Name="StartTime" DefVarType="8" DefValueType="6" DefValueValue="9:00AM" VarType="8" ValueType="6" ValueValue="9:00AM" />
+										<Parameter Name="EndTime" DefVarType="8" DefValueType="6" DefValueValue="2:00PM" VarType="8" ValueType="6" ValueValue="2:00PM" />
+										<Parameter Name="DP" DefVarType="8" DefValueType="6" DefValueValue="BAV" VarType="8" ValueType="6" ValueValue="BAV" />
+										<Parameter Name="GrossRate" DefVarType="8" DefValueType="6" DefValueValue="$100" VarType="8" ValueType="6" ValueValue="$100" />
+										<Parameter Name="Program" DefVarType="8" DefValueType="6" DefValueValue="abc" VarType="8" ValueType="6" ValueValue="abc" />
+										<Parameter Name="spot1" DefVarType="8" DefValueType="6" DefValueValue="2" VarType="8" ValueType="6" ValueValue="2" />
+										<Parameter Name="spot2" DefVarType="8" DefValueType="6" DefValueValue="3" VarType="8" ValueType="6" ValueValue="3" />
+									</Parameters>
+								</Data>
+							</Operation>
+							<Operation Type="{E8089E1C-53BC-4D9C-A69D-7CDDB49422CB}">
+								<Data Description="Runs a keyword test." TestName="SubmitEstimateToELEVEN" />
+							</Operation>
+							<Operation Type="{E8089E1C-53BC-4D9C-A69D-7CDDB49422CB}">
+								<Data Description="Runs a keyword test." TestName="closeSBMSView">
+									<Parameters LangId="{90F89436-9452-4F95-9882-6B5210079F13}">
+										<Parameter Name="TCNum" DefVarType="3" DefValueType="1" DefValueValue="0" VarType="3" ValueType="1" ValueValue="2" />
+									</Parameters>
+								</Data>
+							</Operation>
+							<Operation Type="{56B7409E-809F-4569-B55F-35534DDD66FF}">
+								<Data Description="Pops the folder that is currently at the top of the folder stack out of the stack. This makes the folder that will become the top of the stack the default folder of the test log." />
+							</Operation>
+						</Children>
+					</Operation>
+					<Operation Type="{56B7409E-809F-4569-B55F-35534DDD66FF}">
+						<Data Description="Pops the folder that is currently at the top of the folder stack out of the stack. This makes the folder that will become the top of the stack the default folder of the test log." />
+					</Operation>
+				</Children>
+			</Operation>
+		</Children>
+	</TestData>
+	<Parameters Key="{128E10A0-A402-446C-9732-705726B062A5}" />
+</Root>

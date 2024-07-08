@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Root Signature="{5DCBAC3B-D39C-497C-9BE8-744CBADD37AA}" NameMappingVersion="7" SaveImages="0">
+	<Storages Current="0">
+		<Child Name="Default Configuration" />
+	</Storages>
+	<Nodes Name="NameMapping" Key="{BE401E45-B2D6-4FBA-931A-C2117D5C51AD}">
+		<Children>
+			<Child Name="Sys" Key="{CC697EA0-7299-4AB9-B31F-9252D13EED69}">
+				<TypeInfo Item0="{AF82DFD2-EA97-41D3-A596-C1A2B078A6E2}" />
+				<Properties>
+					<Property Name="Name">
+						<Value Value="Sys" />
+					</Property>
+				</Properties>
+				<Children>
+					<Child Name="SBMSNET" Key="{958E6A5B-F8B1-4152-BBD2-19DC48D74355}">
+						<TypeInfo Item0="{94B46BC8-44B7-4925-95F8-7C75ACAA89E1}" />
+						<Properties>
+							<Property Name="ProcessName">
+								<Value Value="SBMSNET" />
+							</Property>
+						</Properties>
+						<Children>
+							<Child Name="Form_Login" Key="{342BA372-2020-4BD4-BA69-3E380C5AE06F}">
+								<Image FileName="351808462" Left="0" Top="0" Right="314" Bottom="249" />
+								<TypeInfo Item0="{EE7C4597-655E-4179-A60D-4799C8C65624}" />
+								<Properties>
+									<Property Name="WinFormsControlName">
+										<Value Value="Form_Login" />
+									</Property>
+								</Properties>
+							</Child>
+						</Children>
+					</Child>
+				</Children>
+			</Child>
+		</Children>
+	</Nodes>
+	<LogicalNodes Name="Aliases" Owner="{BE401E45-B2D6-4FBA-931A-C2117D5C51AD}">
+		<Child Name="SBMSNET" Owner="{958E6A5B-F8B1-4152-BBD2-19DC48D74355}">
+			<Child Name="Form_Login" Owner="{342BA372-2020-4BD4-BA69-3E380C5AE06F}" />
+		</Child>
+	</LogicalNodes>
+</Root>

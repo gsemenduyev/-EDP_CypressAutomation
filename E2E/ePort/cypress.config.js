@@ -10,6 +10,14 @@ async function setupNodeEvents(on, config) {
   on("file:preprocessor", browserify.default(config));
   registerDataSession(on, config);
 
+  on('task', {
+    getRepositoryPath() {
+      const currentPath = process.cwd();
+      const repositoryPath = path.dirname(currentPath);
+      return repositoryPath;
+    }
+  });
+
   on('after:run', async (results) => {
     const envParamProd = 'cypress/fixtures/environment/prod-param.json';
     const envParamQa = 'cypress/fixtures/environment/qa-param.json';
