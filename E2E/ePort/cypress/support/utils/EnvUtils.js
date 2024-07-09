@@ -35,15 +35,17 @@ class EnvUtils {
     getEPortUrl() {
         return envProperties.ePortUrl;
     };
-    getAgencyUsername() {
-        if (DOMAIN === 'Mailinator') {
-            return envProperties.agencyUsername.mailinator;
-        } else {
-            return envProperties.agencyUsername.gmail;
-        };
+    getEPortUsername() {
+        return envProperties.ePortUsername;
     };
-    getAgencyPassword() {
-        return envProperties.agencyPassword;
+    getEPortPassword() {
+        return envProperties.ePortPassword;
+    };
+    getEPortUserFirstName() {
+        return envProperties.ePortUserFirstName;
+    };
+    getEPortUserLastName() {
+        return envProperties.ePortUserLastName;
     };
 }
 export default EnvUtils;

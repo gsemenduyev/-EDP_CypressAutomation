@@ -30,5 +30,14 @@ class EPortLoginPage {
     allLinks() {
         return cy.get('a')
     };
+    username() {
+        return cy.get('#tbUsername')
+    };
+    password() {
+        return cy.get('#tbPassword')
+    };
+    submitBtn() {
+        return cy.get('#bSubmit')
+    };
 }
 export default EPortLoginPage;

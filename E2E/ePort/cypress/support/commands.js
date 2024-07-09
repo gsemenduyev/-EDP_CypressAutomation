@@ -76,10 +76,10 @@ Cypress.Commands.add("sbms", (keywordTest) => {
         const commands = 'cd "C:\\Program Files (x86)\\SmartBear\\TestComplete 15\\Bin" && ' +
             'TestComplete.exe "' + projectPath + '\\SBMS\\SBMS.pjs" ' +
             '/ExportLog:"' + projectPath + '\\ePort\\cypress\\reports\\test-complete-reports\\' + testCompleteHTMLReportName + '\\ViewResults.html" ' +
-            '/ShareResults:"' + projectPath + '\\ePort\\cypress\\reports\\test-complete-reports\\' + testCompleteHTMLReportName + '\\ShareResults.txt" ' +
+            // '/ShareResults:"' + projectPath + '\\ePort\\cypress\\reports\\test-complete-reports\\' + testCompleteHTMLReportName + '\\ShareResults.txt" ' +
             '/run /project:SBMS /test:"KeywordTests|' + keywordTest +
             '" /exit /SilentMode';
-        cy.exec(commands, { timeout: 120000 }).then((result) => {
+        cy.exec(commands, { timeout: 3000000 }).then((result) => {
             if (result.stderr) {
                 cy.log(`Error: ${result.stderr}`);
             } else {

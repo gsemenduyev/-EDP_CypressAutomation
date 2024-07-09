@@ -11,5 +11,6 @@
     "cucumberautocomplete.syncfeatures": "cypress/integration/step-definitions/**/*.feature",
     "cSpell.words": [
         "badeball",
+        "makegoods"
     ]
 }

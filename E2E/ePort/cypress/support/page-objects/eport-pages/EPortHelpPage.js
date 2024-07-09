@@ -1,4 +1,4 @@
-class EPortUserGuidesPage {
+class EPortHelpPage {
     userGuidesText() {
         return cy.get('.SubHeadBlue').eq(0);
     };
@@ -9,4 +9,4 @@ class EPortUserGuidesPage {
         return cy.get('a');
     };
 };
-export default EPortUserGuidesPage;
+export default EPortHelpPage;
