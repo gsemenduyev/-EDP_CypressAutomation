@@ -56,5 +56,11 @@ class EPortHomePage {
     changeUserPasswordLink() {
         return cy.get('#a_User')
     };
+    userViewLink() {
+        return cy.get('#a_userViewLink')
+    };
+    userViewDropdown() {
+        return cy.get('#userViewDrop')
+    };
 }
-export default EPortHomePage; 
+export default EPortHomePage;

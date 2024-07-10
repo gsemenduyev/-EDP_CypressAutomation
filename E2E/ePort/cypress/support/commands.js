@@ -76,6 +76,7 @@ Cypress.Commands.add("sbms", (keywordTest) => {
         const commands = 'cd "C:\\Program Files (x86)\\SmartBear\\TestComplete 15\\Bin" && ' +
             'TestComplete.exe "' + projectPath + '\\SBMS\\SBMS.pjs" ' +
             '/ExportLog:"' + projectPath + '\\ePort\\cypress\\reports\\test-complete-reports\\' + testCompleteHTMLReportName + '\\ViewResults.html" ' +
+            '/ExportSummary:"' + projectPath + '\\ePort\\cypress\\reports\\test-complete-reports\\' + testCompleteHTMLReportName + '\\ViewResults.xml" ' +
             // '/ShareResults:"' + projectPath + '\\ePort\\cypress\\reports\\test-complete-reports\\' + testCompleteHTMLReportName + '\\ShareResults.txt" ' +
             '/run /project:SBMS /test:"KeywordTests|' + keywordTest +
             '" /exit /SilentMode';

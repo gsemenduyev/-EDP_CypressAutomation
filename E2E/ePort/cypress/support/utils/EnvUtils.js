@@ -1,4 +1,4 @@
-/// <reference types="Cypress" />
+/// <reference types="cypress" />
 
 const ENV = Cypress.env('ENV');
 let envProperties;
@@ -21,15 +21,6 @@ before(function () {
         });
     };
 });
-
-// before(function () {
-//     cy.writeFile('cypress/reports/run-info/run-env.json', {
-//         agencyUrl: envProperties.agencyUrl,
-//         ssphereUrl: envProperties.ssphereUrl,
-//         mailinatorUrl: envProperties.mailinatorUrl,
-//         env: envProperties.env,
-//     })
-// })
 
 class EnvUtils {
     getEPortUrl() {
