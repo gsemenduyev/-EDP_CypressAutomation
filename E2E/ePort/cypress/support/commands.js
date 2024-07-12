@@ -36,12 +36,11 @@ Cypress.Commands.add("sbms", (keywordTest) => {
     const hour = now.getHours();
     const minute = now.getMinutes();
     const second = now.getSeconds()
-    const featureFileName = Cypress.spec.relative.replace(/\\/g, '/').split('/').pop();
+    const featureFileName = Cypress.spec.relative.replace(/\\/g, '/').split('/').pop().replace(".feature", "");
     const testContext = cy.state('test');
     const { title, parent: suite } = testContext;
-    const suiteTitleTransformed = suite.title.replace(/\s+/g, '-');
     const testTitleTransformed = title.replace(/\s+/g, '-');
-    const testCompleteHTMLReportName = `${featureFileName}_${suiteTitleTransformed}_${testTitleTransformed}_${keywordTest}_${getUTCFullYear}_${hour}-${minute}-${second}`;
+    const testCompleteHTMLReportName = `${featureFileName}_${testTitleTransformed}_${keywordTest}_${getUTCFullYear}_${hour}-${minute}-${second}`;
     const tc = Cypress.env('TC');
     const projectPath = Cypress.env('PROJECT_PATH');
     const tcEnvSwitcherFile = `${Cypress.env('PROJECT_PATH')}\\SBMS\\SBMS\\Stores\\Files\\CypressEnvironmentSwitcher.txt`;
@@ -103,7 +102,4 @@ Cypress.Commands.add("sbms", (keywordTest) => {
     cy.writeFile(tcEnvSwitcherFile, 'Set up environment');
     cy.readFile(tcEnvSwitcherFile).should('eq', 'Set up environment')
     cy.readFile(estimateNumber).should('not.be.empty')
-    cy.readFile(estimateNumber).then(($estimateNum) => {
-        Cypress.env('ESTIMATE', $estimateNum);
-    })
 });
