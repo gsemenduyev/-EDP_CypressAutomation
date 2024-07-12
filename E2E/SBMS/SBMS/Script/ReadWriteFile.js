@@ -33,7 +33,7 @@ function writeStoreTxtFile(fileName, content) {
 
 
 /* 
-Writes to Text file from Stores Files
+Clears content in Text file from Stores Files
  Accepts - parameter filename, content
  **/
 function clearFileContent(fileName) {
