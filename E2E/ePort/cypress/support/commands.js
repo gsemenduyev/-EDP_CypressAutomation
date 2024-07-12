@@ -9,8 +9,7 @@
 // ***********************************************
 
 /// <reference types="cypress-data-session" />
-/// <reference types="Cypress" />
-
+/// <reference types="cypress" />
 /* 
 Verifies if element exists in DOM.
 [@param] selectorSyntax - Syntax of CSS, class, id...
@@ -43,8 +42,21 @@ Cypress.Commands.add("sbms", (keywordTest) => {
     const suiteTitleTransformed = suite.title.replace(/\s+/g, '-');
     const testTitleTransformed = title.replace(/\s+/g, '-');
     const testCompleteHTMLReportName = `${featureFileName}_${suiteTitleTransformed}_${testTitleTransformed}_${keywordTest}_${getUTCFullYear}_${hour}-${minute}-${second}`;
-    const tc = Cypress.env('TC')
-    const projectPath = Cypress.env('PROJECT_PATH')
+    const tc = Cypress.env('TC');
+    const projectPath = Cypress.env('PROJECT_PATH');
+    const tcEnvSwitcherFile = `${Cypress.env('PROJECT_PATH')}\\SBMS\\SBMS\\Stores\\Files\\CypressEnvironmentSwitcher.txt`;
+    const estimateNumber = `${Cypress.env('PROJECT_PATH')}\\SBMS\\SBMS\\Stores\\Files\\EstimateNumber.txt`;
+    let env;
+    if (Cypress.env('ENV') === 'Production') {
+        env = 'PROD'
+    } else if (Cypress.env('ENV') === 'UAT') {
+        env = 'UAT'
+    } else {
+        env = 'QA'
+    };
+
+    cy.writeFile(tcEnvSwitcherFile, env);
+    cy.readFile(tcEnvSwitcherFile).should('eq', env)
 
     if (tc === 'SessionCreator') {
         cy.log('Launching SessionCreator')
@@ -88,4 +100,10 @@ Cypress.Commands.add("sbms", (keywordTest) => {
             }
         });
     };
+    cy.writeFile(tcEnvSwitcherFile, 'Set up environment');
+    cy.readFile(tcEnvSwitcherFile).should('eq', 'Set up environment')
+    cy.readFile(estimateNumber).should('not.be.empty')
+    cy.readFile(estimateNumber).then(($estimateNum) => {
+        Cypress.env('ESTIMATE', $estimateNum);
+    })
 });

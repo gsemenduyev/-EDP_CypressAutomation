@@ -38,5 +38,14 @@ class EnvUtils {
     getEPortUserLastName() {
         return envProperties.ePortUserLastName;
     };
+    getElevenUrl() {
+        return envProperties.elevenUrl;
+    };
+    getElevenUsername() {
+        return envProperties.elevenUsername;
+    };
+    getElevenPassword() {
+        return envProperties.elevenPassword;
+    };
 }
 export default EnvUtils;

@@ -14,14 +14,6 @@ async function setupNodeEvents(on, config) {
   const currentPath = process.cwd();
   config.env.PROJECT_PATH = path.dirname(currentPath);
 
-  // on('task', {
-  //   getRepositoryPath() {
-  //     const currentPath = process.cwd();
-  //     const repositoryPath = path.dirname(currentPath);
-  //     return repositoryPath;
-  //   }
-  // });
-
   on('after:run', async (results) => {
     const envParamProd = 'cypress/fixtures/environment/prod-param.json';
     const envParamQa = 'cypress/fixtures/environment/qa-param.json';
@@ -84,7 +76,7 @@ async function setupNodeEvents(on, config) {
 module.exports = defineConfig({
   viewportWidth: 1920,
   viewportHeight: 1080,
-  defaultCommandTimeout: 120000,
+  defaultCommandTimeout: 20000,
   pageLoadTimeout: 600000,
   screenshotOnRunFailure: true,
   video: true,

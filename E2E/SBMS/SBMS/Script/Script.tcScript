@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Root signature="{9252F941-DB23-4FCA-AA50-858B33BB4A19}" version="11.40">
 	<children>
-		<child name="GetCurrentDate" key="{02B5231F-98F1-404A-A031-3865CE459B71}" path="GetCurrentDate.js" />
+		<child name="DateUtils" key="{02B5231F-98F1-404A-A031-3865CE459B71}" path="DateUtils.js" />
 		<child name="WaitForElement" key="{664694CD-6F68-471F-A385-9578972043D9}" path="WaitForElement.js" />
-		<child name="WriteToFile" key="{0F8B9147-4FDE-48EE-B1C5-5564FBD1801E}" path="WriteToFile.js" />
+		<child name="ReadWriteFile" key="{C3A2CA4B-C360-4376-865C-D7D35F463F52}" path="ReadWriteFile.js" />
 	</children>
 </Root>

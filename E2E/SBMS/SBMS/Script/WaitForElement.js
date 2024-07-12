@@ -6,13 +6,11 @@
     try {
       element = Sys.Process("SBMSNET").find(objectIdentifier, elementName, 30);
       if (element.Exists && element.VisibleOnScreen) {
-        // Element found and visible on screen, exit the loop
         break;
       }
-      element = null; // Reset element if not visible
+      element = null;
     } catch (e) {
-      // Element not found yet, continue waiting
-      Delay(500); // Adjust the delay as needed
+      Delay(500);
     }
   }
   if (element === null) {

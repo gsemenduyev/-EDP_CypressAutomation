@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Root signature="{B9D9273E-7266-43E0-BF02-97F168593604}" version="15.0">
+	<TestData Description="" Key="{67CA3475-E2C3-4168-A13F-650D941E4365}" Type="{79147B28-EE20-4294-B773-1D3787FBF37B}">
+		<Data>
+			<Extenders>
+				<NodeBitmaps>
+					<Bitmap Name="Sys.Process(&quot;SBMSNET&quot;)" Data="61717A69700000000100000036040000780173F235636100033320A901C40250CCC8A000640101541EC2A13E397DD294FFB83031B6E1D20B12A7877E5C76A0BB0B973A5CE2C4EAC7A50E9738BA7DB8D4E1121F2AFAD1DD898B4FAC3F89D58F6E1E888F4B2F481C9B7A74315AEAC767362E3900B8B907FC" />
+				</NodeBitmaps>
+			</Extenders>
+		</Data>
+		<Children>
+			<Operation Type="{CE294ABA-E13B-4B94-AFC8-FA8F4249123D}">
+				<Data Description="Moves the mouse cursor to the menu item specified and then simulates a single click." Action="Click" MenuType="0" PreferredMenu="MainMenu">
+					<Parameters LangId="{90F89436-9452-4F95-9882-6B5210079F13}">
+						<Parameter Name="Item" DefVarType="12" VarType="8" ValueType="6" ValueValue="File|Exit SBMS" />
+					</Parameters>
+					<ObjectSyntax LangId="{90F89436-9452-4F95-9882-6B5210079F13}" Code="Sys.Process(&quot;SBMSNET&quot;).WinFormsObject(&quot;Form_MDI&quot;);" />
+				</Data>
+			</Operation>
+		</Children>
+	</TestData>
+	<Variables Version="4" Key="{4FFA69CC-87CF-4EC1-A52F-0CE4508DA1CE}">
+		<Items>
+			<Variable Name="Count1" Type="Integer" Local="False">
+				<DefValue IntValue="0" />
+			</Variable>
+		</Items>
+	</Variables>
+	<Parameters Key="{376A4490-EEC7-4A79-8719-BAC75360FB35}" />
+</Root>
