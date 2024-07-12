@@ -4,5 +4,8 @@
 		<child name="CypressEnvironmentSwitcher" key="{BC59C1EC-5C41-45A3-ACD8-8B6A7446AEBD}">
 			<data signature="{FC92F8D9-8A57-4D74-B8B4-479AA50BF647}" version="15.0" caption="CypressEnvironmentSwitcher" ID="{BC59C1EC-5C41-45A3-ACD8-8B6A7446AEBD}" FileName="Files\CypressEnvironmentSwitcher.txt" Update="False" />
 		</child>
+		<child name="EstimateNumber_txt" key="{E7200531-E697-4FA5-BE62-9F4908DC9355}">
+			<data signature="{FC92F8D9-8A57-4D74-B8B4-479AA50BF647}" version="15.0" caption="EstimateNumber_txt" ID="{E7200531-E697-4FA5-BE62-9F4908DC9355}" FileName="Files\EstimateNumber.txt" Update="False" />
+		</child>
 	</children>
 </Root>

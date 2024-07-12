@@ -6,3 +6,4 @@ Visualizer
 SBMS/Log/
 *.tcNM
 /SBMS/SBMS.mds.tcLS
+/SBMS/Script/*js.bak

@@ -10,13 +10,9 @@ async function setupNodeEvents(on, config) {
   on("file:preprocessor", browserify.default(config));
   registerDataSession(on, config);
 
-  on('task', {
-    getRepositoryPath() {
-      const currentPath = process.cwd();
-      const repositoryPath = path.dirname(currentPath);
-      return repositoryPath;
-    }
-  });
+  // Sets up environment variable
+  const currentPath = process.cwd();
+  config.env.PROJECT_PATH = path.dirname(currentPath);
 
   on('after:run', async (results) => {
     const envParamProd = 'cypress/fixtures/environment/prod-param.json';
@@ -80,7 +76,7 @@ async function setupNodeEvents(on, config) {
 module.exports = defineConfig({
   viewportWidth: 1920,
   viewportHeight: 1080,
-  defaultCommandTimeout: 120000,
+  defaultCommandTimeout: 20000,
   pageLoadTimeout: 600000,
   screenshotOnRunFailure: true,
   video: true,

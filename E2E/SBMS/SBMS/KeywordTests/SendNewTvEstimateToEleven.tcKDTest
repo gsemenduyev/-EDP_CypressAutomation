@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Root signature="{B9D9273E-7266-43E0-BF02-97F168593604}" version="15.0">
+	<TestData Description="" Key="{FF1DF05C-9D99-4852-9822-0964BE89A447}" Type="{79147B28-EE20-4294-B773-1D3787FBF37B}">
+		<Data>
+			<Extenders>
+				<NodeBitmaps />
+			</Extenders>
+		</Data>
+		<Children>
+			<Operation Type="{E8089E1C-53BC-4D9C-A69D-7CDDB49422CB}">
+				<Data Description="Runs a keyword test." TestName="createTVEstimate">
+					<Parameters LangId="{90F89436-9452-4F95-9882-6B5210079F13}">
+						<Parameter Name="StartWeek" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="1" />
+						<Parameter Name="StartDay" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="monday" />
+						<Parameter Name="EndWeek" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="1" />
+						<Parameter Name="EndDay" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="sunday" />
+						<Parameter Name="AgencyName" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="ABC Agency" />
+						<Parameter Name="AgencyOfficeName" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="ABC Agency Office" />
+						<Parameter Name="ClientName" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="ABC Client" />
+						<Parameter Name="EstimateDesc" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="TV Test Estimate" />
+						<Parameter Name="Media" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="TV" />
+						<Parameter Name="Product" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="ABC Product" />
+						<Parameter Name="EstimateGroup" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="General" />
+						<Parameter Name="DaypartGroup" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="Local TV" />
+						<Parameter Name="PrimaryDemo" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="Adults 18-54" />
+						<Parameter Name="EstimateType" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="Weekly" />
+						<Parameter Name="Market" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="Denver-Boulder" />
+						<Parameter Name="Days" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="MTuWThF" />
+						<Parameter Name="StartTime" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="9:00AM" />
+						<Parameter Name="EndTime" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="2:00PM" />
+						<Parameter Name="DP" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="BAV" />
+						<Parameter Name="GrossRate" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="$100" />
+						<Parameter Name="Spots" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="5" />
+						<Parameter Name="Station" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="KMGH-TV" />
+					</Parameters>
+				</Data>
+			</Operation>
+		</Children>
+	</TestData>
+	<Parameters Key="{E1CF37E4-E010-467B-A197-1B5538A8A2D3}" />
+</Root>

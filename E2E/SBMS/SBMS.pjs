@@ -11,18 +11,6 @@
 	<variables key="{1014BE9A-6A05-4219-A3DC-8C45CBA2C527}">
 		<data Version="4">
 			<Items>
-				<Variable Name="EnvironmentVersion" Type="String" Local="True">
-					<DefValue />
-				</Variable>
-				<Variable Name="EnvironmentURL" Type="String" Local="True">
-					<DefValue />
-				</Variable>
-				<Variable Name="Browser" Type="String" Local="True" Descr="Chrome">
-					<DefValue />
-				</Variable>
-				<Variable Name="Media" Type="String" Local="True">
-					<DefValue />
-				</Variable>
 				<Variable Name="SBMSEnvironment" Type="String" Local="True">
 					<DefValue />
 				</Variable>
