@@ -15,7 +15,7 @@ Verifies if element exists in DOM.
 [@param] selectorSyntax - Syntax of CSS, class, id...
 [@return] - boolean
 */
-Cypress.Commands.add("isElementExists", (selectorSyntax) => {
+Cypress.Commands.add("is_element_exists", (selectorSyntax) => {
     cy.get("body").then($body => {
         let elementExist;
         if ($body.find(selectorSyntax).length > 0) {
@@ -40,11 +40,12 @@ Cypress.Commands.add("sbms", (keywordTest) => {
     const testContext = cy.state('test');
     const { title, parent: suite } = testContext;
     const testTitleTransformed = title.replace(/\s+/g, '-');
-    const testCompleteHTMLReportName = `${featureFileName}_${testTitleTransformed}_${keywordTest}_${getUTCFullYear}_${hour}-${minute}-${second}`;
+    const testCompleteHTMLReportName = `${featureFileName}_${testTitleTransformed}_${keywordTest}_${hour}-${minute}-${second}`;
     const tc = Cypress.env('TC');
     const projectPath = Cypress.env('PROJECT_PATH');
-    const tcEnvSwitcherFile = `${Cypress.env('PROJECT_PATH')}\\SBMS\\SBMS\\Stores\\Files\\CypressEnvironmentSwitcher.txt`;
-    const estimateNumber = `${Cypress.env('PROJECT_PATH')}\\SBMS\\SBMS\\Stores\\Files\\EstimateNumber.txt`;
+    const tcEnvSwitcherFilePath = `${Cypress.env('PROJECT_PATH')}\\SBMS\\SBMS\\Stores\\Files\\CypressEnvironmentSwitcher.txt`;
+    const tcProjectEstNumFilePath = `${Cypress.env('PROJECT_PATH')}\\SBMS\\SBMS\\Stores\\Files\\EstimateNumber.txt`;
+    const cyProjectEstNumFilePath = 'cypress/fixtures/sbms-estimate/estimate-number.txt'
     let env;
     if (Cypress.env('ENV') === 'Production') {
         env = 'PROD'
@@ -54,8 +55,8 @@ Cypress.Commands.add("sbms", (keywordTest) => {
         env = 'QA'
     };
 
-    cy.writeFile(tcEnvSwitcherFile, env);
-    cy.readFile(tcEnvSwitcherFile).should('eq', env)
+    cy.writeFile(tcEnvSwitcherFilePath, env);
+    cy.readFile(tcEnvSwitcherFilePath).should('eq', env)
 
     if (tc === 'SessionCreator') {
         cy.log('Launching SessionCreator')
@@ -99,7 +100,11 @@ Cypress.Commands.add("sbms", (keywordTest) => {
             }
         });
     };
-    cy.writeFile(tcEnvSwitcherFile, 'Set up environment');
-    cy.readFile(tcEnvSwitcherFile).should('eq', 'Set up environment')
-    cy.readFile(estimateNumber).should('not.be.empty')
+    cy.writeFile(tcEnvSwitcherFilePath, 'Set up environment')
+    cy.readFile(tcEnvSwitcherFilePath).should('eq', 'Set up environment');
+    cy.readFile(tcProjectEstNumFilePath).should('not.be.empty');
+    cy.readFile(tcProjectEstNumFilePath).then(($estimateNum) => {
+        cy.writeFile(cyProjectEstNumFilePath, $estimateNum)
+        cy.readFile(cyProjectEstNumFilePath).should('include', $estimateNum)
+    })
 });

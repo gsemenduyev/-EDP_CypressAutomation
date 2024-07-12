@@ -1,11 +1,17 @@
-Feature: New estimate ePort workflow.
+Feature: New SBMS estimate ePort workflow.
 
     Feature Description:
     Create new Estimate In SBMS - Send To ELEVEN - Submit To EPort And Confirm The Order
 
-    Scenario: User creates new ePort user and verifies new ePort user is created
+    Scenario: Login to ePort
         * Login to ePort
 
-    Scenario: Launch SBMS scenario
-        * Launch SBMS
+    Scenario: Create new SBMS estimate and send to Eleven
+        * Create new SBMS estimate and send to Eleven
+        * Verify new SBMS estimate is created
+
+    Scenario: Verify estimate made it to eleven
+        * Login to Eleven
+        * Search for order in Eleven
+        * Verify TV order status is 'New'
 
