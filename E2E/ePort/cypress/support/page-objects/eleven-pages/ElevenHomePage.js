@@ -29,5 +29,23 @@ class ElevenHomePage {
     okButton() {
         return cy.get('.button-bar-confirm > .text-right > .save')
     };
+    showChangeAEStationLink() {
+        return cy.get("[data-action='show-changeAE']")
+    };
+    selectSellerDropdown() {
+        return cy.get('#changeAE-master-rep')
+    };
+    selectViaDropdown() {
+        return cy.get('#changeAE-transport')
+    };
+    selectSubRepCoDropdown() {
+        return cy.get('#changeAE-sub-rep')
+    };
+    selectSubRepOfficeDropdown() {
+        return cy.get('#changeAE-office')
+    };
+    selectChangeAEDropdown() {
+        return cy.get('#changeAE-ae')
+    };
 };
 export default ElevenHomePage;

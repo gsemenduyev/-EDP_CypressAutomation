@@ -29,6 +29,15 @@ Cypress.Commands.add("is_element_exists", (selectorSyntax) => {
     });
 });
 
+Cypress.Commands.add('getFormattedDate', () => {
+    const today = new Date();
+    const month = today.getMonth() + 1;
+    const day = today.getDate();
+    const year = today.getFullYear();
+
+    return `${month}/${day}/${year}`;
+});
+
 Cypress.Commands.add("sbms", (keywordTest) => {
     const now = new Date();
     cy.clock(now);

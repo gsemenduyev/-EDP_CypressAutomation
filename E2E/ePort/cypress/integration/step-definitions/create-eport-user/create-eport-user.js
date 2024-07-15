@@ -23,9 +23,6 @@ const ORGANIZATION = (() => {
     }
 })();
 
-
-
-
 Given('Navigate to ePort Org Admin Page', () => {
     ePortHomePage.selectActionDropdown().select('Org Admin');
     cy.title().should('eq', 'ePort - Administration');

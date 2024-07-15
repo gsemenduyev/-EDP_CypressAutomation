@@ -1,66 +1,81 @@
 class EPortHomePage {
     welcomeTitle() {
-        return cy.get('.separator')
+        return cy.get('.separator');
     };
     password() {
-        return cy.get('#tbPassword')
+        return cy.get('#tbPassword');
     };
     submitBtn() {
-        return cy.get('#bSubmit')
+        return cy.get('#bSubmit');
     };
     quickSearchLink() {
-        return cy.get('a').eq(3)
+        return cy.get('a').eq(3);
     };
     logoutLink() {
-        return cy.get('a').eq(2)
+        return cy.get('a').eq(2);
     };
     needHelpLink() {
-        return cy.get('a').eq(1)
+        return cy.get('a').eq(1);
     };
     refreshBtn() {
-        return cy.get('#lb_Refresh')
+        return cy.get('#lb_Refresh');
     };
     tabInbox() {
-        return cy.get('#tabInbox')
+        return cy.get('#tabInbox');
     };
     tabPending() {
-        return cy.get('#tabPending')
+        return cy.get('#tabPending');
     };
     tabDrafts() {
-        return cy.get('#tabDrafts')
+        return cy.get('#tabDrafts');
     };
     tabCompleted() {
-        return cy.get('#tabCompleted')
+        return cy.get('#tabCompleted');
     };
     ordersBtn() {
-        return cy.get('#subOrders2')
+        return cy.get('#subOrders2');
     };
     revisionsBtn() {
-        return cy.get('#subRevisions2')
+        return cy.get('#subRevisions2');
     };
     makegoodsBtn() {
-        return cy.get('#subMakegoods2')
+        return cy.get('#subMakegoods2');
     };
     logTimesBtn() {
-        return cy.get('#subLogTimes')
+        return cy.get('#subLogTimes');;
     };
     cashTradeAllocationBtn() {
-        return cy.get('#subCashTradeAllocation')
+        return cy.get('#subCashTradeAllocation');
     };
     inboxGridHeaders() {
-        return cy.get('.DataGrid_Header')
+        return cy.get('.DataGrid_Header');
     };
     selectActionDropdown() {
-        return cy.get('#SelectAction')
+        return cy.get('#SelectAction');
     };
     changeUserPasswordLink() {
-        return cy.get('#a_User')
+        return cy.get('#a_User');
     };
     userViewLink() {
-        return cy.get('#a_userViewLink')
+        return cy.get('#a_userViewLink');
     };
     userViewDropdown() {
-        return cy.get('#userViewDrop')
+        return cy.get('#userViewDrop');
     };
+    dateReceivedHeader() {
+        return cy.get('.DataGrid_Header > :nth-child(2)');
+    };
+    firstGridRow() {
+        return cy.get('.DataGrid_RowItem').first();
+    };
+    auditTrailText() {
+        return cy.get('.innerContainer');
+    };
+    logOutButton() {
+        return cy.get('#PageHeader_Logout');
+    }
+    returnButton() {
+        return cy.get('#b_Return');
+    }
 }
 export default EPortHomePage;

@@ -10,4 +10,5 @@ Feature: Verify ePort pages
         * Login to ePort
         * Verify ePort Home Page
         * Verify ePort Org Admin Page
+        * Logout from ePort
         * Verify ePort Change Password Page

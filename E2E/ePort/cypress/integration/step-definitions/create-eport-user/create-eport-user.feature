@@ -9,3 +9,4 @@ Feature: Create new ePort user
         * Verify Org Admin page User Manager grid
         * Create new ePort user
         * Verify new user created
+        * Logout from ePort
