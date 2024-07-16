@@ -145,7 +145,7 @@ Cypress.Commands.add("sbms", (keywordTest) => {
     cy.writeFile(tcEnvSwitcherFilePath, 'Set up environment')
     cy.readFile(tcEnvSwitcherFilePath).should('eq', 'Set up environment');
     /* 
-    Copies the SBMS Estimate number the E2E\SBMS\SBMS\Stores\Files\CypressEnvironmentSwitcher.txt is not empty
+    Copies the SBMS Estimate number from E2E\SBMS\SBMS\Stores\Files\CypressEnvironmentSwitcher.txt
     and writes the SBMS Estimate number to cypress\fixtures\sbms-estimate\estimate-number.txt
     */
     cy.readFile(tcProjectEstNumFilePath).should('not.be.empty');
