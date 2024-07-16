@@ -10,6 +10,34 @@
 
 /// <reference types="cypress-data-session" />
 /// <reference types="cypress" />
+
+let testCompleteHTMLReportName;
+/* 
+AfterEach hook serves the TestComplete HTML report, 
+it checks if the Scenario with SBMS step failed 
+then adds "Failed" to the report folder name,
+located in "cypress\reports\test-complete-reports"
+*/
+afterEach(function () {
+    const { title, state, parent: suite } = cy.state('test');
+    if (state === 'failed') {
+        const parentFolder = Cypress.env('PROJECT_PATH') + '\\ePort\\cypress\\reports\\test-complete-reports';
+        const oldFolderName = testCompleteHTMLReportName;
+        const newFolderName = `Failed-${testCompleteHTMLReportName}`;
+        if (oldFolderName && typeof oldFolderName === 'string' && oldFolderName.trim().length > 0) {
+            cy.task('searchAndRenameFolder', { parentFolder, oldFolderName, newFolderName })
+                .then(
+                    () => {
+                        cy.log('Folder renamed successfully');
+                    },
+                    (err) => {
+                        cy.log('Failed to rename folder:', err.message);
+                    }
+                );
+        }
+    }
+});
+
 /* 
 Verifies if element exists in DOM.
 [@param] selectorSyntax - Syntax of CSS, class, id...
@@ -34,14 +62,17 @@ Cypress.Commands.add('getFormattedDate', () => {
     const month = today.getMonth() + 1;
     const day = today.getDate();
     const year = today.getFullYear();
-
     return `${month}/${day}/${year}`;
 });
 
+/* 
+Executes SBMS TestComplete project.
+Sets up Environment for SBMS TestComplete project before the KeywordTest execution starts, location - E2E\SBMS\SBMS\Stores\Files\CypressEnvironmentSwitcher.txt.
+[@param] keywordTest - Name of TestComplete KeywordTest
+*/
 Cypress.Commands.add("sbms", (keywordTest) => {
     const now = new Date();
     cy.clock(now);
-    const getUTCFullYear = now.toLocaleDateString().replace(/\//g, '-');
     const hour = now.getHours();
     const minute = now.getMinutes();
     const second = now.getSeconds()
@@ -49,7 +80,7 @@ Cypress.Commands.add("sbms", (keywordTest) => {
     const testContext = cy.state('test');
     const { title, parent: suite } = testContext;
     const testTitleTransformed = title.replace(/\s+/g, '-');
-    const testCompleteHTMLReportName = `${featureFileName}_${testTitleTransformed}_${keywordTest}_${hour}-${minute}-${second}`;
+    testCompleteHTMLReportName = `${featureFileName}_${testTitleTransformed}_${keywordTest}_${hour}-${minute}-${second}`;
     const tc = Cypress.env('TC');
     const projectPath = Cypress.env('PROJECT_PATH');
     const tcEnvSwitcherFilePath = `${Cypress.env('PROJECT_PATH')}\\SBMS\\SBMS\\Stores\\Files\\CypressEnvironmentSwitcher.txt`;
@@ -64,6 +95,7 @@ Cypress.Commands.add("sbms", (keywordTest) => {
         env = 'QA'
     };
 
+    // Writes the environment name to SBMS TestComplete project
     cy.writeFile(tcEnvSwitcherFilePath, env);
     cy.readFile(tcEnvSwitcherFilePath).should('eq', env)
 
@@ -109,8 +141,13 @@ Cypress.Commands.add("sbms", (keywordTest) => {
             }
         });
     };
+    // Sets up "Set up environment" as default text
     cy.writeFile(tcEnvSwitcherFilePath, 'Set up environment')
     cy.readFile(tcEnvSwitcherFilePath).should('eq', 'Set up environment');
+    /* 
+    Copies the SBMS Estimate number the E2E\SBMS\SBMS\Stores\Files\CypressEnvironmentSwitcher.txt is not empty
+    and writes the SBMS Estimate number to cypress\fixtures\sbms-estimate\estimate-number.txt
+    */
     cy.readFile(tcProjectEstNumFilePath).should('not.be.empty');
     cy.readFile(tcProjectEstNumFilePath).then(($estimateNum) => {
         cy.writeFile(cyProjectEstNumFilePath, $estimateNum)

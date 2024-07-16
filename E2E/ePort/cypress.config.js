@@ -14,6 +14,43 @@ async function setupNodeEvents(on, config) {
   const currentPath = process.cwd();
   config.env.PROJECT_PATH = path.dirname(currentPath);
 
+  on('task', {
+    searchAndRenameFolder({ parentFolder, oldFolderName, newFolderName }) {
+      return new Promise((resolve, reject) => {
+        if (!parentFolder || !oldFolderName || !newFolderName) {
+          return reject(new Error('Invalid arguments: parentFolder, oldFolderName, and newFolderName are required.'));
+        }
+        const oldFolderPath = path.join(parentFolder, oldFolderName);
+        const newFolderPath = path.join(parentFolder, newFolderName);
+        // List all contents of the parent folder
+        fs.readdir(parentFolder, (err, files) => {
+          if (err) {
+            return reject(new Error(`Unable to read parent folder "${parentFolder}": ${err.message}`));
+          }
+
+          console.log(`Contents of "${parentFolder}":`);
+          files.forEach(file => {
+            console.log(file);
+          });
+
+          // Check if the old folder exists
+          fs.access(oldFolderPath, fs.constants.F_OK, (err) => {
+            if (err) {
+              return reject(new Error(`Folder "${oldFolderName}" not found in "${parentFolder}"`));
+            }
+            // Rename the folder
+            fs.rename(oldFolderPath, newFolderPath, (err) => {
+              if (err) {
+                return reject(err);
+              }
+              resolve(null);
+            });
+          });
+        });
+      });
+    }
+  });
+
   on('after:run', async (results) => {
     const envParamProd = 'cypress/fixtures/environment/prod-param.json';
     const envParamQa = 'cypress/fixtures/environment/qa-param.json';
