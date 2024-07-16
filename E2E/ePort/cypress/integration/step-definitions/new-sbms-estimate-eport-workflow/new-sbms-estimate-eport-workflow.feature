@@ -1,4 +1,4 @@
-Feature: New SBMS estimate ePort workflow.
+Feature: New SBMS TV estimate ePort workflow.
 
     Feature Description:
     Create new Estimate In SBMS - Send To ELEVEN - Submit To EPort And Confirm The Order
