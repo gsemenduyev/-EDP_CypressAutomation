@@ -3,3 +3,4 @@ screenshots
 videos
 reports
 cypress/fixtures/environment/*.json
+cypress/fixtures/sbms-estimate/estimate-number.txt
