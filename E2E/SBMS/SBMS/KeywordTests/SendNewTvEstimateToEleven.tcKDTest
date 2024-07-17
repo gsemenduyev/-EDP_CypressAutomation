@@ -21,14 +21,14 @@
 						<Parameter Name="Media" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="TV" />
 						<Parameter Name="Product" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="ABC Product" />
 						<Parameter Name="EstimateGroup" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="General" />
-						<Parameter Name="DaypartGroup" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="Local TV" />
+						<Parameter Name="DaypartGroup" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="TV" />
 						<Parameter Name="PrimaryDemo" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="Adults 18-54" />
 						<Parameter Name="EstimateType" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="Weekly" />
 						<Parameter Name="Market" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="Denver-Boulder" />
 						<Parameter Name="Days" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="MTuWThF" />
 						<Parameter Name="StartTime" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="9:00AM" />
 						<Parameter Name="EndTime" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="2:00PM" />
-						<Parameter Name="DP" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="BAV" />
+						<Parameter Name="DP" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="AM" />
 						<Parameter Name="GrossRate" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="$100" />
 						<Parameter Name="Spots" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="5" />
 						<Parameter Name="Station" DefVarType="8" DefValueType="6" DefValueValue="" VarType="8" ValueType="6" ValueValue="KMGH-TV" />
