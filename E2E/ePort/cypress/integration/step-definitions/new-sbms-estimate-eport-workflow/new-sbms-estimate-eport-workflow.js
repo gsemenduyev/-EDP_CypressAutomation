@@ -99,7 +99,7 @@ Given('Send order to ePort', () => {
 Given('Verify new order details in ePort', () => {
     cy.readFile(estNumFilePath).then(($estimateNumber) => {
         let startIndex = 0;
-        let endIndex = 30;
+        let endIndex = 120;
         const waitForEstimate = () => {
             ePortHomePage.dateReceivedHeader().find('img').invoke('attr', 'alt').then((altText) => {
                 if (altText !== 'Desc') {
