@@ -53,7 +53,6 @@ Given('Verify ePort Login Page', () => {
 
 });
 
-
 Given('Verify ePort User Guides Page', () => {
     cy.visit(envUtils.getEPortUrl());
     cy.title().should('eq', 'ePort Home');
@@ -106,6 +105,12 @@ Given('Login to ePort', () => {
     ePortLoginPage.password().type(envUtils.getEPortPassword())
     ePortLoginPage.submitBtn().click();
     cy.title().should('eq', 'ePort');
+    cy.screenshot();
+});
+
+Given('Logout from ePort', () => {
+    ePortHomePage.logOutButton().click();
+    cy.title().should('eq', 'ePort Home');
     cy.screenshot();
 });
 

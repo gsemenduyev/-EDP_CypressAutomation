@@ -47,5 +47,17 @@ class EnvUtils {
     getElevenPassword() {
         return envProperties.elevenPassword;
     };
+    getSeller() {
+        return envProperties.seller;
+    };
+    getVia() {
+        return envProperties.via;
+    };
+    getSubRepCompany() {
+        return envProperties.subRepCompany;
+    };
+    getSubRepOffice() {
+        return envProperties.subRepOffice;
+    };
 }
 export default EnvUtils;
