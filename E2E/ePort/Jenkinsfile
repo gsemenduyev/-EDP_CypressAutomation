@@ -1,0 +1,104 @@
+#!/usr/bin/env groovy
+import groovy.json.*
+
+def CONFIG_FILE_PATH = 'E2E/ePort/cypress/fixtures/test-complete/session-creator-jenkins-creds.json';
+
+pipeline {
+    agent {
+        label 'testexecute'
+    }
+    tools {
+        nodejs '18'
+    }
+    options {
+        ansiColor('xterm')
+    }
+
+    stages {
+
+        stage('Cleanup') {
+            steps {
+                cleanWs()
+            }
+        }
+        stage('Clone Repository') {
+            steps {
+                script {
+                     withCredentials([usernamePassword(credentialsId: 'sabuildserver_GIT_TOKEN', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                        def gitUrl = "https://${GIT_USERNAME}:${GIT_PASSWORD}@github.freewheel.tv/HS/EDP_CypressAutomation.git"
+                        git url: gitUrl, branch: 'FWS-49164'
+                    }
+                }
+            }
+        }
+
+        stage('Config file setup'){
+            steps {
+                script {
+                     withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'TE_Agent', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])  {
+                     def username = "${USERNAME}";
+                     def password = "${PASSWORD}";
+                     def testcomplete = [
+                        'username': (username),
+                        'password': (password)
+                        ];
+                    def reporterConfig = readJSON file: CONFIG_FILE_PATH;
+                    reporterConfig.put("testcomplete", testcomplete);
+                    def json = JsonOutput.toJson(reporterConfig);
+                    json = JsonOutput.prettyPrint(json);
+                    writeFile(file: CONFIG_FILE_PATH, text: json);
+
+                    def reporterConfig1 = readJSON file: CONFIG_FILE_PATH;
+                       testcomplete = [
+                        'username': reporterConfig1.testcomplete.username.values[0],
+                        'password': reporterConfig1.testcomplete.password.values[0],
+                        ];
+                        reporterConfig.put("testcomplete", testcomplete);
+                        json = JsonOutput.toJson(reporterConfig);
+                        json = JsonOutput.prettyPrint(json);
+                        writeFile(file: CONFIG_FILE_PATH, text: json);
+                     }
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                bat 'cd E2E\\TC-Cypress-Integration && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome --env tags=\"@WIP\",TC=\"SessionCreator\"';
+            }
+        }
+    }
+    post {
+        always {
+            script {
+                bat 'cd E2E\\TC-Cypress-Integration && node ./cucumber-html-report.js'
+            }
+            publishHTML(target: [
+                allowMissing: true,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'E2E/TC-Cypress-Integration/cypress/reports',
+                reportFiles: 'cucumber-reports/cucumber-html-report/index.html',
+                reportName: 'Cucumber Report',
+                reportTitles: 'Cucumber Report'
+            ])
+            publishHTML(target: [
+                allowMissing: true,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'E2E/TC-Cypress-Integration/cypress/reports',
+                reportFiles: 'multi-html-report/index.html',
+                reportName: 'Multi HTML Report',
+                reportTitles: 'Multi HTML Report'
+            ])
+            // publishHTML(target: [
+            //     allowMissing: false,
+            //     alwaysLinkToLastBuild: true,
+            //     keepAll: true,
+            //     reportDir: 'E2E/SBMS/Test1',
+            //     reportFiles: 'test.html',
+            //     reportName: 'GS Test TestComplete HTML Report',
+            //     reportTitles: 'GS Test TestComplete HTML Report'
+            // ])
+        }
+    }
+}
