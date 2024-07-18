@@ -63,7 +63,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                bat 'cd E2E\\ePort && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome --env tags=\"@WIP\",TC=\"SessionCreator\"';
+                bat 'cd E2E\\ePort && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome --env TC="SessionCreator" --spec "cypress/integration/step-definitions/test-jenkins/test-jenkins.feature"';
             }
         }
     }
