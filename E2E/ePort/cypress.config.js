@@ -122,7 +122,7 @@ module.exports = defineConfig({
   pageLoadTimeout: 600000,
   screenshotOnRunFailure: true,
   trashAssetsBeforeRuns: false,
-  video: true,
+  video: false,
   retries: {
     runMode: 0,
     openMode: 0
