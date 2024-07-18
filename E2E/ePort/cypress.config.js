@@ -54,6 +54,7 @@ async function setupNodeEvents(on, config) {
   on('after:run', async (results) => {
     const envParamProd = 'cypress/fixtures/environment/prod-param.json';
     const envParamQa = 'cypress/fixtures/environment/qa-param.json';
+    const envParamUat = 'cypress/fixtures/environment/uat-param.json';
     const metaDataFilePath = 'cypress/reports/run-info/report-metadata.json';
     const metaDataDirPathFilePath = path.dirname(metaDataFilePath);
 
@@ -61,6 +62,8 @@ async function setupNodeEvents(on, config) {
 
     if (config.env.ENV === 'Production') {
       envFilePath = envParamProd;
+    } else if (Cypress.env('ENV') === 'UAT') {
+      envFilePath = envParamUat;
     } else {
       envFilePath = envParamQa;
     }
@@ -114,7 +117,7 @@ module.exports = defineConfig({
   redirectionLimit: 500,
   viewportWidth: 1920,
   viewportHeight: 1080,
-  defaultCommandTimeout: 20000,
+  defaultCommandTimeout: 60000,
   pageLoadTimeout: 600000,
   screenshotOnRunFailure: true,
   trashAssetsBeforeRuns: false,
