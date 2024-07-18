@@ -227,9 +227,7 @@
 								</Children>
 							</Operation>
 							<Operation Type="{D993D251-65A9-4BED-A2EC-C2AC83739BAD}">
-								<Data GroupName="Submit TV Estimate to Eleven">
-									<CommonData Disabled="True" />
-								</Data>
+								<Data GroupName="Submit TV Estimate to Eleven" />
 								<Children>
 									<Operation Type="{28D3E73B-A718-4E67-96A3-4C49D5D4B340}">
 										<Data Description="Creates a log folder and makes it the current folder to which messages will be posted. This folder can contain messages of different types as well as subfolders.">
@@ -252,6 +250,7 @@
 									</Operation>
 									<Operation Type="{E8089E1C-53BC-4D9C-A69D-7CDDB49422CB}">
 										<Data Description="Runs a keyword test." TestName="submitEstimateToEleven">
+											<CommonData Disabled="True" />
 											<Parameters LangId="{90F89436-9452-4F95-9882-6B5210079F13}">
 												<Parameter Name="AgencyName" DefVarType="8" DefValueType="6" DefValueValue="" ParamType="{91E40FC5-34AB-4B37-B86A-789030413699}" Parameter="AgencyName" />
 												<Parameter Name="AgencyOfficeName" DefVarType="8" DefValueType="6" DefValueValue="" ParamType="{91E40FC5-34AB-4B37-B86A-789030413699}" Parameter="AgencyOfficeName" />
@@ -281,9 +280,7 @@
 						</Children>
 					</Operation>
 					<Operation Type="{D993D251-65A9-4BED-A2EC-C2AC83739BAD}">
-						<Data GroupName="Save New Estimate number to Store file">
-							<CommonData Disabled="True" />
-						</Data>
+						<Data GroupName="Save New Estimate number to Store file" />
 						<Children>
 							<Operation Type="{28D3E73B-A718-4E67-96A3-4C49D5D4B340}">
 								<Data Description="Creates a log folder and makes it the current folder to which messages will be posted. This folder can contain messages of different types as well as subfolders.">
@@ -306,9 +303,18 @@
 							</Operation>
 							<Operation Type="{206B0810-0B42-45AB-90F5-9F8DF0D669D2}">
 								<Data Description="Runs a script routine." TestName="writeStoreTxtFile" Unit="ReadWriteFile">
+									<CommonData Disabled="True" />
 									<Parameters LangId="{90F89436-9452-4F95-9882-6B5210079F13}">
 										<Parameter Name="fileName" DefVarType="12" DefValueType="0" DefValueValue="0" VarType="8" ValueType="6" ValueValue="EstimateNumber.txt" />
 										<Parameter Name="content" DefVarType="12" DefValueType="0" DefValueValue="0" ParamType="{2B146992-A675-4CF3-9B71-7EE4A1CA11B2}" Expression="&quot;New Estimate-&quot; + Project.Variables.EstimateNumber" />
+									</Parameters>
+								</Data>
+							</Operation>
+							<Operation Type="{206B0810-0B42-45AB-90F5-9F8DF0D669D2}">
+								<Data Description="Runs a script routine." TestName="writeStoreTxtFile" Unit="ReadWriteFile">
+									<Parameters LangId="{90F89436-9452-4F95-9882-6B5210079F13}">
+										<Parameter Name="fileName" DefVarType="12" DefValueType="0" DefValueValue="0" VarType="8" ValueType="6" ValueValue="EstimateNumber.txt" />
+										<Parameter Name="content" DefVarType="12" DefValueType="0" DefValueValue="0" VarType="8" ValueType="6" ValueValue="New Estimate-87877" />
 									</Parameters>
 								</Data>
 							</Operation>
