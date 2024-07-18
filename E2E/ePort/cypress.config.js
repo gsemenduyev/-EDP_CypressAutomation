@@ -1,12 +1,13 @@
 const { defineConfig } = require("cypress");
 const { addCucumberPreprocessorPlugin, afterRunHandler } = require("@badeball/cypress-cucumber-preprocessor");
 const browserify = require("@badeball/cypress-cucumber-preprocessor/browserify");
-const registerDataSession = require('cypress-data-session/src/plugin')
+const registerDataSession = require('cypress-data-session/src/plugin');
 const fs = require('fs');
 const path = require('path');
+
 // Setup Node Events
 async function setupNodeEvents(on, config) {
-  await addCucumberPreprocessorPlugin(on, config, { omitAfterRunHandler: true, });
+  await addCucumberPreprocessorPlugin(on, config, { omitAfterRunHandler: true });
   on("file:preprocessor", browserify.default(config));
   registerDataSession(on, config);
 
@@ -62,7 +63,7 @@ async function setupNodeEvents(on, config) {
 
     if (config.env.ENV === 'Production') {
       envFilePath = envParamProd;
-    } else if (Cypress.env('ENV') === 'UAT') {
+    } else if (config.env.ENV === 'UAT') {
       envFilePath = envParamUat;
     } else {
       envFilePath = envParamQa;
