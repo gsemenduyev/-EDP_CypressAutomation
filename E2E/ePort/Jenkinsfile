@@ -63,20 +63,20 @@ pipeline {
         }
         stage('Test') {
             steps {
-                bat 'cd E2E\\TC-Cypress-Integration && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome --env tags=\"@WIP\",TC=\"SessionCreator\"';
+                bat 'cd E2E\\ePort && npm cache clean --force && npm ci --prefer-offline && npx cypress run --browser chrome --env tags=\"@WIP\",TC=\"SessionCreator\"';
             }
         }
     }
     post {
         always {
             script {
-                bat 'cd E2E\\TC-Cypress-Integration && node ./cucumber-html-report.js'
+                bat 'cd E2E\\ePort && node ./cucumber-html-report.js'
             }
             publishHTML(target: [
                 allowMissing: true,
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
-                reportDir: 'E2E/TC-Cypress-Integration/cypress/reports',
+                reportDir: 'E2E/ePort/cypress/reports',
                 reportFiles: 'cucumber-reports/cucumber-html-report/index.html',
                 reportName: 'Cucumber Report',
                 reportTitles: 'Cucumber Report'
@@ -85,7 +85,7 @@ pipeline {
                 allowMissing: true,
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
-                reportDir: 'E2E/TC-Cypress-Integration/cypress/reports',
+                reportDir: 'E2E/ePort/cypress/reports',
                 reportFiles: 'multi-html-report/index.html',
                 reportName: 'Multi HTML Report',
                 reportTitles: 'Multi HTML Report'
