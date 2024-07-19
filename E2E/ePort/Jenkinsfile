@@ -81,7 +81,7 @@ pipeline {
                 cd ${CURRENT_PROJECT_PATH} && \
                 npm cache clean --force && \
                 npm ci --prefer-offline && \
-                npx cypress run --env TC="SessionCreator"
+                npx cypress run --browser chrome --env TC="SessionCreator"
               """
               echo 'Finished test'
             }
