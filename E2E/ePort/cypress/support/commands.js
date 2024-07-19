@@ -86,6 +86,7 @@ Cypress.Commands.add("sbms", (keywordTest) => {
     const tcEnvSwitcherFilePath = `${Cypress.env('PROJECT_PATH')}\\SBMS\\SBMS\\Stores\\Files\\CypressEnvironmentSwitcher.txt`;
     const tcProjectEstNumFilePath = `${Cypress.env('PROJECT_PATH')}\\SBMS\\SBMS\\Stores\\Files\\EstimateNumber.txt`;
     const cyProjectEstNumFilePath = 'cypress/fixtures/sbms-estimate/estimate-number.txt'
+    const sessionCreatorJenkinsCreds = 'cypress/fixtures/test-complete/session-creator-jenkins-creds.json'
     let env;
     if (Cypress.env('ENV') === 'Production') {
         env = 'PROD'
@@ -101,11 +102,11 @@ Cypress.Commands.add("sbms", (keywordTest) => {
 
     if (tc === 'SessionCreator') {
         cy.log('Launching SessionCreator')
-        cy.readFile('credentials.json').then((credentials) => {
+        cy.readFile(sessionCreatorJenkinsCreds).then(($creds) => {
             const commands = 'cd "C:\\Program Files (x86)\\SmartBear\\TestExecute 15\\bin" && ' +
                 'SessionCreator.exe RunTest ' +
-                '/UserName:"' + credentials.testcomplete.username + '" ' +
-                '/Password:"' + credentials.testcomplete.password + '" ' +
+                '/UserName:"' + $creds.testcomplete.username + '" ' +
+                '/Password:"' + $creds.testcomplete.password + '" ' +
                 '/ScreenResolution:"1920*1020" ' +
                 '/ProjectPath:"' + projectPath + '\\SBMS\\SBMS.pjs" ' +
                 '/ExportLog:"' + projectPath + '\\ePort\\cypress\\reports\\test-complete-reports\\' + testCompleteHTMLReportName + '\\ViewResults.html" ' +
