@@ -76,12 +76,14 @@ pipeline {
         }
         stage('Test') {
             steps {
+                echo 'Steart test'
                 bat """
                 cd ${CURRENT_PROJECT_PATH} && \
                 npm cache clean --force && \
                 npm ci --prefer-offline && \
                 npx cypress run --env TC="SessionCreator"
               """
+              echo 'Finished test'
             }
         }
     }
