@@ -80,7 +80,9 @@ Cypress.Commands.add("sbms", (keywordTest) => {
     const testContext = cy.state('test');
     const { title, parent: suite } = testContext;
     const testTitleTransformed = title.replace(/\s+/g, '-');
-    testCompleteHTMLReportName = `${featureFileName}_${testTitleTransformed}_${keywordTest}_${hour}-${minute}-${second}`;
+ //   testCompleteHTMLReportName = `${featureFileName}_${testTitleTransformed}_${keywordTest}_${hour}-${minute}-${second}`;
+    testCompleteHTMLReportName = `${featureFileName}_${keywordTest}-${minute}-${second}`;
+
     const tc = Cypress.env('TC');
     const projectPath = Cypress.env('PROJECT_PATH');
     const tcEnvSwitcherFilePath = `${Cypress.env('PROJECT_PATH')}\\SBMS\\SBMS\\Stores\\Files\\CypressEnvironmentSwitcher.txt`;
