@@ -20,9 +20,6 @@ pipeline {
     tools {
         nodejs '20'
     }
-    environment {
-        CYPRESS_CACHE_FOLDER = "${env.WORKSPACE}/.cache/Cypress"
-    }
     options {
         ansiColor('xterm')
     }
@@ -79,14 +76,14 @@ pipeline {
         }
         stage('Test') {
             steps {
-                echo 'Start test'
+                echo 'Steart test'
                 bat """
                 cd ${CURRENT_PROJECT_PATH} && \
                 npm cache clean --force && \
                 npm ci --prefer-offline && \
                 npx cypress run --browser chrome --env TC="SessionCreator"
-                """
-                echo 'Finished test'
+              """
+              echo 'Finished test'
             }
         }
     }
@@ -178,8 +175,8 @@ def inject_config_file(String configFileId, String destinationFilePath) {
 */ 
 def read_config_file(String configFileId){
     configFileProvider([configFile(fileId: configFileId, variable: 'configFile')]) {
-        def fileContent = readFile configFile
-        def jsonFileContent = readJSON text: fileContent
-        return jsonFileContent
+        def fileContent = readFile configFile;
+        def jsonFileContent = readJSON text: fileContent;
+        return jsonFileContent;
     } 
 }
