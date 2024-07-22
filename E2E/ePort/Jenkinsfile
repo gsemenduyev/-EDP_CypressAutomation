@@ -9,6 +9,20 @@ pipeline {
         ansiColor('xterm')
     }
 
+    environment {
+        CURRENT_PROJECT_PATH = 'E2E/ePort'
+        PROD_CONFIG_FILE_ID = '1ad0b80a-404d-45ac-81b1-71cd259794d1'
+        QA_CONFIG_FILE_ID = '2a6e4dde-90fd-4b33-870c-94e1ac74261e'
+        UAT_CONFIG_FILE_ID = '10596465-25c2-4869-93fe-1b8c63a3dec6'
+        EMAILS_SLACK_CONTACTS = '72f4f5fc-2d3c-415d-891d-943c990e74a1'
+
+        PROD_CONFIG_FILE_DESTINATION = 'E2E/ePort/cypress/fixtures/environment/prod-param.json'
+        QA_CONFIG_FILE_DESTINATION = 'E2E/ePort/cypress/fixtures/environment/qa-param.json'
+        UAT_CONFIG_FILE_DESTINATION = 'E2E/ePort/cypress/fixtures/environment/uat-param.json'
+        
+        CONFIG_FILE_PATH = 'E2E/ePort/cypress/fixtures/test-complete/session-creator-jenkins-creds.json'
+    }
+
     stages {
         stage('Cleanup') {
             steps {
@@ -29,9 +43,9 @@ pipeline {
             steps {
                 script {
                     // Copy paste Config files from Jenkins to current project
-                    inject_config_file(PROD_CONFIG_FILE_ID, PROD_CONFIG_FILE_DESTINATION)
-                    inject_config_file(QA_CONFIG_FILE_ID, QA_CONFIG_FILE_DESTINATION)
-                    inject_config_file(UAT_CONFIG_FILE_ID, UAT_CONFIG_FILE_DESTINATION)
+                    inject_config_file(env.PROD_CONFIG_FILE_ID, env.PROD_CONFIG_FILE_DESTINATION)
+                    inject_config_file(env.QA_CONFIG_FILE_ID, env.QA_CONFIG_FILE_DESTINATION)
+                    inject_config_file(env.UAT_CONFIG_FILE_ID, env.UAT_CONFIG_FILE_DESTINATION)
 
                     withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'TE_Agent', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                         def username = "${USERNAME}"
@@ -40,13 +54,13 @@ pipeline {
                             'username': username,
                             'password': password
                         ]
-                        def reporterConfig = readJSON file: CONFIG_FILE_PATH
+                        def reporterConfig = readJSON file: env.CONFIG_FILE_PATH
                         reporterConfig.put('testcomplete', testcomplete)
                         def json = JsonOutput.toJson(reporterConfig)
                         json = JsonOutput.prettyPrint(json)
-                        writeFile(file: CONFIG_FILE_PATH, text: json)
+                        writeFile(file: env.CONFIG_FILE_PATH, text: json)
 
-                        def reporterConfig1 = readJSON file: CONFIG_FILE_PATH
+                        def reporterConfig1 = readJSON file: env.CONFIG_FILE_PATH
                         testcomplete = [
                             'username': reporterConfig1.testcomplete.username.values[0],
                             'password': reporterConfig1.testcomplete.password.values[0]
@@ -54,7 +68,7 @@ pipeline {
                         reporterConfig.put('testcomplete', testcomplete)
                         json = JsonOutput.toJson(reporterConfig)
                         json = JsonOutput.prettyPrint(json)
-                        writeFile(file: CONFIG_FILE_PATH, text: json)
+                        writeFile(file: env.CONFIG_FILE_PATH, text: json)
                     }
                 }
             }
@@ -63,7 +77,7 @@ pipeline {
             steps {
                 echo 'Start test'
                 bat """
-                cd ${CURRENT_PROJECT_PATH} && \
+                cd ${env.CURRENT_PROJECT_PATH} && \
                 npm cache clean --force && \
                 npm ci --prefer-offline && \
                 npx cypress run --browser chrome --env TC="SessionCreator" --config video=false --headless --spec 'cypress/integration/**/**/*.feature' --reporter cypress-mochawesome-reporter --reporter-options reportDir=cypress/reports/mochawesome-report,reportFilename=index.html,overwrite=false,html=false,json=true --config defaultCommandTimeout=60000,pageLoadTimeout=120000
@@ -76,16 +90,16 @@ pipeline {
         always {
             script {
                 bat """
-                cd ${CURRENT_PROJECT_PATH} && \
+                cd ${env.CURRENT_PROJECT_PATH} && \
                 node ./cucumber-html-report.js
                 """
                 echo 'Post hello'
                 // List directories and generate HTML reports
                 echo "Current workspace: ${env.WORKSPACE}"
-                echo "Current project path: ${CURRENT_PROJECT_PATH}"
+                echo "Current project path: ${env.CURRENT_PROJECT_PATH}"
 
                 try {
-                    def workspacePath = "${env.WORKSPACE}\\${CURRENT_PROJECT_PATH}\\cypress\\reports\\test-complete-reports"
+                    def workspacePath = "${env.WORKSPACE}\\${env.CURRENT_PROJECT_PATH}\\cypress\\reports\\test-complete-reports"
                     echo "Workspace Path: ${workspacePath}"
 
                     // Use a separate script block to handle bat commands
@@ -119,7 +133,7 @@ pipeline {
                 allowMissing: true,
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
-                reportDir: "${CURRENT_PROJECT_PATH}/cypress/reports",
+                reportDir: "${env.CURRENT_PROJECT_PATH}/cypress/reports",
                 reportFiles: 'cucumber-reports/cucumber-html-report/index.html',
                 reportName: 'Cucumber Report',
                 reportTitles: 'Cucumber Report'
