@@ -7,3 +7,4 @@ SBMS/Log/
 *.tcNM
 /SBMS/SBMS.mds.tcLS
 /SBMS/Script/*js.bak
+/SBMS/Stores/Files/EstimateNumber.txt

@@ -18,6 +18,8 @@ const NEW_PASSWORD = 'password1';
 const ORGANIZATION = (() => {
     if (Cypress.env('ENV') === 'Production') {
         return 'WTVB (S)';
+    } else if (Cypress.env('ENV') === 'UAT') {
+        return 'TEST (S)'
     } else {
         return 'KDVR (S)';
     }

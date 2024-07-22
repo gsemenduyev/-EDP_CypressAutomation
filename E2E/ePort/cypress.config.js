@@ -1,12 +1,13 @@
 const { defineConfig } = require("cypress");
 const { addCucumberPreprocessorPlugin, afterRunHandler } = require("@badeball/cypress-cucumber-preprocessor");
 const browserify = require("@badeball/cypress-cucumber-preprocessor/browserify");
-const registerDataSession = require('cypress-data-session/src/plugin')
+const registerDataSession = require('cypress-data-session/src/plugin');
 const fs = require('fs');
 const path = require('path');
+
 // Setup Node Events
 async function setupNodeEvents(on, config) {
-  await addCucumberPreprocessorPlugin(on, config, { omitAfterRunHandler: true, });
+  await addCucumberPreprocessorPlugin(on, config, { omitAfterRunHandler: true });
   on("file:preprocessor", browserify.default(config));
   registerDataSession(on, config);
 
@@ -54,6 +55,7 @@ async function setupNodeEvents(on, config) {
   on('after:run', async (results) => {
     const envParamProd = 'cypress/fixtures/environment/prod-param.json';
     const envParamQa = 'cypress/fixtures/environment/qa-param.json';
+    const envParamUat = 'cypress/fixtures/environment/uat-param.json';
     const metaDataFilePath = 'cypress/reports/run-info/report-metadata.json';
     const metaDataDirPathFilePath = path.dirname(metaDataFilePath);
 
@@ -61,6 +63,8 @@ async function setupNodeEvents(on, config) {
 
     if (config.env.ENV === 'Production') {
       envFilePath = envParamProd;
+    } else if (config.env.ENV === 'UAT') {
+      envFilePath = envParamUat;
     } else {
       envFilePath = envParamQa;
     }
@@ -114,7 +118,7 @@ module.exports = defineConfig({
   redirectionLimit: 500,
   viewportWidth: 1920,
   viewportHeight: 1080,
-  defaultCommandTimeout: 20000,
+  defaultCommandTimeout: 60000,
   pageLoadTimeout: 600000,
   screenshotOnRunFailure: true,
   trashAssetsBeforeRuns: false,
