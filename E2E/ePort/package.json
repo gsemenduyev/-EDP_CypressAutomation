@@ -26,7 +26,7 @@
   "devDependencies": {
     "@babel/helper-compilation-targets": "^7.23.6",
     "@cypress/browserify-preprocessor": "^3.0.2",
-    "cypress": "^13.10.0",
+    "cypress": "^13.13.1",
     "cypress-cucumber-preprocessor": "^4.3.1",
     "cypress-data-session": "^2.8.2",
     "cypress-iframe": "^1.0.1",
