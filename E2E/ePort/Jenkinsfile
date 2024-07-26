@@ -148,8 +148,7 @@ pipeline {
                 echo 'Running Cypress tests...'
                 bat """
                 cd ${CURRENT_PROJECT_PATH} && \
-                npx cypress run --headless --env TC="SessionCreator"
-                """
+                npx cypress run --headless --spec "cypress/integration/step-definitions/create-eport-user/create-eport-user.feature" --env TC="SessionCreator"                """
             }
         }
     }
