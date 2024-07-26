@@ -102,7 +102,9 @@ Given('Login to ePort', () => {
     cy.title().should('eq', 'Login_New');
     cy.screenshot();
     ePortLoginPage.username().type(envUtils.getEPortUsername())
+    cy.screenshot();
     ePortLoginPage.password().type(envUtils.getEPortPassword())
+    cy.screenshot();
     ePortLoginPage.submitBtn().click();
     cy.title().should('eq', 'ePort');
     cy.screenshot();
