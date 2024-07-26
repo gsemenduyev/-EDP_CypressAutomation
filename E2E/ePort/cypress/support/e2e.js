@@ -15,3 +15,8 @@
 import './commands'
 // import failOnConsoleError from 'cypress-fail-on-console-error'
 // failOnConsoleError();
+
+module.exports = (on, config) => {
+    on('file:preprocessor', cucumber())
+
+}

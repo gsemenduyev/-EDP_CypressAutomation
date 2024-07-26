@@ -102,8 +102,7 @@ async function setupNodeEvents(on, config) {
             nodeVersion: results.config.resolvedNodeVersion,
             cypressVersion: results.cypressVersion,
             startedTestsAt: results.startedTestsAt,
-            endedTestsAt: results.endedTestsAt,
-            env: runInfo['env'],
+            endedTestsAt: results.endedTestsAt
           },
           null,
           '\t',
