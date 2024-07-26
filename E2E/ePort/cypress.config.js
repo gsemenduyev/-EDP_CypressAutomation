@@ -121,7 +121,8 @@ module.exports = defineConfig({
   pageLoadTimeout: 600000,
   screenshotOnRunFailure: true,
   trashAssetsBeforeRuns: false,
-  video: false,
+  video: true,
+  chromeWebSecurity: false,
   retries: {
     runMode: 0,
     openMode: 0
@@ -129,7 +130,6 @@ module.exports = defineConfig({
   e2e: {
     setupNodeEvents,
     experimentalOriginDependencies: true,
-    chromeWebSecurity: false,
     specPattern: "**/*.feature",
   },
 });
