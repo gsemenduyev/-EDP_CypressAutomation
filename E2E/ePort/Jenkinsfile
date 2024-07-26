@@ -130,9 +130,13 @@ pipeline {
                 echo 'Installing dependencies...'
                 bat """
                 cd ${CURRENT_PROJECT_PATH} && \
-                npm cache clean --force && \
-                npm ci --prefer-offline
+                npm install
                 """
+                // bat """
+                // cd ${CURRENT_PROJECT_PATH} && \
+                // npm cache clean --force && \
+                // npm ci --prefer-offline
+                // """
             }
         }
 
