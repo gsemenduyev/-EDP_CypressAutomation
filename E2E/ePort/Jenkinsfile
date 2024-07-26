@@ -148,7 +148,7 @@ pipeline {
                 echo 'Running Cypress tests...'
                 bat """
                 cd ${CURRENT_PROJECT_PATH} && \
-                npx cypress run --env TC="SessionCreator"
+                npx cypress run --headless"
                 """
             }
         }
