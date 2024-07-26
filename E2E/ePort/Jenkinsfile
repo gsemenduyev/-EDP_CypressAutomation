@@ -137,9 +137,9 @@ pipeline {
         }
 
         stage('Run Cypress Tests') {
-            environment {
-                DEBUG = 'cypress:*'
-             }
+            // environment {
+            //     DEBUG = 'cypress:*'
+            //  }
             steps {
                 echo 'Running Cypress tests...'
                 bat """
