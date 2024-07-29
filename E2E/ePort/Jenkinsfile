@@ -4,12 +4,24 @@ import groovy.json.*
 def CURRENT_PROJECT_PATH = 'E2E/ePort'
 
 pipeline {
-    agent any
+    agent {
+        label 'Testexecute_c'
+    }
 
     stages {
         stage('Cleanup') {
             steps {
                 cleanWs()
+            }
+        }
+        stage('Clone Repository') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'sabuildserver_GIT_TOKEN', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                        def gitUrl = "https://${GIT_USERNAME}:${GIT_PASSWORD}@github.freewheel.tv/HS/EDP_CypressAutomation.git"
+                        git url: gitUrl, branch: 'Jenkinc_local'
+                    }
+                }
             }
         }
         stage('Demo') {
