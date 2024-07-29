@@ -1,0 +1,15 @@
+{
+    "ePortUrl": "https://eportuat.gotostrata.com",
+    "ePortUsername": "quser",
+    "ePortPassword": "abc123#",
+    "ePortUserFirstName": "QA",
+    "ePortUserLastName": "Test",
+    "elevenUrl": "https://11uat.gotostrata.com/11Orders/",
+    "elevenUsername": "qatest",
+    "elevenPassword": "tetGNU",
+    "seller": "Strata Test Rep Firm",
+    "via": "ePort Gateway",
+    "subRepCompany": "Strata Test Rep Firm",
+    "subRepOffice": "Chicago",
+    "env": "UAT"
+}

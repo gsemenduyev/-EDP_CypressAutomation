@@ -1,0 +1,15 @@
+{
+    "ePortUrl": "https://eportqa.pregotostrata.com",
+    "ePortUsername": "kchow",
+    "ePortPassword": "password1",
+    "ePortUserFirstName": "Kevin",
+    "ePortUserLastName": "Chow",
+    "elevenUrl": "https://11qa.pregotostrata.com/11Orders/",
+    "elevenUsername": "QATest",
+    "elevenPassword": "abc123#",
+    "seller": "Gretchen Test Rep Firm",
+    "via": "ePort Gateway",
+    "subRepCompany": "Gretchen Test Rep Firm",
+    "subRepOffice": "Parker",
+    "env": "QA"
+}
