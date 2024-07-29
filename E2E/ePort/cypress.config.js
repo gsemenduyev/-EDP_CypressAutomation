@@ -119,9 +119,12 @@ module.exports = defineConfig({
   viewportHeight: 1080,
   defaultCommandTimeout: 60000,
   pageLoadTimeout: 600000,
-  screenshotOnRunFailure: true,
-  video: true,
   chromeWebSecurity: false,
+  screenshotsFolder: 'cypress/screenshots',
+  video: true,
+  videosFolder: 'cypress/videos',
+  screenshotOnRunFailure: true,
+  trashAssetsBeforeRuns: true,
   retries: {
     runMode: 0,
     openMode: 0
