@@ -120,10 +120,7 @@ module.exports = defineConfig({
   defaultCommandTimeout: 60000,
   pageLoadTimeout: 600000,
   chromeWebSecurity: false,
-  screenshotsFolder: 'cypress/screenshots',
   video: true,
-  videoCompression: true,
-  videosFolder: 'cypress/videos',
   screenshotOnRunFailure: true,
   trashAssetsBeforeRuns: true,
   e2e: {
