@@ -117,7 +117,7 @@ module.exports = defineConfig({
   redirectionLimit: 500,
   viewportWidth: 1920,
   viewportHeight: 1080,
-  defaultCommandTimeout: 600000,
+  defaultCommandTimeout: 60000,
   pageLoadTimeout: 600000,
   screenshotOnRunFailure: true,
   video: true,
