@@ -120,10 +120,8 @@ module.exports = defineConfig({
   defaultCommandTimeout: 600000,
   pageLoadTimeout: 600000,
   screenshotOnRunFailure: true,
-  trashAssetsBeforeRuns: false,
   video: true,
   chromeWebSecurity: false,
-  userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.185",
   retries: {
     runMode: 0,
     openMode: 0
