@@ -125,6 +125,7 @@ module.exports = defineConfig({
   videosFolder: 'cypress/videos',
   screenshotOnRunFailure: true,
   trashAssetsBeforeRuns: true,
+  testIsolation: false,
   retries: {
     runMode: 0,
     openMode: 0
