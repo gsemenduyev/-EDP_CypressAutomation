@@ -15,14 +15,15 @@ def CONFIG_FILE_PATH = 'E2E/ePort/cypress/fixtures/test-complete/session-creator
 
 pipeline {
     agent {
-        label 'testexecute'
+        label 'Testexecute_c'
     }
+
     tools {
-        nodejs '20'
+        nodejs '18'
     }
-    options {
-        ansiColor('xterm')
-    }
+    // options {
+    //     ansiColor('xterm')
+    // }
 
     stages {
         stage('Cleanup') {
@@ -30,6 +31,55 @@ pipeline {
                 cleanWs()
             }
         }
+
+        stage('Check Chrome Installation') {
+            steps {
+                script {
+                    // Query the registry for Chrome version
+                    def versionOutput = powershell(script: '''
+                        $chromeRegPath = "HKCU:\\Software\\Google\\Chrome\\BLBeacon"
+                        if (Test-Path $chromeRegPath) {
+                            (Get-ItemProperty -Path $chromeRegPath).version
+                        } else {
+                            "Chrome is not installed"
+                            exit 1
+                        }
+                    ''', returnStdout: true).trim()
+                    echo "Chrome version: ${versionOutput}"
+                }
+            }
+        }
+
+        stage('Print Agent Information') {
+            steps {
+                script {
+                    // Print CPU information
+                    powershell '''
+                        Write-Host "CPU Information:"
+                        Get-WmiObject Win32_Processor | Select-Object Name, NumberOfCores, MaxClockSpeed | Format-Table | Out-String | Write-Host
+                    '''
+                    
+                    // Print Memory information
+                    powershell '''
+                        Write-Host "Memory Information:"
+                        Get-WmiObject Win32_PhysicalMemory | Select-Object Capacity, Manufacturer, Speed | Format-Table | Out-String | Write-Host
+                    '''
+                    
+                    // Print Disk Space information
+                    powershell '''
+                        Write-Host "Disk Space Information:"
+                        Get-PSDrive -PSProvider FileSystem | Select-Object Name, @{Name="Free(GB)";Expression={[math]::round($_.Free/1GB,2)}}, @{Name="Used(GB)";Expression={[math]::round(($_.Used/1GB),2)}} | Format-Table | Out-String | Write-Host
+                    '''
+                    
+                    // Print Operating System information
+                    powershell '''
+                        Write-Host "Operating System Information:"
+                        Get-WmiObject Win32_OperatingSystem | Select-Object Caption, OSArchitecture, Version | Format-Table | Out-String | Write-Host
+                    '''
+                }
+            }
+        }
+
         stage('Clone Repository') {
             steps {
                 script {
@@ -74,16 +124,31 @@ pipeline {
                 }
             }
         }
-        stage('Test') {
+        
+        stage('Install Dependencies') {
             steps {
-                echo 'Steart test'
+                echo 'Installing dependencies...'
                 bat """
                 cd ${CURRENT_PROJECT_PATH} && \
-                npm cache clean --force && \
-                npm ci --prefer-offline && \
-                npx cypress run --browser chrome --env TC="SessionCreator"
-              """
-              echo 'Finished test'
+                npm install
+                """
+                // bat """
+                // cd ${CURRENT_PROJECT_PATH} && \
+                // npm cache clean --force && \
+                // npm ci --prefer-offline
+                // """
+            }
+        }
+
+        stage('Run Cypress Tests') {
+            // environment {
+            //     DEBUG = 'cypress:*'
+            //  }
+            steps {
+                echo 'Running Cypress tests...'
+                bat """
+                cd ${CURRENT_PROJECT_PATH} && \
+                npx cypress run --headless --spec "cypress/integration/step-definitions/create-eport-user/create-eport-user.feature" --env TC="SessionCreator"                """
             }
         }
     }
@@ -166,17 +231,4 @@ def inject_config_file(String configFileId, String destinationFilePath) {
         json = JsonOutput.prettyPrint(json)
         writeFile(file: destinationFilePath, text: json)
     }
-}
-
-/*
-  Reads the Jenkins config file
-  [@param] configFileId: accepts Jenkins config file unique ID
-  [@return] values of Jenkins config file
-*/ 
-def read_config_file(String configFileId){
-    configFileProvider([configFile(fileId: configFileId, variable: 'configFile')]) {
-        def fileContent = readFile configFile;
-        def jsonFileContent = readJSON text: fileContent;
-        return jsonFileContent;
-    } 
 }
