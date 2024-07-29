@@ -5,10 +5,7 @@ def CURRENT_PROJECT_PATH = 'E2E/ePort'
 
 pipeline {
     agent any
-
-    
-
-    stages {     
+   
             
     stages {
         stage('Cleanup') {
@@ -16,7 +13,7 @@ pipeline {
                 cleanWs()
             }
         }
-    stage('demo') {
+        stage('demo') {
             steps {
                 ansiColor('xterm') {
                     echo "\033[31;1mExecuting demo stage:\033[0m"
@@ -25,15 +22,12 @@ pipeline {
                 echo "\033[31;1mcommand-2\033[0m"
             }
         }
-
-
-
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
-       stage('Install Dependencies') {
+        stage('Install Dependencies') {
             steps {
                 echo 'Installing dependencies...'
                 bat """
@@ -93,6 +87,5 @@ pipeline {
             ])
         }
     }
-}
 }
 }
