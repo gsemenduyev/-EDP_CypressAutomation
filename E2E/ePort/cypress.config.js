@@ -130,6 +130,5 @@ module.exports = defineConfig({
     setupNodeEvents,
     experimentalOriginDependencies: true,
     specPattern: "**/*.feature",
-    testIsolation: false, // Set within e2e section
   },
 });

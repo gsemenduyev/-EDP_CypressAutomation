@@ -6,10 +6,6 @@ def CURRENT_PROJECT_PATH = 'E2E/ePort'
 pipeline {
     agent any
 
-    options{
-        ansiColor('xterm')
-    }
-
     stages {
         stage('Cleanup') {
             steps {
