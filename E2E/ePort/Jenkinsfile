@@ -5,7 +5,29 @@ def CURRENT_PROJECT_PATH = 'E2E/ePort'
 
 pipeline {
     agent any
+
+    
+
+    stages {     
+            
     stages {
+        stage('Cleanup') {
+            steps {
+                cleanWs()
+            }
+        }
+    stage('demo') {
+            steps {
+                ansiColor('xterm') {
+                    echo "\033[31;1mExecuting demo stage:\033[0m"
+                }
+                echo "\033[31;1mcommand-1\033[0m"
+                echo "\033[31;1mcommand-2\033[0m"
+            }
+        }
+
+
+
         stage('Checkout') {
             steps {
                 checkout scm
@@ -18,11 +40,6 @@ pipeline {
                 cd ${CURRENT_PROJECT_PATH} && \
                 npm install
                 """
-                // bat """
-                // cd ${CURRENT_PROJECT_PATH} && \
-                // npm cache clean --force && \
-                // npm ci --prefer-offline
-                // """
             }
         }
         stage('Run Cypress Tests') {
@@ -33,7 +50,7 @@ pipeline {
                 echo 'Running Cypress tests...'
                 bat """
                 cd ${CURRENT_PROJECT_PATH} && \
-                npx cypress run --headless --spec "cypress/integration/step-definitions/create-eport-user/create-eport-user.feature" --env TC="SessionCreator"                
+                npx cypress run --headless --spec "cypress/integration/step-definitions/verify-eport-login-page/verify-eport-pages.feature"                
                 """
             }
         }
@@ -52,10 +69,8 @@ pipeline {
                 node ./cucumber-html-report.js
                 """
                 echo 'Post hello'
-                // List directories and generate HTML reports
                 echo "Current workspace: ${env.WORKSPACE}"
                 echo "Current project path: ${CURRENT_PROJECT_PATH}"
-
 
             publishHTML(target: [
                 allowMissing: true,
@@ -78,5 +93,6 @@ pipeline {
             ])
         }
     }
+}
 }
 }

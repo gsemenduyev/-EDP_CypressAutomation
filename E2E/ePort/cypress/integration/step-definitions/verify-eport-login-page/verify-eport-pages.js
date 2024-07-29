@@ -121,7 +121,7 @@ Given("Login to ePort", () => {
   cy.title().should("eq", "ePort Home");
   cy.screenshot();
   cy.visit(envUtils.getEPortUrl() + "/Login_New.aspx");
-  cy.title().should("eq", "Login_Newjdpwoighwpooiihg");
+  cy.title().should("eq", "Login_New");
   cy.screenshot();
   ePortLoginPage.username().type(envUtils.getEPortUsername());
   ePortLoginPage.password().type(envUtils.getEPortPassword());
