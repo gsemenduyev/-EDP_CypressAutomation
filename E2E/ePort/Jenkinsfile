@@ -68,7 +68,7 @@ pipeline {
                     alwaysLinkToLastBuild: true,
                     keepAll: true,
                     reportDir: "${CURRENT_PROJECT_PATH}/cypress/reports",
-                    reportFiles: "${CURRENT_PROJECT_PATH}cucumber-reports/cucumber-html-report/index.html",
+                    reportFiles: 'cucumber-reports/cucumber-html-report/index.html',
                     reportName: 'Cucumber Report',
                     reportTitles: 'Cucumber Report'
                 ])
@@ -79,7 +79,7 @@ pipeline {
                     keepAll: true,
                     reportDir: "${CURRENT_PROJECT_PATH}/cypress/reports",
                     reportFiles: "${CURRENT_PROJECT_PATH}multi-html-report/index.html",
-                    reportName: 'Multi HTML Report',
+1878309                    reportName: 'Multi HTML Report',
                     reportTitles: 'Multi HTML Report'
                 ])
             }

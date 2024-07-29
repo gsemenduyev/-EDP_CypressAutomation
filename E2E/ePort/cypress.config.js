@@ -122,6 +122,7 @@ module.exports = defineConfig({
   chromeWebSecurity: false,
   screenshotsFolder: 'cypress/screenshots',
   video: true,
+  videoCompression: true,
   videosFolder: 'cypress/videos',
   screenshotOnRunFailure: true,
   trashAssetsBeforeRuns: true,
