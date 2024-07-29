@@ -6,6 +6,10 @@ def CURRENT_PROJECT_PATH = 'E2E/ePort'
 pipeline {
     agent any
 
+    options{
+        ansiColor('xterm')
+    }
+
     stages {
         stage('Cleanup') {
             steps {
@@ -37,11 +41,9 @@ pipeline {
         stage('Run Cypress Tests') {
             steps {
                 echo 'Running Cypress tests...'
-                ansiColor('xterm') {
-                    bat """
-                    cd ${CURRENT_PROJECT_PATH} && npx cypress run --browser chrome --headless --spec "cypress/integration/step-definitions/verify-eport-login-page/verify-eport-pages.feature"
-                    """
-                }
+                bat """
+                cd ${CURRENT_PROJECT_PATH} && npx cypress run --browser chrome --headless --spec "cypress/integration/step-definitions/verify-eport-login-page/verify-eport-pages.feature"
+                """
             }
         }
         stage('Archive Videos') {
@@ -68,7 +70,7 @@ pipeline {
                     alwaysLinkToLastBuild: true,
                     keepAll: true,
                     reportDir: "${CURRENT_PROJECT_PATH}/cypress/reports",
-                    reportFiles: 'cucumber-reports/cucumber-html-report/index.html',
+                    reportFiles: "cucumber-reports/cucumber-html-report/index.html",
                     reportName: 'Cucumber Report',
                     reportTitles: 'Cucumber Report'
                 ])
@@ -78,7 +80,7 @@ pipeline {
                     alwaysLinkToLastBuild: true,
                     keepAll: true,
                     reportDir: "${CURRENT_PROJECT_PATH}/cypress/reports",
-                    reportFiles: "${CURRENT_PROJECT_PATH}multi-html-report/index.html",
+                    reportFiles: "multi-html-report/index.html",
                     reportName: 'Multi HTML Report',
                     reportTitles: 'Multi HTML Report'
                 ])
