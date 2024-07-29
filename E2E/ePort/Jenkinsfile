@@ -5,21 +5,20 @@ def CURRENT_PROJECT_PATH = 'E2E/ePort'
 
 pipeline {
     agent any
-   
-            
+
     stages {
         stage('Cleanup') {
             steps {
                 cleanWs()
             }
         }
-        stage('demo') {
+        stage('Demo') {
             steps {
                 ansiColor('xterm') {
                     echo "\033[31;1mExecuting demo stage:\033[0m"
+                    echo "\033[31;1mcommand-1\033[0m"
+                    echo "\033[31;1mcommand-2\033[0m"
                 }
-                echo "\033[31;1mcommand-1\033[0m"
-                echo "\033[31;1mcommand-2\033[0m"
             }
         }
         stage('Checkout') {
@@ -31,61 +30,57 @@ pipeline {
             steps {
                 echo 'Installing dependencies...'
                 bat """
-                cd ${CURRENT_PROJECT_PATH} && \
-                npm install
+                cd ${CURRENT_PROJECT_PATH} && npm install
                 """
             }
         }
         stage('Run Cypress Tests') {
-            // environment {
-            //     DEBUG = 'cypress:*'
-            //  }
             steps {
                 echo 'Running Cypress tests...'
                 bat """
-                cd ${CURRENT_PROJECT_PATH} && \
-                npx cypress run --browser chrome --headless --spec "cypress/integration/step-definitions/verify-eport-login-page/verify-eport-pages.feature"                
+                cd ${CURRENT_PROJECT_PATH} && npx cypress run --browser chrome --headless --spec "cypress/integration/step-definitions/verify-eport-login-page/verify-eport-pages.feature" --no-color
                 """
             }
         }
         stage('Archive Videos') {
             steps {
-                archiveArtifacts artifacts: "${CURRENT_PROJECT_PATH}cypress/videos/**/*.mp4", allowEmptyArchive: true
+                archiveArtifacts artifacts: "${CURRENT_PROJECT_PATH}/cypress/videos/**/*.mp4", allowEmptyArchive: true
             }
         }
     }
 
-     post {
+    post {
         always {
             script {
+                // Generate report
                 bat """
-                cd ${CURRENT_PROJECT_PATH} && \
-                node ./cucumber-html-report.js
+                cd ${CURRENT_PROJECT_PATH} && node ./cucumber-html-report.js
                 """
-                echo 'Post hello'
+                echo 'Post build actions'
                 echo "Current workspace: ${env.WORKSPACE}"
                 echo "Current project path: ${CURRENT_PROJECT_PATH}"
 
-            publishHTML(target: [
-                allowMissing: true,
-                alwaysLinkToLastBuild: true,
-                keepAll: true,
-                reportDir: "${CURRENT_PROJECT_PATH}/cypress/reports",
-                reportFiles: 'cucumber-reports/cucumber-html-report/index.html',
-                reportName: 'Cucumber Report',
-                reportTitles: 'Cucumber Report'
-            ])
+                // Publish HTML reports
+                publishHTML(target: [
+                    allowMissing: true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: "${CURRENT_PROJECT_PATH}/cypress/reports",
+                    reportFiles: "${CURRENT_PROJECT_PATH}cucumber-reports/cucumber-html-report/index.html",
+                    reportName: 'Cucumber Report',
+                    reportTitles: 'Cucumber Report'
+                ])
 
-            publishHTML(target: [
-                allowMissing: true,
-                alwaysLinkToLastBuild: true,
-                keepAll: true,
-                reportDir: 'E2E/ePort/cypress/reports',
-                reportFiles: 'multi-html-report/index.html',
-                reportName: 'Multi HTML Report',
-                reportTitles: 'Multi HTML Report'
-            ])
+                publishHTML(target: [
+                    allowMissing: true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: "${CURRENT_PROJECT_PATH}/cypress/reports",
+                    reportFiles: "${CURRENT_PROJECT_PATH}multi-html-report/index.html",
+                    reportName: 'Multi HTML Report',
+                    reportTitles: 'Multi HTML Report'
+                ])
+            }
         }
     }
-}
 }
