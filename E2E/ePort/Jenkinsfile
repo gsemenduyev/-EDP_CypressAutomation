@@ -50,7 +50,7 @@ pipeline {
                 echo 'Running Cypress tests...'
                 bat """
                 cd ${CURRENT_PROJECT_PATH} && \
-                npx cypress run --headless --spec "cypress/integration/step-definitions/verify-eport-login-page/verify-eport-pages.feature"                
+                npx cypress run --browser chrome --headless --spec "cypress/integration/step-definitions/verify-eport-login-page/verify-eport-pages.feature"                
                 """
             }
         }
