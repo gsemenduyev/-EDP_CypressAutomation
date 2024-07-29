@@ -79,7 +79,7 @@ pipeline {
                     keepAll: true,
                     reportDir: "${CURRENT_PROJECT_PATH}/cypress/reports",
                     reportFiles: "${CURRENT_PROJECT_PATH}multi-html-report/index.html",
-1878309                    reportName: 'Multi HTML Report',
+                    reportName: 'Multi HTML Report',
                     reportTitles: 'Multi HTML Report'
                 ])
             }
