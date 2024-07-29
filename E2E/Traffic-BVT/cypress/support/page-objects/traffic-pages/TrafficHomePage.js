@@ -113,5 +113,69 @@ class TrafficHomePage {
     logoutLink() {
         return cy.contains('Logout');
     };
+    gridRows() {
+        return cy.get('.ui-widget-content.slick-row');
+    };
+    gridRowsSyntax() {
+        return '.ui-widget-content.slick-row';
+    };
+
+    acceptInstructionComment() {
+        return cy.get('#comment')
+    };
+    commentAcceptBtn() {
+        return cy.get(':nth-child(1) > .ui-button-text')
+    };
+    editUser() {
+        return cy.get('.ui-widget-content.slick-row a')
+    };
+    editUser() {
+        return cy.get('.ui-widget-content.slick-row a')
+    };
+    assignVendorsRows() {
+        return cy.get('#dlgVndr .ui-widget-content')
+    };
+    removeVendorsBtn() {
+        return cy.contains('Remove Vendors');
+    };
+    viewAssignVendorsCancelBtn() {
+        return cy.contains('Cancel');
+    };
+    theGrid() {
+        return cy.get('#theGrid');
+    };
+    addVendorWnd() {
+        return cy.get('.ui-dialog');
+    };
+    callLettersTxtBox() {
+        return cy.get(".ui-dialog [name='e_name']");
+    };
+    selectMedia() {
+        return cy.get(".ui-dialog [name='e_media']");
+    };
+    bandCodeTxtBox() {
+        return cy.get(".ui-dialog [name='e_code']");
+    };
+    selectMarket() {
+        return cy.get(".ui-dialog [name='e_market']");
+    };
+    selectCompany() {
+        return cy.get(".ui-dialog [name='e_company']");
+    };
+    selectForwarding() {
+        return cy.get(".ui-dialog [name='e_forwarding']");
+    };
+    disableEmailCheckBox() {
+        return cy.get(".ui-dialog [name='e_disableEmail']");
+    };
+    disabledCheckBox() {
+        return cy.get(".ui-dialog [name='e_disabled']");
+    };
+    addVendorCancelBtn() {
+        return cy.contains('Cancel');
+    };
+    addVendorCreateBtn() {
+        return cy.contains('Create');
+    };
 };
 export default TrafficHomePage;

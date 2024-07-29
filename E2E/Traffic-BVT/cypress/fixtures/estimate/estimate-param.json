@@ -1,9 +1,11 @@
 {
+    "instructionName": "Traffic Automation Instruction",
+    "startDate": "7/8/2024",
+    "endDate": "8/25/2024",
     "agency": "ABC Agency",
     "office": "ABC Agency Office",
     "client": "ABC Client",
     "product": "ABC Product",
     "media": "Radio",
-    "estimate": "5313",
     "vendor": "TEST TRAFFIC-AM"
 }

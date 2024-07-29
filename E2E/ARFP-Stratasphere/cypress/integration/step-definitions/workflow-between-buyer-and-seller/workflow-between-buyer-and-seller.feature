@@ -29,12 +29,9 @@ Feature: Workflow between buyer and seller
     * Create Type1 Rate Request
     * Logout Agency RFP
 
-  Scenario: Seller validates the email from buyer (WBBS)
-    * Search for 'Stratasphere' user in Mailinator
+  Scenario: Seller Redirects from Email to Stratasphere and Revise the Buy Rate (WBBS)
     * Validate email for New Rate Request
-
-  Scenario: Seller Redirects from Mailinator to Stratasphere and Revise the Buy Rate (WBBS)
-    * Redirect from Mailinator to Stratasphere
+    * Redirect from email to Stratasphere
     * Validate Proposal Response Page
     * Validate "Proposal Details" Page in Stratasphere
     * Revise the Buy Rate

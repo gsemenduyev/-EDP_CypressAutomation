@@ -6,8 +6,8 @@ class MailinatorHomePage {
         return "tr[ng-repeat='email in emails']";
     }
 
-    publicMessageText(milliseconds) {
-        return cy.get('.gray-color', { timeout: milliseconds });
+    publicMessageText() {
+        return cy.get('.gray-color');
     }
     emailMsgBodyIframe() {
         return cy.get('#html_msg_body');

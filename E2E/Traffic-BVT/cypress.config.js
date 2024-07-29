@@ -1,17 +1,13 @@
 const { defineConfig } = require("cypress");
 const { addCucumberPreprocessorPlugin, afterRunHandler } = require("@badeball/cypress-cucumber-preprocessor");
 const browserify = require("@badeball/cypress-cucumber-preprocessor/browserify");
-const registerDataSession = require('cypress-data-session/src/plugin')
 const TestRailReporter = require('cypress-testrail');
 const fs = require('fs');
-const xlsx = require('node-xlsx').default;
-const ENVIRONMENT_FILE_PATH = 'cypress/fixtures/environment/environments.json';
-
+const ENVIRONMENT_FILE_PATH = 'cypress/reports/run-info/run-env.json';
 async function setupNodeEvents(cypressOn, config) {
   const on = require('cypress-on-fix')(cypressOn);
   await addCucumberPreprocessorPlugin(on, config, { omitAfterRunHandler: true, });
   on("file:preprocessor", browserify.default(config));
-  registerDataSession(on, config);
   new TestRailReporter(on, config).register();
 
   // Creates new user json file.
@@ -27,8 +23,10 @@ async function setupNodeEvents(cypressOn, config) {
         email: "email",
         firstName: "firstName",
         lastName: "lastName",
-        phone: "phone",
-        vendor: "vendor"
+        phoneNumber: "phone",
+        vendor: "vendor",
+        password: "password",
+        jobTitle: "title"
       };
       const jsonContent = JSON.stringify(data);
       fs.writeFileSync('cypress/fixtures/new-user/new-user-param.json', jsonContent);
@@ -42,19 +40,6 @@ async function setupNodeEvents(cypressOn, config) {
         console.log(err);
       };
     });
-  });
-
-  on('task', {
-    parseXlsx({ filePath }) {
-      return new Promise((resolve, reject) => {
-        try {
-          const jsonData = xlsx.parse(fs.readFileSync(filePath));
-          resolve(jsonData);
-        } catch (e) {
-          reject(e);
-        };
-      });
-    }
   });
 
   on('after:run', async (results) => {
@@ -74,21 +59,9 @@ async function setupNodeEvents(cypressOn, config) {
             cypressVersion: results.cypressVersion,
             startedTestsAt: results.startedTestsAt,
             endedTestsAt: results.endedTestsAt,
-            arfpUrlQa: runInfo['arfpUrlQa'],
-            arfpUrlUat: runInfo['arfpUrlUat'],
-            ssphereUrlQa: runInfo['ssphereUrlQa'],
-            ssphereUrlUat: runInfo['ssphereUrlUat'],
-            sTrafficUrlQa: runInfo['sTrafficUrlQa'],
-            sTrafficUrlUat: runInfo['sTrafficUrlUat'],
-            trafficUrlQa: runInfo['trafficUrlQa'],
-            trafficUrlUat: runInfo['arfpUrlUat'],
-            aeInboxUrlQa: runInfo['aeInboxUrlQa'],
-            aeInboxUrlUat: runInfo['aeInboxUrlUat'],
-            ePortUrlQa: runInfo['ePortUrlQa'],
-            ePortUrlUat: runInfo['ePortUrlUat'],
-            elevenUrlQa: runInfo['elevenUrlQa'],
-            elevenUrlUat: runInfo['elevenUrlQa'],
-
+            trafficUrl: runInfo['trafficUrl'],
+            sTrafficUrl: runInfo['sTrafficUrl'],
+            env: runInfo['env'],
           },
           null,
           '\t',
@@ -103,7 +76,7 @@ module.exports = defineConfig({
   viewportWidth: 1920,
   viewportHeight: 1080,
   defaultCommandTimeout: 60000,
-  pageLoadTimeout: 60000,
+  pageLoadTimeout: 90000,
   screenshotOnRunFailure: true,
   video: true,
   retries: {

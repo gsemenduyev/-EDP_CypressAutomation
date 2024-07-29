@@ -16,31 +16,41 @@ before(function () {
 before(function () {
     cy.writeFile('cypress/reports/run-info/run-env.json', {
         trafficUrl: envProperties.trafficUrl,
-        env: envProperties.env,
+        sTrafficUrl: envProperties.sTrafficUrl,
+        env: envProperties.env
     })
 })
 
 class EnvUtils {
     getTrafficUrl() {
         return envProperties.trafficUrl;
-    }
+    };
     getTrafficAdminUsername() {
         return envProperties.trafficAdminUsername;
-    }
+    };
     getTrafficAdminPassword() {
         return envProperties.trafficAdminPassword;
-    }
+    };
+    getTrafficUsername() {
+        return envProperties.trafficUsername;
+    };
+    getTrafficPassword() {
+        return envProperties.trafficPassword;
+    };
     getsTrafficUrl() {
         return envProperties.sTrafficUrl;
-    }
+    };
     getsTrafficUsername() {
         return envProperties.sTrafficUsername;
-    }
+    };
     getsTrafficPassword() {
         return envProperties.sTrafficPassword;
-    }
+    };
     getEstimate() {
         return envProperties.estimate;
-    }
-}
+    };
+    getVendor() {
+        return envProperties.vendor;
+    };
+};
 export default EnvUtils;

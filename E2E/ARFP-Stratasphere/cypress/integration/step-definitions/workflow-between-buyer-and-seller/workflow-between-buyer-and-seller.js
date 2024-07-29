@@ -17,8 +17,9 @@ import SearchRfpPage from "../../../support/page-objects/agency-pages/SearchRfpP
 import LinearProposalRfpPage from "../../../support/page-objects/agency-pages/LinearProposalRfpPage";
 import MailinatorHomePage from "../../../support/page-objects/mailinator-pages/MailinatorHomePage";
 import SSphereProposalResponsePage from "../../../support/page-objects/ssphere-pages/SSphereProposalResponsePage";
-import EnvUtils from "../../../support/utils/EnvUtils";
 import CentralLoginPage from "../../../support/page-objects/central-login-pages/CentralLoginPage";
+import GmailBodyPage from "../../../support/page-objects/gmail-pages/GmailBodyPage";
+import EnvUtils from "../../../support/utils/EnvUtils";
 
 const agencyLoginPage = new AgencyLoginPage;
 const agencyBasePage = new AgencyBasePage;
@@ -32,8 +33,9 @@ const mailinatorHomePage = new MailinatorHomePage;
 const sSphereProposalResponsePage = new SSphereProposalResponsePage;
 const searchRfpPage = new SearchRfpPage;
 const rfpDetailsPage = new RfpDetailsPage;
-const envUtils = new EnvUtils;
 const centralLoginPage = new CentralLoginPage;
+const gmailBodyPage = new GmailBodyPage;
+const envUtils = new EnvUtils;
 
 const FILE_NAME = 'stores/TEST Dallas RTG_IMP.xml';
 const SELLER_REVISION_RATE = '8';
@@ -81,30 +83,35 @@ Given('Login to Agency RFP with {string} password', string => {
             centralLoginPage.loginNextButton().click();
             centralLoginPage.loginPassword().type(agencyPassword, { log: false });
             centralLoginPage.loginButton().click();
+            Cypress.env('CENTRAL_LOGIN_ONN', true);
         } else {
             agencyBasePage.pageTitle().should('have.text', 'Sign In');
             agencyLoginPage.usernameBox().type(envUtils.getAgencyUsername());
             agencyLoginPage.passwordBox().type(agencyPassword, { log: false });
             agencyLoginPage.loginButton().click();
+            Cypress.env('CENTRAL_LOGIN_ONN', false);
         };
+    }).then(() => {
+        cy.title().should('eq', 'Home - RFP');
+        var index = 0;
+        const checkXmlValidated = () => {
+            cy.wait(1000)
+            cy.is_element_exists(agencyBasePage.pastDueRfpModalSyntax()).then(pastDueRfpModal => {
+                if (pastDueRfpModal === true) {
+                    agencyBasePage.pastDueRfpModalNoButton().click();
+                    index++;
+                    checkXmlValidated();
+                } else if (index < 5 || pastDueRfpModal === false) {
+                    index = 5;
+                };
+            });
+        };
+        checkXmlValidated()
+        cy.screenshot();
+
     });
 
-    cy.title().should('eq', 'Home - RFP');
-    var index = 0;
-    const checkXmlValidated = () => {
-        cy.wait(1000)
-        cy.is_element_exists(agencyBasePage.pastDueRfpModalSyntax()).then(pastDueRfpModal => {
-            if (pastDueRfpModal === true) {
-                agencyBasePage.pastDueRfpModalNoButton().click();
-                index++;
-                checkXmlValidated();
-            } else if (index < 5 || pastDueRfpModal === false) {
-                index = 5;
-            };
-        });
-    };
-    checkXmlValidated()
-    cy.screenshot();
+
 });
 
 // Create New RFP
@@ -185,7 +192,7 @@ Given('Validate RFP Creation', () => {
         agencyBasePage.pageTitle(60000).should('have.text', newRfpName);
     });
     rfpDetailsPage.rfpStatus(1200000).contains('Sent', { timeout: 1200000 });
-    rfpDetailsPage.rfpStatus().should('have.text', 'Sent');
+    rfpDetailsPage.rfpStatus(1200000).should('have.text', 'Sent');
     cy.screenshot();
 });
 
@@ -444,46 +451,118 @@ Given('Create Type1 Rate Request', () => {
     linearProposalRfpPage.myReteTexBoxValue().should('have.text', BUYER_REVISION_RATE);
 });
 
-// Search for Stratasphere, AgencyRFP user in Mailinator
-Given('Search for {string} user in Mailinator', string => {
-    cy.visit(envUtils.getMailinatorUrl());
-    cy.title().should('eq', 'Mailinator');
-    mailinatorHomePage.userSearchBox().clear();
-    if (string === 'Stratasphere') {
-        mailinatorHomePage.userSearchBox().type(envUtils.getSsphereUsername());
-    } else if (string === 'AgencyRFP') {
-        mailinatorHomePage.userSearchBox().type(envUtils.getAgencyUsername());
-    }
-    mailinatorHomePage.goButton().click({ force: true });
-})
+// Search for Stratasphere, AgencyRFP user email
+Given('Search for {string} user email', string => {
+    if (envUtils.getSsphereUsername().endsWith('mailinator.com')) {
+        cy.visit(envUtils.getMailinatorUrl());
+        cy.title().should('eq', 'Mailinator');
+        mailinatorHomePage.userSearchBox().clear();
+        if (string === 'Stratasphere') {
+            mailinatorHomePage.userSearchBox().type(envUtils.getSsphereUsername());
+        } else if (string === 'AgencyRFP') {
+            mailinatorHomePage.userSearchBox().type(envUtils.getAgencyUsername());
+        }
+        mailinatorHomePage.goButton().click({ force: true });
+    } else if (envUtils.getSsphereUsername().endsWith('gmail.com')) {
+        cy.visit(envUtils.getAgencyUrl());
+        let emailDates;
+        let credentialsFile;
+        let tokenFile;
+        let emailSubject;
+        let noReplStrataEmail;
+        cy.dataSession('newRfpName').then(newRfpName => {
+            if (string === 'Stratasphere') {
+                emailDates = Cypress.env('SSPHERE_GMAIL_DATES');
+                credentialsFile = Cypress.env('SSPHERE_CREDENTIALS_FILE');
+                tokenFile = Cypress.env('SSPHERE_TOKEN_FILE');
+                emailSubject =
+                    `New RFP Request for ${newRfpName} at 
+                ${newRfpParam.vendor} from 
+                ${envUtils.getAgencyUsername().split(".")[0]} 
+                ${envUtils.getAgencyUsername().split(".")[1].split("@")[0]} at 
+                ${newRfpParam.agency}`;
+                noReplStrataEmail = envUtils.getNoReplStrataEmail();
+            } else if (string === 'AgencyRFP') {
+                emailDates = Cypress.env('ARFP_GMAIL_DATES');
+                credentialsFile = Cypress.env('ARFP_CREDENTIALS_FILE');
+                tokenFile = Cypress.env('ARFP_TOKEN_FILE');
+                emailSubject =
+                    `RFP Response Received for ${newRfpName} from 
+                ${envUtils.getSsphereUsername().split(".")[0]} 
+                ${envUtils.getSsphereUsername().split(".")[1].split("@")[0]} at 
+                ${newRfpParam.vendor}`;
+                noReplStrataEmail = envUtils.getNoReplBounceStrataEmail();
+            }
+            cy.get_gmail(
+                emailDates,
+                credentialsFile,
+                tokenFile,
+                noReplStrataEmail,
+                emailSubject,
+                60,
+                10000
+            );
+        });
+    };
+});
 
 // Validate email for New Rate Request
 Given('Validate email for New Rate Request', () => {
     cy.dataSession('newRfpName').then(newRfpName => {
-        mailinatorHomePage.search_email('New Rate Request for ', newRfpName);
-    });
-    mailinatorHomePage.version().should('have.text', '2');
-    mailinatorHomePage.advertiser().should('have.text', newRfpParam.agency);
-    mailinatorHomePage.flightDates().should('include.text', newRfpParam.startDate.slice(0, 6) + '20' + newRfpParam.startDate.slice(6) + ' to '
-        + newRfpParam.endDate.slice(0, 6) + '20' + newRfpParam.endDate.slice(6));
-    mailinatorHomePage.primaryDemo().should('have.text', newRfpParam.primaryDemo);
-    mailinatorHomePage.redirectSsphereNegotiationLink().then(function (el) {
-        const url = el.prop('href')
-        cy.dataSession({
-            name: 'redirectSsphereLink',
-            setup: () => url,
-            validate: false,
-            shareAcrossSpecs: true,
-        });
+        if (envUtils.getSsphereUsername().endsWith('mailinator.com')) {
+            cy.visit(envUtils.getMailinatorUrl());
+            cy.title().should('eq', 'Mailinator');
+            mailinatorHomePage.userSearchBox().clear();
+            mailinatorHomePage.userSearchBox().type(envUtils.getSsphereUsername());
+            mailinatorHomePage.goButton().click({ force: true });
+            mailinatorHomePage.search_email('New Rate Request for ', newRfpName);
+            mailinatorHomePage.version().should('have.text', '2');
+            mailinatorHomePage.advertiser().should('have.text', newRfpParam.agency);
+            mailinatorHomePage.flightDates().should('include.text', newRfpParam.startDate.slice(0, 6) + '20' + newRfpParam.startDate.slice(6) + ' to '
+                + newRfpParam.endDate.slice(0, 6) + '20' + newRfpParam.endDate.slice(6));
+            mailinatorHomePage.primaryDemo().should('have.text', newRfpParam.primaryDemo);
+            mailinatorHomePage.redirectSsphereNegotiationLink().then(function ($el) {
+                const url = $el.prop('href')
+                cy.dataSession({
+                    name: 'redirectSsphereLink',
+                    setup: () => url,
+                    validate: false,
+                    shareAcrossSpecs: true,
+                });
+            });
+        } else if (envUtils.getSsphereUsername().endsWith('gmail.com')) {
+            cy.visit(envUtils.getSsphereUrl());
+            cy.get_gmail(
+                Cypress.env('SSPHERE_GMAIL_DATES'),
+                Cypress.env('SSPHERE_CREDENTIALS_FILE'),
+                Cypress.env('SSPHERE_TOKEN_FILE'),
+                envUtils.getNoReplStrataEmail(),
+                `New Rate Request for 
+                ${newRfpName} at 
+                ${newRfpParam.vendor} from 
+                ${envUtils.getAgencyUsername().split(".")[0]} 
+                ${envUtils.getAgencyUsername().split(".")[1].split("@")[0]} at 
+                ${newRfpParam.agency}`,
+                60,
+                10000
+            );
+        }
     });
     cy.screenshot();
 });
 
-// Redirect from Mailinator to Stratasphere
-Given('Redirect from Mailinator to Stratasphere', () => {
-    cy.dataSession('redirectSsphereLink').then(redirectSsphereLink => {
-        cy.visit(redirectSsphereLink);
-    })
+// Redirect from email to Stratasphere
+Given('Redirect from email to Stratasphere', () => {
+
+    if (envUtils.getSsphereUsername().endsWith('mailinator.com')) {
+        cy.dataSession('redirectSsphereLink').then(redirectSsphereLink => {
+            cy.visit(redirectSsphereLink);
+        })
+    } else if (envUtils.getSsphereUsername().endsWith('gmail.com')) {
+        cy.visit(Cypress.env('GMAIL_HTML_PATH'));
+        cy.screenshot();
+        gmailBodyPage.newRequestRedirectionLink().invoke('removeAttr', 'target').click();
+    }
     sSphereBasePage.pageTitle().should('include.text', ' Login');
     sSphereLoginPage.usernameBox().type(envUtils.getSsphereUsername());
     sSphereLoginPage.passwordBox().type(envUtils.getSspherePassword());
@@ -583,7 +662,7 @@ function xml_proposal_map(param) {
 }
 
 function new_rfp_name() {
-    const filePath = 'cypress/fixtures/agencyRFP/new-frp-name.json';
+    const filePath = Cypress.env('NEW_RFP_NAME_PATH');
     const RFPAutomation = "AutomationRFP"
     let newRfpNameTemp;
     const createNewRfpName = () => {

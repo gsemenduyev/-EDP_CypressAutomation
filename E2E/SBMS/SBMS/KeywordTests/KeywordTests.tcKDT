@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Root signature="{9576DAFD-0ADD-41A8-9897-C72F150AF6BB}" version="15.0">
+	<children>
+		<folder name="Cypress-Integration">
+			<child name="SendNewTvEstimateToEleven" key="{D4A6488C-8DA8-4CC2-AAFA-81424BB36722}" path="SendNewTvEstimateToEleven.tcKDTest" />
+		</folder>
+		<folder name="Utilities">
+			<folder name="DatesUtils">
+				<child name="setOrderStartDate" key="{89D49468-8C70-4F2D-B0B3-F28CE9A5EEC6}" path="setOrderStartDate.tcKDTest" />
+				<child name="setOrderEndDate" key="{5F3F9495-227E-4586-9AA3-F9EC8D65DA44}" path="setOrderEndDate.tcKDTest" />
+			</folder>
+			<folder name="SBMSUtils">
+				<child name="clickOnLinkInSpotBuy" key="{492DE20F-79B0-4F8C-8467-8C88A849A919}" path="clickOnLinkInSpotBuy.tcKDTest" />
+				<child name="launchSBMS" key="{14EA4DFE-5A19-41C4-B2A4-4D3F02BD3377}" path="launchSBMS.tcKDTest" />
+				<child name="closeSBMSNET" key="{E8A29896-97B3-4F39-836B-807E6C57A467}" path="closeSBMSNET.tcKDTest" />
+			</folder>
+			<folder name="EstimateUtils">
+				<child name="createTVEstimate" key="{1F4904B3-667C-438E-A597-89D342B677FB}" path="createTVEstimate.tcKDTest" />
+				<child name="createEstimateHeader" key="{775131F4-DA84-4578-981A-BB8CDE55FB4F}" path="createEstimateHeader.tcKDTest" />
+				<child name="submitEstimateToEleven" key="{24626CAB-8F07-4B30-AEE2-A67946A17D72}" path="submitEstimateToEleven.tcKDTest" />
+				<child name="scheduleEstimateTV" key="{D885663D-78F4-4FA9-8DDD-0AC4B8D404F2}" path="scheduleEstimateTV.tcKDTest" />
+			</folder>
+		</folder>
+	</children>
+</Root>

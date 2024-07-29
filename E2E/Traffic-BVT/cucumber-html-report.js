@@ -1,0 +1,59 @@
+const report = require('multiple-cucumber-html-reporter');
+const dayjs = require('dayjs');
+const fs = require('fs');
+const data = fs.readFileSync('cypress/reports/run-info/report-metadata.json', { encoding: 'utf8', flag: 'r' });
+const runInfo = JSON.parse(data);
+
+const osName = () => {
+  switch (runInfo['osName']) {
+    case 'darwin':
+      return 'osx';
+    case 'win32':
+      return 'windows';
+    case 'ubuntu':
+      return 'ubuntu';
+    case 'linux':
+      return 'linux';
+    default:
+      console.log('Undefined browser');
+  }
+};
+
+report.generate({
+  jsonDir: './cypress/reports/cucumber-reports/',
+  reportPath: 'cypress/reports/multi-html-report',
+  metadata: {
+    browser: {
+      name: runInfo['browserName'],
+      version: runInfo['browserVersion'],
+    },
+    device: 'Local Test Machine',
+    platform: {
+      name: osName(),
+      version: runInfo['osVersion'],
+    },
+  },
+  customData: {
+    title: 'Run Info',
+    data: [
+      { label: 'Traffic URL', value: runInfo['trafficUrl'] },
+      { label: 'sTraffic URL', value: runInfo['sTrafficUrl'] },
+      { label: 'Environment', value: runInfo['env'] },
+      {
+        label: 'Execution Start Time',
+        value: dayjs(runInfo['startedTestsAt']).format('YYYY-MM-DD HH:mm:ss.SSS'),
+      },
+      {
+        label: 'Execution End Time',
+        value: dayjs(runInfo['endedTestsAt']).format('YYYY-MM-DD HH:mm:ss.SSS'),
+      },
+      {
+        label: 'Duration Time',
+        value: dayjs(runInfo['endedTestsAt']).diff(dayjs(runInfo['startedTestsAt']), 'second').toString() + ' seconds',
+      },
+    ],
+  },
+  disableLog: true,
+  pageTitle: 'Cypress Cucumber Html Report',
+  displayDuration: true,
+});

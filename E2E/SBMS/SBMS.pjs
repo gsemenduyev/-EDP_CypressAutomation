@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Root signature="{24B6FA0B-0143-461A-9758-AEB9E9A9428B}" version="15.0" key="{C1D7595D-682F-4C46-9353-E718C1B423B9}">
+	<children>
+		<child name="SBMS" key="{D84F85E7-822B-4537-9142-48DF2D7226FD}" path="SBMS\SBMS.mds" />
+	</children>
+	<testItems key="{D2C0F693-8C23-4559-994A-CD28FC1BC260}">
+		<children>
+			<testItem key="{D84F85E7-822B-4537-9142-48DF2D7226FD}" enabled="True" timeout="0" stopOnError="True" description="" />
+		</children>
+	</testItems>
+	<variables key="{1014BE9A-6A05-4219-A3DC-8C45CBA2C527}">
+		<data Version="4">
+			<Items>
+				<Variable Name="SBMSEnvironment" Type="String" Local="True">
+					<DefValue />
+				</Variable>
+			</Items>
+		</data>
+	</variables>
+	<analysis key="{7EBED930-215F-4216-B15C-876AC75B6D0A}" />
+	<scc key="{C900492B-D218-429C-9AA0-264B7D78CA88}" name="Git Plugin">
+		<data />
+	</scc>
+</Root>
