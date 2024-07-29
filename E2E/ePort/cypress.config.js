@@ -125,14 +125,10 @@ module.exports = defineConfig({
   videosFolder: 'cypress/videos',
   screenshotOnRunFailure: true,
   trashAssetsBeforeRuns: true,
-  testIsolation: false,
-  retries: {
-    runMode: 0,
-    openMode: 0
-  },
   e2e: {
     setupNodeEvents,
     experimentalOriginDependencies: true,
     specPattern: "**/*.feature",
+    testIsolation: false, // Set within e2e section
   },
 });
