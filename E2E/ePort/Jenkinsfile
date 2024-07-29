@@ -37,9 +37,11 @@ pipeline {
         stage('Run Cypress Tests') {
             steps {
                 echo 'Running Cypress tests...'
-                bat """
-                cd ${CURRENT_PROJECT_PATH} && npx cypress run --browser chrome --headless --spec "cypress/integration/step-definitions/verify-eport-login-page/verify-eport-pages.feature" --no-color
-                """
+                ansiColor('xterm') {
+                    bat """
+                    cd ${CURRENT_PROJECT_PATH} && npx cypress run --browser chrome --headless --spec "cypress/integration/step-definitions/verify-eport-login-page/verify-eport-pages.feature"
+                    """
+                }
             }
         }
         stage('Archive Videos') {
