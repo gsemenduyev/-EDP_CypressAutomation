@@ -1,0 +1,15 @@
+{
+    "ePortUrl": "https://eport.gotostrata.com/",
+    "ePortUsername": "kevinrep",
+    "ePortPassword": "abc123",
+    "ePortUserFirstName": "Kevin",
+    "ePortUserLastName": "TestRep",
+    "elevenUrl": "https://11orders.com/",
+    "elevenUsername": "QATest",
+    "elevenPassword": "abc123#",
+    "seller": "TVB Test Rep",
+    "via": "ePort Gateway",
+    "subRepCompany": "TVB Test Rep",
+    "subRepOffice": "New York",
+    "env": "Production"
+}

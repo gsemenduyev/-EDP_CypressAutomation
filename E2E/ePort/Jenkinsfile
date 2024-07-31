@@ -2,27 +2,12 @@
 import groovy.json.*
 
 def CURRENT_PROJECT_PATH = 'E2E/ePort'
-def PROD_CONFIG_FILE_ID = '1ad0b80a-404d-45ac-81b1-71cd259794d1'
-def QA_CONFIG_FILE_ID = '2a6e4dde-90fd-4b33-870c-94e1ac74261e'
-def UAT_CONFIG_FILE_ID = '10596465-25c2-4869-93fe-1b8c63a3dec6'
-def EMAILS_SLACK_CONTACTS = '72f4f5fc-2d3c-415d-891d-943c990e74a1'
-
-def PROD_CONFIG_FILE_DESTINATION = 'E2E/ePort/cypress/fixtures/environment/prod-param.json'
-def QA_CONFIG_FILE_DESTINATION = 'E2E/ePort/cypress/fixtures/environment/qa-param.json'
-def UAT_CONFIG_FILE_DESTINATION = 'E2E/ePort/cypress/fixtures/environment/uat-param.json'
-
-def CONFIG_FILE_PATH = 'E2E/ePort/cypress/fixtures/test-complete/session-creator-jenkins-creds.json'
 
 pipeline {
-    agent {
-        label 'Testexecute_c'
-    }
 
-    tools {
-        nodejs '18'
-    }
-    // options {
-    //     ansiColor('xterm')
+    agent any
+    // agent {
+    //     label 'Testexecute_c'
     // }
 
     stages {
@@ -31,204 +16,85 @@ pipeline {
                 cleanWs()
             }
         }
-
-        stage('Check Chrome Installation') {
+        // stage('Clone Repository') {
+        //     steps {
+        //         script {
+        //             withCredentials([usernamePassword(credentialsId: 'sabuildserver_GIT_TOKEN', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+        //                 def gitUrl = "https://${GIT_USERNAME}:${GIT_PASSWORD}@github.freewheel.tv/HS/EDP_CypressAutomation.git"
+        //                 git url: gitUrl, branch: 'Jenkinc_local'
+        //             }
+        //         }
+        //     }
+        // }
+        stage('Demo') {
             steps {
-                script {
-                    // Query the registry for Chrome version
-                    def versionOutput = powershell(script: '''
-                        $chromeRegPath = "HKCU:\\Software\\Google\\Chrome\\BLBeacon"
-                        if (Test-Path $chromeRegPath) {
-                            (Get-ItemProperty -Path $chromeRegPath).version
-                        } else {
-                            "Chrome is not installed"
-                            exit 1
-                        }
-                    ''', returnStdout: true).trim()
-                    echo "Chrome version: ${versionOutput}"
+                ansiColor('xterm') {
+                    echo "\033[31;1mExecuting demo stage:\033[0m"
+                    echo "\033[31;1mcommand-1\033[0m"
+                    echo "\033[31;1mcommand-2\033[0m"
                 }
             }
         }
-
-        stage('Print Agent Information') {
+        stage('Checkout') {
             steps {
-                script {
-                    // Print CPU information
-                    powershell '''
-                        Write-Host "CPU Information:"
-                        Get-WmiObject Win32_Processor | Select-Object Name, NumberOfCores, MaxClockSpeed | Format-Table | Out-String | Write-Host
-                    '''
-                    
-                    // Print Memory information
-                    powershell '''
-                        Write-Host "Memory Information:"
-                        Get-WmiObject Win32_PhysicalMemory | Select-Object Capacity, Manufacturer, Speed | Format-Table | Out-String | Write-Host
-                    '''
-                    
-                    // Print Disk Space information
-                    powershell '''
-                        Write-Host "Disk Space Information:"
-                        Get-PSDrive -PSProvider FileSystem | Select-Object Name, @{Name="Free(GB)";Expression={[math]::round($_.Free/1GB,2)}}, @{Name="Used(GB)";Expression={[math]::round(($_.Used/1GB),2)}} | Format-Table | Out-String | Write-Host
-                    '''
-                    
-                    // Print Operating System information
-                    powershell '''
-                        Write-Host "Operating System Information:"
-                        Get-WmiObject Win32_OperatingSystem | Select-Object Caption, OSArchitecture, Version | Format-Table | Out-String | Write-Host
-                    '''
-                }
+                checkout scm
             }
         }
-
-        stage('Clone Repository') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'sabuildserver_GIT_TOKEN', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
-                        def gitUrl = "https://${GIT_USERNAME}:${GIT_PASSWORD}@github.freewheel.tv/HS/EDP_CypressAutomation.git"
-                        git url: gitUrl, branch: 'FWS-49164'
-                    }
-                }
-            }
-        }
-        stage('Config file setup') {
-            steps {
-                script {
-                    // Copy paste Config files from Jenkins to current project
-                    inject_config_file(PROD_CONFIG_FILE_ID, PROD_CONFIG_FILE_DESTINATION)
-                    inject_config_file(QA_CONFIG_FILE_ID, QA_CONFIG_FILE_DESTINATION)
-                    inject_config_file(UAT_CONFIG_FILE_ID, UAT_CONFIG_FILE_DESTINATION)
-
-                    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'TE_Agent', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-                        def username = "${USERNAME}"
-                        def password = "${PASSWORD}"
-                        def testcomplete = [
-                            'username': username,
-                            'password': password
-                        ]
-                        def reporterConfig = readJSON file: CONFIG_FILE_PATH
-                        reporterConfig.put('testcomplete', testcomplete)
-                        def json = JsonOutput.toJson(reporterConfig)
-                        json = JsonOutput.prettyPrint(json)
-                        writeFile(file: CONFIG_FILE_PATH, text: json)
-
-                        def reporterConfig1 = readJSON file: CONFIG_FILE_PATH
-                        testcomplete = [
-                            'username': reporterConfig1.testcomplete.username.values[0],
-                            'password': reporterConfig1.testcomplete.password.values[0]
-                        ]
-                        reporterConfig.put('testcomplete', testcomplete)
-                        json = JsonOutput.toJson(reporterConfig)
-                        json = JsonOutput.prettyPrint(json)
-                        writeFile(file: CONFIG_FILE_PATH, text: json)
-                    }
-                }
-            }
-        }
-        
         stage('Install Dependencies') {
             steps {
                 echo 'Installing dependencies...'
                 bat """
-                cd ${CURRENT_PROJECT_PATH} && \
-                npm install
+                cd ${CURRENT_PROJECT_PATH} && npm install
                 """
-                // bat """
-                // cd ${CURRENT_PROJECT_PATH} && \
-                // npm cache clean --force && \
-                // npm ci --prefer-offline
-                // """
             }
         }
-
         stage('Run Cypress Tests') {
-            // environment {
-            //     DEBUG = 'cypress:*'
-            //  }
             steps {
                 echo 'Running Cypress tests...'
                 bat """
-                cd ${CURRENT_PROJECT_PATH} && \
-                npx cypress run --headless --spec "cypress/integration/step-definitions/create-eport-user/create-eport-user.feature" --env TC="SessionCreator"                """
+                cd ${CURRENT_PROJECT_PATH} && npx cypress run --browser chrome --headless --spec "cypress/integration/step-definitions/verify-eport-login-page/verify-eport-pages.feature"
+                """
+            }
+        }
+        stage('Archive Videos') {
+            steps {
+                archiveArtifacts artifacts: "${CURRENT_PROJECT_PATH}/cypress/videos/**/*.mp4", allowEmptyArchive: true
             }
         }
     }
+
     post {
         always {
             script {
+                // Generate report
                 bat """
-                cd ${CURRENT_PROJECT_PATH} && \
-                node ./cucumber-html-report.js
+                cd ${CURRENT_PROJECT_PATH} && node ./cucumber-html-report.js
                 """
-                echo 'Post hello'
-                // List directories and generate HTML reports
+                echo 'Post build actions'
                 echo "Current workspace: ${env.WORKSPACE}"
                 echo "Current project path: ${CURRENT_PROJECT_PATH}"
 
-                try {
-                    def workspacePath = "${env.WORKSPACE}\\${CURRENT_PROJECT_PATH}\\cypress\\reports\\test-complete-reports"
-                    echo "Workspace Path: ${workspacePath}"
+                // Publish HTML reports
+                publishHTML(target: [
+                    allowMissing: true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: "${CURRENT_PROJECT_PATH}/cypress/reports",
+                    reportFiles: "cucumber-reports/cucumber-html-report/index.html",
+                    reportName: 'Cucumber Report',
+                    reportTitles: 'Cucumber Report'
+                ])
 
-                    // Use a separate script block to handle bat commands
-                    def reportDirs = bat(script: """@echo off
-                       for /d %%i in ("${workspacePath}\\*") do (
-                       echo %%i
-                      )
-                      """, returnStdout: true).trim().split('\r?\n')
-                    echo "Directories found: ${reportDirs.join(', ')}"
-                    reportDirs.each { dir ->
-                        def folderName = dir.tokenize('\\').last()
-                        echo "Publishing report for folder: ${folderName}"
-
-                        publishHTML(target: [
-                              allowMissing: true,
-                              alwaysLinkToLastBuild: true,
-                              keepAll: true,
-                              reportDir: "${dir}",
-                              reportFiles: 'ViewResults.html',
-                              reportName: "${folderName}",
-                              reportTitles: "${folderName}"
-                            ])
-                        }
-                } catch (Exception e) {
-                        echo "Error during report publishing: ${e.message}"
-                        throw e
-                }
+                publishHTML(target: [
+                    allowMissing: true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: "${CURRENT_PROJECT_PATH}/cypress/reports",
+                    reportFiles: "multi-html-report/index.html",
+                    reportName: 'Multi HTML Report',
+                    reportTitles: 'Multi HTML Report'
+                ])
             }
-
-            publishHTML(target: [
-                allowMissing: true,
-                alwaysLinkToLastBuild: true,
-                keepAll: true,
-                reportDir: "${CURRENT_PROJECT_PATH}/cypress/reports",
-                reportFiles: 'cucumber-reports/cucumber-html-report/index.html',
-                reportName: 'Cucumber Report',
-                reportTitles: 'Cucumber Report'
-            ])
-
-            publishHTML(target: [
-                allowMissing: true,
-                alwaysLinkToLastBuild: true,
-                keepAll: true,
-                reportDir: 'E2E/ePort/cypress/reports',
-                reportFiles: 'multi-html-report/index.html',
-                reportName: 'Multi HTML Report',
-                reportTitles: 'Multi HTML Report'
-            ])
         }
-    }
-}
-
-/*
-  Copies the Jenkins configuration file and adds it to the current project
-  [@param] configFileId: accepts Jenkins config file unique ID
-  [@param] destinationFilePath: destination file path
-*/
-def inject_config_file(String configFileId, String destinationFilePath) {
-    configFileProvider([configFile(fileId: configFileId, variable: 'configFile')]) {
-        def fileContent = readFile configFile
-        def jsonFileContent = readJSON text: fileContent
-        def json = JsonOutput.toJson(jsonFileContent)
-        json = JsonOutput.prettyPrint(json)
-        writeFile(file: destinationFilePath, text: json)
     }
 }

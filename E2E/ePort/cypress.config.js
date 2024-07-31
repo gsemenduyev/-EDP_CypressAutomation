@@ -117,17 +117,12 @@ module.exports = defineConfig({
   redirectionLimit: 500,
   viewportWidth: 1920,
   viewportHeight: 1080,
-  defaultCommandTimeout: 600000,
+  defaultCommandTimeout: 60000,
   pageLoadTimeout: 600000,
-  screenshotOnRunFailure: true,
-  trashAssetsBeforeRuns: false,
-  video: true,
   chromeWebSecurity: false,
-  userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.185",
-  retries: {
-    runMode: 0,
-    openMode: 0
-  },
+  video: true,
+  screenshotOnRunFailure: true,
+  trashAssetsBeforeRuns: true,
   e2e: {
     setupNodeEvents,
     experimentalOriginDependencies: true,
